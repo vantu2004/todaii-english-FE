@@ -39,20 +39,20 @@ Optional:
 ## 🔹 Project Structure
 
 todaii-english-fe/
-│── public/ # static assets
-│── src/
-│ ├── components/ # reusable UI components
-│ ├── layouts/ # shared layouts (AuthLayout, AdminLayout)
-│ ├── modules/ # domain modules
-│ │ ├── api/ # API services (axios clients)
-│ │ ├── store/ # Zustand state slices
-│ │ └── ui/ # module-specific components
-│ ├── pages/ # route-level pages
-│ ├── hooks/ # custom React hooks
-│ ├── utils/ # helper functions (quota checker, formatters, i18n)
-│ ├── config/ # env variables, axios interceptors
-│ ├── App.jsx # root app
-│ └── main.jsx
+├── public/ # static assets
+└── src/
+├── components/ # reusable UI components
+├── layouts/ # shared layouts (AuthLayout, AdminLayout)
+├── modules/ # domain modules
+│ ├── api/ # API services (axios clients)
+│ ├── store/ # Zustand state slices
+│ └── ui/ # module-specific components
+├── pages/ # route-level pages
+├── hooks/ # custom React hooks
+├── utils/ # helper functions (quota checker, formatters, i18n)
+├── config/ # env variables, axios interceptors
+├── App.jsx # root app
+└── main.jsx
 
 ### Layering
 
