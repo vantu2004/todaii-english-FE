@@ -38,6 +38,7 @@ Optional:
 
 ## 🔹 Project Structure
 
+```text
 todaii-english-fe/
 ├── public/ # static assets
 └── src/
@@ -96,3 +97,4 @@ todaii-english-fe/
 - **Video Lyric** → `videos`, `video_lyric_lines`
 - **UGC** → `ugc_translations`, `ugc_translation_votes`, `paragraph_translation_pins`
 - **Payments** → `user_subscriptions`, `payment_events`
+```
