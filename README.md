@@ -54,6 +54,7 @@ todaii-english-fe/
 ├── config/ # env variables, axios interceptors
 ├── App.jsx # root app
 └── main.jsx
+```
 
 ### Layering
 
@@ -97,4 +98,7 @@ todaii-english-fe/
 - **Video Lyric** → `videos`, `video_lyric_lines`
 - **UGC** → `ugc_translations`, `ugc_translation_votes`, `paragraph_translation_pins`
 - **Payments** → `user_subscriptions`, `payment_events`
+
+```
+
 ```
