@@ -4,6 +4,7 @@ import { fadeIn } from "../../animations/fadeIn.js";
 import LogoLight from "../../assets/landing_page/logo-light.svg";
 
 const Footer = () => {
+  // hello world
   return (
     <motion.footer
       variants={fadeIn(0.1)}
