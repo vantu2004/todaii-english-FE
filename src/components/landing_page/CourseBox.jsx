@@ -2,9 +2,9 @@ import React from 'react'
 
 const CourseBox = ({course}) => {
   return (
-    <div className="w-87 h-80 min-[850px]:max-lg:w-85 max-[850px]:w-full max-[360px]:h-90 bg-white rounded-xl shadow-md relative">
-        <div className="mt-[-1.5rem] ml-6">
-            <img src={course.icon} alt={`${course.title} icon`}/>
+    <div className="relative w-87 h-80 min-[850px]:max-lg:w-85 max-[850px]:w-full max-[360px]:h-90 bg-white rounded-xl shadow-md">
+        <div className="relative left-5 -top-5">
+            <img src={course.icon} alt={`${course.title} icon`} />
         </div>
 
         <div className="pt-4 pl-7">

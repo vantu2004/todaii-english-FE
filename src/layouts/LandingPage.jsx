@@ -5,7 +5,7 @@ import Footer from '../components/common/Footer.jsx';
 
 function LandingPage() {
   return (
-    <div className="font-jarkata-sans overflow-x-hidden relative bg-gradient-to-b from-white to-[#F0F1FF]">
+    <div className="font-jarkata-sans overflow-hidden relative bg-gradient-to-b from-white to-[#F0F1FF]">
       <Navbar />
       <Hero />
       <PopularCourses />
