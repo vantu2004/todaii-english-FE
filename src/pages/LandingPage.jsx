@@ -1,7 +1,7 @@
-import Navbar from '../components/common/Navbar.jsx';
-import Hero from '../components/landing_page/Hero.jsx';
-import PopularCourses from '../components/landing_page/PopularCourses.jsx';
-import Footer from '../components/common/Footer.jsx';
+import Navbar from "../components/common/Navbar.jsx";
+import Hero from "../components/landing_page/Hero.jsx";
+import PopularCourses from "../components/landing_page/PopularCourses.jsx";
+import Footer from "../components/common/Footer.jsx";
 
 function LandingPage() {
   return (
