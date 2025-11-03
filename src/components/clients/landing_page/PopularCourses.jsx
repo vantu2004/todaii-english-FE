@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../animations/fadeIn.js";
-import { slideUp } from "../../animations/slideUp.js";
+import { fadeIn } from "../../../animations/fadeIn.js";
+import { slideUp } from "../../../animations/slideUp.js";
 
-import Animation from "../../assets/img/landing_page/icon-animation.svg";
-import Design from "../../assets/img/landing_page/icon-design.svg";
-import Photography from "../../assets/img/landing_page/icon-photography.svg";
-import Crypto from "../../assets/img/landing_page/icon-crypto.svg";
-import Business from "../../assets/img/landing_page/icon-business.svg";
-import CourseBox from "./CourseBox";
+import Animation from "../../../assets/img/landing_page/icon-animation.svg";
+import Design from "../../../assets/img/landing_page/icon-design.svg";
+import Photography from "../../../assets/img/landing_page/icon-photography.svg";
+import Crypto from "../../../assets/img/landing_page/icon-crypto.svg";
+import Business from "../../../assets/img/landing_page/icon-business.svg";
+import CourseBox from "./CourseBox.jsx";
 
 const courses = [
   {
@@ -48,7 +48,6 @@ const PopularCourses = () => {
     >
       <div className="w-[90%] max-w-275 ml-auto mr-auto">
         <div className="grid max-[1400px]:grid-cols-2 max-[850px]:grid-cols-1 grid-cols-3 gap-y-14 gap-x-6 justify-items-center">
-          
           {/* Gradient Header Box */}
           <motion.div
             variants={slideUp(0.2)}

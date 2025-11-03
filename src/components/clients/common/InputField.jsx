@@ -1,4 +1,12 @@
-const InputField = ({ label, name, value, onChange, type = "text", placeholder, className = "" }) => {
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  placeholder,
+  className = "",
+}) => {
   return (
     <label className={`block text-sm ${className}`}>
       <span className="text-gray-700 dark:text-gray-400">{label}</span>

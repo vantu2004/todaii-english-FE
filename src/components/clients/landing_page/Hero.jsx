@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../animations/fadeIn";
-import { slideUp } from "../../animations/slideUp";
-import { staggerContainer } from "../../animations/staggerContainer";
-import HeroDeskTop from "../../assets/img/landing_page/image-hero-desktop.webp";
-import HeroTablet from "../../assets/img/landing_page/image-hero-tablet.webp";
-import HeroMobile from "../../assets/img/landing_page/image-hero-mobile.webp";
+import { fadeIn } from "../../../animations/fadeIn";
+import { slideUp } from "../../../animations/slideUp";
+import { staggerContainer } from "../../../animations/staggerContainer";
+import HeroDeskTop from "../../../assets/img/landing_page/image-hero-desktop.webp";
+import HeroTablet from "../../../assets/img/landing_page/image-hero-tablet.webp";
+import HeroMobile from "../../../assets/img/landing_page/image-hero-mobile.webp";
 
 const Hero = () => {
   return (
@@ -33,8 +33,8 @@ const Hero = () => {
               variants={fadeIn(0.4)}
               className="min-[932px]:max-lg:w-[55%] min-lg:max-[1400px]:w-[60%] max-[932px]:w-full w-[76%] text-[#83869a] text-[18px] font-medium leading-[28px] mt-8"
             >
-              Our modern courses across a range of in-demand skills will give you
-              the knowledge you need to live the life you want.
+              Our modern courses across a range of in-demand skills will give
+              you the knowledge you need to live the life you want.
             </motion.p>
 
             <motion.a
@@ -67,7 +67,11 @@ const Hero = () => {
             variants={fadeIn(0.3)}
             className="max-[740px]:block max-[740px]:mt-8 hidden"
           >
-            <img src={HeroMobile} className="min-[360px]:w-full" alt="hero mobile" />
+            <img
+              src={HeroMobile}
+              className="min-[360px]:w-full"
+              alt="hero mobile"
+            />
           </motion.div>
         </div>
       </div>

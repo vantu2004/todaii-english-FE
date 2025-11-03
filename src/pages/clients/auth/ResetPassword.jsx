@@ -1,16 +1,13 @@
-import React, { useState } from "react";
-import RegisterOffice from "../../assets/img/register/register-office.jpeg";
-import RegisterOfficeDark from "../../assets/img/register/register-office-dark.jpeg";
-import InputField from "../../components/common/InputField";
-import { register } from "../../api/client/authApi";
+import { useState } from "react";
+import RegisterOffice from "../../../assets/img/register/register-office.jpeg";
+import RegisterOfficeDark from "../../../assets/img/register/register-office-dark.jpeg";
+import InputField from "../../../components/clients/common/InputField";
 import { useNavigate, useParams } from "react-router-dom";
-import { resetPassword } from "../../api/client/authApi";
+import { resetPassword } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
-
 const ResetPassword2 = () => {
-
-  const {token} = useParams();
+  const { token } = useParams();
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -26,18 +23,15 @@ const ResetPassword2 = () => {
     try {
       await resetPassword(token, form.newPassword);
       toast.success("Password reset successfully");
-      navigate("/login");
+      navigate("/client/login");
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Token has been expired");
-      } 
-      else if (err.response?.status === 404) {
+      } else if (err.response?.status === 404) {
         toast.error("Token not found");
-      } 
-      else if (err.response?.status === 400) {
+      } else if (err.response?.status === 400) {
         toast.error("Wrong format"); // chỗ này nên handle format của input thay vì báo lỗi sau khi request
-      }
-      else {
+      } else {
         toast.error("Internal server error");
       }
       console.error("Register error:", err);
@@ -80,7 +74,7 @@ const ResetPassword2 = () => {
                 value={form.newPassword}
                 onChange={handleChange}
                 type="password"
-                placeholder="***************"
+                placeholder="******"
                 className="mt-4"
               />
 
@@ -90,7 +84,7 @@ const ResetPassword2 = () => {
                 value={form.confirmNewPassword}
                 onChange={handleChange}
                 type="password"
-                placeholder="***************"
+                placeholder="******"
                 className="mt-4"
               />
 
@@ -101,8 +95,6 @@ const ResetPassword2 = () => {
               >
                 {loading ? "Requesting..." : "Confirm"}
               </button>
-
-            
             </form>
           </div>
         </div>

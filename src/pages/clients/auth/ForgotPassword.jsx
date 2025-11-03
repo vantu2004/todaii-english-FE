@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-
-import ForgotPasswordOffice from "../../assets/img/forgot_password/forgot-password-office.jpeg";
-import ForgotPasswordOfficeDark from "../../assets/img/forgot_password/forgot-password-office-dark.jpeg";
-import InputField from "../../components/common/InputField";
-import { forgotPassword } from "../../api/client/authApi";
+import { useState } from "react";
+import ForgotPasswordOffice from "../../../assets/img/forgot_password/forgot-password-office.jpeg";
+import ForgotPasswordOfficeDark from "../../../assets/img/forgot_password/forgot-password-office-dark.jpeg";
+import InputField from "../../../components/clients/common/InputField";
+import { forgotPassword } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
 const ForgotPassword2 = () => {
@@ -78,10 +77,8 @@ const ForgotPassword2 = () => {
                 disabled={loading}
                 className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
               >
-                {loading ? "Requesting...": "Recover Password"}
+                {loading ? "Requesting..." : "Recover Password"}
               </button>
-
-          
             </div>
           </div>
         </div>

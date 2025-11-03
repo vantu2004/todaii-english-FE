@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-
-import ForgotPasswordOffice from "../../assets/img/forgot_password/forgot-password-office.jpeg";
-import ForgotPasswordOfficeDark from "../../assets/img/forgot_password/forgot-password-office-dark.jpeg";
-import InputField from "../../components/common/InputField";
+import { useState } from "react";
+import ForgotPasswordOffice from "../../../assets/img/forgot_password/forgot-password-office.jpeg";
+import ForgotPasswordOfficeDark from "../../../assets/img/forgot_password/forgot-password-office-dark.jpeg";
+import InputField from "../../../components/clients/common/InputField";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { verifyOtp, resendOtp } from "../../api/client/authApi";
+import { verifyOtp, resendOtp } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
 const VerifyOtp2 = () => {
@@ -22,7 +21,7 @@ const VerifyOtp2 = () => {
     try {
       await verifyOtp(email, otp);
       toast.success("Verify successful!");
-      navigate("/login");
+      navigate("/client/login");
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Invalid OTP");

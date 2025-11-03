@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 
 function getThemeFromLocalStorage() {
-  if (typeof window === "undefined") return "light"; 
+  if (typeof window === "undefined") return "light";
   const stored = localStorage.getItem("theme");
   if (stored) return stored;
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -17,9 +17,7 @@ function setThemeToLocalStorage(value) {
 
 export const ThemeContext = createContext();
 
-
-
-export const ThemeProvider = ({ children }) =>  {
+export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(getThemeFromLocalStorage);
 
   const toggleTheme = useCallback(() => {
@@ -45,4 +43,4 @@ export const ThemeProvider = ({ children }) =>  {
       {children}
     </ThemeContext.Provider>
   );
-}
+};
