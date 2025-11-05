@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect } from "react";
-import { fetchProfile } from "../api/clients/userApi";
+import { fetchProfile } from "../../api/clients/userApi";
 
-export const AuthContext = createContext();
+export const ClientAuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const ClientAuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -28,5 +28,9 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <ClientAuthContext.Provider value={value}>
+      {children}
+    </ClientAuthContext.Provider>
+  );
 };

@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import ClientAuthContext from "../context/clients/ClientAuthContext";
 
-const ProtectRoutes = () => {
-  const { authUser, isLoggedIn } = useContext(AuthContext);
+const ClientProtectRoutes = () => {
+  const { authUser, isLoggedIn } = useContext(ClientAuthContext);
 
   // If not logged in, redirect to login
   if (!isLoggedIn || !authUser) {
@@ -14,4 +14,4 @@ const ProtectRoutes = () => {
   return <Outlet />;
 };
 
-export default ProtectRoutes;
+export default ClientProtectRoutes;

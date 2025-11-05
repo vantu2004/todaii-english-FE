@@ -1,41 +1,24 @@
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import ClientLandingPage from "./pages/clients/LandingPage";
-import ClientLogin from "./pages/clients/auth/Login";
-import ClientRegister from "./pages/clients/auth/Register";
-import ClientVerify from "./pages/clients/auth/VerifyOtp";
-import ClientForgotPassword from "./pages/clients/auth/ForgotPassword";
-import ClientResetPassword from "./pages/clients/auth/ResetPassword";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
+import ClientRoutes from "./config/routes/ClientRoutes";
+import AdminRoutes from "./config/routes/AdminRoutes";
 
 const App = () => {
   return (
-    <AuthProvider>
+    <ThemeProvider>
       <Toaster position="top-center" reverseOrder={false} />
 
       <BrowserRouter>
-        {/* Client Routes */}
         <Routes>
           {/* Mặc định khi chạy port từ console thì nó chuyển hướng về /client */}
           <Route path="/" element={<Navigate to={"/client"} />} />
-          <Route path="/client" element={<ClientLandingPage />} />
-          <Route path="/client/login" element={<ClientLogin />} />
-          <Route path="/client/register" element={<ClientRegister />} />
-          <Route path="/client/verify-otp" element={<ClientVerify />} />
-          <Route
-            path="/client/forgot-password"
-            element={<ClientForgotPassword />}
-          />
-          <Route
-            path="/client/reset-password/:token"
-            element={<ClientResetPassword />}
-          />
-        </Routes>
 
-        {/* Server Routes */}
-        <Routes></Routes>
+          <Route path="/client/*" element={<ClientRoutes />} />
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    </ThemeProvider>
   );
 };
 

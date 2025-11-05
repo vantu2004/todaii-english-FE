@@ -1,43 +1,39 @@
 import { useState } from "react";
-import LoginOffice from "../../../assets/img/login/login-office.jpeg";
-import LoginOfficeDark from "../../../assets/img/login/login-office-dark.jpeg";
-import { login } from "../../../api/clients/authApi";
+import RegisterOffice from "../../../../assets/img/register/register-office.jpeg";
+import RegisterOfficeDark from "../../../../assets/img/register/register-office-dark.jpeg";
+import InputField from "../../../../components/InputField";
+import { register } from "../../../../api/clients/authApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import InputField from "../../../components/clients/common/InputField";
-import { useAuth } from "../../../hooks/useAuth";
-import { fetchProfile } from "../../../api/clients/userApi";
 
-const LoginPage = () => {
-  const { setAuthUser, setIsLoggedIn } = useAuth();
-
-  const [form, setForm] = useState({ email: "", password: "" });
+const Register = () => {
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    displayName: "",
+    password: "",
+    confirmPassword: "",
+  });
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await login(form.email, form.password);
-
-      const myProfile = await fetchProfile();
-      setAuthUser(myProfile);
-      setIsLoggedIn(true);
-
-      toast.success("Login successful!");
-
-      navigate("/client");
+      const { email, password, displayName } = form;
+      await register(email, password, displayName);
+      toast.success("Register successful!");
+      navigate(`/client/verify-otp?email=${encodeURIComponent(email)}`);
     } catch (err) {
-      if (err.response?.status === 401) {
-        toast.error("Invalid email or password");
+      if (err.response?.status === 409) {
+        toast.error("User already exsits");
       } else if (err.response?.status === 400) {
         toast.error("Wrong format"); // chỗ này nên handle format của input thay vì báo lỗi sau khi request
       } else {
         toast.error("Internal server error");
       }
-      console.error("Login error:", err);
+      console.error("Register error:", err);
     } finally {
       setLoading(false);
     }
@@ -55,20 +51,20 @@ const LoginPage = () => {
             <img
               aria-hidden="true"
               className="object-cover w-full h-full dark:hidden"
-              src={LoginOffice}
+              src={RegisterOffice}
               alt="Office"
             />
             <img
               aria-hidden="true"
               className="hidden object-cover w-full h-full dark:block"
-              src={LoginOfficeDark}
+              src={RegisterOfficeDark}
               alt="Office"
             />
           </div>
           <div className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-            <form className="w-full" onSubmit={handleLogin}>
+            <form className="w-full" onSubmit={handleRegister}>
               <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                Login
+                Create account
               </h1>
 
               <InputField
@@ -76,26 +72,57 @@ const LoginPage = () => {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                type="email"
                 placeholder="example@gmail.com"
               />
 
               <InputField
+                label="Display name"
+                name="displayName"
+                value={form.displayName}
+                onChange={handleChange}
+                placeholder="Jane Doe"
                 className="mt-4"
+              />
+
+              <InputField
                 label="Password"
                 name="password"
                 value={form.password}
                 onChange={handleChange}
                 type="password"
                 placeholder="******"
+                className="mt-4"
               />
+
+              <InputField
+                label="Confirm password"
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                type="password"
+                placeholder="******"
+                className="mt-4"
+              />
+
+              {/* <div className="flex mt-6 text-sm">
+                <label className="flex items-center dark:text-gray-400">
+                  <input
+                    type="checkbox"
+                    className="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  />
+                  <span className="ml-2">
+                    I agree to the&nbsp;
+                    <span className="underline">privacy policy</span>
+                  </span>
+                </label>
+              </div> */}
 
               <button
                 type="submit"
+                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                 disabled={loading}
-                className="block w-full px-4 py-2 mt-6 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
               >
-                {loading ? "Logging in..." : "Log in"}
+                {loading ? "Creating..." : "Create Account"}
               </button>
 
               <div className="flex items-center my-4">
@@ -104,10 +131,7 @@ const LoginPage = () => {
                 <hr className="flex-grow border-gray-300" />
               </div>
 
-              <button
-                type="button"
-                className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 cursor-pointer transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
-              >
+              <button className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 cursor-pointer transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
                 <svg
                   className="w-4 h-4 mr-2"
                   aria-hidden="true"
@@ -122,17 +146,9 @@ const LoginPage = () => {
               <p className="mt-4">
                 <a
                   className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  href="./forgot-password"
+                  href="./login"
                 >
-                  Forgot your password?
-                </a>
-              </p>
-              <p className="mt-2">
-                <a
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  href="./register"
-                >
-                  Create account
+                  Back to login
                 </a>
               </p>
             </form>
@@ -143,4 +159,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Register;

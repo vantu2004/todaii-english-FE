@@ -39,21 +39,51 @@ Optional:
 ## 🔹 Project Structure
 
 ```text
-todaii-english-fe/
-├── public/ # static assets
-└── src/
-├── components/ # reusable UI components
-├── layouts/ # shared layouts (AuthLayout, AdminLayout)
-├── modules/ # domain modules
-│ ├── api/ # API services (axios clients)
-│ ├── store/ # Zustand state slices
-│ └── ui/ # module-specific components
-├── pages/ # route-level pages
-├── hooks/ # custom React hooks
-├── utils/ # helper functions (quota checker, formatters, i18n)
-├── config/ # env variables, axios interceptors
-├── App.jsx # root app
-└── main.jsx
+src/
+├── api/                      # Chứa tất cả API call (axios instance, endpoints)
+│   ├── clients/
+│   │   ├── authApi.js
+│   │   └── userApi.js
+│   └── admins/
+│       ├── authApi.js
+│       └── userApi.js
+│
+├── assets/                   # Hình ảnh, logo, fonts, v.v.
+│
+├── components/               # Reusable components (Button, Navbar, FormInput,...)
+│
+├── config/                   # File cấu hình chung (axios config, route config, env, v.v.)
+│   ├── axios.js
+│   └── routes/
+│       ├── ClientRoutes.jsx  # 👈 Route dành cho Client
+│       └── AdminRoutes.jsx   # 👈 Route dành cho Admin
+│
+├── context/                  # React Contexts (global state)
+│   ├── clients/
+│   │   ├── AuthContext.jsx
+│   │   └── useAuth.js
+│   └── admins/
+│       ├── AdminAuthContext.jsx
+│       └── useAdminAuth.js
+│
+├── hooks/                    # Custom hooks (useFetch, useDebounce,...)
+│
+├── modules/                  # Chứa các feature lớn (module hoá app)
+│   ├── clients/
+│   │   ├── components/       # Component riêng cho client
+│   │   ├── pages/            # Trang client: Login, Register, Dashboard...
+│   │   └── layouts/          # Layout tổng thể (ClientLayout.jsx)
+│   └── admins/
+│       ├── components/
+│       ├── pages/
+│       └── layouts/
+│
+├── utils/                    # Hàm tiện ích dùng chung (formatDate, handleError,...)
+│
+├── App.jsx                   # Chứa BrowserRouter chính
+├── main.jsx                  # Entry file (ReactDOM.createRoot)
+├── index.css
+└── vite.config.js
 ```
 
 ### Layering

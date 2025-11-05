@@ -1,9 +1,9 @@
 import { useState } from "react";
-import RegisterOffice from "../../../assets/img/register/register-office.jpeg";
-import RegisterOfficeDark from "../../../assets/img/register/register-office-dark.jpeg";
-import InputField from "../../../components/clients/common/InputField";
+import RegisterOffice from "../../../../assets/img/register/register-office.jpeg";
+import RegisterOfficeDark from "../../../../assets/img/register/register-office-dark.jpeg";
+import InputField from "../../../../components/InputField";
 import { useNavigate, useParams } from "react-router-dom";
-import { resetPassword } from "../../../api/clients/authApi";
+import { resetPassword } from "../../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
 const ResetPassword = () => {

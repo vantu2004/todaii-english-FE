@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../animations/fadeIn.js";
-import { slideUp } from "../../../animations/slideUp.js";
+import { fadeIn } from "../../../../animations/fadeIn.js";
+import { slideUp } from "../../../../animations/slideUp.js";
 
-import Animation from "../../../assets/img/landing_page/icon-animation.svg";
-import Design from "../../../assets/img/landing_page/icon-design.svg";
-import Photography from "../../../assets/img/landing_page/icon-photography.svg";
-import Crypto from "../../../assets/img/landing_page/icon-crypto.svg";
-import Business from "../../../assets/img/landing_page/icon-business.svg";
+import Animation from "../../../../assets/img/landing_page/icon-animation.svg";
+import Design from "../../../../assets/img/landing_page/icon-design.svg";
+import Photography from "../../../../assets/img/landing_page/icon-photography.svg";
+import Crypto from "../../../../assets/img/landing_page/icon-crypto.svg";
+import Business from "../../../../assets/img/landing_page/icon-business.svg";
 import CourseBox from "./CourseBox.jsx";
 
 const courses = [

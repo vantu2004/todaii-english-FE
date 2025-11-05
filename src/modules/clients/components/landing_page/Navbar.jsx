@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { slideDown } from "../../../animations/slideDown";
-import LogoDark from "../../../assets/img/landing_page/logo-dark.svg";
+import { slideDown } from "../../../../animations/slideDown";
+import LogoDark from "../../../../assets/img/landing_page/logo-dark.svg";
 
 const Navbar = () => {
   return (
