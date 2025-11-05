@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyOtp, resendOtp } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
-const VerifyOtp2 = () => {
+const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
@@ -117,4 +117,4 @@ const VerifyOtp2 = () => {
   );
 };
 
-export default VerifyOtp2;
+export default VerifyOtp;

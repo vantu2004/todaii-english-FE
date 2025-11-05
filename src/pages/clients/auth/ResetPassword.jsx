@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
-const ResetPassword2 = () => {
+const ResetPassword = () => {
   const { token } = useParams();
 
   const [loading, setLoading] = useState(false);
@@ -103,4 +103,4 @@ const ResetPassword2 = () => {
   );
 };
 
-export default ResetPassword2;
+export default ResetPassword;

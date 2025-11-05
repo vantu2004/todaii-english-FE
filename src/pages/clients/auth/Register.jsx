@@ -6,7 +6,7 @@ import { register } from "../../../api/clients/authApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const Register2 = () => {
+const Register = () => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -159,4 +159,4 @@ const Register2 = () => {
   );
 };
 
-export default Register2;
+export default Register;

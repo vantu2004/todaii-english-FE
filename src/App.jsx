@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ClientLandingPage from "./pages/clients/LandingPage";
 import ClientLogin from "./pages/clients/auth/Login";
@@ -13,9 +13,11 @@ const App = () => {
     <AuthProvider>
       <Toaster position="top-center" reverseOrder={false} />
 
-      <Router>
+      <BrowserRouter>
         {/* Client Routes */}
         <Routes>
+          {/* Mặc định khi chạy port từ console thì nó chuyển hướng về /client */}
+          <Route path="/" element={<Navigate to={"/client"} />} />
           <Route path="/client" element={<ClientLandingPage />} />
           <Route path="/client/login" element={<ClientLogin />} />
           <Route path="/client/register" element={<ClientRegister />} />
@@ -32,7 +34,7 @@ const App = () => {
 
         {/* Server Routes */}
         <Routes></Routes>
-      </Router>
+      </BrowserRouter>
     </AuthProvider>
   );
 };

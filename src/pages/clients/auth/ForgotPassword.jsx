@@ -5,7 +5,7 @@ import InputField from "../../../components/clients/common/InputField";
 import { forgotPassword } from "../../../api/clients/authApi";
 import toast from "react-hot-toast";
 
-const ForgotPassword2 = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -87,4 +87,4 @@ const ForgotPassword2 = () => {
   );
 };
 
-export default ForgotPassword2;
+export default ForgotPassword;

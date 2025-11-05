@@ -3,11 +3,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 const ProtectRoutes = () => {
-  const { authUser, isLoggedIn, appLoading } = useContext(AuthContext);
-
-  if (appLoading) {
-    return <div>Loading...</div>;
-  }
+  const { authUser, isLoggedIn } = useContext(AuthContext);
 
   // If not logged in, redirect to login
   if (!isLoggedIn || !authUser) {

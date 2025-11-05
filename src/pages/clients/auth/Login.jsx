@@ -5,8 +5,12 @@ import { login } from "../../../api/clients/authApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import InputField from "../../../components/clients/common/InputField";
+import { useAuth } from "../../../hooks/useAuth";
+import { fetchProfile } from "../../../api/clients/userApi";
 
-const LoginPage2 = () => {
+const LoginPage = () => {
+  const { setAuthUser, setIsLoggedIn } = useAuth();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,7 +21,13 @@ const LoginPage2 = () => {
 
     try {
       await login(form.email, form.password);
+
+      const myProfile = await fetchProfile();
+      setAuthUser(myProfile);
+      setIsLoggedIn(true);
+
       toast.success("Login successful!");
+
       navigate("/client");
     } catch (err) {
       if (err.response?.status === 401) {
@@ -133,4 +143,4 @@ const LoginPage2 = () => {
   );
 };
 
-export default LoginPage2;
+export default LoginPage;
