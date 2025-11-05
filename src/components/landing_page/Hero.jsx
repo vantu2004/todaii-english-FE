@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../../animations/fadeIn";
-import { slideUp } from "../../../../animations/slideUp";
-import { staggerContainer } from "../../../../animations/staggerContainer";
-import HeroDeskTop from "../../../../assets/img/landing_page/image-hero-desktop.webp";
-import HeroTablet from "../../../../assets/img/landing_page/image-hero-tablet.webp";
-import HeroMobile from "../../../../assets/img/landing_page/image-hero-mobile.webp";
+import { fadeIn } from "../../animations/fadeIn";
+import { slideUp } from "../../animations/slideUp";
+import { staggerContainer } from "../../animations/staggerContainer";
+import HeroDeskTop from "../../assets/img/landing_page/image-hero-desktop.webp";
+import HeroTablet from "../../assets/img/landing_page/image-hero-tablet.webp";
+import HeroMobile from "../../assets/img/landing_page/image-hero-mobile.webp";
 
 const Hero = () => {
   return (
