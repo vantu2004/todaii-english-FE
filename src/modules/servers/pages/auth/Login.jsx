@@ -1,5 +1,5 @@
 import { ShieldCheck, Lock } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -90,38 +90,14 @@ const Login = () => {
               />
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              disabled={loading}
-              className="w-full py-3 font-semibold rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 transition-colors duration-300 shadow-md hover:shadow-indigo-500/20"
+            <button
+              disabled={!form.email || !form.password || loading}
+              className="w-full py-2.5 font-semibold rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-md hover:shadow-indigo-500/20"
             >
               {loading ? "Logging in..." : "Sign In"}
-            </motion.button>
+            </button>
           </div>
         </form>
-
-        {/* Footer */}
-        <div className="text-center text-xs sm:text-sm text-gray-500">
-          <p>
-            Haven’t activated your account?{" "}
-            <Link
-              to="/server/verify-otp"
-              className="text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200"
-            >
-              Verify with OTP
-            </Link>
-          </p>
-          <p>
-            Resend new OTP.{" "}
-            <Link
-              to="/server/resend-otp"
-              className="text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200"
-            >
-              Click here
-            </Link>
-          </p>
-        </div>
       </motion.section>
     </main>
   );
