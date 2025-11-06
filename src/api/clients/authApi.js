@@ -19,11 +19,10 @@ export const register = async (email, password, name) => {
 
 export const login = async (email, password) => {
   try {
-    const response = await clientInstance.post("/auth/login", {
+    await clientInstance.post("/auth/login", {
       email,
       password,
     });
-    return response;
   } catch (err) {
     console.log("Error:", err);
     console.log("Status:", err.response.status);
