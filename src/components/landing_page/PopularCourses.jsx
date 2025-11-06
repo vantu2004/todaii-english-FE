@@ -2,38 +2,34 @@ import { motion } from "framer-motion";
 import { fadeIn } from "../../animations/fadeIn.js";
 import { slideUp } from "../../animations/slideUp.js";
 
-import Animation from "../../assets/img/landing_page/icon-animation.svg";
-import Design from "../../assets/img/landing_page/icon-design.svg";
-import Photography from "../../assets/img/landing_page/icon-photography.svg";
-import Crypto from "../../assets/img/landing_page/icon-crypto.svg";
-import Business from "../../assets/img/landing_page/icon-business.svg";
+import { BookOpen, BookMarked, Headphones, Mic, FileText } from "lucide-react";
 import CourseBox from "./CourseBox.jsx";
 
 const courses = [
   {
-    title: "Animation",
-    icon: Animation,
-    desc: "Learn the latest animation techniques to create stunning motion design and captivate your audience.",
+    title: "Reading Practice",
+    icon: <BookOpen className="w-10 h-10" />,
+    desc: "Improve comprehension with bilingual articles and contextual explanations tailored to your level.",
   },
   {
-    title: "Design",
-    icon: Design,
-    desc: "Create beautiful, usable interfaces to help shape the future of how the web looks.",
+    title: "Vocabulary Builder",
+    icon: <BookMarked className="w-10 h-10" />,
+    desc: "Expand your vocabulary effectively with smart flashcards, spaced repetition, and real examples.",
   },
   {
-    title: "Photography",
-    icon: Photography,
-    desc: "Explore critical fundamentals like lighting, composition, and focus to capture exceptional photos.",
+    title: "Listening & Pronunciation",
+    icon: <Headphones className="w-10 h-10" />,
+    desc: "Train your ears and accent through audio lessons and song-based exercises synced with lyrics.",
   },
   {
-    title: "Crypto",
-    icon: Crypto,
-    desc: "All you need to know to get started investing in crypto. Go from beginner to advanced with this 54 hour course.",
+    title: "Speaking Skills",
+    icon: <Mic className="w-10 h-10" />,
+    desc: "Gain confidence in communication with guided practice, dialogues, and pronunciation feedback.",
   },
   {
-    title: "Business",
-    icon: Business,
-    desc: "A step-by-step playbook to help you start, scale, and sustain your business without outside investment.",
+    title: "Grammar Essentials",
+    icon: <FileText className="w-10 h-10" />,
+    desc: "Master key grammar points with short, clear lessons and practical examples you can use instantly.",
   },
 ];
 
@@ -47,6 +43,10 @@ const PopularCourses = () => {
       className="mt-20 mb-40"
     >
       <div className="w-[90%] max-w-275 ml-auto mr-auto">
+        <h2 className="text-4xl font-extrabold text-[#13183f] mb-12">
+          Discover Key Learning Areas
+        </h2>
+
         <div className="grid max-[1400px]:grid-cols-2 max-[850px]:grid-cols-1 grid-cols-3 gap-y-14 gap-x-6 justify-items-center">
           {/* Gradient Header Box */}
           <motion.div

@@ -1,37 +1,73 @@
-import { motion } from "framer-motion";
-import { slideDown } from "../../animations/slideDown";
-import LogoDark from "../../assets/img/landing_page/logo-dark.svg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  return (
-    <motion.nav
-      variants={slideDown(0.1)}
-      initial="hidden"
-      animate="show"
-      className="w-[90%] max-w-[1100px] ml-auto mr-auto"
-    >
-      <div className="flex justify-between items-center mt-4">
-        <motion.a
-          href="#"
-          variants={slideDown(0.3)}
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          <img src={LogoDark} alt="skilled logo" />
-        </motion.a>
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
-        <motion.a
-          href="#"
-          variants={slideDown(0.5)}
-          whileHover={{ scale: 1.1 }}
-          transition={{ type: "spring", stiffness: 300 }}
+  return (
+    <nav className="w-[90%] max-w-[1100px] mx-auto mt-4 relative z-[100]">
+      <div className="flex justify-between items-center">
+        {/* Logo text */}
+        <a
+          href="/"
+          className="text-2xl font-extrabold tracking-tight select-none"
         >
-          <button className="max-[320px]:w-32 max-[320px]:h-10 max-[320px]:text-[14px] font-bold text-white text-[18px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] w-[167px] h-[56px] bg-[#13183f] rounded-[28px] hover:opacity-80 transition">
+          <span className="text-[#13183f]">Todaii</span>
+          <span className="ml-1 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">
+            English
+          </span>
+        </a>
+
+        {/* Desktop buttons */}
+        <div className="hidden md:flex items-center gap-4">
+          <button
+            onClick={() => navigate("/client/register")}
+            className="px-5 py-2.5 rounded-full font-semibold text-white bg-[#13183f] hover:bg-indigo-600 hover:scale-105 transition-all duration-200"
+          >
             Get Started
           </button>
-        </motion.a>
+          <button
+            onClick={() => navigate("/admin/dashboard")}
+            className="px-5 py-2.5 rounded-full font-semibold border border-[#13183f] text-[#13183f] hover:bg-[#13183f] hover:text-white hover:scale-105 transition-all duration-200"
+          >
+            Dashboard
+          </button>
+        </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-[#13183f] font-semibold"
+        >
+          {open ? "Close" : "Menu"}
+        </button>
       </div>
-    </motion.nav>
+
+      {/* Mobile dropdown */}
+      {open && (
+        <div className="flex flex-col items-center gap-3 mt-4 md:hidden">
+          <button
+            onClick={() => {
+              navigate("/client/register");
+              setOpen(false);
+            }}
+            className="w-[80%] py-2 rounded-full font-semibold text-white bg-[#13183f] hover:bg-indigo-600 hover:scale-105 transition-all duration-200"
+          >
+            Get Started
+          </button>
+          <button
+            onClick={() => {
+              navigate("/admin/dashboard");
+              setOpen(false);
+            }}
+            className="w-[80%] py-2 rounded-full font-semibold border border-[#13183f] text-[#13183f] hover:bg-[#13183f] hover:text-white hover:scale-105 transition-all duration-200"
+          >
+            Dashboard
+          </button>
+        </div>
+      )}
+    </nav>
   );
 };
 

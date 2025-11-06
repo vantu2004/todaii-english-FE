@@ -13,7 +13,7 @@ const Hero = () => {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.3 }}
-      className="max-[740px]:mt-12"
+      className="max-[740px]:mt-12 min-h-screen"
     >
       <div className="w-[90%] max-w-275 ml-auto mr-auto">
         <div className="flex max-[740px]:flex-col items-center justify-between">
@@ -26,15 +26,16 @@ const Hero = () => {
               variants={slideUp(0.2)}
               className="min-[932px]:max-lg:w-[90%] min-[1024px]:max-[1400px]:w-[80%] min-[740px]:max-[932px]:w-full max-[740px]:text-[40px] leading-[1.2] text-[#13183f] text-[56px] font-extrabold"
             >
-              Maximize skill, minimize budget
+              Learn English smart, with Todaii English
             </motion.h1>
 
             <motion.p
               variants={fadeIn(0.4)}
               className="min-[932px]:max-lg:w-[55%] min-lg:max-[1400px]:w-[60%] max-[932px]:w-full w-[76%] text-[#83869a] text-[18px] font-medium leading-[28px] mt-8"
             >
-              Our modern courses across a range of in-demand skills will give
-              you the knowledge you need to live the life you want.
+              A web platform designed to help learners improve English
+              proficiency through accessible, well structured, and engaging
+              content.
             </motion.p>
 
             <motion.a

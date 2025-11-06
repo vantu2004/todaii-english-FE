@@ -1,42 +1,56 @@
 import { motion } from "framer-motion";
 import { slideUp } from "../../animations/slideUp.js";
 import { fadeIn } from "../../animations/fadeIn.js";
-import LogoLight from "../../assets/img/landing_page/logo-light.svg";
 
 const Footer = () => {
-  // hello world
   return (
     <motion.footer
       variants={fadeIn(0.1)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
-      className="bg-[#13183f] py-4"
+      className="bg-[#13183f] text-white py-10"
     >
       <motion.div
         variants={slideUp(0.2)}
-        className="w-[90%] max-w-[1100px] ml-auto mr-auto"
+        className="w-[90%] max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left"
       >
-        <div className="flex justify-between items-center">
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+        {/* Logo + tagline */}
+        <div>
+          <a
+            href="/"
+            className="text-2xl font-extrabold tracking-tight select-none"
           >
-            <img src={LogoLight} alt="skilled logo light" />
-          </motion.a>
+            <span className="text-white">Todaii</span>
+            <span className="ml-1 text-transparent bg-clip-text bg-gradient-to-r from-[#FF6F48] to-[#F02AA6]">
+              English
+            </span>
+          </a>
+          <p className="text-sm text-gray-400 mt-1">
+            Learn smarter. Grow stronger every day.
+          </p>
+        </div>
 
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <button className="max-[320px]:w-32 max-[320px]:h-10 max-[320px]:text-[14px] w-40 h-14 text-[18px] bg-gradient-to-b from-[#4851FF] to-[#F02AA6] text-white px-6 py-3 rounded-full font-bold shadow-md hover:opacity-80 transition">
-              Get Started
-            </button>
-          </motion.a>
+        {/* Links */}
+        <div className="flex flex-wrap justify-center md:justify-end items-center gap-6 text-sm text-gray-400">
+          <a href="#" className="hover:text-white transition">
+            Terms
+          </a>
+          <a href="#" className="hover:text-white transition">
+            Privacy
+          </a>
+          <a href="#" className="hover:text-white transition">
+            Contact
+          </a>
         </div>
       </motion.div>
+
+      {/* Divider line */}
+      <div className="w-[90%] max-w-[1100px] mx-auto mt-6 border-t border-white/10 pt-4 text-center">
+        <p className="text-xs text-gray-500">
+          © {new Date().getFullYear()} Todaii English. All rights reserved.
+        </p>
+      </div>
     </motion.footer>
   );
 };
