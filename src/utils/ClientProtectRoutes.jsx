@@ -1,17 +1,22 @@
-import { useContext } from "react";
-import { Outlet, Navigate } from "react-router-dom";
-import ClientAuthContext from "../context/clients/ClientAuthContext";
+import { Navigate } from "react-router-dom";
+import { useClientAuthContext } from "../hooks/clients/useClientAuthContext";
 
-const ClientProtectRoutes = () => {
-  const { authUser, isLoggedIn } = useContext(ClientAuthContext);
+export const ClientProtectRoutes = ({ children }) => {
+  const { authUser, isLoggedIn } = useClientAuthContext();
 
-  // If not logged in, redirect to login
   if (!isLoggedIn || !authUser) {
     return <Navigate to="/client/login" replace />;
   }
 
-  // If authenticated, render child routes
-  return <Outlet />;
+  return children;
 };
 
-export default ClientProtectRoutes;
+export const RedirectAuthenticatedUser = ({ children }) => {
+  const { authUser, isLoggedIn } = useClientAuthContext();
+
+  if (isLoggedIn && authUser) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};

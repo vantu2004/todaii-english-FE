@@ -22,13 +22,13 @@ const Navbar = () => {
         {/* Desktop buttons */}
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={() => navigate("/client/register")}
+            onClick={() => navigate("/client/login")}
             className="px-5 py-2.5 rounded-full font-semibold text-white bg-[#13183f] hover:bg-indigo-600 hover:scale-105 transition-all duration-200"
           >
             Get Started
           </button>
           <button
-            onClick={() => navigate("/admin/dashboard")}
+            onClick={() => navigate("/server/login")}
             className="px-5 py-2.5 rounded-full font-semibold border border-[#13183f] text-[#13183f] hover:bg-[#13183f] hover:text-white hover:scale-105 transition-all duration-200"
           >
             Dashboard
@@ -49,7 +49,7 @@ const Navbar = () => {
         <div className="flex flex-col items-center gap-3 mt-4 md:hidden">
           <button
             onClick={() => {
-              navigate("/client/register");
+              navigate("/client/login");
               setOpen(false);
             }}
             className="w-[80%] py-2 rounded-full font-semibold text-white bg-[#13183f] hover:bg-indigo-600 hover:scale-105 transition-all duration-200"
@@ -58,7 +58,7 @@ const Navbar = () => {
           </button>
           <button
             onClick={() => {
-              navigate("/admin/dashboard");
+              navigate("/server/login");
               setOpen(false);
             }}
             className="w-[80%] py-2 rounded-full font-semibold border border-[#13183f] text-[#13183f] hover:bg-[#13183f] hover:text-white hover:scale-105 transition-all duration-200"
