@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../animations/fadeIn.js";
-import { slideUp } from "../../../animations/slideUp.js";
+import { fadeIn } from "../../animations/fadeIn.js";
+import { slideUp } from "../../animations/slideUp.js";
 
 import { BookOpen, BookMarked, Headphones, Mic, FileText } from "lucide-react";
 import CourseBox from "./CourseBox.jsx";

@@ -12,7 +12,7 @@ export const fetchProfile = async () => {
 export const fetchAdmins = async (
   page = 1,
   size = 10,
-  sortBy = "updatedAt",
+  sortBy = "id",
   direction = "desc",
   keyword = ""
 ) => {
@@ -29,7 +29,7 @@ export const fetchAdmins = async (
 export const toggleAdmin = async (adminId) => {
   try {
     const response = await serverInstance.patch(`/admin/${adminId}/enabled`);
-    return response.data; 
+    return response.data;
   } catch (err) {
     console.error(`Error toggling enabled state for admin ${adminId}:`, err);
   }
@@ -38,7 +38,7 @@ export const toggleAdmin = async (adminId) => {
 export const deleteAdmin = async (adminId) => {
   try {
     const response = await serverInstance.delete(`/admin/${adminId}`);
-    return response.data; 
+    return response.data;
   } catch (err) {
     console.error(`Error deleting admin ${adminId}:`, err);
   }

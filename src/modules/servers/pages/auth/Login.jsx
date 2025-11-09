@@ -22,7 +22,7 @@ const Login = () => {
     try {
       await login(form.email, form.password);
       toast.success("Login successful!");
-      navigate("/");
+      navigate("/server");
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Invalid email or password");

@@ -1,7 +1,7 @@
-import Navbar from "../components/clients/landing_page/Navbar";
-import Hero from "../components/clients/landing_page/Hero";
-import PopularCourses from "../components/clients/landing_page/PopularCourses";
-import Footer from "../components/clients/landing_page/Footer";
+import Navbar from "../components/landing_page/Navbar";
+import Hero from "../components/landing_page/Hero";
+import PopularCourses from "../components/landing_page/PopularCourses";
+import Footer from "../components/landing_page/Footer";
 
 function LandingPage() {
   return (
