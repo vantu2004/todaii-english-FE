@@ -1,9 +1,9 @@
 import { useState } from "react";
 import RegisterOffice from "../../../../assets/img/register/register-office.jpeg";
 import RegisterOfficeDark from "../../../../assets/img/register/register-office-dark.jpeg";
-import InputField from "../../../../components/InputField";
+import InputField from "../../../../components/clients/InputField";
 import { register } from "../../../../api/clients/authApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Register = () => {
@@ -144,12 +144,12 @@ const Register = () => {
               </button>
 
               <p className="mt-4">
-                <a
+                <Link
                   className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  href="./login"
+                  to="../login"
                 >
                   Back to login
-                </a>
+                </Link>
               </p>
             </form>
           </div>

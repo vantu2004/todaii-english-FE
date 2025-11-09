@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { slideUp } from "../../animations/slideUp.js";
-import { fadeIn } from "../../animations/fadeIn.js";
+import { slideUp } from "../../../animations/slideUp.js";
+import { fadeIn } from "../../../animations/fadeIn.js";
 
 const Footer = () => {
   return (

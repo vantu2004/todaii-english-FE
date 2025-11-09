@@ -11,7 +11,6 @@ export default function ClientLayout() {
         </nav>
       </header>
 
-      {/* 👇 Đây là nơi các page con sẽ được hiển thị */}
       <main>
         <Outlet />
       </main>

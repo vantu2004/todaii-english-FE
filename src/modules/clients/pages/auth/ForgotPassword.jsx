@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ForgotPasswordOffice from "../../../../assets/img/forgot_password/forgot-password-office.jpeg";
 import ForgotPasswordOfficeDark from "../../../../assets/img/forgot_password/forgot-password-office-dark.jpeg";
-import InputField from "../../../../components/InputField";
+import InputField from "../../../../components/clients/InputField";
 import { forgotPassword } from "../../../../api/clients/authApi";
 import toast from "react-hot-toast";
 

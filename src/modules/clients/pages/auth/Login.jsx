@@ -2,9 +2,9 @@ import { useState } from "react";
 import LoginOffice from "../../../../assets/img/login/login-office.jpeg";
 import LoginOfficeDark from "../../../../assets/img/login/login-office-dark.jpeg";
 import { login } from "../../../../api/clients/authApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import InputField from "../../../../components/InputField";
+import InputField from "../../../../components/clients/InputField";
 import { useClientAuthContext } from "../../../../hooks/clients/useClientAuthContext";
 import { fetchProfile } from "../../../../api/clients/userApi";
 
@@ -120,20 +120,20 @@ const LoginPage = () => {
               </button>
 
               <p className="mt-4">
-                <a
+                <Link
                   className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  href="./forgot-password"
+                  to="../forgot-password"
                 >
                   Forgot your password?
-                </a>
+                </Link>
               </p>
               <p className="mt-2">
-                <a
+                <Link
                   className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                  href="./register"
+                  to="../register"
                 >
                   Create account
-                </a>
+                </Link>
               </p>
             </form>
           </div>
