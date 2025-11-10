@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { formatDate } from "./../../../utils/FormatDate";
 import {
   deleteAdmin,
@@ -8,14 +7,15 @@ import {
 } from "../../../api/servers/adminApi";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
-import { a } from "framer-motion/client";
+import AdminViewModal from "./AdminViewModal";
 
-const AdminsTable = ({ columns, admins, reloadAdmins }) => {
+const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
 
@@ -50,6 +50,11 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
     // lây dữ liệu chuẩn bị cho initial value
     setSelectedAdmin(admins[index]);
     setIsUpdateModalOpen(true);
+  };
+
+  const handleViewClick = (index) => {
+    setSelectedAdmin(admins[index]);
+    setIsViewModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -99,11 +104,54 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
         {/* === Table Header === */}
         <thead>
           <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-            {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3">
-                {col.label}
-              </th>
-            ))}
+            {columns.map((col) => {
+              const isSortable = !!col.sortField;
+              const isActiveSort = query.sortBy === col.sortField;
+
+              return (
+                <th
+                  key={col.key}
+                  className={`px-4 py-3 ${
+                    isSortable
+                      ? "cursor-pointer select-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    if (!isSortable) return;
+
+                    const newDirection = isActiveSort
+                      ? query.direction === "asc"
+                        ? "desc"
+                        : "asc"
+                      : "asc";
+
+                    updateQuery({
+                      sortBy: col.sortField,
+                      direction: newDirection,
+                      page: query.page,
+                    });
+                  }}
+                >
+                  <div className="flex items-center gap-1">
+                    {col.label}
+                    {isSortable && isActiveSort && (
+                      <span className="inline-flex items-center">
+                        {query.direction === "asc" ? (
+                          <ArrowUp className="w-3 h-3 text-blue-600" />
+                        ) : (
+                          <ArrowDown className="w-3 h-3 text-blue-600" />
+                        )}
+                      </span>
+                    )}
+                    {isSortable && !isActiveSort && (
+                      <span className="inline-flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowUp className="w-3 h-3 text-gray-400" />
+                      </span>
+                    )}
+                  </div>
+                </th>
+              );
+            })}
           </tr>
         </thead>
 
@@ -243,49 +291,62 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
       </table>
 
       {/* Modal delete admin */}
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Delete Admin"
-        footer={
-          <>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                handleConfirmDelete();
-                setIsModalOpen(false);
-              }}
-              className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-            >
-              Delete
-            </button>
-          </>
-        }
-      >
-        <p className="text-gray-700 dark:text-gray-300">
-          Are you sure you want to delete{" "}
-          <span className="font-semibold text-blue-600">
-            {selectedAdminIndex !== null
-              ? admins[selectedAdminIndex].display_name
-              : ""}
-          </span>
-          ?
-        </p>
-      </Modal>
+      {selectedAdminIndex !== null && selectedAdminIndex !== undefined && (
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          title="Delete Admin"
+          footer={
+            <>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  handleConfirmDelete();
+                  setIsDeleteModalOpen(false);
+                }}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+              >
+                Delete
+              </button>
+            </>
+          }
+        >
+          <p className="text-gray-700 dark:text-gray-300">
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-blue-600">
+              {selectedAdminIndex !== null
+                ? admins[selectedAdminIndex].display_name
+                : ""}
+            </span>
+            ?
+          </p>
+        </Modal>
+      )}
 
       {/* Modal update admin */}
-      <AdminFormModal
-        isOpen={isUpdateModalOpen}
-        onClose={() => setIsUpdateModalOpen(false)}
-        mode={"update"} // "create" hoặc "update"
-        initialData={selectedAdmin || {}} // khi tạo nên set initialData = {}
-        onSubmit={handleConfirmUpdate}
-      />
+      {selectedAdmin && (
+        <AdminFormModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => setIsUpdateModalOpen(false)}
+          mode={"update"} // "create" hoặc "update"
+          initialData={selectedAdmin || {}} // khi tạo nên set initialData = {}
+          onSubmit={handleConfirmUpdate}
+        />
+      )}
+
+      {/* Modal view admin */}
+      {selectedAdmin && (
+        <AdminViewModal
+          isOpen={isViewModalOpen}
+          onClose={() => setIsViewModalOpen(false)}
+          admin={selectedAdmin || {}}
+        />
+      )}
     </>
   );
 };

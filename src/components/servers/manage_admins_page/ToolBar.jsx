@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
 import { createAdmin } from "../../../api/servers/adminApi";
 import { toast } from "react-hot-toast";
 
-const ToolBar = ({ reloadAdmins }) => {
+const ToolBar = ({ updateQuery, reloadAdmins }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // debounce: chờ user dừng gõ 500ms mới thực thi
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      updateQuery({ keyword: searchTerm, page: 1 });
+    }, 500);
+
+    return () => clearTimeout(delay); // cleanup mỗi lần gõ
+  }, [searchTerm]);
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    // bạn có thể lọc tại client hoặc gọi API filter ở đây
   };
 
   const handleConfirmCreate = async (data) => {

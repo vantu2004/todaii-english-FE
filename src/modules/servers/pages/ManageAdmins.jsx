@@ -28,13 +28,13 @@ const ManageAdmins = () => {
   });
 
   const columns = [
-    { key: "id", label: "ID" },
-    { key: "email_name", label: "Name/Email" },
+    { key: "id", label: "ID", sortField: "id" },
+    { key: "email_name", label: "Name/Email", sortField: "displayName" },
     { key: "role", label: "Role" },
-    { key: "lastLogin", label: "Last Login" },
-    { key: "createdAt", label: "Created At" },
-    { key: "status", label: "Status" },
-    { key: "enable", label: "Enable" },
+    { key: "lastLogin", label: "Last Login", sortField: "lastLoginAt" },
+    { key: "createdAt", label: "Created At", sortField: "createdAt" },
+    { key: "status", label: "Status", sortField: "status" },
+    { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];
 
@@ -82,7 +82,7 @@ const ManageAdmins = () => {
           Manage Admins
         </h2>
 
-        <ToolBar reloadAdmins={reloadAdmins} />
+        <ToolBar updateQuery={updateQuery} reloadAdmins={reloadAdmins} />
 
         <h4 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
           Table with actions
