@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { TextAlignStart, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, UserCog, Users } from "lucide-react";
 
 const Sidebar = () => {
   const location = useLocation(); // get current path
@@ -13,7 +13,12 @@ const Sidebar = () => {
     {
       name: "Manage Admins",
       to: "/server/admin",
-      icon: <TextAlignStart className="w-5 h-5" />,
+      icon: <UserCog className="w-5 h-5" />,
+    },
+    {
+      name: "Manage Users",
+      to: "/server/user",
+      icon: <Users className="w-5 h-5" />,
     },
   ];
 

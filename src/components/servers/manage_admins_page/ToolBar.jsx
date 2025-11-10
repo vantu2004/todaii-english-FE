@@ -4,9 +4,8 @@ import AdminFormModal from "./AdminFormModal";
 import { createAdmin } from "../../../api/servers/adminApi";
 import { toast } from "react-hot-toast";
 
-const ToolBar = ({ updateQuery, reloadAdmins }) => {
+const ToolBar = ({ updateQuery, setIsModalOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // debounce: chờ user dừng gõ 500ms mới thực thi
   useEffect(() => {
@@ -19,26 +18,6 @@ const ToolBar = ({ updateQuery, reloadAdmins }) => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-  };
-
-  const handleConfirmCreate = async (data) => {
-    try {
-      await createAdmin(data);
-      await reloadAdmins();
-
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error creating admin:", error);
-
-      // Lấy danh sách lỗi từ response
-      const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
-      } else {
-        toast.error("Failed to create admin"); // fallback
-      }
-    }
   };
 
   return (
@@ -56,24 +35,15 @@ const ToolBar = ({ updateQuery, reloadAdmins }) => {
           />
         </div>
 
-        {/* Nút tạo admin */}
+        {/* Nút tạo mới */}
         <button
           onClick={() => setIsModalOpen(true)}
           className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Create Admin
+          Create New
         </button>
       </div>
-
-      {/* Modal tạo admin */}
-      <AdminFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        mode={"create"} // "create" hoặc "update"
-        initialData={{}} // khi tạo nên set initialData = {}
-        onSubmit={handleConfirmCreate}
-      />
     </>
   );
 };

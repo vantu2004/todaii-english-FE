@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AdminsTable from "../../../components/servers/manage_admins_page/AdminsTable";
-import { fetchAdmins } from "../../../api/servers/adminApi";
+import { fetchAdmins, createAdmin } from "../../../api/servers/adminApi";
 import ToolBar from "../../../components/servers/manage_admins_page/ToolBar";
 import { motion } from "framer-motion";
-import Pagination from "../../../components/servers/manage_admins_page/Pagination";
+import Pagination from "../../../components/servers/Pagination";
+import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
 
 const ManageAdmins = () => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // State chung cho phân trang, sort, search
   const [query, setQuery] = useState({
@@ -75,49 +77,74 @@ const ManageAdmins = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
+  const handleConfirmCreate = async (data) => {
+    try {
+      await createAdmin(data);
+      await reloadAdmins();
+
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      console.error("Error creating admin:", error);
+
+      // Lấy danh sách lỗi từ response
+      const errors = error.response?.data?.errors;
+
+      if (errors && Array.isArray(errors)) {
+        errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error("Failed to create admin"); // fallback
+      }
+    }
+  };
+
   return (
-    <main className="h-full pb-16 overflow-y-auto">
-      <div className="container grid px-6 mx-auto">
-        <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+    <div className="flex flex-col h-full">
+      <div className="flex-none">
+        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
           Manage Admins
         </h2>
 
-        <ToolBar updateQuery={updateQuery} reloadAdmins={reloadAdmins} />
+        <ToolBar
+          updateQuery={updateQuery}
+          setIsModalOpen={setIsCreateModalOpen}
+        />
 
-        <h4 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+        <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
           Table with actions
         </h4>
-
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="w-12 h-12 border-4 border-t-indigo-500 border-gray-300 rounded-full"
-            ></motion.div>
-            <p className="mt-4 text-gray-500">Loading admins...</p>
-          </div>
-        ) : (
-          <div className="border border-gray-300 w-full overflow-hidden rounded-lg shadow-xs">
-            <div className="w-full overflow-x-auto">
-              <AdminsTable
-                columns={columns}
-                admins={admins}
-                reloadAdmins={reloadAdmins}
-                query={query}
-                updateQuery={updateQuery}
-              />
-
-              <Pagination
-                query={query}
-                updateQuery={updateQuery}
-                pagination={pagination}
-              />
-            </div>
-          </div>
-        )}
       </div>
-    </main>
+
+      {/* Vùng bảng cuộn riêng */}
+      <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+        <AdminsTable
+          columns={columns}
+          admins={admins}
+          reloadAdmins={reloadAdmins}
+          query={query}
+          updateQuery={updateQuery}
+        />
+      </div>
+
+      {/* Pagination nằm ngoài, cố định dưới cùng */}
+      <div className="flex-none mt-4">
+        <Pagination
+          query={query}
+          updateQuery={updateQuery}
+          pagination={pagination}
+        />
+      </div>
+
+      {/* Modal */}
+      {isCreateModalOpen && (
+        <AdminFormModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          mode="create"
+          initialData={{}}
+          onSubmit={handleConfirmCreate}
+        />
+      )}
+    </div>
   );
 };
 

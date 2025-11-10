@@ -8,6 +8,7 @@ import Login from "../../modules/servers/pages/Login";
 import ServerLayout from "../../modules/servers/layouts/ServerLayout";
 import Dashboard from "../../modules/servers/pages/Dashboard";
 import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
+import ManageUsers from "../../modules/servers/pages/ManageUsers";
 
 export default function ServerRoutes() {
   return (
@@ -37,6 +38,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageAdmins />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/user"
+            element={
+              <ServerProtectRoutes>
+                <ManageUsers />
               </ServerProtectRoutes>
             }
           />

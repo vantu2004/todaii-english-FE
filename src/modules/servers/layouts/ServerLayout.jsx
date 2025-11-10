@@ -5,17 +5,15 @@ import { Outlet } from "react-router-dom";
 
 const ServerLayout = () => {
   return (
-    <div className="font-inter flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="font-inter flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <Sidebar />
 
-      <Sidebar/>
-
-      <div className="flex flex-col flex-1">
-        <Header/>
-        <main>
-          <Outlet/>
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <Header />
+        <main className="flex-1 overflow-y-auto p-6">
+          <Outlet />
         </main>
       </div>
-      
     </div>
   );
 };
