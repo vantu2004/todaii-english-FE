@@ -13,10 +13,11 @@ const ToolBar = ({ reloadAdmins }) => {
     // bạn có thể lọc tại client hoặc gọi API filter ở đây
   };
 
-  const handleCreateAdmin = async (data) => {
+  const handleConfirmCreate = async (data) => {
     try {
       await createAdmin(data);
       await reloadAdmins();
+
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error creating admin:", error);
@@ -63,7 +64,7 @@ const ToolBar = ({ reloadAdmins }) => {
         onClose={() => setIsModalOpen(false)}
         mode={"create"} // "create" hoặc "update"
         initialData={{}} // khi tạo nên set initialData = {}
-        onSubmit={handleCreateAdmin}
+        onSubmit={handleConfirmCreate}
       />
     </>
   );

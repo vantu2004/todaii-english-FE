@@ -5,7 +5,6 @@ import { fetchAdmins } from "../../../api/servers/adminApi";
 import ToolBar from "../../../components/servers/manage_admins_page/ToolBar";
 import { motion } from "framer-motion";
 import Pagination from "../../../components/servers/manage_admins_page/Pagination";
-import Modal from "../../../components/servers/Modal";
 
 const ManageAdmins = () => {
   const [admins, setAdmins] = useState([]);
@@ -27,8 +26,6 @@ const ManageAdmins = () => {
     first: true,
     last: true,
   });
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns = [
     { key: "id", label: "ID" },

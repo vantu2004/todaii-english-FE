@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 
 import { formatDate } from "./../../../utils/FormatDate";
-import { deleteAdmin, toggleAdmin } from "../../../api/servers/adminApi";
+import {
+  deleteAdmin,
+  toggleAdmin,
+  updateAdmin,
+} from "../../../api/servers/adminApi";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import AdminFormModal from "./AdminFormModal";
+import { a } from "framer-motion/client";
 
 const AdminsTable = ({ columns, admins, reloadAdmins }) => {
   const [enabledStates, setEnabledStates] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
 
   useEffect(() => {
     setEnabledStates(admins.map((admin) => admin.enabled));
@@ -34,7 +42,14 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
 
   const handleDeleteClick = (index) => {
     setSelectedAdminIndex(index);
-    setIsModalOpen(true);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleUpdateClick = (index) => {
+    setSelectedAdminIndex(index);
+    // lây dữ liệu chuẩn bị cho initial value
+    setSelectedAdmin(admins[index]);
+    setIsUpdateModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -48,8 +63,33 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
       toast.error("Failed to delete admin");
       console.error("Failed to delete admin:", err);
     } finally {
-      setIsModalOpen(false);
+      setIsDeleteModalOpen(false);
       setSelectedAdminIndex(null);
+    }
+  };
+
+  const handleConfirmUpdate = async (data) => {
+    if (selectedAdminIndex === null) return;
+
+    try {
+      const adminId = admins[selectedAdminIndex].id;
+
+      await updateAdmin(adminId, data);
+      await reloadAdmins();
+
+      setIsUpdateModalOpen(false);
+      setSelectedAdminIndex(null);
+    } catch (error) {
+      console.error("Error creating admin:", error);
+
+      // Lấy danh sách lỗi từ response
+      const errors = error.response?.data?.errors;
+
+      if (errors && Array.isArray(errors)) {
+        errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error("Failed to create admin"); // fallback
+      }
     }
   };
 
@@ -179,9 +219,9 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
 
                     {/* Nút sửa */}
                     <button
-                      onClick={() => handleEditClick(i)}
+                      onClick={() => handleUpdateClick(i)}
                       className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-                      aria-label="Edit"
+                      aria-label="Update"
                     >
                       <Pencil className="w-5 h-5" />
                     </button>
@@ -202,8 +242,9 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
         </tbody>
       </table>
 
+      {/* Modal delete admin */}
       <Modal
-        isOpen={isModalOpen}
+        isOpen={isDeleteModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Delete Admin"
         footer={
@@ -236,6 +277,15 @@ const AdminsTable = ({ columns, admins, reloadAdmins }) => {
           ?
         </p>
       </Modal>
+
+      {/* Modal update admin */}
+      <AdminFormModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        mode={"update"} // "create" hoặc "update"
+        initialData={selectedAdmin || {}} // khi tạo nên set initialData = {}
+        onSubmit={handleConfirmUpdate}
+      />
     </>
   );
 };

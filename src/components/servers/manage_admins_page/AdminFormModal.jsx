@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "../Modal";
-import toast from "react-hot-toast";
+import { form } from "framer-motion/client";
 
 const AdminFormModal = ({
   isOpen,
@@ -27,7 +27,13 @@ const AdminFormModal = ({
 
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
-      setFormData((prev) => ({ ...prev, ...initialData }));
+      setFormData({
+        email: initialData.email || "",
+        password: initialData.password || "",
+        displayName: initialData.display_name || "",
+        // Chuyển roles object -> mảng string code
+        roleCodes: (initialData.roles || []).map((r) => r.code),
+      });
     }
   }, [initialData]);
 

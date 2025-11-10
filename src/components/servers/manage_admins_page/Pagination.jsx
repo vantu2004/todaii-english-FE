@@ -1,6 +1,6 @@
 const Pagination = ({ query, updateQuery, pagination }) => {
   return (
-    <div class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
+    <div className="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
       {/* Show total records */}
       <span className="flex items-center col-span-3">
         {pagination.totalElements > 0
@@ -11,7 +11,7 @@ const Pagination = ({ query, updateQuery, pagination }) => {
           : "No records to display"}
       </span>
 
-      <span class="col-span-2"></span>
+      <span className="col-span-2"></span>
       {/* Pagination */}
       <span className="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
         <nav aria-label="Table navigation">
