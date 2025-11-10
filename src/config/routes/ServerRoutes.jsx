@@ -4,11 +4,10 @@ import {
   RedirectAuthenticatedUser,
   ServerProtectRoutes,
 } from "../../utils/ServerProtectRoutes";
-import Login from "../../modules/servers/pages/auth/Login";
+import Login from "../../modules/servers/pages/Login";
 import ServerLayout from "../../modules/servers/layouts/ServerLayout";
 import Dashboard from "../../modules/servers/pages/Dashboard";
 import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
-import ManageAdmins2 from "../../modules/servers/pages/ManageAdmins";
 
 export default function ServerRoutes() {
   return (
