@@ -37,8 +37,7 @@ export const updateUser = async (userId, data) => {
 
 export const toggleUser = async (userId) => {
   try {
-    const response = await serverInstance.patch(`/user/${userId}/enabled`);
-    return response.data;
+    await serverInstance.patch(`/user/${userId}/enabled`);
   } catch (err) {
     console.error(`Error toggling enabled state for user ${userId}:`, err);
   }
@@ -46,8 +45,7 @@ export const toggleUser = async (userId) => {
 
 export const deleteUser = async (userId) => {
   try {
-    const response = await serverInstance.delete(`/user/${userId}`);
-    return response.data;
+    await serverInstance.delete(`/user/${userId}`);
   } catch (err) {
     console.error(`Error deleting user ${userId}:`, err);
   }

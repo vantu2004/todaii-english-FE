@@ -82,6 +82,8 @@ const ManageAdmins = () => {
       await reloadAdmins();
 
       setIsCreateModalOpen(false);
+
+      toast.success("Admin created successfully");
     } catch (error) {
       console.error("Error creating admin:", error);
 

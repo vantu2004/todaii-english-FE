@@ -68,8 +68,10 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
       setIsUpdateModalOpen(false);
       setSelectedAdminIndex(null);
+
+      toast.success("Admin updated successfully");
     } catch (error) {
-      console.error("Error creating admin:", error);
+      console.error("Error updating admin:", error);
 
       // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
@@ -77,7 +79,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
       if (errors && Array.isArray(errors)) {
         errors.forEach((err) => toast.error(err));
       } else {
-        toast.error("Failed to create admin"); // fallback
+        toast.error("Failed to update admin"); // fallback
       }
     }
   };
@@ -87,8 +89,11 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
     try {
       const adminId = admins[selectedAdminIndex].id;
+
       await deleteAdmin(adminId);
       await reloadAdmins();
+
+      toast.success("Admin deleted");
     } catch (err) {
       toast.error("Failed to delete admin");
       console.error("Failed to delete admin:", err);

@@ -67,6 +67,8 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
       setIsUpdateModalOpen(false);
       setSelectedUserIndex(null);
+
+      toast.success("User updated successfully");
     } catch (error) {
       console.error("Error updating user:", error);
 
@@ -85,8 +87,11 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
     try {
       const userId = users[selectedUserIndex].id;
+
       await deleteUser(userId);
       await reloadUsers();
+
+      toast.success("User deleted");
     } catch (err) {
       toast.error("Failed to delete user");
       console.error("Failed to delete user:", err);
