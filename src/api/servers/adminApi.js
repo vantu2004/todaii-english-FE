@@ -12,7 +12,7 @@ export const fetchProfile = async () => {
 export const fetchAdmins = async (
   page = 1,
   size = 10,
-  sortBy = "updatedAt",
+  sortBy = "id",
   direction = "desc",
   keyword = ""
 ) => {
@@ -26,10 +26,37 @@ export const fetchAdmins = async (
   }
 };
 
+export const createAdmin = async (data) => {
+  try {
+    await serverInstance.post("/admin", {
+      email: data.email,
+      password: data.password,
+      display_name: data.displayName,
+      role_codes: data.roleCodes,
+    });
+  } catch (err) {
+    console.error("Error creating admin:", err);
+    throw err;
+  }
+};
+
+export const updateAdmin = async (adminId, data) => {
+  try {
+    await serverInstance.put(`/admin/${adminId}`, {
+      email: data.email,
+      password: data.password,
+      display_name: data.displayName,
+      role_codes: data.roleCodes,
+    });
+  } catch (err) {
+    console.error(`Error updating admin ${adminId}:`, err);
+    throw err;
+  }
+};
+
 export const toggleAdmin = async (adminId) => {
   try {
-    const response = await serverInstance.patch(`/admin/${adminId}/enabled`);
-    return response.data; 
+    await serverInstance.patch(`/admin/${adminId}/enabled`);
   } catch (err) {
     console.error(`Error toggling enabled state for admin ${adminId}:`, err);
   }
@@ -37,8 +64,7 @@ export const toggleAdmin = async (adminId) => {
 
 export const deleteAdmin = async (adminId) => {
   try {
-    const response = await serverInstance.delete(`/admin/${adminId}`);
-    return response.data; 
+    await serverInstance.delete(`/admin/${adminId}`);
   } catch (err) {
     console.error(`Error deleting admin ${adminId}:`, err);
   }

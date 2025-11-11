@@ -1,105 +1,103 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "./../../../utils/FormatDate";
-import {
-  deleteAdmin,
-  toggleAdmin,
-  updateAdmin,
-} from "../../../api/servers/adminApi";
+import { formatDate } from "../../../utils/FormatDate";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import { Eye, Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
-import AdminFormModal from "./AdminFormModal";
-import AdminViewModal from "./AdminViewModal";
+import UserViewModal from "./UserViewModal";
+import {
+  updateUser,
+  toggleUser,
+  deleteUser,
+} from "../../../api/servers/userApi";
+import UserFormModal from "./UserFormModal";
 
-const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
+const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
-    setEnabledStates(admins.map((admin) => admin.enabled));
-  }, [admins]);
+    setEnabledStates(users.map((user) => user.enabled));
+  }, [users]);
 
   const handleToggle = async (index) => {
     setEnabledStates((prev) => {
-      const newStates = [...prev]; // get old states
-      newStates[index] = !newStates[index]; // toggle
+      const newStates = [...prev];
+      newStates[index] = !newStates[index];
       return newStates;
     });
 
     try {
-      const adminId = admins[index].id;
-      await toggleAdmin(adminId);
-      await reloadAdmins();
+      const userId = users[index].id;
+      await toggleUser(userId);
+      await reloadUsers();
     } catch (err) {
-      toast.error("Failed to toggle admin");
-      console.error("Failed to toggle admin:", err);
+      toast.error("Failed to toggle user");
+      console.error("Failed to toggle user:", err);
     }
   };
 
   const handleUpdateClick = (index) => {
-    setSelectedAdminIndex(index);
-    // lây dữ liệu chuẩn bị cho initial value
-    setSelectedAdmin(admins[index]);
+    setSelectedUserIndex(index);
+    setSelectedUser(users[index]);
     setIsUpdateModalOpen(true);
   };
 
   const handleDeleteClick = (index) => {
-    setSelectedAdminIndex(index);
+    setSelectedUserIndex(index);
     setIsDeleteModalOpen(true);
   };
 
   const handleViewClick = (index) => {
-    setSelectedAdmin(admins[index]);
+    setSelectedUser(users[index]);
     setIsViewModalOpen(true);
   };
 
   const handleConfirmUpdate = async (data) => {
-    if (selectedAdminIndex === null) return;
+    if (selectedUserIndex === null) return;
 
     try {
-      const adminId = admins[selectedAdminIndex].id;
+      const userId = users[selectedUserIndex].id;
 
-      await updateAdmin(adminId, data);
-      await reloadAdmins();
+      await updateUser(userId, data);
+      await reloadUsers();
 
       setIsUpdateModalOpen(false);
-      setSelectedAdminIndex(null);
+      setSelectedUserIndex(null);
 
-      toast.success("Admin updated successfully");
+      toast.success("User updated successfully");
     } catch (error) {
-      console.error("Error updating admin:", error);
+      console.error("Error updating user:", error);
 
-      // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
 
       if (errors && Array.isArray(errors)) {
         errors.forEach((err) => toast.error(err));
       } else {
-        toast.error("Failed to update admin"); // fallback
+        toast.error("Failed to update user");
       }
     }
   };
 
   const handleConfirmDelete = async () => {
-    if (selectedAdminIndex === null) return;
+    if (selectedUserIndex === null) return;
 
     try {
-      const adminId = admins[selectedAdminIndex].id;
+      const userId = users[selectedUserIndex].id;
 
-      await deleteAdmin(adminId);
-      await reloadAdmins();
+      await deleteUser(userId);
+      await reloadUsers();
 
-      toast.success("Admin deleted");
+      toast.success("User deleted");
     } catch (err) {
-      toast.error("Failed to delete admin");
-      console.error("Failed to delete admin:", err);
+      toast.error("Failed to delete user");
+      console.error("Failed to delete user:", err);
     } finally {
       setIsDeleteModalOpen(false);
-      setSelectedAdminIndex(null);
+      setSelectedUserIndex(null);
     }
   };
 
@@ -107,7 +105,6 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
     <>
       <div className="h-full rounded-lg overflow-y-auto">
         <table className="w-full whitespace-nowrap">
-          {/* === Table Header === */}
           <thead>
             <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
               {columns.map((col) => {
@@ -149,11 +146,6 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                           )}
                         </span>
                       )}
-                      {isSortable && !isActiveSort && (
-                        <span className="inline-flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <ArrowUp className="w-3 h-3 text-gray-400" />
-                        </span>
-                      )}
                     </div>
                   </th>
                 );
@@ -161,13 +153,12 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
             </tr>
           </thead>
 
-          {/* === Table Body === */}
           <tbody className="bg-white divide-y devide-gray-300 dark:divide-gray-700 dark:bg-gray-800">
-            {admins.map((admin, i) => {
+            {users.map((user, i) => {
               const statusPill =
-                admin.status === "ACTIVE"
+                user.status === "ACTIVE"
                   ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
-                  : admin.status === "PENDING"
+                  : user.status === "PENDING"
                   ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
                   : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
 
@@ -176,19 +167,17 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                   key={i}
                   className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
                 >
-                  {/* ID */}
                   <td className="px-4 py-3 text-xs">
-                    <span className={"font-semibold"}>{admin.id}</span>
+                    <span className={"font-semibold"}>{user.id}</span>
                   </td>
 
-                  {/* Admin name + avatar + email*/}
                   <td className="px-4 py-3 text-sm">
                     <div className="flex items-center text-sm">
                       <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
                         <img
                           className="object-cover w-full h-full rounded-full"
                           src={
-                            admin.avatar_url ||
+                            user.avatar_url ||
                             "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
                           }
                           alt=""
@@ -200,48 +189,37 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                         ></div>
                       </div>
                       <div>
-                        <p className="font-semibold">{admin.display_name}</p>
+                        <p className="font-semibold">{user.display_name}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
-                          {admin.email}
+                          {user.email}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  {/* Roles */}
                   <td className="px-4 py-3 text-xs">
                     <div className="flex flex-wrap gap-1">
-                      {admin.roles.map((role, index) => (
-                        <span
-                          key={role.id || index}
-                          className="px-2 py-1 font-semibold leading-tight rounded-full bg-blue-100 text-blue-700"
-                        >
-                          {role.description}
-                        </span>
-                      ))}
+                      <span className="px-2 py-1 font-semibold leading-tight rounded-full bg-blue-100 text-blue-700">
+                        User
+                      </span>
                     </div>
                   </td>
 
-                  {/* Last login */}
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(admin.last_login_at)}
+                    {formatDate(user.last_login_at)}
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    {formatDate(user.created_at)}
                   </td>
 
-                  {/* Created at */}
-                  <td className="px-4 py-3 text-sm">
-                    {formatDate(admin.created_at)}
-                  </td>
-
-                  {/* Status pill */}
                   <td className="px-4 py-3 text-xs">
                     <span
-                      className={`px-2 py-1 font-semibold leading-tight ${statusPill} rounded-full `}
+                      className={`px-2 py-1 font-semibold leading-tight ${statusPill} rounded-full`}
                     >
-                      {admin.status}
+                      {user.status}
                     </span>
                   </td>
 
-                  {/* Enable button */}
                   <td className="px-4 py-3 text-sm">
                     <button
                       onClick={() => handleToggle(i)}
@@ -259,10 +237,8 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                     </button>
                   </td>
 
-                  {/* Actions */}
                   <td className="px-4 py-3">
                     <div className="flex items-center space-x-3 text-sm">
-                      {/* Nút xem */}
                       <button
                         onClick={() => handleViewClick(i)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -271,7 +247,6 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                         <Eye className="w-5 h-5" />
                       </button>
 
-                      {/* Nút sửa */}
                       <button
                         onClick={() => handleUpdateClick(i)}
                         className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
@@ -280,7 +255,6 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                         <Pencil className="w-5 h-5" />
                       </button>
 
-                      {/* Nút xóa */}
                       <button
                         onClick={() => handleDeleteClick(i)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -297,32 +271,32 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
         </table>
       </div>
 
-      {/* Modal view admin */}
-      {selectedAdmin && (
-        <AdminViewModal
+      {/* Modal view user */}
+      {selectedUser && (
+        <UserViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
-          admin={selectedAdmin || {}}
+          user={selectedUser}
         />
       )}
 
-      {/* Modal update admin */}
-      {selectedAdmin && (
-        <AdminFormModal
+      {/* Modal update user */}
+      {selectedUser && (
+        <UserFormModal
           isOpen={isUpdateModalOpen}
           onClose={() => setIsUpdateModalOpen(false)}
-          mode={"update"} // "create" hoặc "update"
-          initialData={selectedAdmin || {}} // khi tạo nên set initialData = {}
+          mode="update"
+          initialData={selectedUser}
           onSubmit={handleConfirmUpdate}
         />
       )}
 
-      {/* Modal delete admin */}
-      {selectedAdminIndex !== null && selectedAdminIndex !== undefined && (
+      {/* Modal delete user */}
+      {selectedUserIndex !== null && (
         <Modal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          title="Delete Admin"
+          title="Delete User"
           footer={
             <>
               <button
@@ -332,10 +306,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  handleConfirmDelete();
-                  setIsDeleteModalOpen(false);
-                }}
+                onClick={handleConfirmDelete}
                 className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
               >
                 Delete
@@ -346,8 +317,8 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
           <p className="text-gray-700 dark:text-gray-300">
             Are you sure you want to delete{" "}
             <span className="font-semibold text-blue-600">
-              {selectedAdminIndex !== null
-                ? admins[selectedAdminIndex].display_name
+              {selectedUserIndex !== null
+                ? users[selectedUserIndex].display_name
                 : ""}
             </span>
             ?
@@ -358,4 +329,4 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   );
 };
 
-export default AdminsTable;
+export default UsersTable;

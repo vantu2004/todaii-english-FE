@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { login } from "../../../../api/servers/authApi";
+import { login } from "../../../api/servers/authApi";
+import { useServerAuthContext } from "../../../hooks/servers/useServerAuthContext";
+import { fetchProfile } from "../../../api/servers/adminApi";
 
 const Login = () => {
+  const { setAuthUser, setIsLoggedIn } = useServerAuthContext();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,8 +25,14 @@ const Login = () => {
 
     try {
       await login(form.email, form.password);
+
+      const myProfile = await fetchProfile();
+      setAuthUser(myProfile);
+      setIsLoggedIn(true);
+
       toast.success("Login successful!");
-      navigate("/");
+
+      navigate("/server");
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Invalid email or password");

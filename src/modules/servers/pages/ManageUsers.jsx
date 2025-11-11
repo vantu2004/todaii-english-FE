@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AdminsTable from "../../../components/servers/manage_admins_page/AdminsTable";
-import { fetchAdmins, createAdmin } from "../../../api/servers/adminApi";
 import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
-import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
+import { fetchUsers } from "../../../api/servers/userApi";
+import UsersTable from "../../../components/servers/manage_users_page/UsersTable";
 
-const ManageAdmins = () => {
-  const [admins, setAdmins] = useState([]);
+const ManageUsers = () => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   // State chung cho phân trang, sort, search
   const [query, setQuery] = useState({
@@ -39,11 +37,11 @@ const ManageAdmins = () => {
     { key: "actions", label: "Actions" },
   ];
 
-  const reloadAdmins = async () => {
+  const reloadUsers = async () => {
     try {
       setLoading(true);
 
-      const data = await fetchAdmins(
+      const data = await fetchUsers(
         query.page,
         query.size,
         query.sortBy,
@@ -51,7 +49,7 @@ const ManageAdmins = () => {
         query.keyword
       );
 
-      setAdmins(data.content || []);
+      setUsers(data.content || []);
 
       // Lưu metadata cho pagination component
       setPagination({
@@ -61,54 +59,30 @@ const ManageAdmins = () => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading admins:", err);
-      toast.error("Failed to load admins");
+      console.error("Error loading users:", err);
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    reloadAdmins();
-  }, [query]); // tự động reload admins khi query thay đổi
+    reloadUsers();
+  }, [query]); // tự động reload users khi query thay đổi
 
   const updateQuery = (newValues) => {
     setQuery((prev) => ({ ...prev, ...newValues }));
-  };
-
-  const handleConfirmCreate = async (data) => {
-    try {
-      await createAdmin(data);
-      await reloadAdmins();
-
-      setIsCreateModalOpen(false);
-
-      toast.success("Admin created successfully");
-    } catch (error) {
-      console.error("Error creating admin:", error);
-
-      // Lấy danh sách lỗi từ response
-      const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
-      } else {
-        toast.error("Failed to create admin"); // fallback
-      }
-    }
   };
 
   return (
     <div className="flex flex-col h-full">
       <div className="flex-none">
         <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Admins
+          Manage Users
         </h2>
 
-        <ToolBar
-          updateQuery={updateQuery}
-          setIsModalOpen={setIsCreateModalOpen}
-        />
+        {/* Ko cho tạo user */}
+        <ToolBar updateQuery={updateQuery} setIsModalOpen={null} />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
           Table with actions
@@ -117,10 +91,10 @@ const ManageAdmins = () => {
 
       {/* Vùng bảng cuộn riêng */}
       <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
-        <AdminsTable
+        <UsersTable
           columns={columns}
-          admins={admins}
-          reloadAdmins={reloadAdmins}
+          users={users}
+          reloadUsers={reloadUsers}
           query={query}
           updateQuery={updateQuery}
         />
@@ -134,19 +108,8 @@ const ManageAdmins = () => {
           pagination={pagination}
         />
       </div>
-
-      {/* Modal */}
-      {isCreateModalOpen && (
-        <AdminFormModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          mode="create"
-          initialData={{}}
-          onSubmit={handleConfirmCreate}
-        />
-      )}
     </div>
   );
 };
 
-export default ManageAdmins;
+export default ManageUsers;
