@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useClientAuthContext } from './../../../hooks/clients/useClientAuthContext';
+import { useClientAuthContext } from '../../hooks/clients/useClientAuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
