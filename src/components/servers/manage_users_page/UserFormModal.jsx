@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Modal from "../Modal";
+import { Mail, Lock, User, Edit3 } from "lucide-react";
 
 const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -13,87 +14,111 @@ const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
         new_password: "",
         display_name: initialData.display_name || "",
       });
+    } else {
+      setFormData({
+        new_password: "",
+        display_name: "",
+      });
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const updateField = (name, value) =>
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Update User"
+      title={
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg">
+            <Edit3 className="text-white" size={24} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">Update User</h2>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Modify user profile information
+            </p>
+          </div>
+        </div>
+      }
       footer={
-        <>
+        <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+            className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={() => onSubmit(formData)}
-            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105"
           >
-            Save
+            Save Changes
           </button>
-        </>
+        </div>
       }
     >
-      <form className="space-y-4">
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Email
+      <div className="space-y-5">
+        {/* Email Field - Read Only */}
+        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-5 border border-slate-200">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <Mail size={16} className="text-blue-600" />
+            Email Address
           </label>
           <input
             type="email"
-            name="email"
-            value={initialData.email}
-            placeholder="example@email.com"
+            value={initialData.email || ""}
             disabled={true}
-            className={
-              "w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white transition bg-gray-100 cursor-not-allowed"
-            }
+            className="w-full px-4 py-2.5 border-2 border-gray-200 bg-gray-100 text-gray-500 rounded-xl cursor-not-allowed"
           />
+          <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
+            <Lock size={12} />
+            Email cannot be changed
+          </p>
         </div>
 
-        {/* Display Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        {/* Display Name Field */}
+        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-5 border border-slate-200">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <User size={16} className="text-green-600" />
             Display Name
           </label>
           <input
             type="text"
             name="display_name"
             value={formData.display_name}
-            onChange={handleChange}
-            placeholder="e.g. Nguyen Van B"
-            className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white transition"
+            onChange={(e) => updateField("display_name", e.target.value)}
+            placeholder="e.g., Nguyen Van B"
+            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
           />
+          <p className="text-xs text-gray-600 mt-1.5">
+            This name will be displayed across the platform
+          </p>
         </div>
 
-        {/* New Password */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Password{" "}
-            <span className="text-gray-500 text-sm italic">
-              (Leave blank to keep current)
+        {/* Password Field */}
+        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-5 border border-slate-200">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <Lock size={16} className="text-purple-600" />
+            New Password
+            <span className="text-xs text-gray-500 font-normal ml-1">
+              (Optional)
             </span>
           </label>
           <input
             type="password"
             name="new_password"
             value={formData.new_password}
-            onChange={handleChange}
-            placeholder="•••••• (optional)"
-            className="w-full mt-1 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-white transition"
+            onChange={(e) => updateField("new_password", e.target.value)}
+            placeholder="Leave blank to keep current"
+            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
           />
+          <p className="text-xs text-gray-600 mt-1.5">
+            Only enter a new password if you want to change it
+          </p>
         </div>
-      </form>
+      </div>
     </Modal>
   );
 };

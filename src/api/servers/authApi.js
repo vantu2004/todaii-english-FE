@@ -11,3 +11,14 @@ export const login = async (email, password) => {
     throw err;
   }
 };
+
+export const logout = async (email) => {
+  try {
+    await serverInstance.post("/auth/logout", null, {
+      params: { email },
+    });
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
