@@ -1,9 +1,9 @@
 import { User, Mail, CheckCircle, XCircle } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "./../../../utils/FormatDate";
+import { formatDate } from "../../../utils/FormatDate";
 
-const AdminViewModal = ({ isOpen, onClose, admin }) => {
-  if (!admin) return null;
+const UserViewModal = ({ isOpen, onClose, user }) => {
+  if (!user) return null;
 
   const statusStyles = {
     ACTIVE: "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100",
@@ -16,16 +16,16 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Admin Details"
+      title="User Details"
       width="sm:max-w-md"
     >
       <div className="flex flex-col items-center gap-4">
         {/* Avatar */}
         <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-          {admin.avatar_url ? (
+          {user.avatar_url ? (
             <img
-              src={admin.avatar_url}
-              alt={admin.display_name}
+              src={user.avatar_url}
+              alt={user.display_name}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -36,10 +36,10 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
         {/* Name & Email */}
         <div className="text-center">
           <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-            {admin.display_name}
+            {user.display_name}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
-            <Mail className="w-4 h-4" /> {admin.email}
+            <Mail className="w-4 h-4" /> {user.email}
           </p>
         </div>
 
@@ -51,11 +51,11 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
             </span>
             <span
               className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                statusStyles[admin.status] ||
+                statusStyles[user.status] ||
                 "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-100"
               }`}
             >
-              {admin.status}
+              {user.status}
             </span>
           </div>
 
@@ -63,7 +63,7 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
             <span className="font-medium text-gray-600 dark:text-gray-400">
               Enabled:
             </span>
-            {admin.enabled ? (
+            {user.enabled ? (
               <CheckCircle className="w-5 h-5 text-green-500" />
             ) : (
               <XCircle className="w-5 h-5 text-red-500" />
@@ -75,7 +75,7 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
               Created At:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(admin.created_at)}
+              {formatDate(user.created_at)}
             </span>
           </div>
 
@@ -84,7 +84,7 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
               Updated At:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(admin.updated_at)}
+              {formatDate(user.updated_at)}
             </span>
           </div>
 
@@ -93,7 +93,7 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
               Last Login:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(admin.last_login_at)}
+              {formatDate(user.last_login_at)}
             </span>
           </div>
 
@@ -102,14 +102,9 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
               Roles:
             </span>
             <div className="flex flex-wrap gap-1 justify-end">
-              {admin.roles.map((role) => (
-                <span
-                  key={role.code}
-                  className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-700 dark:text-blue-100"
-                >
-                  {role.description}
-                </span>
-              ))}
+              <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 dark:bg-blue-700 dark:text-blue-100">
+                Users
+              </span>
             </div>
           </div>
         </div>
@@ -118,4 +113,4 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
   );
 };
 
-export default AdminViewModal;
+export default UserViewModal;

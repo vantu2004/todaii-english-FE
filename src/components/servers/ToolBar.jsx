@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
-import AdminFormModal from "./AdminFormModal";
-import { createAdmin } from "../../../api/servers/adminApi";
-import { toast } from "react-hot-toast";
 
 const ToolBar = ({ updateQuery, setIsModalOpen }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,13 +33,15 @@ const ToolBar = ({ updateQuery, setIsModalOpen }) => {
         </div>
 
         {/* Nút tạo mới */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Create New
-        </button>
+        {setIsModalOpen && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Create New
+          </button>
+        )}
       </div>
     </>
   );

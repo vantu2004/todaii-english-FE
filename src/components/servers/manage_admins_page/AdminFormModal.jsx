@@ -97,7 +97,7 @@ const AdminFormModal = ({
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Password{" "}
             {isUpdate && (
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-500 text-sm italic">
                 (Leave blank to keep current)
               </span>
             )}

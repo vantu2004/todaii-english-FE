@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AdminsTable from "../../../components/servers/manage_admins_page/AdminsTable";
 import { fetchAdmins, createAdmin } from "../../../api/servers/adminApi";
-import ToolBar from "../../../components/servers/manage_admins_page/ToolBar";
-import { motion } from "framer-motion";
+import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
 
