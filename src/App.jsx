@@ -4,6 +4,7 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import LandingPage from "./pages/LandingPage";
 import ClientRoutes from "./config/routes/ClientRoutes";
 import ServerRoutes from "./config/routes/ServerRoutes.jsx";
+import { ClientAuthProvider } from "./context/clients/ClientAuthContext.jsx";
 
 const App = () => {
   return (
@@ -12,7 +13,14 @@ const App = () => {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/"
+            element={
+              <ClientAuthProvider>
+                <LandingPage />
+              </ClientAuthProvider>
+            }
+          />
 
           <Route path="/client/*" element={<ClientRoutes />} />
           <Route path="/server/*" element={<ServerRoutes />} />

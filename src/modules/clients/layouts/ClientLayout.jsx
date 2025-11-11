@@ -1,21 +1,19 @@
 import { Outlet, Link } from "react-router-dom";
+import Footer from "../../../components/clients/landing_page/Footer";
+import ClientNavBar from "../../../components/clients/ClientNavBar";
 
-export default function ClientLayout() {
+const ClientLayout = () => {
   return (
-    <div className="client-layout">
-      <header>
-        <h1>Client App</h1>
-        <nav>
-          <Link to="/client/dashboard">Dashboard</Link>
-          <Link to="/client/profile">Profile</Link>
-        </nav>
-      </header>
-
+    <div className="font-inter h-screen bg-stale-50 dark:bg-gray-900">
+       <ClientNavBar/>
       <main>
         <Outlet />
       </main>
 
-      <footer>© 2025 Todaii English</footer>
+      <Footer/>
+
     </div>
   );
 }
+
+export default ClientLayout;

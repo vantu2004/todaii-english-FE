@@ -4,6 +4,7 @@ import RegisterOfficeDark from "../../../../assets/img/register/register-office-
 import InputField from "../../../../components/clients/InputField";
 import { register } from "../../../../api/clients/authApi";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 const Register = () => {
@@ -14,7 +15,33 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [error, setError] = useState({
+    email: "",
+    displayName: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [touched, setTouched] = useState(false);
+
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   const navigate = useNavigate();
+
+  const handleFocus = (e) => {
+    const { name } = e.target;
+    if (name === "confirmPassword") {
+      setTouched(true);
+    }
+  };
+
+  const handleTogglePassword = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -27,7 +54,7 @@ const Register = () => {
       navigate(`/client/verify-otp?email=${encodeURIComponent(email)}`);
     } catch (err) {
       if (err.response?.status === 409) {
-        toast.error("User already exsits");
+        toast.error("User already exists");
       } else if (err.response?.status === 400) {
         toast.error("Wrong format"); // chỗ này nên handle format của input thay vì báo lỗi sau khi request
       } else {
@@ -40,7 +67,67 @@ const Register = () => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+
+    setError((prev) => {
+      const updated = { ...prev, [name]: "" };
+
+      const { email, displayName, password, confirmPassword } = {
+        ...form,
+        [name]: value,
+      };
+
+      if (name === "email") {
+        const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
+
+        if (!email) {
+          updated.email = "Please enter your email";
+        } else if (!emailRegex.test(value)) {
+          updated.email = "Please enter a valid email address";
+        } else {
+          updated.email = "";
+        }
+      }
+
+      else if (name === "displayName") {
+
+        const nameRegex = /\d/;
+
+        if (!displayName) {
+          updated.displayName = "Please enter your name";
+        }
+        else if (nameRegex.test(value)) {
+          updated.displayName = "Display name must not contain number";
+        }
+      }
+
+      // Validate new password length
+      else if (name === "password" || name === "confirmPassword") {
+        if (!password) {
+          updated.password = "Please enter a password";
+        } else if (password.length < 6) {
+          updated.password = "Password must be at least 6 characters";
+        } else {
+          updated.password = "";
+        }
+
+        // Validate confirm password after that field has been touched
+        if (!confirmPassword && touched) {
+          updated.confirmPassword = "Please confirm password";
+        } else if (
+          password &&
+          confirmPassword &&
+          password !== confirmPassword
+        ) {
+          updated.confirmPassword = "Passwords don't match";
+        } else {
+          updated.confirmPassword = "";
+        }
+      }
+
+      return updated;
+    });
   };
 
   return (
@@ -75,6 +162,10 @@ const Register = () => {
                 placeholder="example@gmail.com"
               />
 
+              {error.email && (
+                <span className="text-xs text-red-500">{error.email}</span>
+              )}
+
               <InputField
                 label="Display name"
                 name="displayName"
@@ -84,25 +175,68 @@ const Register = () => {
                 className="mt-4"
               />
 
-              <InputField
-                label="Password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                type="password"
-                placeholder="******"
-                className="mt-4"
-              />
+              {error.displayName && (
+                <span className="text-xs text-red-500">
+                  {error.displayName}
+                </span>
+              )}
 
-              <InputField
-                label="Confirm password"
-                name="confirmPassword"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                type="password"
-                placeholder="******"
-                className="mt-4"
-              />
+              <div className="relative">
+                <InputField
+                  label="Password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  type={showPassword.password ? "text" : "password"}
+                  placeholder="******"
+                  className="mt-4"
+                />
+
+                <span
+                  className="absolute top-[38px] right-3 cursor-pointer"
+                  onClick={() => handleTogglePassword("password")}
+                >
+                  {showPassword.password ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </span>
+              </div>
+
+              {error.password && (
+                <span className="text-xs text-red-500">{error.password}</span>
+              )}
+
+              <div className="relative">
+                <InputField
+                  label="Confirm password"
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  type={showPassword.confirmPassword ? "text" : "password"}
+                  placeholder="******"
+                  className="mt-4"
+                />
+
+                <span
+                  className="absolute top-[38px] right-3 cursor-pointer"
+                  onClick={() => handleTogglePassword("confirmPassword")}
+                >
+                  {showPassword.confirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </span>
+              </div>
+
+              {error.confirmPassword && (
+                <span className="text-xs text-red-500">
+                  {error.confirmPassword}
+                </span>
+              )}
 
               {/* <div className="flex mt-6 text-sm">
                 <label className="flex items-center dark:text-gray-400">
@@ -119,7 +253,7 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple"
                 disabled={loading}
               >
                 {loading ? "Creating..." : "Create Account"}
@@ -145,7 +279,7 @@ const Register = () => {
 
               <p className="mt-4">
                 <Link
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline"
                   to="../login"
                 >
                   Back to login

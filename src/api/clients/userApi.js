@@ -8,3 +8,4 @@ export const fetchProfile = async () => {
     console.error("Error:", err);
   }
 };
+
