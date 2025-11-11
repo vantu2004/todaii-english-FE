@@ -4,6 +4,7 @@ import RegisterOfficeDark from "../../../../assets/img/register/register-office-
 import InputField from "../../../../components/clients/InputField";
 import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../../../../api/clients/authApi";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ResetPassword = () => {
@@ -14,7 +15,70 @@ const ResetPassword = () => {
     newPassword: "",
     confirmNewPassword: "",
   });
+
+  const [touched, setTouched] = useState(false);
+
+  const [error, setError] = useState({
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    setShowPassword: false,
+  });
   const navigate = useNavigate();
+
+  const handleFocus = (e) => {
+    const { name } = e.target;
+    if (name === "confirmNewPassword") {
+      setTouched(true);
+    }
+  };
+
+  const handleTogglePassword = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setError((prev) => {
+      const updated = { ...prev, [name]: "" };
+
+      const { newPassword, confirmNewPassword } = {
+        ...form,
+        [name]: value,
+      };
+
+      // Validate new password length
+      if (name === "newPassword" || name === "confirmNewPassword") {
+        if (!newPassword) {
+          updated.newPassword = "Please enter a password";
+        } else if (newPassword.length < 6) {
+          updated.newPassword = "Password must be at least 6 characters";
+        } else {
+          updated.newPassword = "";
+        }
+
+        // Validate confirm password after that field has been touched
+        if (!confirmNewPassword && touched) {
+          updated.confirmNewPassword = "Please confirm password";
+        } else if (
+          newPassword &&
+          confirmNewPassword &&
+          newPassword !== confirmNewPassword
+        ) {
+          updated.confirmNewPassword = "Passwords don't match";
+        } else {
+          updated.confirmNewPassword = "";
+        }
+      }
+
+      return updated;
+    });
+  };
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -30,7 +94,7 @@ const ResetPassword = () => {
       } else if (err.response?.status === 404) {
         toast.error("Token not found");
       } else if (err.response?.status === 400) {
-        toast.error("Wrong format"); // chỗ này nên handle format của input thay vì báo lỗi sau khi request
+        toast.error("Invalid password format");
       } else {
         toast.error("Internal server error");
       }
@@ -38,10 +102,6 @@ const ResetPassword = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   return (
@@ -68,29 +128,67 @@ const ResetPassword = () => {
                 Reset password
               </h1>
 
-              <InputField
-                label="New password"
-                name="newPassword"
-                value={form.newPassword}
-                onChange={handleChange}
-                type="password"
-                placeholder="******"
-                className="mt-4"
-              />
+              <div className="relative">
+                <InputField
+                  label="New password"
+                  name="newPassword"
+                  value={form.newPassword}
+                  onChange={handleChange}
+                  type={showPassword.newPassword ? "text" : "password"}
+                  placeholder="******"
+                  className="mt-4"
+                />
 
-              <InputField
-                label="Confirm new password"
-                name="confirmNewPassword"
-                value={form.confirmNewPassword}
-                onChange={handleChange}
-                type="password"
-                placeholder="******"
-                className="mt-4"
-              />
+                <span
+                  className="absolute top-[38px] right-3 cursor-pointer"
+                  onClick={() => handleTogglePassword("newPassword")}
+                >
+                  {showPassword.newPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </span>
+              </div>
+
+              {error.newPassword && (
+                <span className="text-xs text-red-500">
+                  {error.newPassword}
+                </span>
+              )}
+
+              <div className="relative">
+                <InputField
+                  label="Confirm new password"
+                  name="confirmNewPassword"
+                  value={form.confirmNewPassword}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  type={showPassword.confirmNewPassword ? "text" : "password"}
+                  placeholder="******"
+                  className="mt-4"
+                />
+                <span
+                  className="absolute top-[38px] right-3 cursor-pointer"
+                  onClick={() => handleTogglePassword("confirmNewPassword")}
+                >
+                  {showPassword.confirmNewPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </span>
+              </div>
+
+              {error.confirmNewPassword && (
+                <span className="text-xs text-red-500">
+                  {error.confirmNewPassword}
+                </span>
+              )}
 
               <button
                 type="submit"
-                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple"
                 disabled={loading}
               >
                 {loading ? "Requesting..." : "Confirm"}

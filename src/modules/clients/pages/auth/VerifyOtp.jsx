@@ -95,7 +95,7 @@ const VerifyOtp = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple"
               >
                 {loading ? "Verifying..." : "Confirm"}
               </button>
@@ -104,7 +104,7 @@ const VerifyOtp = () => {
                 <button
                   onClick={handleResendOtp}
                   disabled={loading}
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline cursor-pointer"
+                  className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline cursor-pointer"
                 >
                   Resend OTP
                 </button>

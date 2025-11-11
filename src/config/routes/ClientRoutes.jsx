@@ -2,9 +2,14 @@ import { ClientAuthProvider } from "../../context/clients/ClientAuthContext";
 import { Routes, Route } from "react-router-dom";
 import Login from "../../modules/clients/pages/auth/Login";
 import Register from "../../modules/clients/pages/auth/Register";
-import Verify from "../../modules/clients/pages/auth/VerifyOtp";
+import VerifyOtp from "../../modules/clients/pages/auth/VerifyOtp";
+import VerifyEmail from "../../modules/clients/pages/auth/VerifyEmail";
 import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
 import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
+import ClientLayout from "../../modules/clients/layouts/ClientLayout";
+import Home from "../../modules/clients/pages/home/Home"
+import Home1 from "../../modules/clients/pages/home/Home1"
+
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
@@ -35,10 +40,20 @@ export default function ClientRoutes() {
           path="/verify-otp"
           element={
             <RedirectAuthenticatedUser>
-              <Verify />
+              <VerifyOtp />
             </RedirectAuthenticatedUser>
           }
         />
+
+        <Route
+          path="/verify-email"
+          element={
+            <RedirectAuthenticatedUser>
+              <VerifyEmail />
+            </RedirectAuthenticatedUser>
+          }
+        />
+
         <Route
           path="/forgot-password"
           element={
@@ -56,20 +71,23 @@ export default function ClientRoutes() {
           }
         />
 
+        <Route
+          path="/home"
+          element={
+              <ClientLayout/>
+          }
+        >
+          <Route index element={<Home/>}></Route>
+          <Route path="test" element={<Home1/>}></Route>
+
+        </Route>
+
         {/* PROTECTED routes (phải login mới vào được) */}
         {/* <Route
           path="/home"
           element={
             <ClientProtectRoutes>
-              <Home />
-            </ClientProtectRoutes>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ClientProtectRoutes>
-              <Profile />
+              <ClientLayout/>
             </ClientProtectRoutes>
           }
         /> */}

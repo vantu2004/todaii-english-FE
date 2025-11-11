@@ -15,7 +15,7 @@ export const RedirectAuthenticatedUser = ({ children }) => {
   const { authUser, isLoggedIn } = useClientAuthContext();
 
   if (isLoggedIn && authUser) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/client/home" replace />;
   }
 
   return children;

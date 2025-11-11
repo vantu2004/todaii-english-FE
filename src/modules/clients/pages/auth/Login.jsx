@@ -33,7 +33,7 @@ const LoginPage = () => {
       if (err.response?.status === 401) {
         toast.error("Invalid email or password");
       } else if (err.response?.status === 400) {
-        toast.error("Wrong format"); // chỗ này nên handle format của input thay vì báo lỗi sau khi request
+        toast.error("Wrong email format"); 
       } else {
         toast.error("Internal server error");
       }
@@ -93,7 +93,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="block w-full px-4 py-2 mt-6 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                className="block w-full px-4 py-2 mt-6 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple"
               >
                 {loading ? "Logging in..." : "Log in"}
               </button>
@@ -121,7 +121,7 @@ const LoginPage = () => {
 
               <p className="mt-4">
                 <Link
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline"
                   to="../forgot-password"
                 >
                   Forgot your password?
@@ -129,10 +129,18 @@ const LoginPage = () => {
               </p>
               <p className="mt-2">
                 <Link
-                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
+                  className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline"
                   to="../register"
                 >
                   Create account
+                </Link>
+              </p>
+              <p className="mt-2">
+                <Link
+                  className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline"
+                  to="../verify-email"
+                >
+                 Verify email
                 </Link>
               </p>
             </form>
