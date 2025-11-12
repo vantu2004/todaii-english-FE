@@ -7,7 +7,14 @@ import {
 } from "../../../api/servers/adminApi";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
-import { Eye, Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Eye,
+  Pencil,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  AlertTriangle,
+} from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
 import AdminViewModal from "./AdminViewModal";
 
@@ -32,12 +39,18 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
     try {
       const adminId = admins[index].id;
+
       await toggleAdmin(adminId);
       await reloadAdmins();
     } catch (err) {
       toast.error("Failed to toggle admin");
       console.error("Failed to toggle admin:", err);
     }
+  };
+
+  const handleViewClick = (index) => {
+    setSelectedAdmin(admins[index]);
+    setIsViewModalOpen(true);
   };
 
   const handleUpdateClick = (index) => {
@@ -52,11 +65,6 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
     setIsDeleteModalOpen(true);
   };
 
-  const handleViewClick = (index) => {
-    setSelectedAdmin(admins[index]);
-    setIsViewModalOpen(true);
-  };
-
   const handleConfirmUpdate = async (data) => {
     if (selectedAdminIndex === null) return;
 
@@ -66,20 +74,19 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
       await updateAdmin(adminId, data);
       await reloadAdmins();
 
-      setIsUpdateModalOpen(false);
       setSelectedAdminIndex(null);
+      setSelectedAdmin(null);
+      setIsUpdateModalOpen(false);
 
       toast.success("Admin updated successfully");
     } catch (error) {
       console.error("Error updating admin:", error);
 
-      // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
-        toast.error("Failed to update admin"); // fallback
+        toast.error("Failed to update admin");
       }
     }
   };
@@ -93,13 +100,13 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
       await deleteAdmin(adminId);
       await reloadAdmins();
 
+      setSelectedAdminIndex(null);
+      setIsDeleteModalOpen(false);
+
       toast.success("Admin deleted");
     } catch (err) {
       toast.error("Failed to delete admin");
       console.error("Failed to delete admin:", err);
-    } finally {
-      setIsDeleteModalOpen(false);
-      setSelectedAdminIndex(null);
     }
   };
 
@@ -322,12 +329,26 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
         <Modal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          title="Delete Admin"
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
+                <AlertTriangle className="text-red-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Delete Admin
+                </h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  This action cannot be undone
+                </p>
+              </div>
+            </div>
+          }
           footer={
-            <>
+            <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
@@ -336,22 +357,42 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                   handleConfirmDelete();
                   setIsDeleteModalOpen(false);
                 }}
-                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
               >
-                Delete
+                <Trash2 size={16} />
+                Delete Admin
               </button>
-            </>
+            </div>
           }
         >
-          <p className="text-gray-700 dark:text-gray-300">
-            Are you sure you want to delete{" "}
-            <span className="font-semibold text-blue-600">
-              {selectedAdminIndex !== null
-                ? admins[selectedAdminIndex].display_name
-                : ""}
-            </span>
-            ?
-          </p>
+          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">
+                  Are you sure you want to delete this administrator?
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  You are about to permanently delete the admin account:
+                </p>
+                <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
+                  <p className="text-sm font-semibold text-red-700">
+                    {selectedAdminIndex !== null
+                      ? admins[selectedAdminIndex].display_name
+                      : ""}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {selectedAdminIndex !== null
+                      ? admins[selectedAdminIndex].email
+                      : ""}
+                  </p>
+                </div>
+                <p className="text-xs text-red-600 leading-relaxed">
+                  ⚠️ This action is permanent and cannot be reversed. The admin
+                  account and all associated permissions will be deleted.
+                </p>
+              </div>
+            </div>
+          </div>
         </Modal>
       )}
     </>

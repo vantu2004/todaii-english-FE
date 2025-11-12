@@ -85,13 +85,11 @@ const ManageTopics = () => {
     } catch (error) {
       console.error("Error creating topic:", error);
 
-      // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
-        toast.error("Failed to create topic"); // fallback
+        toast.error("Failed to create topic");
       }
     }
   };

@@ -69,11 +69,6 @@ const AdminFormModal = ({
     }));
   };
 
-  const roleColor = (roleCode) => {
-    const role = roles.find((r) => r.code === roleCode);
-    return role ? role.color : "from-gray-500 to-gray-600";
-  };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -124,9 +119,9 @@ const AdminFormModal = ({
     >
       <div className="space-y-5">
         {/* Email Field */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-            <Mail size={16} className="text-indigo-600" />
+        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-blue-200/50 hover:border-blue-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
+            <Mail size={16} className="text-blue-600" />
             Email Address {isCreate && <span className="text-red-500">*</span>}
           </label>
           <input
@@ -138,12 +133,12 @@ const AdminFormModal = ({
             disabled={!isCreate}
             className={`w-full px-4 py-2.5 border-2 rounded-xl outline-none transition-all ${
               isCreate
-                ? "border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                ? "border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 : "border-gray-200 bg-gray-100 text-gray-500 cursor-not-allowed"
             }`}
           />
           {!isCreate && (
-            <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
+            <p className="text-xs text-gray-500 mt-2.5 flex items-center gap-1">
               <Lock size={12} />
               Email cannot be changed
             </p>
@@ -151,8 +146,8 @@ const AdminFormModal = ({
         </div>
 
         {/* Password Field */}
-        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-6 border border-purple-200/50 hover:border-purple-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
             <Lock size={16} className="text-purple-600" />
             Password {isCreate && <span className="text-red-500">*</span>}
           </label>
@@ -167,15 +162,15 @@ const AdminFormModal = ({
             className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
           />
           {!isCreate && (
-            <p className="text-xs text-gray-500 mt-1.5">
+            <p className="text-xs text-gray-600 mt-2.5">
               Only enter a new password if you want to change it
             </p>
           )}
         </div>
 
         {/* Display Name Field */}
-        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-6 border border-green-200/50 hover:border-green-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
             <User size={16} className="text-green-600" />
             Display Name
           </label>
@@ -190,8 +185,8 @@ const AdminFormModal = ({
         </div>
 
         {/* Roles Section */}
-        <div className="bg-gradient-to-br from-slate-50 to-orange-50 rounded-2xl p-5 border-2 border-orange-100">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
+        <div className="bg-gradient-to-br from-slate-50 to-orange-50 rounded-2xl p-6 border-2 border-orange-200/50 hover:border-orange-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
             <Shield size={16} className="text-orange-600" />
             Admin Roles & Permissions
           </label>
@@ -207,10 +202,10 @@ const AdminFormModal = ({
               return (
                 <label
                   key={role.code}
-                  className={`relative flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                  className={`relative flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all transform ${
                     isSelected
-                      ? `bg-gradient-to-r ${role.color} text-white border-transparent shadow-lg scale-[1.02]`
-                      : "bg-white border-gray-200 hover:border-gray-300 hover:shadow-md"
+                      ? `bg-gradient-to-r ${role.color} text-white border-transparent shadow-lg hover:shadow-xl scale-[1.02]`
+                      : "bg-white border-gray-200 hover:border-blue-300 hover:shadow-md"
                   }`}
                 >
                   <input
@@ -221,7 +216,7 @@ const AdminFormModal = ({
                   />
 
                   <div
-                    className={`p-2 rounded-lg ${
+                    className={`p-2 rounded-lg flex-shrink-0 ${
                       isSelected ? "bg-white/20" : "bg-gray-100"
                     }`}
                   >
@@ -233,7 +228,7 @@ const AdminFormModal = ({
 
                   <div className="flex-1">
                     <div
-                      className={`font-semibold ${
+                      className={`font-semibold text-sm ${
                         isSelected ? "text-white" : "text-gray-800"
                       }`}
                     >
@@ -249,7 +244,7 @@ const AdminFormModal = ({
                   </div>
 
                   {isSelected && (
-                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
                       <div className="w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full"></div>
                     </div>
                   )}

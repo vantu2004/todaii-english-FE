@@ -61,8 +61,8 @@ const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
     >
       <div className="space-y-5">
         {/* Email Field - Read Only */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-blue-200/50 hover:border-blue-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
             <Mail size={16} className="text-blue-600" />
             Email Address
           </label>
@@ -72,15 +72,15 @@ const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
             disabled={true}
             className="w-full px-4 py-2.5 border-2 border-gray-200 bg-gray-100 text-gray-500 rounded-xl cursor-not-allowed"
           />
-          <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
+          <p className="text-xs text-gray-500 mt-2.5 flex items-center gap-1">
             <Lock size={12} />
             Email cannot be changed
           </p>
         </div>
 
         {/* Display Name Field */}
-        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-6 border border-green-200/50 hover:border-green-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
             <User size={16} className="text-green-600" />
             Display Name
           </label>
@@ -92,14 +92,14 @@ const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
             placeholder="e.g., Nguyen Van B"
             className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
           />
-          <p className="text-xs text-gray-600 mt-1.5">
+          <p className="text-xs text-gray-600 mt-2.5">
             This name will be displayed across the platform
           </p>
         </div>
 
         {/* Password Field */}
-        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-5 border border-slate-200">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-6 border border-purple-200/50 hover:border-purple-300 hover:shadow-md transition-all">
+          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
             <Lock size={16} className="text-purple-600" />
             New Password
             <span className="text-xs text-gray-500 font-normal ml-1">
@@ -114,7 +114,7 @@ const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {
             placeholder="Leave blank to keep current"
             className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
           />
-          <p className="text-xs text-gray-600 mt-1.5">
+          <p className="text-xs text-gray-600 mt-2.5">
             Only enter a new password if you want to change it
           </p>
         </div>

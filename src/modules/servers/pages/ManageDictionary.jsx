@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { fetchDictionary } from "../../../api/servers/dictionaryApi";
+import {
+  createDictionaryEntry,
+  fetchDictionary,
+} from "../../../api/servers/dictionaryApi";
 import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import DictionaryTable from "../../../components/servers/manage_dictionary_page/DictionaryTable";
@@ -34,7 +37,6 @@ const ManageDictionary = () => {
     { key: "ipa", label: "IPA", sortField: "ipa" },
     { key: "audioUrl", label: "Audio", sortField: "audioUrl" },
     { key: "updatedAt", label: "Updated At", sortField: "updatedAt" },
-    { key: "enabled", label: "Enabled", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];
 
@@ -77,7 +79,7 @@ const ManageDictionary = () => {
 
   const handleConfirmCreate = async (data) => {
     try {
-      await createDictionary(data);
+      await createDictionaryEntry(data);
       await reloadDictionary();
 
       setIsCreateModalOpen(false);
@@ -86,8 +88,8 @@ const ManageDictionary = () => {
       console.error("Error creating dictionary entry:", error);
 
       const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
         toast.error("Failed to create dictionary entry");
       }

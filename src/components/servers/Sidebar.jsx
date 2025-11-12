@@ -8,12 +8,19 @@ import {
   ChevronDown,
   FileText,
   Video,
-  Image,
   Settings,
   LogOut,
   User,
-  BookOpen,
   PenTool,
+  BookCopy,
+  FolderArchive,
+  LockKeyhole,
+  Mails,
+  Newspaper,
+  PanelRight,
+  TvMinimalPlay,
+  ListVideo,
+  BookMarked,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchProfile } from "../../api/servers/adminApi";
@@ -40,8 +47,8 @@ const Sidebar = () => {
       icon: LayoutDashboard,
     },
     {
-      id: "user-management",
-      name: "User Management",
+      id: "user",
+      name: "Users",
       icon: Users,
       children: [
         { name: "Admins", to: "/server/admin", icon: UserCog },
@@ -49,32 +56,36 @@ const Sidebar = () => {
       ],
     },
     {
-      id: "content",
-      name: "Content Management",
-      icon: BookOpen,
+      id: "dictionary",
+      name: "Dictionaries",
+      icon: Languages,
       children: [
-        { name: "Topics", to: "/server/topic", icon: BarChart3 },
-        { name: "Articles", to: "/server/articles", icon: FileText },
-        { name: "Videos", to: "/server/videos", icon: Video },
-        { name: "Images", to: "/server/images", icon: Image },
+        {
+          name: "Dictionary API",
+          to: "/server/dictionary-api",
+          icon: BookMarked,
+        },
+        { name: "Dictionary", to: "/server/dictionary", icon: Languages },
       ],
     },
     {
-      id: "dictionary",
-      name: "Dictionary",
-      icon: Languages,
+      id: "article",
+      name: "Articles",
+      icon: FileText,
       children: [
-        { name: "Manage Words", to: "/server/dictionary", icon: Languages },
-        {
-          name: "Word Categories",
-          to: "/server/dictionary/categories",
-          icon: BarChart3,
-        },
-        {
-          name: "Import/Export",
-          to: "/server/dictionary/import",
-          icon: FileText,
-        },
+        { name: "Article Topics", to: "/server/topic", icon: BarChart3 },
+        { name: "News API", to: "/server/news-api", icon: PanelRight },
+        { name: "Articles", to: "/server/article", icon: Newspaper },
+      ],
+    },
+    {
+      id: "video",
+      name: "Videos",
+      icon: Video,
+      children: [
+        { name: "Video Topics", to: "/server/topic", icon: BarChart3 },
+        { name: "Youtube", to: "/server/youtube", icon: TvMinimalPlay },
+        { name: "Video", to: "/server/video", icon: ListVideo },
       ],
     },
     {
@@ -82,16 +93,27 @@ const Sidebar = () => {
       name: "Learning Tools",
       icon: PenTool,
       children: [
-        { name: "Quizzes", to: "/server/quizzes", icon: PenTool },
-        { name: "Flashcards", to: "/server/flashcards", icon: BookOpen },
-        { name: "Exercises", to: "/server/exercises", icon: FileText },
+        {
+          name: "Vocabulary Groups",
+          to: "/server/vocab-group",
+          icon: FolderArchive,
+        },
+        { name: "Vocabulary Decks", to: "/server/vocab-deck", icon: BookCopy },
       ],
     },
     {
       id: "settings",
       name: "System Settings",
-      to: "/server/settings",
       icon: Settings,
+      children: [
+        {
+          name: "API Keys",
+          to: "/server/api-key",
+          icon: LockKeyhole,
+        },
+
+        { name: "SMTP", to: "/server/smtp", icon: Mails },
+      ],
     },
   ];
 
@@ -128,7 +150,7 @@ const Sidebar = () => {
       <div className="flex-1 py-6 px-3 overflow-y-auto">
         {/* Logo */}
         <a
-          to="/"
+          href="/server"
           className="flex items-center px-3 mb-6 text-2xl font-extrabold tracking-tight select-none"
         >
           <span className="text-[#13183f]">Todaii</span>
