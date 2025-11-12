@@ -85,7 +85,7 @@ const ManageUsers = () => {
         <ToolBar updateQuery={updateQuery} setIsModalOpen={null} />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Table with actions
+          Users Table
         </h4>
       </div>
 

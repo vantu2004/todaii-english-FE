@@ -41,7 +41,7 @@ const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
           </div>
         </div>
       }
-      width="sm:max-w-3xl"
+      width="sm:max-w-4xl"
     >
       <div className="space-y-5">
         {/* Header: Headword + IPA + Audio */}

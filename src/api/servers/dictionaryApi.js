@@ -26,6 +26,18 @@ export const createDictionaryEntry = async (data) => {
   }
 };
 
+export const createDictionaryEntryByGemini = async (data) => {
+  try {
+    const response = await serverInstance.post("/dictionary/gemini", null, {
+      params: { word: data },
+    });
+
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const updateDictionaryEntry = async (id, data) => {
   try {
     await serverInstance.put(`/dictionary/${id}`, data);

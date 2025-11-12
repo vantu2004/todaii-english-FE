@@ -109,7 +109,7 @@ const ManageAdmins = () => {
         />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Table with actions
+          Admins Table
         </h4>
       </div>
 
