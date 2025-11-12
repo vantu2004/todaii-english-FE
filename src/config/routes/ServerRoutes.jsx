@@ -54,10 +54,19 @@ export default function ServerRoutes() {
           />
 
           <Route
-            path="/topic"
+            path="/article-topic"
             element={
               <ServerProtectRoutes>
-                <ManageTopics />
+                <ManageTopics topicType="article" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/video-topic"
+            element={
+              <ServerProtectRoutes>
+                <ManageTopics topicType="video" />
               </ServerProtectRoutes>
             }
           />

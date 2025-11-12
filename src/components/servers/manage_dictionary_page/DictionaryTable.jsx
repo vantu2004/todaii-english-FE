@@ -30,7 +30,7 @@ const DictionaryTable = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDictionaryIndex, setSelectedDictionaryIndex] = useState(null);
   const [selectedDictionary, setSelectedDictionary] = useState(null);
-  const audioRef = useRef(null);
+  const [playingIndex, setPlayingIndex] = useState(null);
 
   const handleViewClick = (index) => {
     setSelectedDictionary(dictionary[index]);
@@ -91,16 +91,19 @@ const DictionaryTable = ({
     }
   };
 
-  const handlePlayAudio = (audioUrl) => {
-    if (!audioUrl) {
-      toast.error("No audio available");
-      return;
+  const handlePlayAudio = async (index, audio_url) => {
+    if (audio_url) {
+      setPlayingIndex(index);
+      try {
+        const audio = new Audio(audio_url);
+        audio.onended = () => setPlayingIndex(null);
+        await audio.play();
+      } catch (err) {
+        console.error(err);
+        toast.error("Audio playback failed");
+        setPlayingIndex(null);
+      }
     }
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
-    audioRef.current = new Audio(audioUrl);
-    audioRef.current.play().catch(() => toast.error("Failed to play audio"));
   };
 
   return (
@@ -178,11 +181,12 @@ const DictionaryTable = ({
                 <td className="px-4 py-3 text-sm">
                   {entry.audio_url ? (
                     <button
-                      onClick={() => handlePlayAudio(entry.audio_url)}
+                      onClick={() => handlePlayAudio(i, entry.audio_url)}
+                      disabled={playingIndex === i}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
                     >
                       <Volume2 className="w-5 h-5" />
-                      Play
+                      {playingIndex === i ? "Playing..." : "Play"}
                     </button>
                   ) : (
                     <span className="text-gray-400 italic">No audio</span>

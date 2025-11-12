@@ -73,7 +73,11 @@ const Sidebar = () => {
       name: "Articles",
       icon: FileText,
       children: [
-        { name: "Article Topics", to: "/server/topic", icon: BarChart3 },
+        {
+          name: "Article Topics",
+          to: "/server/article-topic",
+          icon: BarChart3,
+        },
         { name: "News API", to: "/server/news-api", icon: PanelRight },
         { name: "Articles", to: "/server/article", icon: Newspaper },
       ],
@@ -83,7 +87,7 @@ const Sidebar = () => {
       name: "Videos",
       icon: Video,
       children: [
-        { name: "Video Topics", to: "/server/topic", icon: BarChart3 },
+        { name: "Video Topics", to: "/server/video-topic", icon: BarChart3 },
         { name: "Youtube", to: "/server/youtube", icon: TvMinimalPlay },
         { name: "Video", to: "/server/video", icon: ListVideo },
       ],

@@ -6,7 +6,7 @@ import { fetchTopics, createTopic } from "../../../api/servers/topicApi";
 import TopicsTable from "../../../components/servers/manage_topics_page/TopicsTable";
 import TopicFormModal from "../../../components/servers/manage_topics_page/TopicFormModal";
 
-const ManageTopics = () => {
+const ManageTopics = ({ topicType }) => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -47,7 +47,8 @@ const ManageTopics = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
+        topicType
       );
 
       setTopics(data.content || []);
@@ -68,7 +69,7 @@ const ManageTopics = () => {
 
   useEffect(() => {
     reloadTopics();
-  }, [query]); // reload khi query thay đổi
+  }, [topicType, query]); // reload khi query thay đổi
 
   const updateQuery = (newValues) => {
     setQuery((prev) => ({ ...prev, ...newValues }));

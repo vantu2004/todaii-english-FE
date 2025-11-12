@@ -5,12 +5,13 @@ export const fetchTopics = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
+  topicType = "article"
 ) => {
   try {
     // get nhận tham số query ở tham số thứ 2
     const response = await serverInstance.get("/topic", {
-      params: { page, size, sortBy, direction, keyword },
+      params: { page, size, sortBy, direction, keyword, topicType },
     });
     return response.data;
   } catch (err) {

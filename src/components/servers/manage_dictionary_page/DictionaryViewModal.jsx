@@ -2,6 +2,7 @@ import { Eye, Volume2, CheckCircle, Lightbulb, Link2 } from "lucide-react";
 import Modal from "../Modal";
 import { formatDate } from "../../../utils/FormatDate";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -16,7 +17,8 @@ const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
         audio.onended = () => setIsPlaying(false);
         await audio.play();
       } catch (err) {
-        console.error("Audio playback failed:", err);
+        console.error(err);
+        toast.error("Audio playback failed");
         setIsPlaying(false);
       }
     }
