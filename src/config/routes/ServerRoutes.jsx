@@ -11,6 +11,7 @@ import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
 import ManageUsers from "../../modules/servers/pages/ManageUsers";
 import ManageTopics from "../../modules/servers/pages/ManageTopics";
 import ManageDictionary from "../../modules/servers/pages/ManageDictionary";
+import DictionaryApi from "../../modules/servers/pages/DictionaryApi";
 
 export default function ServerRoutes() {
   return (
@@ -76,6 +77,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageDictionary />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/dictionary-api"
+            element={
+              <ServerProtectRoutes>
+                <DictionaryApi />
               </ServerProtectRoutes>
             }
           />

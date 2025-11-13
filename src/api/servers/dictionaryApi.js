@@ -1,5 +1,16 @@
 import { serverInstance } from "../../config/axios";
 
+export const fetchRawWord = async (word) => {
+  try {
+    const response = await serverInstance.get("/dictionary/raw-word", {
+      params: { word },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 export const fetchDictionary = async (
   page = 1,
   size = 20,
