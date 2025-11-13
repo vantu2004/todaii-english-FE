@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [profile, setProfile] = useState(null); // state lưu profile
+  const [loading, setLoading] = useState(false); // state lưu loading
 
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState(["content"]);
@@ -137,11 +138,15 @@ const Sidebar = () => {
   };
 
   const handleLogout = async (email) => {
+    setLoading(true);
+
     try {
       await logout(email);
       navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -270,10 +275,17 @@ const Sidebar = () => {
             onClick={() => {
               handleLogout(profile?.email);
             }}
+            disabled={loading}
             className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
           >
-            <LogOut size={14} />
-            Logout
+            {loading ? (
+              "Logging out..."
+            ) : (
+              <>
+                <LogOut size={14} />
+                Logout
+              </>
+            )}
           </button>
         </div>
       </div>

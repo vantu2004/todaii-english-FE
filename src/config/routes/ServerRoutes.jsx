@@ -10,10 +10,10 @@ import Dashboard from "../../modules/servers/pages/Dashboard";
 import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
 import ManageUsers from "../../modules/servers/pages/ManageUsers";
 import ManageTopics from "../../modules/servers/pages/ManageTopics";
-import ManageDictionary from "../../modules/servers/pages/ManageDictionary";
-import DictionaryApi from "../../modules/servers/pages/DictionaryApi";
-import NewsApi from "../../modules/servers/pages/NewsApi";
-import ManageArticles from "../../modules/servers/pages/ManageArticles";
+import ManageDictionary from "../../modules/servers/pages/manage_dictionary_page/ManageDictionary";
+import DictionaryApi from "../../modules/servers/pages/manage_dictionary_page/DictionaryApi";
+import NewsApi from "../../modules/servers/pages/manage_articles_page/NewsApi";
+import ManageArticles from "../../modules/servers/pages/manage_articles_page/ManageArticles";
 
 export default function ServerRoutes() {
   return (

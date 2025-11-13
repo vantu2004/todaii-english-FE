@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchArticlesFromNewsApi } from "../../../api/servers/articleApi";
+import { fetchArticlesFromNewsApi } from "../../../../api/servers/articleApi";
 import { ExternalLink } from "lucide-react";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/news_api_page/Pagination";
-import ArticlesTable from "../../../components/servers/news_api_page/ArticlesTable";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/news_api_page/Pagination";
+import ArticlesTable from "../../../../components/servers/news_api_page/ArticlesTable";
 
 const NewsApi = () => {
   const [articles, setArticles] = useState([]);

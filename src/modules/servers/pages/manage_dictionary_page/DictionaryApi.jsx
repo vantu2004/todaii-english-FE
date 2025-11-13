@@ -6,7 +6,7 @@ import {
   X,
   History,
 } from "lucide-react";
-import { fetchRawWord } from "../../../api/servers/dictionaryApi";
+import { fetchRawWord } from "../../../../api/servers/dictionaryApi";
 import { useState, useRef, useEffect } from "react";
 
 const DictionaryApi = () => {

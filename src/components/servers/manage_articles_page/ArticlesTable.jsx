@@ -10,7 +10,7 @@ import {
   ArrowDown,
   AlertTriangle,
 } from "lucide-react";
-import { toggleArticle } from "../../../api/servers/articleApi";
+import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
 
 const ArticlesTable = ({
@@ -70,11 +70,14 @@ const ArticlesTable = ({
 
     try {
       const articleId = articles[selectedIndex].id;
+
       await updateArticle(articleId, data);
       await reloadArticles();
+
       setSelectedIndex(null);
       setSelectedArticle(null);
       setIsUpdateModalOpen(false);
+
       toast.success("Article updated successfully");
     } catch (error) {
       console.error("Error updating article:", error);
@@ -89,10 +92,13 @@ const ArticlesTable = ({
 
     try {
       const articleId = articles[selectedIndex].id;
+
       await deleteArticle(articleId);
       await reloadArticles();
+
       setSelectedIndex(null);
       setIsDeleteModalOpen(false);
+
       toast.success("Article deleted");
     } catch (err) {
       toast.error("Failed to delete article");

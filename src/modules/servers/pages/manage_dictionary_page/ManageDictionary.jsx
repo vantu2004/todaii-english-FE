@@ -4,13 +4,13 @@ import {
   createDictionaryEntry,
   createDictionaryEntryByGemini,
   fetchDictionary,
-} from "../../../api/servers/dictionaryApi";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/Pagination";
-import DictionaryTable from "../../../components/servers/manage_dictionary_page/DictionaryTable";
-import DictionaryFormModal from "../../../components/servers/manage_dictionary_page/DictionaryFormModal";
+} from "../../../../api/servers/dictionaryApi";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/Pagination";
+import DictionaryTable from "../../../../components/servers/manage_dictionary_page/DictionaryTable";
+import DictionaryFormModal from "../../../../components/servers/manage_dictionary_page/DictionaryFormModal";
 import { Sparkles, Loader } from "lucide-react";
-import DictionaryViewModal from "../../../components/servers/manage_dictionary_page/DictionaryViewModal";
+import DictionaryViewModal from "../../../../components/servers/manage_dictionary_page/DictionaryViewModal";
 import { set } from "date-fns";
 
 const ManageDictionary = () => {

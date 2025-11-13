@@ -47,3 +47,11 @@ export const toggleArticle = async (articleId) => {
     );
   }
 };
+
+export const deleteArticle = async (articleId) => {
+  try {
+    await serverInstance.delete(`/article/${articleId}`);
+  } catch (err) {
+    console.error(`Error deleting article ${articleId}:`, err);
+  }
+};

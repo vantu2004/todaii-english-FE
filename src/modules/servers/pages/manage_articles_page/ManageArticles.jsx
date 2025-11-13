@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { fetchArticles } from "../../../api/servers/articleApi";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/Pagination";
-import ArticlesTable from "../../../components/servers/manage_articles_page/ArticlesTable";
+import { fetchArticles } from "../../../../api/servers/articleApi";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/Pagination";
+import ArticlesTable from "../../../../components/servers/manage_articles_page/ArticlesTable";
 
 const ManageArticles = () => {
   const [articles, setArticles] = useState([]);
