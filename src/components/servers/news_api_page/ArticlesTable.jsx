@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { formatDate } from "../../../utils/FormatDate";
 import { Eye, ArrowRightFromLine } from "lucide-react";
+import ArticleViewModal from "./ArticleViewModal";
 
 const ArticlesTable = ({ columns, articles }) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -99,13 +100,13 @@ const ArticlesTable = ({ columns, articles }) => {
       </div>
 
       {/* View Modal */}
-      {/* {selectedArticle && (
+      {selectedArticle && (
         <ArticleViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
           article={selectedArticle}
         />
-      )} */}
+      )}
     </>
   );
 };

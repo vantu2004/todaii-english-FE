@@ -13,6 +13,7 @@ import ManageTopics from "../../modules/servers/pages/ManageTopics";
 import ManageDictionary from "../../modules/servers/pages/ManageDictionary";
 import DictionaryApi from "../../modules/servers/pages/DictionaryApi";
 import NewsApi from "../../modules/servers/pages/NewsApi";
+import ManageArticles from "../../modules/servers/pages/ManageArticles";
 
 export default function ServerRoutes() {
   return (
@@ -86,7 +87,16 @@ export default function ServerRoutes() {
             path="/news-api"
             element={
               <ServerProtectRoutes>
-                <NewsApi topicType="article" />
+                <NewsApi />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article"
+            element={
+              <ServerProtectRoutes>
+                <ManageArticles />
               </ServerProtectRoutes>
             }
           />
