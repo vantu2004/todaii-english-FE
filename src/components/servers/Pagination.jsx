@@ -30,7 +30,7 @@ const Pagination = ({ query, updateQuery, pagination }) => {
   const endItem = Math.min(query.page * query.size, pagination.totalElements);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border-t border-gray-200">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white border-t border-gray-200 rounded-lg">
       {/* Showing Info */}
       <div className="text-sm text-gray-600">
         {pagination.totalElements > 0 ? (

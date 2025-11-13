@@ -12,6 +12,7 @@ import ManageUsers from "../../modules/servers/pages/ManageUsers";
 import ManageTopics from "../../modules/servers/pages/ManageTopics";
 import ManageDictionary from "../../modules/servers/pages/ManageDictionary";
 import DictionaryApi from "../../modules/servers/pages/DictionaryApi";
+import NewsApi from "../../modules/servers/pages/NewsApi";
 
 export default function ServerRoutes() {
   return (
@@ -55,24 +56,6 @@ export default function ServerRoutes() {
           />
 
           <Route
-            path="/article-topic"
-            element={
-              <ServerProtectRoutes>
-                <ManageTopics topicType="article" />
-              </ServerProtectRoutes>
-            }
-          />
-
-          <Route
-            path="/video-topic"
-            element={
-              <ServerProtectRoutes>
-                <ManageTopics topicType="video" />
-              </ServerProtectRoutes>
-            }
-          />
-
-          <Route
             path="/dictionary"
             element={
               <ServerProtectRoutes>
@@ -86,6 +69,33 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <DictionaryApi />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article-topic"
+            element={
+              <ServerProtectRoutes>
+                <ManageTopics topicType="article" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/news-api"
+            element={
+              <ServerProtectRoutes>
+                <NewsApi topicType="article" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/video-topic"
+            element={
+              <ServerProtectRoutes>
+                <ManageTopics topicType="video" />
               </ServerProtectRoutes>
             }
           />

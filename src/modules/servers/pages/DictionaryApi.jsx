@@ -97,7 +97,7 @@ const DictionaryApi = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+    <div className="flex flex-col h-full bg-gradient-to-br">
       {/* Title */}
       <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
         Dictionary API
@@ -150,7 +150,7 @@ const DictionaryApi = () => {
             </div>
             <button
               onClick={clearHistory}
-              className="text-xs font-medium text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors mr-2"
+              className="text-xs font-medium text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             >
               Clear All
             </button>
