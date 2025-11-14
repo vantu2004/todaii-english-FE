@@ -1,6 +1,6 @@
 import { User, Mail, CheckCircle, XCircle } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 
 const UserViewModal = ({ isOpen, onClose, user }) => {
   if (!user) return null;
@@ -75,7 +75,7 @@ const UserViewModal = ({ isOpen, onClose, user }) => {
               Created At:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(user.created_at)}
+              {formatISODate(user.created_at)}
             </span>
           </div>
 
@@ -84,7 +84,7 @@ const UserViewModal = ({ isOpen, onClose, user }) => {
               Updated At:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(user.updated_at)}
+              {formatISODate(user.updated_at)}
             </span>
           </div>
 
@@ -93,7 +93,7 @@ const UserViewModal = ({ isOpen, onClose, user }) => {
               Last Login:
             </span>
             <span className="text-gray-700 dark:text-gray-200">
-              {formatDate(user.last_login_at)}
+              {formatISODate(user.last_login_at)}
             </span>
           </div>
 

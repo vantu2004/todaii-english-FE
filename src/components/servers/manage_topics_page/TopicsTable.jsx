@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import { Pencil, Trash2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
@@ -179,7 +179,7 @@ const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
                   <td className="px-4 py-3 text-sm">{topic.alias}</td>
                   <td className="px-4 py-3 text-sm">{topic.topic_type}</td>
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(topic.updated_at)}
+                    {formatISODate(topic.updated_at)}
                   </td>
 
                   {/* Enable toggle */}

@@ -7,13 +7,13 @@ import VerifyEmail from "../../modules/clients/pages/auth/VerifyEmail";
 import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
 import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
 import ClientLayout from "../../modules/clients/layouts/ClientLayout";
-import Home from "../../modules/clients/pages/home/Home"
-import Home1 from "../../modules/clients/pages/home/Home1"
+import Home from "../../modules/clients/pages/home/Home";
 
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
+import SearchResults from "../../modules/clients/pages/SearchResults";
 
 export default function ClientRoutes() {
   return (
@@ -71,15 +71,9 @@ export default function ClientRoutes() {
           }
         />
 
-        <Route
-          path="/home"
-          element={
-              <ClientLayout/>
-          }
-        >
-          <Route index element={<Home/>}></Route>
-          <Route path="test" element={<Home1/>}></Route>
-
+        <Route path="/" element={<ClientLayout />}>
+          <Route path="home" element={<Home />}></Route>
+          <Route path="search" element={<SearchResults />}></Route>
         </Route>
 
         {/* PROTECTED routes (phải login mới vào được) */}

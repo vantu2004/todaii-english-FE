@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import { Eye, Pencil, Trash2, ArrowUp, ArrowDown } from "lucide-react";
@@ -206,10 +206,10 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                   </td>
 
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(user.last_login_at)}
+                    {formatISODate(user.last_login_at)}
                   </td>
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(user.created_at)}
+                    {formatISODate(user.created_at)}
                   </td>
 
                   <td className="px-4 py-3 text-xs">
