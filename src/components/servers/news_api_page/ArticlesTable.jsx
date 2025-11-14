@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import { Eye, ArrowRightFromLine } from "lucide-react";
 import ArticleViewModal from "./ArticleViewModal";
 
@@ -70,7 +70,7 @@ const ArticlesTable = ({ columns, articles }) => {
 
                 {/* Published At */}
                 <td className="px-4 py-3 text-sm">
-                  {formatDate(article.published_at)}
+                  {formatISODate(article.published_at)}
                 </td>
 
                 {/* Actions */}

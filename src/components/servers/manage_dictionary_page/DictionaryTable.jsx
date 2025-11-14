@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import toast from "react-hot-toast";
 import {
   Eye,
@@ -195,7 +195,7 @@ const DictionaryTable = ({
 
                 {/* Updated At */}
                 <td className="px-4 py-3 text-sm">
-                  {formatDate(entry.updated_at)}
+                  {formatISODate(entry.updated_at)}
                 </td>
 
                 {/* Actions */}
