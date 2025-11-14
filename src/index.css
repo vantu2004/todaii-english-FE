@@ -10,3 +10,34 @@
   --font-jarkata-sans: "Plus Jakarta Sans", sans-serif;
   --font-inter: "Inter", sans-serif;
 }
+
+.title-hoverline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  display: inline;
+  background-size: 0 3px;
+  transition: background-size 280ms ease;
+}
+
+/* on hover expand to full width */
+.article-card:hover .title-hoverline {
+  background-size: 100% 3px;
+}
+
+.article-card img {
+  transition: transform 0.7s ease-out;
+}
+
+.article-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

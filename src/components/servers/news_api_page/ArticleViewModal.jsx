@@ -7,7 +7,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 
 const ArticleViewModal = ({ isOpen, onClose, article }) => {
   if (!article) return null;
@@ -65,7 +65,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <Calendar size={16} className="text-blue-600 flex-shrink-0" />
                   <span className="font-semibold">
-                    {formatDate(article.published_at)}
+                    {formatISODate(article.published_at)}
                   </span>
                 </div>
               </div>
@@ -131,7 +131,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
               Published
             </p>
             <p className="text-sm font-medium text-green-900">
-              {formatDate(article.published_at)}
+              {formatISODate(article.published_at)}
             </p>
           </div>
         </div>

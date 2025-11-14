@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import {
@@ -164,7 +164,7 @@ const ArticlesTable = ({
                 </td>
                 <td className="px-4 py-3 text-sm">{a.views}</td>
                 <td className="px-4 py-3 text-sm">
-                  {formatDate(a.published_at)}
+                  {formatISODate(a.published_at)}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center text-sm">

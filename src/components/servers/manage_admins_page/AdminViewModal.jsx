@@ -9,7 +9,7 @@ import {
   Eye,
 } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "./../../../utils/FormatDate";
+import { formatISODate } from "./../../../utils/FormatDate";
 
 const AdminViewModal = ({ isOpen, onClose, admin }) => {
   if (!admin) return null;
@@ -122,17 +122,17 @@ const AdminViewModal = ({ isOpen, onClose, admin }) => {
             <InfoRow
               icon={Calendar}
               label="Account Created"
-              value={formatDate(admin.created_at)}
+              value={formatISODate(admin.created_at)}
             />
             <InfoRow
               icon={Clock}
               label="Last Updated"
-              value={formatDate(admin.updated_at)}
+              value={formatISODate(admin.updated_at)}
             />
             <InfoRow
               icon={CheckCircle}
               label="Last Login"
-              value={formatDate(admin.last_login_at)}
+              value={formatISODate(admin.last_login_at)}
             />
           </div>
         </div>

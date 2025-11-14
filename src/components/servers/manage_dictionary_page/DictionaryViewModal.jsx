@@ -1,6 +1,6 @@
 import { Eye, Volume2, CheckCircle, Lightbulb, Link2 } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -71,7 +71,7 @@ const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
         {/* Updated at */}
         <div className="flex items-center gap-2 text-gray-600 text-sm bg-gray-50 p-3 rounded-lg border border-gray-200">
           <CheckCircle size={16} className="text-green-600 flex-shrink-0" />
-          <span>Updated {formatDate(dictionary.updated_at)}</span>
+          <span>Updated {formatISODate(dictionary.updated_at)}</span>
         </div>
 
         {/* Senses */}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "./../../../utils/FormatDate";
+import { formatISODate } from "./../../../utils/FormatDate";
 import {
   deleteAdmin,
   toggleAdmin,
@@ -231,12 +231,12 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
                   {/* Last login */}
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(admin.last_login_at)}
+                    {formatISODate(admin.last_login_at)}
                   </td>
 
                   {/* Created at */}
                   <td className="px-4 py-3 text-sm">
-                    {formatDate(admin.created_at)}
+                    {formatISODate(admin.created_at)}
                   </td>
 
                   {/* Status pill */}

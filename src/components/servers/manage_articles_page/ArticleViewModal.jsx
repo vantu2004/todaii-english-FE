@@ -11,7 +11,7 @@ import {
   Volume2,
 } from "lucide-react";
 import Modal from "../Modal";
-import { formatDate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../../utils/FormatDate";
 
 const ArticleViewModal = ({ isOpen, onClose, article }) => {
   if (!article) return null;
@@ -69,7 +69,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
                 <div className="flex items-center gap-2 text-sm text-gray-700">
                   <Calendar size={16} className="text-blue-600 flex-shrink-0" />
                   <span className="font-semibold">
-                    {formatDate(article.published_at)}
+                    {formatISODate(article.published_at)}
                   </span>
                 </div>
 
@@ -306,7 +306,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
               Created
             </p>
             <p className="text-gray-900 font-medium">
-              {formatDate(article.created_at)}
+              {formatISODate(article.created_at)}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
@@ -314,7 +314,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
               Updated
             </p>
             <p className="text-gray-900 font-medium">
-              {formatDate(article.updated_at)}
+              {formatISODate(article.updated_at)}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
