@@ -4,14 +4,17 @@ import {
   updateArticle,
 } from "../../../../api/servers/articleApi";
 import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const UpdateArticle = () => {
   const { id } = useParams();
 
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -31,10 +34,13 @@ const UpdateArticle = () => {
     try {
       await updateArticle(id, formData);
       toast.success("Article updated!");
+
+      navigate("/server/article");
     } catch (error) {
       console.error("Error updating article:", error);
 
       const errors = error.response?.data?.errors;
+
       if (errors && Array.isArray(errors) && errors.length > 0) {
         toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
@@ -42,6 +48,7 @@ const UpdateArticle = () => {
       }
     }
   };
+
   if (loading) {
     return <div className="p-8 text-gray-500">Loading...</div>;
   }
@@ -62,13 +69,19 @@ const UpdateArticle = () => {
         </h2>
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+      >
         <ArticleForm
           mode="update"
           initialData={article}
           onSubmit={handleUpdateArticle}
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

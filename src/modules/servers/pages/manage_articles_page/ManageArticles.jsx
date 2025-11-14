@@ -5,6 +5,7 @@ import Pagination from "../../../../components/servers/Pagination";
 import ArticlesTable from "../../../../components/servers/manage_articles_page/ArticlesTable";
 import { useNavigate } from "react-router-dom";
 import RedirectToolbar from "../../../../components/servers/RedirectToolbar";
+import { motion } from "framer-motion";
 
 const ManageArticles = () => {
   const REDIRECT_URL = "/server/article/create";
@@ -36,6 +37,8 @@ const ManageArticles = () => {
     { key: "author", label: "Author", sortField: "author" },
     { key: "views", label: "Views", sortField: "views" },
     { key: "publishedAt", label: "Published At", sortField: "publishedAt" },
+    { key: "paragraph", label: "Paragraphs" },
+    { key: "vocabulary", label: "Vocabularies" },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];
@@ -94,7 +97,13 @@ const ManageArticles = () => {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+      >
         <ArticlesTable
           columns={columns}
           articles={articles}
@@ -102,7 +111,7 @@ const ManageArticles = () => {
           query={query}
           updateQuery={updateQuery}
         />
-      </div>
+      </motion.div>
 
       {/* Pagination */}
       <div className="flex-none mt-4">

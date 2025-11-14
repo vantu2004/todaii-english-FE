@@ -4,6 +4,7 @@ import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import { fetchUsers } from "../../../api/servers/userApi";
 import UsersTable from "../../../components/servers/manage_users_page/UsersTable";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -90,7 +91,13 @@ const ManageUsers = () => {
       </div>
 
       {/* Vùng bảng cuộn riêng */}
-      <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+      >
         <UsersTable
           columns={columns}
           users={users}
@@ -98,7 +105,7 @@ const ManageUsers = () => {
           query={query}
           updateQuery={updateQuery}
         />
-      </div>
+      </motion.div>
 
       {/* Pagination nằm ngoài, cố định dưới cùng */}
       <div className="flex-none mt-4">

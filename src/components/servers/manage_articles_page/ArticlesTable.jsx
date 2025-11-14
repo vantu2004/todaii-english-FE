@@ -9,6 +9,8 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  Pilcrow,
+  Languages,
 } from "lucide-react";
 import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
@@ -164,6 +166,26 @@ const ArticlesTable = ({
                 <td className="px-4 py-3 text-sm">
                   {formatDate(a.published_at)}
                 </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center text-sm">
+                    <button
+                      className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                      aria-label="Paragraph"
+                    >
+                      <Pilcrow className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center text-sm">
+                    <button
+                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      aria-label="Vocabulary"
+                    >
+                      <Languages className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-sm">
                   <button
                     onClick={() => handleToggle(i)}
@@ -181,7 +203,7 @@ const ArticlesTable = ({
                   </button>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
+                  <div className="flex items-center text-sm">
                     <button
                       onClick={() => handleViewClick(i)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -189,6 +211,7 @@ const ArticlesTable = ({
                     >
                       <Eye className="w-5 h-5" />
                     </button>
+
                     <button
                       onClick={() => handleUpdateClick(i)}
                       className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"

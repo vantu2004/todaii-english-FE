@@ -11,7 +11,7 @@ import DictionaryTable from "../../../../components/servers/manage_dictionary_pa
 import DictionaryFormModal from "../../../../components/servers/manage_dictionary_page/DictionaryFormModal";
 import { Sparkles, Loader } from "lucide-react";
 import DictionaryViewModal from "../../../../components/servers/manage_dictionary_page/DictionaryViewModal";
-import { set } from "date-fns";
+import { motion } from "framer-motion";
 
 const ManageDictionary = () => {
   const [dictionary, setDictionary] = useState([]);
@@ -239,7 +239,13 @@ const ManageDictionary = () => {
       </div>
 
       {/* Vùng bảng cuộn riêng */}
-      <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+      >
         <DictionaryTable
           columns={columns}
           dictionary={dictionary}
@@ -247,7 +253,7 @@ const ManageDictionary = () => {
           query={query}
           updateQuery={updateQuery}
         />
-      </div>
+      </motion.div>
 
       {/* Pagination */}
       <div className="flex-none mt-4">

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchArticlesFromNewsApi } from "../../../../api/servers/articleApi";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Loader2 } from "lucide-react";
 import ToolBar from "../../../../components/servers/ToolBar";
 import Pagination from "../../../../components/servers/news_api_page/Pagination";
 import ArticlesTable from "../../../../components/servers/news_api_page/ArticlesTable";
+import { motion } from "framer-motion";
 
 const NewsApi = () => {
   const [articles, setArticles] = useState([]);
@@ -86,9 +87,23 @@ const NewsApi = () => {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-hidden border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm mt-4">
-        <ArticlesTable columns={columns} articles={articles} />
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm mt-4"
+      >
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <span className="text-gray-500 dark:text-gray-400 animate-spin">
+              <Loader2 className="w-10 h-10" />
+            </span>
+          </div>
+        ) : (
+          <ArticlesTable columns={columns} articles={articles} />
+        )}
+      </motion.div>
 
       {/* Pagination */}
       <div className="flex-none mt-4">

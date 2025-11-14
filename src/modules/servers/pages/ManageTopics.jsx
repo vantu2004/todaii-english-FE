@@ -5,6 +5,7 @@ import Pagination from "../../../components/servers/Pagination";
 import { fetchTopics, createTopic } from "../../../api/servers/topicApi";
 import TopicsTable from "../../../components/servers/manage_topics_page/TopicsTable";
 import TopicFormModal from "../../../components/servers/manage_topics_page/TopicFormModal";
+import { motion } from "framer-motion";
 
 const ManageTopics = ({ topicType }) => {
   const [topics, setTopics] = useState([]);
@@ -114,7 +115,13 @@ const ManageTopics = ({ topicType }) => {
         </div>
 
         {/* Bảng cuộn riêng */}
-        <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.5 }}
+          className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        >
           <TopicsTable
             columns={columns}
             topics={topics}
@@ -122,7 +129,7 @@ const ManageTopics = ({ topicType }) => {
             query={query}
             updateQuery={updateQuery}
           />
-        </div>
+        </motion.div>
 
         {/* Pagination */}
         <div className="flex-none mt-4">

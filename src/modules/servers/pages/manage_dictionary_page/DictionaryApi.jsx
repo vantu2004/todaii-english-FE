@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { fetchRawWord } from "../../../../api/servers/dictionaryApi";
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const DictionaryApi = () => {
   const [rawWord, setRawWord] = useState([]);
@@ -192,7 +193,11 @@ const DictionaryApi = () => {
           </div>
         ) : rawWord && rawWord.length > 0 ? (
           rawWord.map((entry, idx) => (
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.5 }}
               key={idx}
               className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50
                   hover:shadow-md dark:hover:shadow-lg dark:shadow-blue-900/10 transition-all"
@@ -328,7 +333,7 @@ const DictionaryApi = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </motion.div>
           ))
         ) : searchTerm ? (
           <div className="flex flex-col items-center justify-center py-12">

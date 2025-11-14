@@ -233,7 +233,7 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                               <img
                                 src={formData.image_url}
                                 alt="Preview"
-                                className="w-full h-40 object-cover"
+                                className="w-full h-auto object-cover"
                               />
                             </motion.div>
                           )}
@@ -307,13 +307,20 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
       </div>
 
       {/* Footer */}
-      <div className="flex-shrink-0 border-t border-gray-200 bg-gray-50 px-8 py-4 flex justify-between items-center">
-        <p className="text-sm text-gray-600">
-          {mode === "create" ? "Create new article" : "Update article"}
-        </p>
+      <div className="flex-shrink-0 border-t border-gray-200 bg-gray-50 px-8 py-4 flex justify-end items-center gap-3">
+        {/* Cancel button */}
+        <button
+          type="button"
+          onClick={() => window.history.back()} // quay lại trang trước
+          className="px-5 py-2.5 text-sm font-semibold text-gray-700 bg-gray-200 rounded-xl hover:bg-gray-300 active:scale-95 transition-all shadow-sm"
+        >
+          Cancel
+        </button>
+
+        {/* Submit button */}
         <button
           type="submit"
-          className="px-6 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition-colors"
+          className="px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm"
         >
           {mode === "create" ? "Create Article" : "Update Article"}
         </button>
