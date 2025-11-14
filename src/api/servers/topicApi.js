@@ -1,16 +1,28 @@
 import { serverInstance } from "../../config/axios";
 
+export const fetchTopicsNoPaged = async (topicType) => {
+  try {
+    const response = await serverInstance.get("/topic/no-paged", {
+      params: { topicType },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 export const fetchTopics = async (
   page = 1,
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
+  topicType = "article"
 ) => {
   try {
     // get nhận tham số query ở tham số thứ 2
     const response = await serverInstance.get("/topic", {
-      params: { page, size, sortBy, direction, keyword },
+      params: { page, size, sortBy, direction, keyword, topicType },
     });
     return response.data;
   } catch (err) {

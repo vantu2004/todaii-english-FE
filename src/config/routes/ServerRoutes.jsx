@@ -10,6 +10,12 @@ import Dashboard from "../../modules/servers/pages/Dashboard";
 import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
 import ManageUsers from "../../modules/servers/pages/ManageUsers";
 import ManageTopics from "../../modules/servers/pages/ManageTopics";
+import ManageDictionary from "../../modules/servers/pages/manage_dictionary_page/ManageDictionary";
+import DictionaryApi from "../../modules/servers/pages/manage_dictionary_page/DictionaryApi";
+import NewsApi from "../../modules/servers/pages/manage_articles_page/NewsApi";
+import ManageArticles from "../../modules/servers/pages/manage_articles_page/ManageArticles";
+import CreateArticle from "../../modules/servers/pages/manage_articles_page/CreateArticle";
+import UpdateArticle from "../../modules/servers/pages/manage_articles_page/UpdateArticle";
 
 export default function ServerRoutes() {
   return (
@@ -53,10 +59,73 @@ export default function ServerRoutes() {
           />
 
           <Route
-            path="/topic"
+            path="/dictionary"
             element={
               <ServerProtectRoutes>
-                <ManageTopics />
+                <ManageDictionary />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/dictionary-api"
+            element={
+              <ServerProtectRoutes>
+                <DictionaryApi />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article-topic"
+            element={
+              <ServerProtectRoutes>
+                <ManageTopics topicType="article" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/news-api"
+            element={
+              <ServerProtectRoutes>
+                <NewsApi />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article"
+            element={
+              <ServerProtectRoutes>
+                <ManageArticles />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article/create"
+            element={
+              <ServerProtectRoutes>
+                <CreateArticle />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article/:id/update"
+            element={
+              <ServerProtectRoutes>
+                <UpdateArticle />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/video-topic"
+            element={
+              <ServerProtectRoutes>
+                <ManageTopics topicType="video" />
               </ServerProtectRoutes>
             }
           />

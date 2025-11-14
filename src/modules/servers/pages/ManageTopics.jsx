@@ -5,8 +5,9 @@ import Pagination from "../../../components/servers/Pagination";
 import { fetchTopics, createTopic } from "../../../api/servers/topicApi";
 import TopicsTable from "../../../components/servers/manage_topics_page/TopicsTable";
 import TopicFormModal from "../../../components/servers/manage_topics_page/TopicFormModal";
+import { motion } from "framer-motion";
 
-const ManageTopics = () => {
+const ManageTopics = ({ topicType }) => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -47,7 +48,8 @@ const ManageTopics = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
+        topicType
       );
 
       setTopics(data.content || []);
@@ -68,7 +70,7 @@ const ManageTopics = () => {
 
   useEffect(() => {
     reloadTopics();
-  }, [query]); // reload khi query thay đổi
+  }, [topicType, query]); // reload khi query thay đổi
 
   const updateQuery = (newValues) => {
     setQuery((prev) => ({ ...prev, ...newValues }));
@@ -85,13 +87,11 @@ const ManageTopics = () => {
     } catch (error) {
       console.error("Error creating topic:", error);
 
-      // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
-        toast.error("Failed to create topic"); // fallback
+        toast.error("Failed to create topic");
       }
     }
   };
@@ -115,7 +115,13 @@ const ManageTopics = () => {
         </div>
 
         {/* Bảng cuộn riêng */}
-        <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.5 }}
+          className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        >
           <TopicsTable
             columns={columns}
             topics={topics}
@@ -123,7 +129,7 @@ const ManageTopics = () => {
             query={query}
             updateQuery={updateQuery}
           />
-        </div>
+        </motion.div>
 
         {/* Pagination */}
         <div className="flex-none mt-4">

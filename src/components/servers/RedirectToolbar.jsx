@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Search } from "lucide-react";
 
-const ToolBar = ({ updateQuery, setIsModalOpen }) => {
+const RedirectToolbar = ({ updateQuery, handleRedirect }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -26,9 +26,9 @@ const ToolBar = ({ updateQuery, setIsModalOpen }) => {
       </div>
 
       {/* Create Button */}
-      {setIsModalOpen && (
+      {handleRedirect && (
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleRedirect}
           className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm hover:shadow-md"
         >
           <Plus className="w-5 h-5" />
@@ -39,4 +39,4 @@ const ToolBar = ({ updateQuery, setIsModalOpen }) => {
   );
 };
 
-export default ToolBar;
+export default RedirectToolbar;

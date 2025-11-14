@@ -5,6 +5,7 @@ import { fetchAdmins, createAdmin } from "../../../api/servers/adminApi";
 import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
+import { motion } from "framer-motion";
 
 const ManageAdmins = () => {
   const [admins, setAdmins] = useState([]);
@@ -87,13 +88,11 @@ const ManageAdmins = () => {
     } catch (error) {
       console.error("Error creating admin:", error);
 
-      // Lấy danh sách lỗi từ response
       const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors)) {
-        errors.forEach((err) => toast.error(err));
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
       } else {
-        toast.error("Failed to create admin"); // fallback
+        toast.error("Failed to create admin");
       }
     }
   };
@@ -111,12 +110,18 @@ const ManageAdmins = () => {
         />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Table with actions
+          Admins Table
         </h4>
       </div>
 
       {/* Vùng bảng cuộn riêng */}
-      <div className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.5 }}
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+      >
         <AdminsTable
           columns={columns}
           admins={admins}
@@ -124,7 +129,7 @@ const ManageAdmins = () => {
           query={query}
           updateQuery={updateQuery}
         />
-      </div>
+      </motion.div>
 
       {/* Pagination nằm ngoài, cố định dưới cùng */}
       <div className="flex-none mt-4">

@@ -1,38 +1,166 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, UserCog, Users, ChartBarStacked } from "lucide-react";
+import {
+  LayoutDashboard,
+  UserCog,
+  Users,
+  BarChart3,
+  Languages,
+  ChevronDown,
+  FileText,
+  Video,
+  Settings,
+  LogOut,
+  User,
+  PenTool,
+  BookCopy,
+  FolderArchive,
+  LockKeyhole,
+  Mails,
+  Newspaper,
+  PanelRight,
+  TvMinimalPlay,
+  ListVideo,
+  BookMarked,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { fetchProfile } from "../../api/servers/adminApi";
+import { logout } from "../../api/servers/authApi";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const location = useLocation(); // get current path
+  const [profile, setProfile] = useState(null); // state lưu profile
+  const [loading, setLoading] = useState(false); // state lưu loading
+
+  const location = useLocation();
+  const [expandedMenus, setExpandedMenus] = useState(["content"]);
+
+  const toggleMenu = (id) => {
+    setExpandedMenus((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
 
   const menuItems = [
     {
+      id: "dashboard",
       name: "Dashboard",
       to: "/server",
-      icon: <LayoutDashboard className="w-5 h-5" />,
+      icon: LayoutDashboard,
     },
     {
-      name: "Manage Admins",
-      to: "/server/admin",
-      icon: <UserCog className="w-5 h-5" />,
+      id: "user",
+      name: "Users",
+      icon: Users,
+      children: [
+        { name: "Admins", to: "/server/admin", icon: UserCog },
+        { name: "Users", to: "/server/user", icon: Users },
+      ],
     },
     {
-      name: "Manage Users",
-      to: "/server/user",
-      icon: <Users className="w-5 h-5" />,
+      id: "dictionary",
+      name: "Dictionaries",
+      icon: Languages,
+      children: [
+        {
+          name: "Dictionary API",
+          to: "/server/dictionary-api",
+          icon: BookMarked,
+        },
+        { name: "Dictionary", to: "/server/dictionary", icon: Languages },
+      ],
     },
     {
-      name: "Manage Topics",
-      to: "/server/topic",
-      icon: <ChartBarStacked className="w-5 h-5" />,
+      id: "article",
+      name: "Articles",
+      icon: FileText,
+      children: [
+        {
+          name: "Article Topics",
+          to: "/server/article-topic",
+          icon: BarChart3,
+        },
+        { name: "News API", to: "/server/news-api", icon: PanelRight },
+        { name: "Articles", to: "/server/article", icon: Newspaper },
+      ],
+    },
+    {
+      id: "video",
+      name: "Videos",
+      icon: Video,
+      children: [
+        { name: "Video Topics", to: "/server/video-topic", icon: BarChart3 },
+        { name: "Youtube", to: "/server/youtube", icon: TvMinimalPlay },
+        { name: "Video", to: "/server/video", icon: ListVideo },
+      ],
+    },
+    {
+      id: "learning",
+      name: "Learning Tools",
+      icon: PenTool,
+      children: [
+        {
+          name: "Vocabulary Groups",
+          to: "/server/vocab-group",
+          icon: FolderArchive,
+        },
+        { name: "Vocabulary Decks", to: "/server/vocab-deck", icon: BookCopy },
+      ],
+    },
+    {
+      id: "settings",
+      name: "System Settings",
+      icon: Settings,
+      children: [
+        {
+          name: "API Keys",
+          to: "/server/api-key",
+          icon: LockKeyhole,
+        },
+
+        { name: "SMTP", to: "/server/smtp", icon: Mails },
+      ],
     },
   ];
 
+  const isPathActive = (path) => location.pathname === path;
+  const isParentActive = (children) =>
+    children?.some((child) => location.pathname === child.to);
+
+  const navigate = useNavigate();
+
+  const handleFetchProfile = async () => {
+    try {
+      const response = await fetchProfile();
+      setProfile(response);
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  const handleLogout = async (email) => {
+    setLoading(true);
+
+    try {
+      await logout(email);
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleFetchProfile();
+  }, []);
+
   return (
-    <div className="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
-      <div className="py-4 text-gray-500 dark:text-gray-400">
+    <div className="hidden w-64 bg-white md:flex md:flex-col border-r border-gray-200">
+      <div className="flex-1 py-6 px-3 overflow-y-auto">
+        {/* Logo */}
         <a
           href="/server"
-          className="ml-6 text-2xl font-extrabold tracking-tight select-none"
+          className="flex items-center px-3 mb-6 text-2xl font-extrabold tracking-tight select-none"
         >
           <span className="text-[#13183f]">Todaii</span>
           <span className="ml-1 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">
@@ -40,32 +168,126 @@ const Sidebar = () => {
           </span>
         </a>
 
-        <ul className="mt-6">
+        {/* Navigation */}
+        <nav className="space-y-1">
           {menuItems.map((item) => {
-            const isActive = location.pathname === `/server/${item.to}`;
+            const hasChildren = item.children?.length > 0;
+            const isExpanded = expandedMenus.includes(item.id);
+            const isActive = item.to ? isPathActive(item.to) : false;
+            const isChildActive = hasChildren && isParentActive(item.children);
+            const Icon = item.icon;
+
             return (
-              <li key={item.to} className="relative px-6 py-3">
-                {isActive && (
-                  <span
-                    className="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                    aria-hidden="true"
-                  ></span>
+              <div key={item.id}>
+                {hasChildren ? (
+                  <button
+                    onClick={() => toggleMenu(item.id)}
+                    className="w-full"
+                  >
+                    <div
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+                        isChildActive
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Icon size={18} />
+                      <span className="text-sm font-medium flex-1 text-left">
+                        {item.name}
+                      </span>
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform ${
+                          isExpanded ? "rotate-180" : ""
+                        }`}
+                      />
+                    </div>
+                  </button>
+                ) : (
+                  <Link to={item.to}>
+                    <div
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+                        isActive
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Icon size={18} />
+                      <span className="text-sm font-medium">{item.name}</span>
+                    </div>
+                  </Link>
                 )}
-                <Link
-                  className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 ${
-                    isActive
-                      ? "text-gray-800 dark:text-gray-100"
-                      : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400"
-                  }`}
-                  to={item.to}
-                >
-                  {item.icon}
-                  <span className="ml-4">{item.name}</span>
-                </Link>
-              </li>
+
+                {hasChildren && isExpanded && (
+                  <div className="mt-1 ml-6 space-y-1">
+                    {item.children.map((child) => {
+                      const isChildItemActive = isPathActive(child.to);
+                      const ChildIcon = child.icon;
+
+                      return (
+                        <Link key={child.to} to={child.to}>
+                          <div
+                            className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+                              isChildItemActive
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-600 hover:bg-gray-50"
+                            }`}
+                          >
+                            <ChildIcon size={16} />
+                            <span className="text-sm">{child.name}</span>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
-        </ul>
+        </nav>
+      </div>
+
+      {/* Footer */}
+      <div className="p-3 border-t border-gray-200">
+        <div className="flex items-center gap-3 px-3 py-2 mb-2">
+          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+            <User className="text-blue-600" size={18} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-gray-900 truncate">
+              {profile?.display_name}
+            </div>
+            <div className="text-xs text-gray-500 truncate">
+              {profile?.email}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-2">
+          <Link
+            to="/server/profile"
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+          >
+            <Settings size={14} />
+            Settings
+          </Link>
+          <button
+            onClick={() => {
+              handleLogout(profile?.email);
+            }}
+            disabled={loading}
+            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+          >
+            {loading ? (
+              "Logging out..."
+            ) : (
+              <>
+                <LogOut size={14} />
+                Logout
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
