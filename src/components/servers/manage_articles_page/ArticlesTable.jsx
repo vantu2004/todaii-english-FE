@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
+import { useNavigate } from "react-router-dom";
 
 const ArticlesTable = ({
   columns,
@@ -22,10 +23,11 @@ const ArticlesTable = ({
 }) => {
   const [statusStates, setStatusStates] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setStatusStates(articles.map((a) => a.enabled ?? true));
@@ -42,10 +44,17 @@ const ArticlesTable = ({
       const articleId = articles[index].id;
 
       await toggleArticle(articleId);
+    } catch (error) {
+      console.error("Error toggling article:", error);
+
+      const errors = error.response?.data?.errors;
+      if (errors && Array.isArray(errors) && errors.length > 0) {
+        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
+      } else {
+        toast.error("Failed to toggle article");
+      }
+    } finally {
       await reloadArticles();
-    } catch (err) {
-      toast.error("Failed to toggle article");
-      console.error("Failed to toggle article:", err);
     }
   };
 
@@ -55,36 +64,13 @@ const ArticlesTable = ({
   };
 
   const handleUpdateClick = (index) => {
-    setSelectedIndex(index);
-    setSelectedArticle(articles[index]);
-    setIsUpdateModalOpen(true);
+    const articleId = articles[index].id;
+    navigate(`/server/article/${articleId}/update`);
   };
 
   const handleDeleteClick = (index) => {
     setSelectedIndex(index);
     setIsDeleteModalOpen(true);
-  };
-
-  const handleConfirmUpdate = async (data) => {
-    if (selectedIndex === null) return;
-
-    try {
-      const articleId = articles[selectedIndex].id;
-
-      await updateArticle(articleId, data);
-      await reloadArticles();
-
-      setSelectedIndex(null);
-      setSelectedArticle(null);
-      setIsUpdateModalOpen(false);
-
-      toast.success("Article updated successfully");
-    } catch (error) {
-      console.error("Error updating article:", error);
-      const errors = error.response?.data?.errors;
-      if (errors?.length > 0) toast.error(errors[0]);
-      else toast.error("Failed to update article");
-    }
   };
 
   const handleConfirmDelete = async () => {
@@ -233,17 +219,6 @@ const ArticlesTable = ({
           article={selectedArticle}
         />
       )}
-
-      {/* Update Modal */}
-      {/* {selectedArticle && (
-        <ArticleFormModal
-          isOpen={isUpdateModalOpen}
-          onClose={() => setIsUpdateModalOpen(false)}
-          mode="update"
-          initialData={selectedArticle}
-          onSubmit={handleConfirmUpdate}
-        />
-      )} */}
 
       {/* Delete Modal */}
       {selectedIndex !== null && (

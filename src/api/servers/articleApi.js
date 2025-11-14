@@ -37,6 +37,33 @@ export const fetchArticles = async (
   }
 };
 
+export const fetchArticle = async (articleId) => {
+  try {
+    const response = await serverInstance.get(`/article/${articleId}`);
+    return response.data;
+  } catch (err) {
+    console.error(`Error fetching article ${articleId}:`, err);
+  }
+};
+
+export const createArticle = async (data) => {
+  try {
+    await serverInstance.post("/article", data);
+  } catch (err) {
+    console.error("Error creating article:", err);
+    throw err;
+  }
+};
+
+export const updateArticle = async (articleId, data) => {
+  try {
+    await serverInstance.put(`/article/${articleId}`, data);
+  } catch (err) {
+    console.error(`Error updating article ${articleId}:`, err);
+    throw err;
+  }
+};
+
 export const toggleArticle = async (articleId) => {
   try {
     await serverInstance.patch(`/article/${articleId}/enabled`);
@@ -45,6 +72,7 @@ export const toggleArticle = async (articleId) => {
       `Error toggling enabled state for article ${articleId}:`,
       err
     );
+    throw err;
   }
 };
 

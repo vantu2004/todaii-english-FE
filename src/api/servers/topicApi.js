@@ -1,5 +1,16 @@
 import { serverInstance } from "../../config/axios";
 
+export const fetchTopicsNoPaged = async (topicType) => {
+  try {
+    const response = await serverInstance.get("/topic/no-paged", {
+      params: { topicType },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 export const fetchTopics = async (
   page = 1,
   size = 10,

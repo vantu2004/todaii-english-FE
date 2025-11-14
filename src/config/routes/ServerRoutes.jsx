@@ -14,6 +14,8 @@ import ManageDictionary from "../../modules/servers/pages/manage_dictionary_page
 import DictionaryApi from "../../modules/servers/pages/manage_dictionary_page/DictionaryApi";
 import NewsApi from "../../modules/servers/pages/manage_articles_page/NewsApi";
 import ManageArticles from "../../modules/servers/pages/manage_articles_page/ManageArticles";
+import CreateArticle from "../../modules/servers/pages/manage_articles_page/CreateArticle";
+import UpdateArticle from "../../modules/servers/pages/manage_articles_page/UpdateArticle";
 
 export default function ServerRoutes() {
   return (
@@ -97,6 +99,24 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageArticles />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article/create"
+            element={
+              <ServerProtectRoutes>
+                <CreateArticle />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article/:id/update"
+            element={
+              <ServerProtectRoutes>
+                <UpdateArticle />
               </ServerProtectRoutes>
             }
           />

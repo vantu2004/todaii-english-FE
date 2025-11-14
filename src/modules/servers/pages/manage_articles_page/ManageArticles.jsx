@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { fetchArticles } from "../../../../api/servers/articleApi";
-import ToolBar from "../../../../components/servers/ToolBar";
 import Pagination from "../../../../components/servers/Pagination";
 import ArticlesTable from "../../../../components/servers/manage_articles_page/ArticlesTable";
+import { useNavigate } from "react-router-dom";
+import RedirectToolbar from "../../../../components/servers/RedirectToolbar";
 
 const ManageArticles = () => {
+  const REDIRECT_URL = "/server/article/create";
+
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   // state chung cho phân trang, sort, search
   const [query, setQuery] = useState({
@@ -72,20 +75,6 @@ const ManageArticles = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
-  const handleConfirmCreate = async (formData) => {
-    try {
-      await createArticle(formData);
-      await reloadArticles();
-      setIsCreateModalOpen(false);
-      toast.success("Article created successfully");
-    } catch (error) {
-      console.error("Error creating article:", error);
-      const errors = error.response?.data?.errors;
-      if (errors?.length > 0) toast.error(errors[0]);
-      else toast.error("Failed to create article");
-    }
-  };
-
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -94,9 +83,9 @@ const ManageArticles = () => {
           Manage Articles
         </h2>
 
-        <ToolBar
+        <RedirectToolbar
           updateQuery={updateQuery}
-          setIsModalOpen={setIsCreateModalOpen}
+          handleRedirect={() => navigate(REDIRECT_URL)}
         />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
@@ -123,17 +112,6 @@ const ManageArticles = () => {
           pagination={pagination}
         />
       </div>
-
-      {/* Modal */}
-      {isCreateModalOpen && (
-        <ArticleFormModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          mode="create"
-          initialData={{}}
-          onSubmit={handleConfirmCreate}
-        />
-      )}
     </div>
   );
 };

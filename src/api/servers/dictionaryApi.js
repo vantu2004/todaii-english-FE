@@ -30,7 +30,6 @@ export const fetchDictionary = async (
 
 export const createDictionaryEntry = async (data) => {
   try {
-    console.log(data);
     await serverInstance.post("/dictionary", data);
   } catch (err) {
     throw err;
