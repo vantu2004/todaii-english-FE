@@ -38,6 +38,25 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
     handleFetchTopics();
   }, []);
 
+  // auto-fill khi initialData đổi
+  useEffect(() => {
+    setFormData({
+      source_id: initialData.source_id || "",
+      source_name: initialData.source_name || "",
+      author: initialData.author || "",
+      title: initialData.title || "",
+      description: initialData.description || "",
+      source_url: initialData.source_url || "",
+      image_url: initialData.image_url || "",
+      published_at: initialData.published_at
+        ? initialData.published_at.slice(0, 16)
+        : "",
+      cefr_level: initialData.cefr_level || "A1",
+      topic_ids:
+        initialData.topic_ids || initialData.topics?.map((t) => t.id) || [],
+    });
+  }, [initialData]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

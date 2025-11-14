@@ -95,7 +95,7 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
                 {article.source_name || "Unknown Source"}
               </div>
               <div
-                className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full"
+                className="inline-flex items-center gap-2 px-3 py-1 ml-2 text-xs font-semibold rounded-full"
                 style={{
                   backgroundColor: article.enabled ? "#d1fae5" : "#fee2e2",
                   color: article.enabled ? "#065f46" : "#991b1b",

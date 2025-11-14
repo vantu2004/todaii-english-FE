@@ -3,9 +3,13 @@ import { createArticle } from "../../../../api/servers/articleApi";
 import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useNewsApiStore } from "../../../../stores/useNewsApiStore";
+import { useEffect, useState } from "react";
 
 const CreateArticle = () => {
   const navigate = useNavigate();
+  const [initialData, setInitialData] = useState({});
+  const { rawArticle, clearRawArticle } = useNewsApiStore();
 
   const handleCreateArticle = async (data) => {
     try {
@@ -23,6 +27,33 @@ const CreateArticle = () => {
       }
     }
   };
+
+  const normalizeRawArticle = (raw) => {
+    if (!raw) return {};
+
+    return {
+      source_id: raw.source?.id || "",
+      source_name: raw.source?.name || "",
+      author: raw.author || "",
+      title: raw.title || "",
+      description: raw.description || "",
+      source_url: raw.url || "",
+      image_url: raw.url_to_image || "",
+      published_at: raw.published_at || "",
+      cefr_level: "", // default
+      topic_ids: [], // default
+    };
+  };
+
+  // Khi mở trang, nếu có rawArticle thì chuẩn hóa
+  useEffect(() => {
+    if (rawArticle) {
+      const normalized = normalizeRawArticle(rawArticle);
+      setInitialData(normalized);
+    }
+
+    return () => clearRawArticle();
+  }, [rawArticle, clearRawArticle]);
 
   return (
     <div className="flex flex-col h-full">
@@ -43,7 +74,7 @@ const CreateArticle = () => {
       >
         <ArticleForm
           mode="create"
-          initialData={{}}
+          initialData={initialData}
           onSubmit={handleCreateArticle}
         />
       </motion.div>

@@ -2,10 +2,16 @@ import { useState } from "react";
 import { formatDate } from "../../../utils/FormatDate";
 import { Eye, ArrowRightFromLine } from "lucide-react";
 import ArticleViewModal from "./ArticleViewModal";
+import { useNewsApiStore } from "../../../stores/useNewsApiStore";
+import { useNavigate } from "react-router-dom";
 
 const ArticlesTable = ({ columns, articles }) => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
+
+  const { setRawArticle } = useNewsApiStore();
+
+  const navigate = useNavigate();
 
   const handleViewClick = (article) => {
     setSelectedArticle(article);
@@ -13,8 +19,10 @@ const ArticlesTable = ({ columns, articles }) => {
   };
 
   const handleExportClick = (article) => {
-    console.log("Export article:", article.title);
-    // 👉 Sau này bạn có thể dùng navigate("/export/article/" + article.id)
+    // Lưu article vào Zustand
+    setRawArticle(article);
+
+    navigate("/server/article/create");
   };
 
   return (
