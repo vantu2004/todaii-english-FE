@@ -47,17 +47,13 @@ const ArticlesTable = ({
 
       await toggleArticle(articleId);
     } catch (error) {
-      console.error("Error toggling article:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to toggle article");
-      }
-    } finally {
-      await reloadArticles();
+      toast.error("Failed to toggle article");
     }
+  };
+
+  const handleParagraphClick = (index) => {
+    const articleId = articles[index].id;
+    navigate(`/server/article/${articleId}/paragraph`);
   };
 
   const handleViewClick = (index) => {
@@ -169,6 +165,7 @@ const ArticlesTable = ({
                 <td className="px-4 py-3">
                   <div className="flex items-center text-sm">
                     <button
+                      onClick={() => handleParagraphClick(i)}
                       className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                       aria-label="Paragraph"
                     >

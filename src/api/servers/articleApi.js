@@ -72,7 +72,6 @@ export const toggleArticle = async (articleId) => {
       `Error toggling enabled state for article ${articleId}:`,
       err
     );
-    throw err;
   }
 };
 

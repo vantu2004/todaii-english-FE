@@ -16,6 +16,7 @@ import NewsApi from "../../modules/servers/pages/manage_articles_page/NewsApi";
 import ManageArticles from "../../modules/servers/pages/manage_articles_page/ManageArticles";
 import CreateArticle from "../../modules/servers/pages/manage_articles_page/CreateArticle";
 import UpdateArticle from "../../modules/servers/pages/manage_articles_page/UpdateArticle";
+import ManageParagraphs from "../../modules/servers/pages/manage_articles_page/ManageParagraphs";
 
 export default function ServerRoutes() {
   return (
@@ -117,6 +118,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <UpdateArticle />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/article/:id/paragraph"
+            element={
+              <ServerProtectRoutes>
+                <ManageParagraphs />
               </ServerProtectRoutes>
             }
           />
