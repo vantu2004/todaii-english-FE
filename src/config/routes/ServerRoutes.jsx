@@ -17,6 +17,7 @@ import ManageArticles from "../../modules/servers/pages/manage_articles_page/Man
 import CreateArticle from "../../modules/servers/pages/manage_articles_page/CreateArticle";
 import UpdateArticle from "../../modules/servers/pages/manage_articles_page/UpdateArticle";
 import ManageParagraphs from "../../modules/servers/pages/manage_articles_page/ManageParagraphs";
+import Youtube from "../../modules/servers/pages/manage_videos_page/Youtube";
 
 export default function ServerRoutes() {
   return (
@@ -78,19 +79,19 @@ export default function ServerRoutes() {
           />
 
           <Route
-            path="/article-topic"
+            path="/news-api"
             element={
               <ServerProtectRoutes>
-                <ManageTopics topicType="article" />
+                <NewsApi />
               </ServerProtectRoutes>
             }
           />
 
           <Route
-            path="/news-api"
+            path="/article-topic"
             element={
               <ServerProtectRoutes>
-                <NewsApi />
+                <ManageTopics topicType="article" />
               </ServerProtectRoutes>
             }
           />
@@ -136,6 +137,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageTopics topicType="video" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/youtube"
+            element={
+              <ServerProtectRoutes>
+                <Youtube />
               </ServerProtectRoutes>
             }
           />
