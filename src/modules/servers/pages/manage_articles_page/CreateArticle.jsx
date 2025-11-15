@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useNewsApiStore } from "../../../../stores/useNewsApiStore";
 import { useEffect, useState } from "react";
+import { logError } from "../../../../utils/LogError";
 
 const CreateArticle = () => {
   const navigate = useNavigate();
@@ -17,14 +18,7 @@ const CreateArticle = () => {
 
       navigate("/server/article");
     } catch (error) {
-      console.error("Error creating article:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to create article");
-      }
+      logError(error);
     }
   };
 

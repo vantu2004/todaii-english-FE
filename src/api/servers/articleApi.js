@@ -16,6 +16,7 @@ export const fetchArticlesFromNewsApi = async (
     );
     return response.data.articles;
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -33,7 +34,8 @@ export const fetchArticles = async (
     });
     return response.data;
   } catch (err) {
-    console.error("Error fetching articles:", err);
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -42,7 +44,8 @@ export const fetchArticle = async (articleId) => {
     const response = await serverInstance.get(`/article/${articleId}`);
     return response.data;
   } catch (err) {
-    console.error(`Error fetching article ${articleId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -50,7 +53,7 @@ export const createArticle = async (data) => {
   try {
     await serverInstance.post("/article", data);
   } catch (err) {
-    console.error("Error creating article:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -59,7 +62,7 @@ export const updateArticle = async (articleId, data) => {
   try {
     await serverInstance.put(`/article/${articleId}`, data);
   } catch (err) {
-    console.error(`Error updating article ${articleId}:`, err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -68,10 +71,8 @@ export const toggleArticle = async (articleId) => {
   try {
     await serverInstance.patch(`/article/${articleId}/enabled`);
   } catch (err) {
-    console.error(
-      `Error toggling enabled state for article ${articleId}:`,
-      err
-    );
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -79,6 +80,7 @@ export const deleteArticle = async (articleId) => {
   try {
     await serverInstance.delete(`/article/${articleId}`);
   } catch (err) {
-    console.error(`Error deleting article ${articleId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };

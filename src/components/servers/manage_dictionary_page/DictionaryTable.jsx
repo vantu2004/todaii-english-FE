@@ -17,6 +17,7 @@ import {
   updateDictionaryEntry,
 } from "../../../api/servers/dictionaryApi";
 import DictionaryViewModal from "./DictionaryViewModal";
+import { logError } from "../../../utils/LogError";
 
 const DictionaryTable = ({
   columns,
@@ -63,14 +64,7 @@ const DictionaryTable = ({
 
       toast.success("Dictionary updated successfully");
     } catch (error) {
-      console.error("Error updating dictionary entry:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to update dictionary entry");
-      }
+      logError(error);
     }
   };
 
@@ -87,7 +81,7 @@ const DictionaryTable = ({
 
       toast.success("Dictionary entry deleted");
     } catch (err) {
-      toast.error("Failed to delete dictionary entry");
+      logError(err);
     }
   };
 

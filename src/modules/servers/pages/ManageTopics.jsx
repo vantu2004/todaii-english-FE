@@ -6,6 +6,7 @@ import { fetchTopics, createTopic } from "../../../api/servers/topicApi";
 import TopicsTable from "../../../components/servers/manage_topics_page/TopicsTable";
 import TopicFormModal from "../../../components/servers/manage_topics_page/TopicFormModal";
 import { motion } from "framer-motion";
+import { logError } from "../../../utils/LogError";
 
 const ManageTopics = ({ topicType }) => {
   const [topics, setTopics] = useState([]);
@@ -61,8 +62,7 @@ const ManageTopics = ({ topicType }) => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading topics:", err);
-      toast.error("Failed to load topics");
+      logError(err);
     } finally {
       setLoading(false);
     }
@@ -85,14 +85,7 @@ const ManageTopics = ({ topicType }) => {
 
       toast.success("Topic created successfully");
     } catch (error) {
-      console.error("Error creating topic:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to create topic");
-      }
+      logError(error);
     }
   };
 

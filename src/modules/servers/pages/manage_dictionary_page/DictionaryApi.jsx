@@ -9,6 +9,7 @@ import {
 import { fetchRawWord } from "../../../../api/servers/dictionaryApi";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import { logError } from "../../../../utils/LogError";
 
 const DictionaryApi = () => {
   const [rawWord, setRawWord] = useState([]);
@@ -54,7 +55,7 @@ const DictionaryApi = () => {
         });
       }
     } catch (err) {
-      console.error("Error:", err);
+      logError(err);
       setRawWord([]);
     } finally {
       setIsLoading(false);

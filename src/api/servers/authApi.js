@@ -7,7 +7,7 @@ export const login = async (email, password) => {
       password,
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -18,7 +18,7 @@ export const logout = async (email) => {
       params: { email },
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error:", err);
     throw err;
   }
 };

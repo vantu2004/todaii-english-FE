@@ -12,6 +12,7 @@ import DictionaryFormModal from "../../../../components/servers/manage_dictionar
 import { Sparkles, Loader } from "lucide-react";
 import DictionaryViewModal from "../../../../components/servers/manage_dictionary_page/DictionaryViewModal";
 import { motion } from "framer-motion";
+import { logError } from "../../../../utils/LogError";
 
 const ManageDictionary = () => {
   const [dictionary, setDictionary] = useState([]);
@@ -71,8 +72,7 @@ const ManageDictionary = () => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading dictionary:", err);
-      toast.error("Failed to load dictionary");
+      logError(err);
     } finally {
       setLoading(false);
     }
@@ -94,14 +94,7 @@ const ManageDictionary = () => {
       setIsCreateModalOpen(false);
       toast.success("Dictionary entry created successfully");
     } catch (error) {
-      console.error("Error creating dictionary entry:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to create dictionary entry");
-      }
+      logError(error);
     }
   };
 

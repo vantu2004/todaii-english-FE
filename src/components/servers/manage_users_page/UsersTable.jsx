@@ -17,6 +17,7 @@ import {
   deleteUser,
 } from "../../../api/servers/userApi";
 import UserFormModal from "./UserFormModal";
+import { logError } from "../../../utils/LogError";
 
 const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
@@ -42,8 +43,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
       await toggleUser(userId);
       await reloadUsers();
     } catch (err) {
-      toast.error("Failed to toggle user");
-      console.error("Failed to toggle user:", err);
+      logError(err);
     }
   };
 
@@ -78,14 +78,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
       toast.success("User updated successfully");
     } catch (error) {
-      console.error("Error updating user:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to update user");
-      }
+      logError(error);
     }
   };
 
@@ -103,8 +96,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
       toast.success("User deleted");
     } catch (err) {
-      toast.error("Failed to delete user");
-      console.error("Failed to delete user:", err);
+      logError(err);
     }
   };
 

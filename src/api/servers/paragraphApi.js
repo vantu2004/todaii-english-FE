@@ -6,7 +6,7 @@ export const saveParagraph = async (articleId, data) => {
     console.log(data);
     await serverInstance.post(`/article/${articleId}/paragraph`, data);
   } catch (err) {
-    console.error("Error creating paragraph:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -18,7 +18,7 @@ export const translateByGemini = async (textEn) => {
     });
     return response.data;
   } catch (err) {
-    console.error(`Error translating paragraph ${paragraphId}:`, err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -27,6 +27,7 @@ export const deleteParagraph = async (paragraphId) => {
   try {
     await serverInstance.delete(`/article/paragraph/${paragraphId}`);
   } catch (err) {
-    console.error(`Error deleting paragraph ${paragraphId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };

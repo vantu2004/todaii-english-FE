@@ -6,6 +6,7 @@ import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
 import { motion } from "framer-motion";
+import { logError } from "../../../utils/LogError";
 
 const ManageAdmins = () => {
   const [admins, setAdmins] = useState([]);
@@ -62,8 +63,7 @@ const ManageAdmins = () => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading admins:", err);
-      toast.error("Failed to load admins");
+      logError(err);
     } finally {
       setLoading(false);
     }
@@ -86,14 +86,7 @@ const ManageAdmins = () => {
 
       toast.success("Admin created successfully");
     } catch (error) {
-      console.error("Error creating admin:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to create admin");
-      }
+      logError(error);
     }
   };
 

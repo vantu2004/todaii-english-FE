@@ -6,6 +6,7 @@ import {
   deleteParagraph,
 } from "../../../api/servers/paragraphApi";
 import { Trash2, Plus, Check, Languages } from "lucide-react";
+import { logError } from "../../../utils/LogError";
 
 const ParagraphForm = ({ articleId, paragraphs }) => {
   const [localParagraphs, setLocalParagraphs] = useState([]);
@@ -68,8 +69,7 @@ const ParagraphForm = ({ articleId, paragraphs }) => {
       );
       toast.success(`Paragraph ${para.para_order} saved`);
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to save paragraph");
+      logError(err);
     }
   };
 
@@ -90,8 +90,7 @@ const ParagraphForm = ({ articleId, paragraphs }) => {
       );
       toast.success(`Paragraph ${para.para_order} translated`);
     } catch (err) {
-      console.error(err);
-      toast.error("Translation failed");
+      logError(err);
     } finally {
       setLoadingPara(null);
     }
@@ -109,8 +108,7 @@ const ParagraphForm = ({ articleId, paragraphs }) => {
 
       toast.success(`Paragraph ${para.para_order} deleted`);
     } catch (err) {
-      console.error(err);
-      toast.error("Delete failed");
+      logError(err);
     }
   };
 

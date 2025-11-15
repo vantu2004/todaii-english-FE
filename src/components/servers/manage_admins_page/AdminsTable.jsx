@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
 import AdminViewModal from "./AdminViewModal";
+import { logError } from "../../../utils/LogError";
 
 const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
@@ -43,8 +44,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
       await toggleAdmin(adminId);
       await reloadAdmins();
     } catch (err) {
-      toast.error("Failed to toggle admin");
-      console.error("Failed to toggle admin:", err);
+      logError(err);
     }
   };
 
@@ -80,14 +80,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
       toast.success("Admin updated successfully");
     } catch (error) {
-      console.error("Error updating admin:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to update admin");
-      }
+      logError(error);
     }
   };
 
@@ -105,8 +98,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
 
       toast.success("Admin deleted");
     } catch (err) {
-      toast.error("Failed to delete admin");
-      console.error("Failed to delete admin:", err);
+      logError(err);
     }
   };
 

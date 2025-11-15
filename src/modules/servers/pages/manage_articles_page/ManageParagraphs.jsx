@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import ArticleDetails from "../../../../components/servers/manage_articles_page/ArticleDetails";
 import ParagraphForm from "../../../../components/servers/manage_articles_page/ParagraphForm";
 import { ArrowLeft, RefreshCw } from "lucide-react";
+import { logError } from "../../../../utils/LogError";
 
 const ManageParagraphs = () => {
   const { id } = useParams();
@@ -18,8 +19,7 @@ const ManageParagraphs = () => {
       const data = await fetchArticle(id);
       setArticle(data);
     } catch (err) {
-      console.error("Error fetching article:", err);
-      toast.error("Failed to load article");
+      logError(err);
     } finally {
       setLoading(false);
     }

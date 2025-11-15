@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { fetchTopicsNoPaged } from "../../../api/servers/topicApi";
 import { ChevronDown } from "lucide-react";
+import { logError } from "../../../utils/LogError";
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
@@ -30,7 +31,7 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
       const data = await fetchTopicsNoPaged("ARTICLE");
       setTopics(data || []);
     } catch (error) {
-      console.error("Error fetching topics:", error);
+      logError(error);
     }
   };
 

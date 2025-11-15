@@ -6,6 +6,7 @@ import ArticlesTable from "../../../../components/servers/manage_articles_page/A
 import { useNavigate } from "react-router-dom";
 import RedirectToolbar from "../../../../components/servers/RedirectToolbar";
 import { motion } from "framer-motion";
+import { logError } from "../../../../utils/LogError";
 
 const ManageArticles = () => {
   const REDIRECT_URL = "/server/article/create";
@@ -63,8 +64,7 @@ const ManageArticles = () => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading articles:", err);
-      toast.error("Failed to load articles");
+      logError(err);
     } finally {
       setLoading(false);
     }

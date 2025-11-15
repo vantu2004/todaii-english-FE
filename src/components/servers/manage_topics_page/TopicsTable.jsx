@@ -16,6 +16,7 @@ import {
   toggleTopic,
   updateTopic,
 } from "../../../api/servers/topicApi";
+import { logError } from "../../../utils/LogError";
 
 const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
@@ -40,8 +41,7 @@ const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
       await toggleTopic(topicId);
       await reloadTopics();
     } catch (err) {
-      toast.error("Failed to toggle topic");
-      console.error("Failed to toggle topic:", err);
+      logError(err);
     }
   };
 
@@ -72,14 +72,7 @@ const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
 
       toast.success("Topic updated successfully");
     } catch (error) {
-      console.error("Error updating topic:", error);
-
-      const errors = error.response?.data?.errors;
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to update topic");
-      }
+      logError(error);
     }
   };
 
@@ -97,8 +90,7 @@ const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
 
       toast.success("Topic deleted");
     } catch (err) {
-      toast.error("Failed to delete topic");
-      console.error("Failed to delete topic:", err);
+      logError(err);
     }
   };
 

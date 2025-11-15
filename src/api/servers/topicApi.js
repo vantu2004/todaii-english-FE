@@ -8,6 +8,7 @@ export const fetchTopicsNoPaged = async (topicType) => {
     return response.data;
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -27,6 +28,7 @@ export const fetchTopics = async (
     return response.data;
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -37,6 +39,7 @@ export const createTopic = async (data) => {
       topic_type: data.topicType,
     });
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -49,6 +52,7 @@ export const updateTopic = async (topicId, data) => {
       params: { name: data.name }, // gửi qua query
     });
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -57,7 +61,8 @@ export const toggleTopic = async (topicId) => {
   try {
     await serverInstance.patch(`/topic/${topicId}/enabled`);
   } catch (err) {
-    console.error(`Error toggling enabled state for topic ${topicId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -65,6 +70,7 @@ export const deleteTopic = async (topicId) => {
   try {
     await serverInstance.delete(`/topic/${topicId}`);
   } catch (err) {
-    console.error(`Error deleting topic ${topicId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };

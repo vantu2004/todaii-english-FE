@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { login } from "../../../api/servers/authApi";
 import { useServerAuthContext } from "../../../hooks/servers/useServerAuthContext";
 import { fetchProfile } from "../../../api/servers/adminApi";
+import { logError } from "../../../utils/LogError";
 
 const Login = () => {
   const { setAuthUser, setIsLoggedIn } = useServerAuthContext();
@@ -34,14 +35,7 @@ const Login = () => {
 
       navigate("/server");
     } catch (err) {
-      if (err.response?.status === 401) {
-        toast.error("Invalid email or password");
-      } else if (err.response?.status === 400) {
-        toast.error("Wrong format");
-      } else {
-        toast.error("Internal server error");
-      }
-      console.error("Login error:", err);
+      logError(err);
     } finally {
       setLoading(false);
     }

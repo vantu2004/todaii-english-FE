@@ -7,6 +7,7 @@ import ArticleForm from "../../../../components/servers/manage_articles_page/Art
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { logError } from "../../../../utils/LogError";
 
 const UpdateArticle = () => {
   const { id } = useParams();
@@ -22,8 +23,7 @@ const UpdateArticle = () => {
         const data = await fetchArticle(id);
         setArticle(data);
       } catch (err) {
-        console.error("Error fetching article:", err);
-        toast.error("Failed to load article");
+        logError(err);
       } finally {
         setLoading(false);
       }
@@ -37,15 +37,7 @@ const UpdateArticle = () => {
 
       navigate("/server/article");
     } catch (error) {
-      console.error("Error updating article:", error);
-
-      const errors = error.response?.data?.errors;
-
-      if (errors && Array.isArray(errors) && errors.length > 0) {
-        toast.error(errors[0]); // chỉ hiển thị lỗi đầu tiên
-      } else {
-        toast.error("Failed to update article");
-      }
+      logError(error);
     }
   };
 

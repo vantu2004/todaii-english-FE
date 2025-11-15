@@ -5,6 +5,7 @@ import Pagination from "../../../components/servers/Pagination";
 import { fetchUsers } from "../../../api/servers/userApi";
 import UsersTable from "../../../components/servers/manage_users_page/UsersTable";
 import { motion, AnimatePresence } from "framer-motion";
+import { logError } from "../../../utils/LogError";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -60,8 +61,7 @@ const ManageUsers = () => {
         last: data.last,
       });
     } catch (err) {
-      console.error("Error loading users:", err);
-      toast.error("Failed to load users");
+      logError(err);
     } finally {
       setLoading(false);
     }

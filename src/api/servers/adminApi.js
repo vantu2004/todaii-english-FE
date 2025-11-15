@@ -6,6 +6,7 @@ export const fetchProfile = async () => {
     return response.data;
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -22,7 +23,8 @@ export const fetchAdmins = async (
     });
     return response.data;
   } catch (err) {
-    console.error("Error fetching admins:", err);
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -35,7 +37,7 @@ export const createAdmin = async (data) => {
       role_codes: data.roleCodes,
     });
   } catch (err) {
-    console.error("Error creating admin:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -49,7 +51,7 @@ export const updateAdmin = async (adminId, data) => {
       role_codes: data.roleCodes,
     });
   } catch (err) {
-    console.error(`Error updating admin ${adminId}:`, err);
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -58,7 +60,8 @@ export const toggleAdmin = async (adminId) => {
   try {
     await serverInstance.patch(`/admin/${adminId}/enabled`);
   } catch (err) {
-    console.error(`Error toggling enabled state for admin ${adminId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -66,6 +69,7 @@ export const deleteAdmin = async (adminId) => {
   try {
     await serverInstance.delete(`/admin/${adminId}`);
   } catch (err) {
-    console.error(`Error deleting admin ${adminId}:`, err);
+    console.error("Error:", err);
+    throw err;
   }
 };

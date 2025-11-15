@@ -8,6 +8,7 @@ export const fetchRawWord = async (word) => {
     return response.data;
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -25,6 +26,7 @@ export const fetchDictionary = async (
     return response.data;
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };
 
@@ -32,6 +34,7 @@ export const createDictionaryEntry = async (data) => {
   try {
     await serverInstance.post("/dictionary", data);
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -44,6 +47,7 @@ export const createDictionaryEntryByGemini = async (data) => {
 
     return response.data;
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -52,6 +56,7 @@ export const updateDictionaryEntry = async (id, data) => {
   try {
     await serverInstance.put(`/dictionary/${id}`, data);
   } catch (err) {
+    console.error("Error:", err);
     throw err;
   }
 };
@@ -61,5 +66,6 @@ export const deleteDictionaryEntry = async (id) => {
     await serverInstance.delete(`/dictionary/${id}`);
   } catch (err) {
     console.error("Error:", err);
+    throw err;
   }
 };

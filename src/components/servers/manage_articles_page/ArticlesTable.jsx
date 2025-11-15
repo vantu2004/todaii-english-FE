@@ -15,6 +15,7 @@ import {
 import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
 import { useNavigate } from "react-router-dom";
+import { logError } from "../../../utils/LogError";
 
 const ArticlesTable = ({
   columns,
@@ -47,7 +48,7 @@ const ArticlesTable = ({
 
       await toggleArticle(articleId);
     } catch (error) {
-      toast.error("Failed to toggle article");
+      logError(error);
     }
   };
 
@@ -85,8 +86,7 @@ const ArticlesTable = ({
 
       toast.success("Article deleted");
     } catch (err) {
-      toast.error("Failed to delete article");
-      console.error("Failed to delete article:", err);
+      logError(err);
     }
   };
 
