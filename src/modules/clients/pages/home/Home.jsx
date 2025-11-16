@@ -15,12 +15,14 @@ import {
   formatDisplayDate,
   getLastNDays,
 } from "../../../../utils/FormatDate";
+import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";
+import TopArticles from './../../../../components/clients/home_page/TopArticles';
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [latestArticles, setLatestArticles] = useState([]);
-  const [topStories, setTopStories] = useState([]);
+  const [topArticles, setTopArticles] = useState([]);
   const [articlesByDate, setArticlesByDate] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -33,7 +35,7 @@ const Home = () => {
         setLoading(true);
         const data = await getLastestArticles(10);
         setLatestArticles(data.slice(0, 5));
-        setTopStories(data.slice(0, 4)); // Get top 4 for featured section
+        setTopArticles(data.slice(0, 4)); // Get top 4 for featured section
       } catch (err) {
         console.error(err);
         setError("Failed to load latest articles.");
@@ -125,80 +127,18 @@ const Home = () => {
             ))}
           </div>
 
-          {/* TOP STORIES SECTION */}
-          <div className="mt-12 mb-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">Top Stories</h2>
-              <Link
-                to="/all-stories"
-                className="flex items-center gap-1 text-gray-700 font-semibold hover:text-blue-600 transition"
-              >
-                ALL TOP STORIES
-                <ArrowRight size={18} />
-              </Link>
-            </div>
+          {/* TOP ARTICLES SECTION */}
+          <TopArticles topArticles={topArticles}/>
 
-            <div className="grid grid-cols-2 gap-4">
-              {/* Large Featured Story */}
-              {topStories[0] && (
-                <Link
-                  to={`/article/${topStories[0].id}`}
-                  className="relative h-96 rounded-2xl overflow-hidden group"
-                >
-                  <img
-                    src={topStories[0].image_url}
-                    alt={topStories[0].title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <span className="inline-block px-3 py-1 bg-blue-600 text-xs font-bold rounded mb-3">
-                      {topStories[0].topics?.[0]?.name || "NEWS"}
-                    </span>
-                    <h3 className="text-2xl font-bold mb-2 line-clamp-2">
-                      {topStories[0].title}
-                    </h3>
-                    <div className="flex items-center gap-4 text-sm text-white/80">
-                      <span>By {topStories[0].author || topStories[0].source_name}</span>
-                      <span>•</span>
-                      <span>{new Date(topStories[0].published_at).toLocaleDateString()}</span>
-                      <span>•</span>
-                      <span>{topStories[0].views} Views</span>
-                    </div>
-                  </div>
-                </Link>
-              )}
-
-              {/* Right Column with 2 smaller stories */}
-              <div className="flex flex-col gap-4">
-                {topStories.slice(1, 3).map((story) => (
-                  <Link
-                    key={story.id}
-                    to={`/article/${story.id}`}
-                    className="relative h-44 rounded-2xl overflow-hidden group"
-                  >
-                    <img
-                      src={story.image_url}
-                      alt={story.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <span className="inline-block px-2 py-1 bg-purple-600 text-xs font-bold rounded mb-2">
-                        {story.topics?.[0]?.name || "NEWS"}
-                      </span>
-                      <h3 className="text-lg font-bold line-clamp-2">
-                        {story.title}
-                      </h3>
-                      <p className="text-xs text-white/80 mt-1">
-                        By {story.author || story.source_name}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* ARTICLES BY DATE SECTION */}
+          <ArticlesByDate
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            articlesByDate={articlesByDate}
+            hasMore={hasMore}
+            loading={loading}
+            loadMoreArticles={loadMoreArticles}
+          />
         </div>
 
         {/* RIGHT SIDE */}
@@ -259,10 +199,30 @@ const Home = () => {
 
             <div className="grid grid-cols-2 gap-3">
               {[
-                { name: "Lifestyle", count: "3+", image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400" },
-                { name: "Travel", count: "3+", image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400" },
-                { name: "Beauty", count: "1+", image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400" },
-                { name: "Drink", count: "1+", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400" },
+                {
+                  name: "Lifestyle",
+                  count: "3+",
+                  image:
+                    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400",
+                },
+                {
+                  name: "Travel",
+                  count: "3+",
+                  image:
+                    "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400",
+                },
+                {
+                  name: "Beauty",
+                  count: "1+",
+                  image:
+                    "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400",
+                },
+                {
+                  name: "Drink",
+                  count: "1+",
+                  image:
+                    "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400",
+                },
               ].map((category, i) => (
                 <Link
                   key={i}
@@ -277,7 +237,9 @@ const Home = () => {
                   <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition"></div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                     <span className="text-2xl font-bold">{category.count}</span>
-                    <span className="text-sm font-semibold">{category.name}</span>
+                    <span className="text-sm font-semibold">
+                      {category.name}
+                    </span>
                   </div>
                 </Link>
               ))}
@@ -288,14 +250,54 @@ const Home = () => {
           <div>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { icon: "📘", count: "2000+", label: "Fans", color: "bg-blue-700" },
-                { icon: "🐦", count: "4000+", label: "Followers", color: "bg-blue-400" },
-                { icon: "▶️", count: "1M+", label: "Subscribers", color: "bg-red-600" },
-                { icon: "💼", count: "600+", label: "Connections", color: "bg-blue-600" },
-                { icon: "💬", count: "1K+", label: "Connections", color: "bg-cyan-400" },
-                { icon: "📌", count: "600+", label: "Followers", color: "bg-red-500" },
-                { icon: "🎮", count: "1000+", label: "Followers", color: "bg-purple-600" },
-                { icon: "📷", count: "1K+", label: "Followers", color: "bg-pink-600" },
+                {
+                  icon: "📘",
+                  count: "2000+",
+                  label: "Fans",
+                  color: "bg-blue-700",
+                },
+                {
+                  icon: "🐦",
+                  count: "4000+",
+                  label: "Followers",
+                  color: "bg-blue-400",
+                },
+                {
+                  icon: "▶️",
+                  count: "1M+",
+                  label: "Subscribers",
+                  color: "bg-red-600",
+                },
+                {
+                  icon: "💼",
+                  count: "600+",
+                  label: "Connections",
+                  color: "bg-blue-600",
+                },
+                {
+                  icon: "💬",
+                  count: "1K+",
+                  label: "Connections",
+                  color: "bg-cyan-400",
+                },
+                {
+                  icon: "📌",
+                  count: "600+",
+                  label: "Followers",
+                  color: "bg-red-500",
+                },
+                {
+                  icon: "🎮",
+                  count: "1000+",
+                  label: "Followers",
+                  color: "bg-purple-600",
+                },
+                {
+                  icon: "📷",
+                  count: "1K+",
+                  label: "Followers",
+                  color: "bg-pink-600",
+                },
               ].map((social, i) => (
                 <a
                   key={i}
@@ -308,99 +310,6 @@ const Home = () => {
                 </a>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* DATE SELECTOR SECTION */}
-        <div className="w-full">
-          <div className="mb-4">
-            <div className="mb-4 font-semibold text-2xl text-gray-700">
-              Tìm đọc tin tức theo ngày
-            </div>
-
-            <div className="flex items-center gap-5 h-20">
-              <button
-                className="p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
-                onClick={() => {
-                  const container = document.getElementById("date-scroll");
-                  container.scrollBy({ left: -200, behavior: "smooth" });
-                }}
-              >
-                <ChevronLeft size={20} className="text-gray-700" />
-              </button>
-
-              <div
-                id="date-scroll"
-                className="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth"
-                style={{ scrollBehavior: "smooth", maxWidth: "450px" }}
-              >
-                {getLastNDays(30).map((date, i) => (
-                  <button
-                    key={i}
-                    className={`px-4 py-2 rounded border border-gray-300 font-medium flex-shrink-0 transition-all ${
-                      formatDate(selectedDate) === formatDate(date)
-                        ? "bg-blue-600 text-white shadow-md"
-                        : "bg-white text-gray-700 hover:bg-gray-50 shadow-sm"
-                    }`}
-                    onClick={() => setSelectedDate(date)}
-                  >
-                    {formatDisplayDate(date)}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                className="p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
-                onClick={() => {
-                  const container = document.getElementById("date-scroll");
-                  container.scrollBy({ left: 200, behavior: "smooth" });
-                }}
-              >
-                <ChevronRight size={20} className="text-gray-700" />
-              </button>
-
-              <div className="ml-3">
-                <BasicDatePicker
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* ARTICLES BY SELECTED DATE */}
-          <div className="space-y-8 mb-10">
-            {articlesByDate.length > 0 ? (
-              articlesByDate.map((article) => (
-                <LongArticleCard
-                  key={article?.id}
-                  imgURL={article?.image_url}
-                  title={article?.title}
-                  description={article?.paragraphs?.[0]?.text_en}
-                  cefr_level={article?.cefr_level}
-                  source={article?.source_name}
-                  updated_at={article?.updated_at}
-                  published_at={article?.published_at}
-                  views={article?.views}
-                />
-              ))
-            ) : (
-              <p className="text-gray-500">
-                Không có bài báo nào trong ngày này.
-              </p>
-            )}
-
-            {hasMore && (
-              <div className="text-center mt-8 mb-4">
-                <button
-                  className="px-4 py-2 rounded bg-blue-600 font-medium text-white hover:bg-blue-700 transition"
-                  onClick={loadMoreArticles}
-                  disabled={loading}
-                >
-                  {loading ? "Đang tải..." : "Xem thêm"}
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
