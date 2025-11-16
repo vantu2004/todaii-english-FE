@@ -1,10 +1,12 @@
 import { serverInstance } from "../../config/axios";
 
-export const saveParagraph = async (articleId, data) => {
+export const saveParagraph = async (articleId, paragraph) => {
   try {
-    console.log(articleId);
-    console.log(data);
-    await serverInstance.post(`/article/${articleId}/paragraph`, data);
+    const response = await serverInstance.post(
+      `/article/${articleId}/paragraph`,
+      paragraph
+    );
+    return response.data;
   } catch (err) {
     console.error("Error:", err);
     throw err;

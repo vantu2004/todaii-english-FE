@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { fetchArticle } from "../../../../api/servers/articleApi";
 import { motion } from "framer-motion";
 import ArticleDetails from "../../../../components/servers/manage_articles_page/ArticleDetails";
-import ParagraphForm from "../../../../components/servers/manage_articles_page/ParagraphForm";
+import ListParagraphs from "../../../../components/servers/manage_articles_page/ListParagraphs";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { logError } from "../../../../utils/LogError";
 
@@ -86,7 +86,7 @@ const ManageParagraphs = () => {
 
           {/* Column 2: Paragraph Form */}
           <div className="overflow-auto max-h-[calc(100vh-150px)]">
-            <ParagraphForm
+            <ListParagraphs
               articleId={article.id}
               paragraphs={article.paragraphs}
             />

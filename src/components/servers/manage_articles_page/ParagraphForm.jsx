@@ -1,216 +1,139 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
-import {
-  saveParagraph,
-  translateByGemini,
-  deleteParagraph,
-} from "../../../api/servers/paragraphApi";
-import { Trash2, Plus, Check, Languages } from "lucide-react";
-import { logError } from "../../../utils/LogError";
+import { Save, Trash2, Languages } from "lucide-react";
 
-const ParagraphForm = ({ articleId, paragraphs }) => {
-  const [localParagraphs, setLocalParagraphs] = useState([]);
-  const [loadingPara, setLoadingPara] = useState(null);
-  const textareaRefs = useRef({});
+const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
+  const [form, setForm] = useState({
+    id: "",
+    para_order: "",
+    text_en: "",
+    text_vi_system: "",
+  });
 
-  // Load paragraphs from props
+  const [translateLoading, setTranslateLoading] = useState(false);
+  const enRef = useRef(null);
+  const viRef = useRef(null);
+
+  // Set form lần đầu render
   useEffect(() => {
-    setLocalParagraphs(paragraphs || []);
-  }, [paragraphs]);
+    if (paragraph) {
+      setForm(paragraph);
+      setTimeout(() => adjustHeight(), 0); // scale textarea lần đầu
+    }
+  }, [paragraph]);
 
-  // Auto-resize textareas
-  useEffect(() => {
-    localParagraphs.forEach((para, idx) => {
-      const refEn = textareaRefs.current[`en-${idx}`];
-      const refVi = textareaRefs.current[`vi-${idx}`];
-      if (refEn) {
-        refEn.style.height = "auto";
-        refEn.style.height = refEn.scrollHeight + "px";
-      }
-      if (refVi) {
-        refVi.style.height = "auto";
-        refVi.style.height = refVi.scrollHeight + "px";
+  // Hàm scale textarea
+  const adjustHeight = () => {
+    [enRef.current, viRef.current].forEach((ta) => {
+      if (ta) {
+        ta.style.height = "auto";
+        ta.style.height = ta.scrollHeight + 10 + "px";
       }
     });
-  }, [localParagraphs]);
-
-  const addParagraph = () => {
-    // loop through localParagraphs and check if any of them have id null
-    if (localParagraphs.some((p) => p.id === null)) {
-      toast.error("Please save the new paragraph before adding another");
-      return;
-    }
-
-    const newPara = {
-      id: null,
-      para_order: localParagraphs.length + 1,
-      text_en: "",
-      text_vi_system: "",
-    };
-    setLocalParagraphs([...localParagraphs, newPara]);
   };
 
-  const updateParagraph = (para, field, value) => {
-    setLocalParagraphs((prev) =>
-      prev.map((p) =>
-        p.para_order === para.para_order ? { ...p, [field]: value } : p
-      )
-    );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSave = async (para) => {
-    try {
-      const saved = await saveParagraph(articleId, para);
-      setLocalParagraphs((prev) =>
-        prev.map((p) => (p.para_order === para.para_order ? { ...saved } : p))
-      );
-      toast.success(`Paragraph ${para.para_order} saved`);
-    } catch (err) {
-      logError(err);
-    }
-  };
-
-  const handleTranslate = async (para) => {
-    if (!para.text_en.trim()) {
-      toast.error("Please enter English text first");
-      return;
-    }
-    setLoadingPara(para.para_order);
-    try {
-      const translated = await translateByGemini(para.text_en);
-      setLocalParagraphs((prev) =>
-        prev.map((p) =>
-          p.para_order === para.para_order
-            ? { ...p, text_vi_system: translated }
-            : p
-        )
-      );
-      toast.success(`Paragraph ${para.para_order} translated`);
-    } catch (err) {
-      logError(err);
-    } finally {
-      setLoadingPara(null);
-    }
-  };
-
-  const handleDelete = async (para) => {
-    try {
-      if (para.id) await deleteParagraph(para.id);
-
-      setLocalParagraphs((prev) =>
-        prev
-          .filter((p) => p.para_order !== para.para_order)
-          .map((p, idx) => ({ ...p, para_order: idx + 1 }))
-      );
-
-      toast.success(`Paragraph ${para.para_order} deleted`);
-    } catch (err) {
-      logError(err);
+  const handleTranslate = async () => {
+    setTranslateLoading(true);
+    const vi = await onTranslate(form.text_en);
+    setTranslateLoading(false);
+    if (vi) {
+      setForm((prev) => ({
+        ...prev,
+        text_vi_system: vi,
+      }));
+      setTimeout(() => adjustHeight(), 0);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-slate-900 mb-2">Paragraphs</h2>
-          <p className="text-slate-600">
-            Manage your article content with translations
-          </p>
-        </div>
+    <div className="bg-white/50 backdrop-blur-sm border border-white/20 rounded-2xl p-6 space-y-5 shadow-lg">
+      {/* Header với Delete button */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-800">
+          {form.id ? `Paragraph with ID ${form.id}` : "New Paragraph"}
+        </h3>
+        {onDelete && (
+          <button
+            onClick={() => onDelete(form.id)}
+            className="p-2 hover:bg-red-100/50 text-red-600 hover:text-red-700 rounded-lg transition-colors"
+            title="Delete"
+          >
+            <Trash2 size={20} />
+          </button>
+        )}
+      </div>
 
-        <div className="space-y-4">
-          {localParagraphs.length === 0 ? (
-            <div className="bg-white rounded-lg border-2 border-dashed border-slate-300 p-12 text-center">
-              <p className="text-slate-500 text-lg mb-4">No paragraphs yet</p>
-              <p className="text-slate-400">Add one below to get started</p>
-            </div>
-          ) : (
-            localParagraphs.map((para, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-slate-200 overflow-hidden"
-              >
-                <div className="bg-blue-50 px-6 py-4 flex justify-between items-center border-b border-blue-200">
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white font-semibold text-sm">
-                      {idx + 1}
-                    </span>
-                    <span className="font-semibold text-slate-700">
-                      Paragraph {idx + 1}
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(para)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+      {/* Order */}
+      <div>
+        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+          Order
+        </label>
+        <input
+          type="number"
+          name="para_order"
+          value={form.para_order}
+          onChange={handleChange}
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all text-sm"
+        />
+      </div>
 
-                <div className="p-6 space-y-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      🇬🇧 English Text
-                    </label>
-                    <textarea
-                      ref={(el) => (textareaRefs.current[`en-${idx}`] = el)}
-                      value={para.text_en}
-                      onChange={(e) =>
-                        updateParagraph(para, "text_en", e.target.value)
-                      }
-                      placeholder="Enter English text here..."
-                      className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
-                    />
-                  </div>
+      {/* English Text */}
+      <div>
+        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+          English Text
+        </label>
+        <textarea
+          ref={enRef}
+          name="text_en"
+          value={form.text_en}
+          onChange={handleChange}
+          rows={3}
+          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all resize-none text-sm leading-relaxed"
+          onInput={adjustHeight}
+        ></textarea>
+      </div>
 
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                      🇻🇳 Vietnamese Translation
-                    </label>
-                    <textarea
-                      ref={(el) => (textareaRefs.current[`vi-${idx}`] = el)}
-                      value={para.text_vi_system}
-                      onChange={(e) =>
-                        updateParagraph(para, "text_vi_system", e.target.value)
-                      }
-                      placeholder="Vietnamese translation will appear here..."
-                      className="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-green-500 resize-none overflow-hidden"
-                    />
-                  </div>
+      {/* Vietnamese (System) */}
+      <div>
+        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+          Vietnamese (System)
+        </label>
+        <textarea
+          ref={viRef}
+          name="text_vi_system"
+          value={form.text_vi_system}
+          onChange={handleChange}
+          rows={3}
+          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all resize-none text-sm leading-relaxed"
+          onInput={adjustHeight}
+        ></textarea>
+      </div>
 
-                  <div className="flex gap-2 pt-2 justify-end">
-                    <button
-                      onClick={() => handleTranslate(para)}
-                      disabled={loadingPara === para.para_order}
-                      className="p-2 rounded-lg text-blue-600 hover:bg-blue-100 disabled:opacity-50"
-                    >
-                      {loadingPara === para.para_order ? (
-                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                      ) : (
-                        <Languages size={18} />
-                      )}
-                    </button>
-
-                    <button
-                      onClick={() => handleSave(para)}
-                      className="p-2 rounded-lg text-green-700 hover:bg-slate-200"
-                    >
-                      <Check size={18} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* Buttons */}
+      <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200/50">
+        <button
+          onClick={handleTranslate}
+          disabled={translateLoading}
+          className="p-2.5 hover:bg-emerald-100/50 text-emerald-600 hover:text-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+          title={translateLoading ? "Translating..." : "Translate"}
+        >
+          <Languages size={20} />
+        </button>
 
         <button
-          onClick={addParagraph}
-          className="w-full mt-6 py-3 bg-blue-100 text-black rounded-lg font-semibold hover:bg-blue-200 flex items-center justify-center gap-2 shadow-md"
+          onClick={() => onSave(form)}
+          className="p-2.5 hover:bg-blue-100/50 text-blue-600 hover:text-blue-700 rounded-lg transition-colors"
+          title="Save"
         >
-          <Plus size={20} />
-          Add New Paragraph
+          <Save size={20} />
         </button>
       </div>
     </div>
