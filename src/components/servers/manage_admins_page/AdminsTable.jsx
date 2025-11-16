@@ -176,9 +176,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                   className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
                 >
                   {/* ID */}
-                  <td className="px-4 py-3 text-xs">
-                    <span className={"font-semibold"}>{admin.id}</span>
-                  </td>
+                  <td className="px-4 py-3 text-sm">{admin.id}</td>
 
                   {/* Admin name + avatar + email*/}
                   <td className="px-4 py-3 text-sm">

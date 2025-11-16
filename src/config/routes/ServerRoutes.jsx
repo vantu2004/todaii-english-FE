@@ -22,6 +22,7 @@ import ManageVideos from "../../modules/servers/pages/manage_videos_page/ManageV
 import CreateVideo from "../../modules/servers/pages/manage_videos_page/CreateVideo";
 import UpdateVideo from "../../modules/servers/pages/manage_videos_page/UpdateVideo";
 import ManageVocabGroups from "../../modules/servers/pages/ManageVocabGroups";
+import ManageVocabDecks from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabDecks";
 
 export default function ServerRoutes() {
   return (
@@ -195,6 +196,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageVocabGroups />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/vocab-deck"
+            element={
+              <ServerProtectRoutes>
+                <ManageVocabDecks />
               </ServerProtectRoutes>
             }
           />
