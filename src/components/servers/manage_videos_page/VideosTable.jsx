@@ -38,7 +38,9 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
 
     try {
       const videoId = videos[index].id;
+
       await toggleVideo(videoId);
+      await reloadVideos();
     } catch (error) {
       logError(error);
     }

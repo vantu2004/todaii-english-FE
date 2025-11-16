@@ -21,6 +21,7 @@ import Youtube from "../../modules/servers/pages/manage_videos_page/Youtube";
 import ManageVideos from "../../modules/servers/pages/manage_videos_page/ManageVideos";
 import CreateVideo from "../../modules/servers/pages/manage_videos_page/CreateVideo";
 import UpdateVideo from "../../modules/servers/pages/manage_videos_page/UpdateVideo";
+import ManageVocabGroups from "../../modules/servers/pages/ManageVocabGroups";
 
 export default function ServerRoutes() {
   return (
@@ -188,6 +189,15 @@ export default function ServerRoutes() {
               </ServerProtectRoutes>
             }
           /> */}
+
+          <Route
+            path="/vocab-group"
+            element={
+              <ServerProtectRoutes>
+                <ManageVocabGroups />
+              </ServerProtectRoutes>
+            }
+          />
         </Route>
       </Routes>
     </ServerAuthProvider>

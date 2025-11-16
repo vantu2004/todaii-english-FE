@@ -47,10 +47,14 @@ export const createTopic = async (data) => {
 export const updateTopic = async (topicId, data) => {
   try {
     // put nhận body ở tham số thứ 2 và query ở tham số thứ 3
-    await serverInstance.put(`/topic/${topicId}`, null, {
-      // body = null
-      params: { name: data.name }, // gửi qua query
-    });
+    await serverInstance.put(
+      `/topic/${topicId}`,
+      {},
+      {
+        // body = null
+        params: { name: data.name }, // gửi qua query
+      }
+    );
   } catch (err) {
     console.error("Error:", err);
     throw err;
