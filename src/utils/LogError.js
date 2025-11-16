@@ -1,6 +1,8 @@
 import toast from "react-hot-toast";
 
 export const logError = (error) => {
+  console.log(error);
+
   const errors = error.response?.data?.errors;
   const errorMessage = error.response?.data?.message;
 
