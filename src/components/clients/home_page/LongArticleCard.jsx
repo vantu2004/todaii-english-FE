@@ -3,7 +3,7 @@ import { formatISODate } from "../../../utils/FormatDate";
 import { Eye } from "lucide-react";
 
 const LongArticleCard = ({
-  imgURL,
+  image_url,
   title,
   cefr_level,
   description,
@@ -15,7 +15,7 @@ const LongArticleCard = ({
   return (
     <div className="bg-white rounded-lg shadow-sm p-4 flex gap-4 hover:shadow-md transition hover:scale-101 duration-300 ease-in-out article-card">
       <img
-        src={imgURL}
+        src={image_url}
         alt={title}
         className="w-60 h-36 object-cover rounded"
       />

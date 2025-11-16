@@ -15,6 +15,7 @@ const BasicDatePicker = ({ selectedDate, setSelectedDate }) => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         label="Chọn ngày"
+        format="DD/MM/YYYY"
         value={value}
         onChange={(newValue) => {
           if (newValue) {

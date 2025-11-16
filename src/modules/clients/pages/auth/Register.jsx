@@ -50,7 +50,7 @@ const Register = () => {
     try {
       const { email, password, displayName } = form;
       await register(email, password, displayName);
-      toast.success("Register successful!");
+      toast.success("Register successfully!");
       navigate(`/client/verify-otp?email=${encodeURIComponent(email)}`);
     } catch (err) {
       if (err.response?.status === 409) {

@@ -4,7 +4,7 @@ import { formatISODate } from "../../../utils/FormatDate";
 import { Eye } from "lucide-react";
 
 const BigArticleCard = ({
-  imgURL,
+  image_url,
   title,
   source,
   published_at,
@@ -15,7 +15,7 @@ const BigArticleCard = ({
     <div className="w-full flex justify-center rounded-xl shadow-md bg-white hover:shadow-lg border border-black/10 py-4 transition-shadow duration-300 article-card">
       <Link className="block w-[95%] relative rounded-xl shadow-md text-white bg-black overflow-hidden">
         <img
-          src={imgURL}
+          src={image_url}
           alt="article"
           className="w-[80%] mx-auto h-[400px] object-cover"
         />
