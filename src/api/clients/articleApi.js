@@ -59,6 +59,7 @@ export const searchArticles = async (
 };
 
 export const filterArticles = async ({
+  keyword= "",
   sourceName = "",
   topicId = "",
   cefrLevel = "",
@@ -66,11 +67,12 @@ export const filterArticles = async ({
   page = 1,
   size = 5,
   sortBy = "id",
-  direction = "asc",
+  direction = "desc",
 }) => {
   try {
     const response = await clientInstance.get(`/article/filter`, {
       params: {
+        keyword,
         sourceName,
         topicId,
         cefrLevel,

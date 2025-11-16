@@ -16,7 +16,7 @@ import {
   getLastNDays,
 } from "../../../../utils/FormatDate";
 import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";
-import TopArticles from './../../../../components/clients/home_page/TopArticles';
+import TopArticles from "./../../../../components/clients/home_page/TopArticles";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -102,33 +102,18 @@ const Home = () => {
 
           {/* Featured Article */}
           {latestArticles.length > 0 && (
-            <BigArticleCard
-              imgURL={latestArticles[0]?.image_url}
-              title={latestArticles[0]?.title}
-              source={latestArticles[0]?.source_name}
-              updated_at={latestArticles[0]?.updated_at}
-              published_at={latestArticles[0]?.published_at}
-              views={latestArticles[0]?.views}
-            />
+            <BigArticleCard {...latestArticles[0]} />
           )}
 
           {/* Article Grid */}
           <div className="grid grid-cols-4 gap-3 mt-5 mb-8">
             {latestArticles.map((article) => (
-              <ArticleCard
-                key={article?.id}
-                imgURL={article?.image_url}
-                title={article?.title}
-                source={article?.source_name}
-                updated_at={article?.updated_at}
-                published_at={article?.published_at}
-                views={article?.views}
-              />
+              <ArticleCard key={article?.id} {...article} />
             ))}
           </div>
 
           {/* TOP ARTICLES SECTION */}
-          <TopArticles topArticles={topArticles}/>
+          <TopArticles topArticles={topArticles} />
 
           {/* ARTICLES BY DATE SECTION */}
           <ArticlesByDate

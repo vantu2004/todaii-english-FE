@@ -90,14 +90,7 @@ const ArticlesByDate = ({
           articlesByDate.map((article) => (
             <LongArticleCard
               key={article.id}
-              imgURL={article.image_url}
-              title={article.title}
-              description={article.paragraphs?.[0]?.text_en}
-              cefr_level={article.cefr_level}
-              source={article.source_name}
-              updated_at={article.updated_at}
-              published_at={article.published_at}
-              views={article.views}
+              {...article}
             />
           ))
         ) : (
