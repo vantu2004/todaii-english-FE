@@ -9,32 +9,25 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
-  Pilcrow,
   Library,
+  FileText,
 } from "lucide-react";
-import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
-import ArticleViewModal from "./ArticleViewModal";
+import { toggleVideo, deleteVideo } from "../../../api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
 import { logError } from "../../../utils/LogError";
 
-const ArticlesTable = ({
-  columns,
-  articles,
-  reloadArticles,
-  query,
-  updateQuery,
-}) => {
+const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
   const [statusStates, setStatusStates] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setStatusStates(articles.map((a) => a.enabled ?? true));
-  }, [articles]);
+    setStatusStates(videos.map((v) => v.enabled ?? true));
+  }, [videos]);
 
   const handleToggle = async (index) => {
     setStatusStates((prev) => {
@@ -44,27 +37,31 @@ const ArticlesTable = ({
     });
 
     try {
-      const articleId = articles[index].id;
-
-      await toggleArticle(articleId);
+      const videoId = videos[index].id;
+      await toggleVideo(videoId);
     } catch (error) {
       logError(error);
     }
   };
 
-  const handleParagraphClick = (index) => {
-    const articleId = articles[index].id;
-    navigate(`/server/article/${articleId}/paragraph`);
+  const handleLyricClick = (index) => {
+    const videoId = videos[index].id;
+    navigate(`/server/video/${videoId}/lyric`);
+  };
+
+  const handleVocabularyClick = (index) => {
+    const videoId = videos[index].id;
+    navigate(`/server/video/${videoId}/vocabulary`);
   };
 
   const handleViewClick = (index) => {
-    setSelectedArticle(articles[index]);
+    setSelectedVideo(videos[index]);
     setIsViewModalOpen(true);
   };
 
   const handleUpdateClick = (index) => {
-    const articleId = articles[index].id;
-    navigate(`/server/article/${articleId}/update`);
+    const videoId = videos[index].id;
+    navigate(`/server/video/${videoId}/update`);
   };
 
   const handleDeleteClick = (index) => {
@@ -76,15 +73,15 @@ const ArticlesTable = ({
     if (selectedIndex === null) return;
 
     try {
-      const articleId = articles[selectedIndex].id;
+      const videoId = videos[selectedIndex].id;
 
-      await deleteArticle(articleId);
-      await reloadArticles();
+      await deleteVideo(videoId);
+      await reloadVideos();
 
       setSelectedIndex(null);
       setIsDeleteModalOpen(false);
 
-      toast.success("Article deleted");
+      toast.success("Video deleted");
     } catch (err) {
       logError(err);
     }
@@ -142,47 +139,53 @@ const ArticlesTable = ({
 
           {/* Body */}
           <tbody className="bg-white divide-y divide-gray-200">
-            {articles.map((a, i) => (
-              <tr key={a.id || i} className="text-gray-700">
-                <td className="px-4 py-3 text-sm">{a.id}</td>
-                <td className="px-4 py-3 text-sm">{a.source_name}</td>
-                <td className="px-4 py-3 text-sm">{a.author}</td>
+            {videos.map((v, i) => (
+              <tr key={v.id || i} className="text-gray-700">
+                <td className="px-4 py-3 text-sm">{v.id}</td>
+
                 <td className="px-4 py-3 text-sm">
                   <a
-                    href={a.source_url}
+                    href={v.video_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800 hover:underline line-clamp-2"
-                    title={a.title}
+                    title={v.title}
                   >
-                    {a.title}
+                    {v.title}
                   </a>
                 </td>
-                <td className="px-4 py-3 text-sm">{a.views}</td>
+
+                <td className="px-4 py-3 text-sm">{v.author_name}</td>
+
+                <td className="px-4 py-3 text-sm">{v.provider_name}</td>
+
+                <td className="px-4 py-3 text-sm">{v.views}</td>
+
                 <td className="px-4 py-3 text-sm">
-                  {formatISODate(a.published_at)}
+                  {formatISODate(v.updated_at)}
                 </td>
+
+                {/* Lyrics */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center text-sm">
-                    <button
-                      onClick={() => handleParagraphClick(i)}
-                      className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                      aria-label="Paragraph"
-                    >
-                      <Pilcrow className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleLyricClick(i)}
+                    className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                  >
+                    <FileText className="w-5 h-5" />
+                  </button>
                 </td>
+
+                {/* Vocabulary */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center text-sm">
-                    <button
-                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                      aria-label="Vocabulary"
-                    >
-                      <Library className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleVocabularyClick(i)}
+                    className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                  >
+                    <Library className="w-5 h-5" />
+                  </button>
                 </td>
+
+                {/* Enable toggle */}
                 <td className="px-4 py-3 text-sm">
                   <button
                     onClick={() => handleToggle(i)}
@@ -199,12 +202,13 @@ const ArticlesTable = ({
                     ></div>
                   </button>
                 </td>
+
+                {/* Actions */}
                 <td className="px-4 py-3">
                   <div className="flex items-center text-sm space-x-4">
                     <button
                       onClick={() => handleViewClick(i)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      aria-label="View"
                     >
                       <Eye className="w-5 h-5" />
                     </button>
@@ -212,14 +216,13 @@ const ArticlesTable = ({
                     <button
                       onClick={() => handleUpdateClick(i)}
                       className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-                      aria-label="Update"
                     >
                       <Pencil className="w-5 h-5" />
                     </button>
+
                     <button
                       onClick={() => handleDeleteClick(i)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      aria-label="Delete"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -232,13 +235,13 @@ const ArticlesTable = ({
       </div>
 
       {/* View Modal */}
-      {selectedArticle && (
-        <ArticleViewModal
+      {/* {selectedVideo && (
+        <VideoViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
-          article={selectedArticle}
+          video={selectedVideo}
         />
-      )}
+      )} */}
 
       {/* Delete Modal */}
       {selectedIndex !== null && (
@@ -252,7 +255,7 @@ const ArticlesTable = ({
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">
-                  Delete Article
+                  Delete Video
                 </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   This action cannot be undone
@@ -269,33 +272,33 @@ const ArticlesTable = ({
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  handleConfirmDelete();
-                  setIsDeleteModalOpen(false);
-                }}
+                onClick={handleConfirmDelete}
                 className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
               >
                 <Trash2 size={16} />
-                Delete Article
+                Delete Video
               </button>
             </div>
           }
         >
           <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
             <h3 className="font-bold text-gray-900 mb-2 text-lg">
-              Are you sure you want to delete this article?
+              Are you sure you want to delete this video?
             </h3>
             <p className="text-gray-700 mb-4">
               You are about to permanently delete:
             </p>
+
             <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
               <p className="text-sm font-semibold text-red-700">
-                {selectedIndex !== null ? articles[selectedIndex].title : ""}
+                {selectedIndex !== null ? videos[selectedIndex].title : ""}
               </p>
+
               <p className="text-xs text-gray-500 mt-1">
-                {selectedIndex !== null ? articles[selectedIndex].author : ""}
+                {selectedIndex !== null ? videos[selectedIndex].authorName : ""}
               </p>
             </div>
+
             <p className="text-xs text-red-600 leading-relaxed">
               ⚠️ This action is permanent and cannot be reversed.
             </p>
@@ -306,4 +309,4 @@ const ArticlesTable = ({
   );
 };
 
-export default ArticlesTable;
+export default VideosTable;

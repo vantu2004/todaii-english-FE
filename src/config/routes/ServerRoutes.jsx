@@ -18,6 +18,9 @@ import CreateArticle from "../../modules/servers/pages/manage_articles_page/Crea
 import UpdateArticle from "../../modules/servers/pages/manage_articles_page/UpdateArticle";
 import ManageParagraphs from "../../modules/servers/pages/manage_articles_page/ManageParagraphs";
 import Youtube from "../../modules/servers/pages/manage_videos_page/Youtube";
+import ManageVideos from "../../modules/servers/pages/manage_videos_page/ManageVideos";
+import CreateVideo from "../../modules/servers/pages/manage_videos_page/CreateVideo";
+import UpdateVideo from "../../modules/servers/pages/manage_videos_page/UpdateVideo";
 
 export default function ServerRoutes() {
   return (
@@ -149,6 +152,42 @@ export default function ServerRoutes() {
               </ServerProtectRoutes>
             }
           />
+
+          <Route
+            path="/video"
+            element={
+              <ServerProtectRoutes>
+                <ManageVideos />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/video/create"
+            element={
+              <ServerProtectRoutes>
+                <CreateVideo />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/video/:id/update"
+            element={
+              <ServerProtectRoutes>
+                <UpdateVideo />
+              </ServerProtectRoutes>
+            }
+          />
+
+          {/* <Route
+            path="/video/:id/lyric"
+            element={
+              <ServerProtectRoutes>
+                <ManageParagraphs />
+              </ServerProtectRoutes>
+            }
+          /> */}
         </Route>
       </Routes>
     </ServerAuthProvider>

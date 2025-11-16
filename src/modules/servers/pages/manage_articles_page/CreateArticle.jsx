@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { createArticle } from "../../../../api/servers/articleApi";
 import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +53,7 @@ const CreateArticle = () => {
       {/* Header */}
       <div className="flex-none">
         <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Create Article
+          Manage Articles
         </h2>
       </div>
 

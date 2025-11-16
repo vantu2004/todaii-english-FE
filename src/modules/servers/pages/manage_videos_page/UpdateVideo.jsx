@@ -1,18 +1,15 @@
 import toast from "react-hot-toast";
-import {
-  fetchArticle,
-  updateArticle,
-} from "../../../../api/servers/articleApi";
-import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
+import { fetchVideo, updateVideo } from "../../../../api/servers/videoApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
+import VideoForm from "../../../../components/servers/manage_videos_page/VideoForm";
 
-const UpdateArticle = () => {
+const UpdateVideo = () => {
   const { id } = useParams();
 
-  const [article, setArticle] = useState(null);
+  const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -20,8 +17,8 @@ const UpdateArticle = () => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await fetchArticle(id);
-        setArticle(data);
+        const data = await fetchVideo(id);
+        setVideo(data);
       } catch (err) {
         logError(err);
       } finally {
@@ -30,12 +27,12 @@ const UpdateArticle = () => {
     })();
   }, [id]);
 
-  const handleUpdateArticle = async (formData) => {
+  const handleUpdateVideo = async (formData) => {
     try {
-      await updateArticle(id, formData);
-      toast.success("Article updated!");
+      await updateVideo(id, formData);
+      toast.success("Video updated!");
 
-      navigate("/server/article");
+      navigate("/server/video");
     } catch (error) {
       logError(error);
     }
@@ -45,10 +42,10 @@ const UpdateArticle = () => {
     return <div className="p-8 text-gray-500">Loading...</div>;
   }
 
-  if (!article) {
+  if (!video) {
     return (
       <div className="p-8 text-red-500">
-        Cannot load article. Please try again.
+        Cannot load video. Please try again.
       </div>
     );
   }
@@ -57,7 +54,7 @@ const UpdateArticle = () => {
     <div className="flex flex-col h-full">
       <div className="flex-none">
         <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Articles
+          Manage Videos
         </h2>
       </div>
 
@@ -68,14 +65,14 @@ const UpdateArticle = () => {
         transition={{ duration: 0.5 }}
         className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
       >
-        <ArticleForm
+        <VideoForm
           mode="update"
-          initialData={article}
-          onSubmit={handleUpdateArticle}
+          initialData={video}
+          onSubmit={handleUpdateVideo}
         />
       </motion.div>
     </div>
   );
 };
 
-export default UpdateArticle;
+export default UpdateVideo;
