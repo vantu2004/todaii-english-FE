@@ -2,9 +2,9 @@ import { createVideo } from "../../../../api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useYoutubeDataStore } from "../../../../stores/useYoutubeDataStore";
 import { logError } from "../../../../utils/LogError";
 import VideoForm from "../../../../components/servers/manage_videos_page/VideoForm";
+import { useYoutubeDataStore } from "../../../../stores/useYoutubeDataStore";
 
 const CreateVideo = () => {
   const navigate = useNavigate();
@@ -27,15 +27,15 @@ const CreateVideo = () => {
     if (!raw) return {};
 
     return {
-      youtube_id: raw.youtubeId || "",
       title: raw.title || "",
-      author_name: raw.author || "",
-      provider_name: raw.providerName || "",
-      thumbnail_url: raw.thumbnailUrl || "",
-      views: raw.views || 0,
-      lyric: raw.lyric || "",
-      vocabulary: raw.vocabulary || "",
-      enabled: true,
+      author_name: raw.author_name || "",
+      provider_name: raw.provider_name || "",
+      provider_url: raw.provider_url || "",
+      thumbnail_url: raw.thumbnail_url || "",
+      embed_html: raw.embed_html || "",
+      video_url: raw.video_url || "",
+      cefr_level: raw.cefr_level || "A1",
+      topic_ids: [],
     };
   };
 

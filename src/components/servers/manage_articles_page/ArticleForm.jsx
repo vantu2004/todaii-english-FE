@@ -313,7 +313,9 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2.5 h-2.5 bg-emerald-600 rounded-full" />
-                <h3 className="font-bold text-slate-900">Topics</h3>
+                <h3 className="font-bold text-slate-900">
+                  Topics <span className="text-red-500">*</span>
+                </h3>
               </div>
 
               <p className="text-xs text-slate-500 mb-4 font-medium">
