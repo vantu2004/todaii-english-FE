@@ -1,94 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import {
-  getLastestArticles,
-  getArticlesByDate,
-} from "../../../../api/clients/articleApi";
 import BigArticleCard from "../../../../components/clients/home_page/BigArticleCard";
 import ArticleCard from "../../../../components/clients/home_page/ArticleCard";
-import LongArticleCard from "../../../../components/clients/home_page/LongArticleCard";
-import BasicDatePicker from "../../../../components/clients/home_page/BasicDatePicker";
-
-import {
-  formatDate,
-  formatDisplayDate,
-  getLastNDays,
-} from "../../../../utils/FormatDate";
 import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";
-import TopArticles from "./../../../../components/clients/home_page/TopArticles";
-
+import TopArticles from "../../../../components/clients/home_page/TopArticles";
+import useArticle from "../../../../hooks/clients/useArticle";
+import useArticlesByDate from "../../../../hooks/clients/useArticleByDate";
 const Home = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [latestArticles, setLatestArticles] = useState([]);
-  const [topArticles, setTopArticles] = useState([]);
-  const [articlesByDate, setArticlesByDate] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  // Fetch latest and top articles
+  const {
+    latestArticles,
+    topArticles,
+    loading: articlesLoading,
+    error: articlesError,
+  } = useArticle(10);
 
-  // Fetch latest articles on first load
-  useEffect(() => {
-    const fetchLatest = async () => {
-      try {
-        setLoading(true);
-        const data = await getLastestArticles(10);
-        setLatestArticles(data.slice(0, 5));
-        setTopArticles(data.slice(0, 4)); // Get top 4 for featured section
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load latest articles.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLatest();
-  }, []);
-
-  // Fetch articles whenever selectedDate changes
-  useEffect(() => {
-    const fetchByDate = async () => {
-      try {
-        setLoading(true);
-        setPage(1);
-        const data = await getArticlesByDate(selectedDate, 1, 1, "id", "asc");
-        setArticlesByDate(data.content || []);
-        setHasMore(data.total_pages > 1);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load articles for selected date.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchByDate();
-  }, [selectedDate]);
-
-  const loadMoreArticles = async () => {
-    if (!hasMore) return;
-
-    try {
-      setLoading(true);
-      const nextPage = page + 1;
-      const data = await getArticlesByDate(
-        selectedDate,
-        nextPage,
-        1,
-        "id",
-        "asc"
-      );
-
-      setArticlesByDate((prev) => [...prev, ...data.content]);
-      setPage(nextPage);
-      setHasMore(nextPage < data.total_pages);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load more articles.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch articles by date with pagination
+  const {
+    articlesByDate,
+    selectedDate,
+    setSelectedDate,
+    hasMore,
+    loading: dateLoading,
+    error: dateError,
+    loadMoreArticles,
+  } = useArticlesByDate();
 
   return (
     <div className="mt-15 bg-[#f9fafc] min-h-screen py-6">
@@ -101,19 +38,31 @@ const Home = () => {
           </p>
 
           {/* Featured Article */}
-          {latestArticles.length > 0 && (
+          {articlesLoading ? (
+            <div className="animate-pulse bg-gray-200 h-96 rounded-xl mb-5"></div>
+          ) : latestArticles.length > 0 ? (
             <BigArticleCard {...latestArticles[0]} />
-          )}
+          ) : null}
 
           {/* Article Grid */}
           <div className="grid grid-cols-4 gap-3 mt-5 mb-8">
-            {latestArticles.map((article) => (
-              <ArticleCard key={article?.id} {...article} />
-            ))}
+            {articlesLoading
+              ? // Loading skeleton
+                Array(4)
+                  .fill(0)
+                  .map((_, i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse bg-gray-200 h-48 rounded-xl"
+                    ></div>
+                  ))
+              : latestArticles.map((article) => (
+                  <ArticleCard key={article?.id} {...article} />
+                ))}
           </div>
 
           {/* TOP ARTICLES SECTION */}
-          <TopArticles topArticles={topArticles} />
+          <TopArticles topArticles={topArticles} loading={articlesLoading} />
 
           {/* ARTICLES BY DATE SECTION */}
           <ArticlesByDate
@@ -121,7 +70,7 @@ const Home = () => {
             setSelectedDate={setSelectedDate}
             articlesByDate={articlesByDate}
             hasMore={hasMore}
-            loading={loading}
+            loading={dateLoading}
             loadMoreArticles={loadMoreArticles}
           />
         </div>
@@ -144,7 +93,7 @@ const Home = () => {
             ].map((tag, i) => (
               <span
                 key={i}
-                className="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer"
+                className="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
               >
                 {tag}
               </span>
@@ -154,7 +103,7 @@ const Home = () => {
           <h3 className="font-semibold mb-3 text-gray-800">
             Học tiếng Anh với Video
           </h3>
-          <div className="bg-white rounded-xl shadow-sm p-3 mb-6">
+          <div className="bg-white rounded-xl shadow-sm p-3 mb-6 hover:shadow-md transition-shadow">
             <img
               src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg"
               className="w-full rounded-md"

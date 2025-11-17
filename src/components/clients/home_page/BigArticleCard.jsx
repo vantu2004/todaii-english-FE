@@ -6,7 +6,7 @@ import { Eye } from "lucide-react";
 const BigArticleCard = ({
   image_url,
   title,
-  source,
+  source_name,
   published_at,
   updated_at,
   views,
@@ -25,7 +25,7 @@ const BigArticleCard = ({
           </h2>
           <div className="mt-1 text-sm flex items-center gap-2">
             <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">
-              {source}
+              {source_name}
             </span>
             <span className="ml-4">{formatISODate(updated_at)}</span>
             <span className="ml-4 flex items-center gap-1">

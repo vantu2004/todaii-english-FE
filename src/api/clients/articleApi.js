@@ -11,6 +11,17 @@ export const getLastestArticles = async (size) => {
   }
 };
 
+
+export const getTopArticles = async (size) => {
+  try {
+    const response = await clientInstance.get(`/article/top?size=${size}`);
+    return response.data;
+  } catch (err) {
+    console.error("Get top articles error:", err);
+    throw err;
+  }
+};
+
 export const getArticlesByDate = async (
   date,
   page = 1,
