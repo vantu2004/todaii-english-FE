@@ -1,6 +1,6 @@
 import { serverInstance } from "../../config/axios";
 
-export const importSrtFile = async (file) => {
+export const uploadSrtFile = async (file) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
@@ -34,7 +34,16 @@ export const fetchLyrics = async (videoId, sortBy, direction, keyword) => {
 
 export const createLyricBatch = async (videoId, lyrics) => {
   try {
-    serverInstance.post(`/video/${videoId}/lyric`, lyrics);
+    await serverInstance.post(`/video/${videoId}/lyric/batch`, lyrics);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const createLyric = async (videoId, lyric) => {
+  try {
+    await serverInstance.post(`/video/${videoId}/lyric`, lyric);
   } catch (err) {
     console.error("Error:", err);
     throw err;

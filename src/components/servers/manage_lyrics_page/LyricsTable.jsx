@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowUp,
   ArrowDown,
@@ -9,7 +9,8 @@ import {
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import { logError } from "../../../utils/LogError";
-import { deleteLyric } from "../../../api/servers/lyricApi";
+import { deleteLyric, updateLyric } from "../../../api/servers/lyricApi";
+import LyricFormModal from "./LyricFormModal";
 
 const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -37,23 +38,38 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
     setIsDeleteModalOpen(true);
   };
 
+  const handleConfirmUpdate = async (lyric) => {
+    if (selectedIndex === null) return;
+
+    try {
+      const lyricId = lyrics[selectedIndex].id;
+
+      await updateLyric(lyricId, lyric);
+      await reloadLyrics();
+
+      setSelectedIndex(null);
+      setSelectedLyric(null);
+      setIsUpdateModalOpen(false);
+
+      toast.success("Admin updated successfully");
+    } catch (error) {
+      logError(error);
+    }
+  };
+
   const handleConfirmDelete = async () => {
     if (selectedIndex === null) return;
     try {
       await deleteLyric(lyrics[selectedIndex].id);
+      await reloadLyrics();
+
       toast.success("Lyric deleted");
 
-      await reloadLyrics();
       setIsDeleteModalOpen(false);
       setSelectedIndex(null);
     } catch (err) {
       logError(err);
     }
-  };
-
-  const handleConfirmUpdate = async () => {
-    await reloadLyrics();
-    setIsUpdateModalOpen(false);
   };
 
   return (
@@ -156,7 +172,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
       )} */}
 
       {/* === UPDATE MODAL === */}
-      {/* {selectedLyric && (
+      {selectedLyric && (
         <LyricFormModal
           isOpen={isUpdateModalOpen}
           mode="update"
@@ -164,7 +180,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
           onClose={() => setIsUpdateModalOpen(false)}
           onSubmit={handleConfirmUpdate}
         />
-      )} */}
+      )}
 
       {/* === DELETE MODAL === */}
       {selectedIndex !== null && (

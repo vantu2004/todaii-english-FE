@@ -1,20 +1,31 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { fetchLyrics, createLyricBatch } from "../../../api/servers/lyricApi";
+import {
+  fetchLyrics,
+  uploadSrtFile,
+  createLyricBatch,
+  createLyric,
+  deleteAllLyrics,
+} from "../../../api/servers/lyricApi";
 import LyricToolBar from "../../../components/servers/manage_lyrics_page/LyricToolBar";
 import { motion } from "framer-motion";
 import { logError } from "../../../utils/LogError";
 import { useParams } from "react-router-dom";
 import LyricsTable from "../../../components/servers/manage_lyrics_page/LyricsTable";
 import { SearchX } from "lucide-react";
+import LyricFormModal from "../../../components/servers/manage_lyrics_page/LyricFormModal";
+import UploadSrtFileModal from "../../../components/servers/manage_lyrics_page/UploadSrtFileModal";
+import DeleteAllLyricsModal from "../../../components/servers/manage_lyrics_page/DeleteAllLyricsModal";
 
 const ManageLyrics = () => {
   const { id } = useParams();
 
   const [lyrics, setLyrics] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isDeleteAllModalOpen, setIsDeleteAllModalOpen] = useState(false);
 
   const [query, setQuery] = useState({
     sortBy: "lineOrder",
@@ -22,7 +33,6 @@ const ManageLyrics = () => {
     keyword: "",
   });
 
-  // columns tuỳ theo design bảng Lyrics
   const columns = [
     { key: "id", label: "ID", sortField: "id" },
     { key: "line_order", label: "Line Order", sortField: "lineOrder" },
@@ -60,16 +70,53 @@ const ManageLyrics = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
-  // const handleConfirmCreate = async (data) => {
-  //   try {
-  //     await createLyricBatch(data);
-  //     await reloadLyrics();
-  //     setIsCreateModalOpen(false);
-  //     toast.success("Lyric created successfully");
-  //   } catch (error) {
-  //     logError(error);
-  //   }
-  // };
+  const handleUploadSrtFile = async (file) => {
+    try {
+      const response = await uploadSrtFile(file);
+      return response;
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  const handleCreateLyricBatch = async (data) => {
+    try {
+      await createLyricBatch(id, data);
+      await reloadLyrics();
+
+      setIsUploadModalOpen(false);
+
+      toast.success("Lyrics created successfully");
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  const handleCreateLyric = async (lyric) => {
+    try {
+      await createLyric(id, lyric);
+      await reloadLyrics();
+
+      setIsCreateModalOpen(false);
+
+      toast.success("Lyric created successfully");
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  const handleDeleteAllLyrics = async () => {
+    try {
+      await deleteAllLyrics(id);
+      await reloadLyrics();
+
+      setIsDeleteAllModalOpen(false);
+
+      toast.success("Lyrics deleted successfully");
+    } catch (error) {
+      logError(error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -81,8 +128,10 @@ const ManageLyrics = () => {
 
         <LyricToolBar
           updateQuery={updateQuery}
+          setIsPreviewModalOpen={setIsPreviewModalOpen}
           setIsUploadModalOpen={setIsUploadModalOpen}
           setIsCreateModalOpen={setIsCreateModalOpen}
+          setIsDeleteAllModalOpen={setIsDeleteAllModalOpen}
         />
 
         <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
@@ -118,15 +167,34 @@ const ManageLyrics = () => {
       </motion.div>
 
       {/* Modal Tạo mới */}
-      {/* {isCreateModalOpen && (
+      {isCreateModalOpen && (
         <LyricFormModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           mode="create"
           initialData={{}}
-          onSubmit={handleConfirmCreate}
+          onSubmit={handleCreateLyric}
         />
-      )} */}
+      )}
+
+      {/* Upload file */}
+      {isUploadModalOpen && (
+        <UploadSrtFileModal
+          isOpen={isUploadModalOpen}
+          onClose={() => setIsUploadModalOpen(false)}
+          onUpload={handleUploadSrtFile}
+          onCreateBatch={handleCreateLyricBatch}
+        />
+      )}
+
+      {/* Delete all */}
+      {isDeleteAllModalOpen && (
+        <DeleteAllLyricsModal
+          isOpen={isDeleteAllModalOpen}
+          onClose={() => setIsDeleteAllModalOpen(false)}
+          onConfirm={handleDeleteAllLyrics}
+        />
+      )}
     </div>
   );
 };

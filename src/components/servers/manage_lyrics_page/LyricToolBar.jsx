@@ -3,8 +3,10 @@ import { Eye, MoveLeft, Plus, Search, Trash2, Upload } from "lucide-react";
 
 const ToolBar = ({
   updateQuery,
+  setIsPreviewModalOpen,
   setIsUploadModalOpen,
   setIsCreateModalOpen,
+  setIsDeleteAllModalOpen,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -40,7 +42,7 @@ const ToolBar = ({
         </button>
 
         <button
-          onClick={() => setIsUploadModalOpen(true)}
+          onClick={() => setIsPreviewModalOpen(true)}
           className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-green-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
         >
           <Eye className="w-5 h-5" />
@@ -64,7 +66,7 @@ const ToolBar = ({
         </button>
 
         <button
-          onClick={() => setIsUploadModalOpen(true)}
+          onClick={() => setIsDeleteAllModalOpen(true)}
           className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-red-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
         >
           <Trash2 className="w-5 h-5" />
