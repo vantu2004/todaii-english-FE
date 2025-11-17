@@ -5,6 +5,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
 import Pagination from "../../../components/clients/Pagination";
 import ArticleFilter from "../../../components/clients/search_result_page/ArticleFilter";
+import SearchBar from "../../../components/clients/SearchBar";
 import useArticleSearch from "../../../hooks/clients/useArticleSearch";
 
 // Static filter options
@@ -36,7 +37,6 @@ const SearchResults = () => {
   const navigate = useNavigate();
 
   const q = searchParams.get("q") || "";
-  const [searchInput, setSearchInput] = useState(q);
 
   // Query state
   const [query, setQuery] = useState({
@@ -47,30 +47,18 @@ const SearchResults = () => {
     size: 5,
   });
 
-  const updateQuery = (values) =>
-    setQuery((prev) => ({ ...prev, ...values }));
+  const updateQuery = (values) => setQuery((prev) => ({ ...prev, ...values }));
 
-  // When URL ?q= changes
+  const { results, totalResults, totalPages, loading } =
+    useArticleSearch(query);
+
   useEffect(() => {
-    updateQuery({ keyword: q, page: 1 });
-    setSearchInput(q);
-  }, [q]);
-
-  const {
-    results,
-    totalResults,
-    totalPages,
-    loading,
-  } = useArticleSearch(query);
-
-  const performSearch = () => {
-    navigate(`/client/search?q=${encodeURIComponent(searchInput)}`);
-  };
+    navigate(`/client/search?q=${encodeURIComponent(query.keyword)}`);
+  }, [query.keyword]);
 
   return (
     <div className="mb-10 min-h-screen bg-[#f9fafc] pt-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
-
         {/* LEFT FILTER PANEL */}
         <ArticleFilter
           query={query}
@@ -82,25 +70,14 @@ const SearchResults = () => {
 
         {/* RIGHT RESULTS */}
         <div className="w-full md:w-3/4 space-y-6">
-          {/* 🔍 SEARCH BAR */}
-          <div className="flex gap-3">
-            <input
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && performSearch()}
-              placeholder="Search articles..."
-              className="flex-1 px-4 py-2 rounded-xl border"
-            />
-            <button
-              onClick={performSearch}
-              className="px-5 py-2 bg-blue-600 text-white rounded-xl"
-            >
-              Search
-            </button>
-          </div>
+          <SearchBar
+            query={query}
+            updateQuery={updateQuery}
+            placeholder="Tìm kiếm bài viết..."
+          />
 
           {/* HEADER */}
-          <div className="flex justify-between items-start sm:items-center flex-col sm:flex-row">
+          <div className="flex justify-between items-start sm:items-center flex-col sm:flex-row gap-4">
             <div>
               <h1 className="text-2xl font-bold">
                 Kết quả tìm kiếm cho:{" "}
@@ -116,8 +93,7 @@ const SearchResults = () => {
               className="min-w-[200px]"
               options={sortOptions}
               value={sortOptions.find(
-                (o) =>
-                  `${query.sortBy}-${query.direction}` === o.value
+                (o) => `${query.sortBy}-${query.direction}` === o.value
               )}
               onChange={(s) => {
                 const [field, direction] = s.value.split("-");
