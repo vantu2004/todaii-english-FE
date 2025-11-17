@@ -20,9 +20,11 @@ export const importSrtFile = async (file) => {
   }
 };
 
-export const fetchLyrics = async (videoId) => {
+export const fetchLyrics = async (videoId, sortBy, direction, keyword) => {
   try {
-    const response = await serverInstance.get(`/video/${videoId}/lyric`);
+    const response = await serverInstance.get(`/video/${videoId}/lyric`, {
+      params: { sortBy, direction, keyword },
+    });
     return response.data;
   } catch (err) {
     console.error("Error:", err);
