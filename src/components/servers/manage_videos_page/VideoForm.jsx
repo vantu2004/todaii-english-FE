@@ -124,7 +124,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               transition={{ delay: 0.05 }}
             >
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Author Name
+                Author Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -145,7 +145,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
             >
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Provider Name
+                  Provider Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -159,7 +159,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Provider URL
+                  Provider URL <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -199,7 +199,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               transition={{ delay: 0.2 }}
             >
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Embed HTML
+                Embed HTML <span className="text-red-500">*</span>
               </label>
               <textarea
                 name="embed_html"
@@ -218,7 +218,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               transition={{ delay: 0.25 }}
             >
               <label className="block text-sm font-semibold text-slate-700 mb-2">
-                Thumbnail URL
+                Thumbnail URL <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -279,7 +279,9 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
             >
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                <h3 className="font-bold text-slate-900">Topics</h3>
+                <h3 className="font-bold text-slate-900">
+                  Topics <span className="text-red-500">*</span>
+                </h3>
               </div>
 
               <p className="text-xs text-slate-500 mb-4 font-medium">

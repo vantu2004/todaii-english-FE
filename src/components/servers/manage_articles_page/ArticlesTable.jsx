@@ -47,6 +47,7 @@ const ArticlesTable = ({
       const articleId = articles[index].id;
 
       await toggleArticle(articleId);
+      await reloadArticles();
     } catch (error) {
       logError(error);
     }

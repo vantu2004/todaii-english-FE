@@ -35,6 +35,7 @@ const ParagraphForm = ({ articleId, paragraphs }) => {
   }, [localParagraphs]);
 
   const addParagraph = () => {
+    // loop through localParagraphs and check if any of them have id null
     if (localParagraphs.some((p) => p.id === null)) {
       toast.error("Please save the new paragraph before adding another");
       return;
@@ -58,10 +59,6 @@ const ParagraphForm = ({ articleId, paragraphs }) => {
   };
 
   const handleSave = async (para) => {
-    if (!para.text_en.trim()) {
-      toast.error("English text is required");
-      return;
-    }
     try {
       const saved = await saveParagraph(articleId, para);
       setLocalParagraphs((prev) =>

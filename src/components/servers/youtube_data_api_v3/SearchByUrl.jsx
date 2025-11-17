@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Download } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useYoutubeDataStore } from "../../../stores/useYoutubeDataStore";
 
 const SearchByUrl = ({ video = {} }) => {
+  const navigate = useNavigate();
+
+  const { setRawVideo } = useYoutubeDataStore();
+
   const exportVideo = (v) => {
-    console.log("Export video:", v);
+    setRawVideo(v);
+
+    navigate("/server/video/create");
   };
 
   if (!video.embed_html) {

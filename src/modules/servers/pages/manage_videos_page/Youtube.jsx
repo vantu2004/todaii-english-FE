@@ -1,7 +1,7 @@
 import { ExternalLink, Search, Loader, X, History } from "lucide-react";
 import { useState, useEffect } from "react";
-import SearchByUrl from "../../../../components/servers/manage_videos_page/SearchByUrl";
-import SearchByKeyword from "../../../../components/servers/manage_videos_page/SearchByKeyword";
+import SearchByUrl from "../../../../components/servers/youtube_data_api_v3/SearchByUrl";
+import SearchByKeyword from "../../../../components/servers/youtube_data_api_v3/SearchByKeyword";
 import {
   fetchVideoByUrl,
   fetchVideoByKeyword,

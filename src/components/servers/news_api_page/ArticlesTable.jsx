@@ -48,7 +48,7 @@ const ArticlesTable = ({ columns, articles }) => {
                 className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
               >
                 {/* # */}
-                <td className="px-4 py-3 text-sm font-semibold">{i + 1}</td>
+                <td className="px-4 py-3 text-sm">{i + 1}</td>
 
                 {/* Source */}
                 <td className="px-4 py-3 text-sm">

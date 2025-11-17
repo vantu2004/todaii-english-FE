@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "./../../../utils/FormatDate";
+import {
+  deleteVocabDeck,
+  toggleVocabDeck,
+  updateVocabDeck,
+} from "../../../api/servers/vocabDeckApi";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
 import {
@@ -10,80 +15,90 @@ import {
   ArrowDown,
   AlertTriangle,
   Library,
-  FileText,
 } from "lucide-react";
-import { toggleVideo, deleteVideo } from "../../../api/servers/videoApi";
-import { useNavigate } from "react-router-dom";
 import { logError } from "../../../utils/LogError";
 
-const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
-  const [statusStates, setStatusStates] = useState([]);
+const VocabDecksTable = ({
+  columns,
+  decks,
+  reloadDecks,
+  query,
+  updateQuery,
+}) => {
+  const [enabledStates, setEnabledStates] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-
-  const navigate = useNavigate();
+  const [selectedDeckIndex, setSelectedDeckIndex] = useState(null);
+  const [selectedDeck, setSelectedDeck] = useState(null);
 
   useEffect(() => {
-    setStatusStates(videos.map((v) => v.enabled ?? true));
-  }, [videos]);
+    setEnabledStates(decks.map((deck) => deck.enabled));
+  }, [decks]);
 
   const handleToggle = async (index) => {
-    setStatusStates((prev) => {
+    setEnabledStates((prev) => {
       const newStates = [...prev];
       newStates[index] = !newStates[index];
       return newStates;
     });
 
     try {
-      const videoId = videos[index].id;
+      const deckId = decks[index].id;
 
-      await toggleVideo(videoId);
-      await reloadVideos();
-    } catch (error) {
-      logError(error);
+      await toggleVocabDeck(deckId);
+      await reloadDecks();
+    } catch (err) {
+      logError(err);
     }
   };
 
-  const handleLyricClick = (index) => {
-    const videoId = videos[index].id;
-    navigate(`/server/video/${videoId}/lyric`);
-  };
-
-  const handleVocabularyClick = (index) => {
-    const videoId = videos[index].id;
-    navigate(`/server/video/${videoId}/vocabulary`);
-  };
-
   const handleViewClick = (index) => {
-    setSelectedVideo(videos[index]);
+    setSelectedDeck(decks[index]);
     setIsViewModalOpen(true);
   };
 
   const handleUpdateClick = (index) => {
-    const videoId = videos[index].id;
-    navigate(`/server/video/${videoId}/update`);
+    setSelectedDeckIndex(index);
+    setSelectedDeck(decks[index]);
+    setIsUpdateModalOpen(true);
   };
 
   const handleDeleteClick = (index) => {
-    setSelectedIndex(index);
+    setSelectedDeckIndex(index);
     setIsDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = async () => {
-    if (selectedIndex === null) return;
+  const handleConfirmUpdate = async (data) => {
+    if (selectedDeckIndex === null) return;
 
     try {
-      const videoId = videos[selectedIndex].id;
+      const deckId = decks[selectedDeckIndex].id;
+      await updateVocabDeck(deckId, data);
+      await reloadDecks();
 
-      await deleteVideo(videoId);
-      await reloadVideos();
+      setSelectedDeckIndex(null);
+      setSelectedDeck(null);
+      setIsUpdateModalOpen(false);
 
-      setSelectedIndex(null);
+      toast.success("Vocab deck updated successfully");
+    } catch (err) {
+      logError(err);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedDeckIndex === null) return;
+
+    try {
+      const deckId = decks[selectedDeckIndex].id;
+      await deleteVocabDeck(deckId);
+      await reloadDecks();
+
+      setSelectedDeckIndex(null);
       setIsDeleteModalOpen(false);
 
-      toast.success("Video deleted");
+      toast.success("Vocab deck deleted");
     } catch (err) {
       logError(err);
     }
@@ -93,27 +108,30 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
     <>
       <div className="h-full rounded-lg overflow-y-auto">
         <table className="w-full table-auto">
-          {/* Header */}
+          {/* === Table Header === */}
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 bg-gray-50">
+            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
               {columns.map((col) => {
                 const isSortable = !!col.sortField;
                 const isActiveSort = query.sortBy === col.sortField;
+
                 return (
                   <th
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 transition-colors"
+                        ? "cursor-pointer select-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         : ""
                     }`}
                     onClick={() => {
                       if (!isSortable) return;
+
                       const newDirection = isActiveSort
                         ? query.direction === "asc"
                           ? "desc"
                           : "asc"
                         : "asc";
+
                       updateQuery({
                         sortBy: col.sortField,
                         direction: newDirection,
@@ -124,13 +142,13 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                     <div className="flex items-center gap-1">
                       {col.label}
                       {isSortable && isActiveSort && (
-                        <>
+                        <span className="inline-flex items-center">
                           {query.direction === "asc" ? (
                             <ArrowUp className="w-3 h-3 text-blue-600" />
                           ) : (
                             <ArrowDown className="w-3 h-3 text-blue-600" />
                           )}
-                        </>
+                        </span>
                       )}
                     </div>
                   </th>
@@ -139,67 +157,43 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
             </tr>
           </thead>
 
-          {/* Body */}
-          <tbody className="bg-white divide-y divide-gray-200">
-            {videos.map((v, i) => (
-              <tr key={v.id || i} className="text-gray-700">
-                <td className="px-4 py-3 text-sm">{v.id}</td>
-
+          {/* === Table Body === */}
+          <tbody className="bg-white divide-y divide-gray-300 dark:divide-gray-700 dark:bg-gray-800">
+            {decks.map((deck, i) => (
+              <tr
+                key={i}
+                className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
+              >
+                <td className="px-4 py-3 text-sm">{deck.id}</td>
+                <td className="px-4 py-3 text-sm font-semibold">{deck.name}</td>
+                <td className="px-4 py-3 text-sm">{deck.description}</td>
+                <td className="px-4 py-3 text-sm">{deck.cefr_level}</td>
                 <td className="px-4 py-3 text-sm">
-                  <a
-                    href={v.video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 hover:underline line-clamp-2"
-                    title={v.title}
-                  >
-                    {v.title}
-                  </a>
+                  {formatISODate(deck.updated_at)}
                 </td>
-
-                <td className="px-4 py-3 text-sm">{v.author_name}</td>
-
-                <td className="px-4 py-3 text-sm">{v.provider_name}</td>
-
-                <td className="px-4 py-3 text-sm">{v.views}</td>
-
-                <td className="px-4 py-3 text-sm">
-                  {formatISODate(v.updated_at)}
-                </td>
-
-                {/* Lyrics */}
                 <td className="px-4 py-3">
-                  <button
-                    onClick={() => handleLyricClick(i)}
-                    className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                  >
-                    <FileText className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center text-sm">
+                    <button
+                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      aria-label="Vocabulary"
+                    >
+                      <Library className="w-5 h-5" />
+                    </button>
+                  </div>
                 </td>
-
-                {/* Vocabulary */}
-                <td className="px-4 py-3">
-                  <button
-                    onClick={() => handleVocabularyClick(i)}
-                    className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                  >
-                    <Library className="w-5 h-5" />
-                  </button>
-                </td>
-
                 {/* Enable toggle */}
                 <td className="px-4 py-3 text-sm">
                   <button
                     onClick={() => handleToggle(i)}
                     className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
-                      statusStates[i]
+                      enabledStates[i]
                         ? "bg-green-400 border-green-400"
                         : "bg-neutral-300 border-neutral-200"
                     }`}
                   >
                     <div
                       className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
-                        statusStates[i] ? "translate-x-5" : "translate-x-0"
+                        enabledStates[i] ? "translate-x-5" : "translate-x-0"
                       }`}
                     ></div>
                   </button>
@@ -207,7 +201,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
 
                 {/* Actions */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center text-sm space-x-4">
+                  <div className="flex items-center space-x-3 text-sm">
                     <button
                       onClick={() => handleViewClick(i)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -236,17 +230,28 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
         </table>
       </div>
 
-      {/* View Modal */}
-      {/* {selectedVideo && (
-        <VideoViewModal
+      {/* Modal view deck */}
+      {/* {selectedDeck && (
+        <VocabDeckViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
-          video={selectedVideo}
+          deck={selectedDeck}
         />
       )} */}
 
-      {/* Delete Modal */}
-      {selectedIndex !== null && (
+      {/* Modal update deck */}
+      {/* {selectedDeck && (
+        <VocabDeckFormModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => setIsUpdateModalOpen(false)}
+          mode={"update"}
+          initialData={selectedDeck}
+          onSubmit={handleConfirmUpdate}
+        />
+      )} */}
+
+      {/* Modal delete deck */}
+      {selectedDeckIndex !== null && selectedDeckIndex !== undefined && (
         <Modal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
@@ -257,7 +262,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">
-                  Delete Video
+                  Delete Deck
                 </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   This action cannot be undone
@@ -274,36 +279,44 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 Cancel
               </button>
               <button
-                onClick={handleConfirmDelete}
+                onClick={() => {
+                  handleConfirmDelete();
+                  setIsDeleteModalOpen(false);
+                }}
                 className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
               >
                 <Trash2 size={16} />
-                Delete Video
+                Delete Deck
               </button>
             </div>
           }
         >
           <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
-            <h3 className="font-bold text-gray-900 mb-2 text-lg">
-              Are you sure you want to delete this video?
-            </h3>
-            <p className="text-gray-700 mb-4">
-              You are about to permanently delete:
-            </p>
-
-            <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
-              <p className="text-sm font-semibold text-red-700">
-                {selectedIndex !== null ? videos[selectedIndex].title : ""}
-              </p>
-
-              <p className="text-xs text-gray-500 mt-1">
-                {selectedIndex !== null ? videos[selectedIndex].authorName : ""}
-              </p>
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <h3 className="font-bold text-gray-900 mb-2 text-lg">
+                  Are you sure you want to delete this vocab deck?
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  You are about to permanently delete the deck:
+                </p>
+                <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
+                  <p className="text-sm font-semibold text-red-700">
+                    {selectedDeckIndex !== null
+                      ? decks[selectedDeckIndex].name
+                      : ""}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {selectedDeckIndex !== null
+                      ? decks[selectedDeckIndex].description
+                      : ""}
+                  </p>
+                </div>
+                <p className="text-xs text-red-600 leading-relaxed">
+                  ⚠️ This action is permanent and cannot be reversed.
+                </p>
+              </div>
             </div>
-
-            <p className="text-xs text-red-600 leading-relaxed">
-              ⚠️ This action is permanent and cannot be reversed.
-            </p>
           </div>
         </Modal>
       )}
@@ -311,4 +324,4 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
   );
 };
 
-export default VideosTable;
+export default VocabDecksTable;

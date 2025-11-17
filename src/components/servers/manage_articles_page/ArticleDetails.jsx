@@ -117,7 +117,7 @@ const ArticleDetails = ({ article }) => {
               Content ({article.paragraphs.length} paragraphs)
             </h4>
           </div>
-          <div className="space-y-4 max-h-80 overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          <div className="space-y-4 pr-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
             {article.paragraphs.map((p, idx) => (
               <div
                 key={p.id}
@@ -127,7 +127,7 @@ const ArticleDetails = ({ article }) => {
                   <span className="flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">
                     {idx + 1}
                   </span>
-                  <div className="flex-1">
+                  <div className="flex-1 break-all">
                     <p className="text-gray-700 text-sm leading-relaxed mb-2">
                       {p.text_en}
                     </p>
@@ -186,7 +186,7 @@ const ArticleDetails = ({ article }) => {
             </h4>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 max-h-96 overflow-y-auto pr-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
+          <div className="grid grid-cols-1 gap-3 pr-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
             {article.entries.map((entry) => (
               <div
                 key={entry.id}
