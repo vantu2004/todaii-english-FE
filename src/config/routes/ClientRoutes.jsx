@@ -14,6 +14,7 @@ import {
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
 import SearchResults from "../../modules/clients/pages/SearchResults";
+import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
 
 export default function ClientRoutes() {
   return (
@@ -74,6 +75,7 @@ export default function ClientRoutes() {
         <Route path="/" element={<ClientLayout />}>
           <Route path="home" element={<Home />}></Route>
           <Route path="search" element={<SearchResults />}></Route>
+          <Route path="article/:id" element={<ArticleDetails />} />
         </Route>
 
         {/* PROTECTED routes (phải login mới vào được) */}

@@ -1,4 +1,3 @@
-// src/hooks/clients/useArticlesByDate.js
 import { useState, useEffect, useCallback } from "react";
 import { getArticlesByDate } from "../../api/clients/articleApi";
 
