@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import ToolBar from "../../../../components/servers/ToolBar";
 import Pagination from "../../../../components/servers/Pagination";
-import {
-  fetchVocabDecks,
-  createVocabDeck,
-} from "../../../../api/servers/vocabDeckApi";
+import { fetchVocabDecks } from "../../../../api/servers/vocabDeckApi";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
 import VocabDecksTable from "../../../../components/servers/manage_vocab_decks_page/VocabDecksTable";
+import { useNavigate } from "react-router-dom";
+import RedirectToolbar from "../../../../components/servers/RedirectToolbar";
 
 const ManageVocabDecks = () => {
+  const REDIRECT_URL = "/server/vocab-deck/create";
+
   const [decks, setDecks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  // Query
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState({
     page: 1,
     size: 10,
@@ -24,7 +23,6 @@ const ManageVocabDecks = () => {
     keyword: "",
   });
 
-  // Pagination meta
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -32,7 +30,6 @@ const ManageVocabDecks = () => {
     last: true,
   });
 
-  // Columns for Deck table
   const columns = [
     { key: "id", label: "ID", sortField: "id" },
     { key: "name", label: "Deck Name", sortField: "name" },
@@ -44,7 +41,6 @@ const ManageVocabDecks = () => {
     { key: "actions", label: "Actions" },
   ];
 
-  // Fetch Decks
   const reloadDecks = async () => {
     try {
       setLoading(true);
@@ -80,18 +76,6 @@ const ManageVocabDecks = () => {
     setQuery((prev) => ({ ...prev, ...values }));
   };
 
-  const handleConfirmCreate = async (formData) => {
-    try {
-      await createVocabDeck(formData);
-      await reloadDecks();
-
-      setIsCreateModalOpen(false);
-      toast.success("Vocab deck created successfully");
-    } catch (err) {
-      logError(err);
-    }
-  };
-
   return (
     <>
       <div className="flex flex-col h-full">
@@ -100,9 +84,9 @@ const ManageVocabDecks = () => {
             Manage Vocabulary Decks
           </h2>
 
-          <ToolBar
+          <RedirectToolbar
             updateQuery={updateQuery}
-            setIsModalOpen={setIsCreateModalOpen}
+            handleRedirect={() => navigate(REDIRECT_URL)}
           />
 
           <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
@@ -136,15 +120,6 @@ const ManageVocabDecks = () => {
           />
         </div>
       </div>
-
-      {/* Create Modal */}
-      {/* {isCreateModalOpen && (
-        <VocabDeckFormModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={handleConfirmCreate}
-        />
-      )} */}
     </>
   );
 };

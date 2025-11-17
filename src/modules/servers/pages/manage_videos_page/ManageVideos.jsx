@@ -13,7 +13,6 @@ const ManageVideos = () => {
 
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -81,18 +80,6 @@ const ManageVideos = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
-  const handleConfirmCreate = async (data) => {
-    try {
-      await createVideo(data);
-      await reloadVideos();
-
-      setIsCreateModalOpen(false);
-      toast.success("Video created successfully");
-    } catch (error) {
-      logError(error);
-    }
-  };
-
   return (
     <>
       <div className="flex flex-col h-full">
@@ -137,15 +124,6 @@ const ManageVideos = () => {
           />
         </div>
       </div>
-
-      {/* Modal tạo video */}
-      {/* {isCreateModalOpen && (
-        <VideoFormModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={handleConfirmCreate}
-        />
-      )} */}
     </>
   );
 };

@@ -3,7 +3,6 @@ import { formatISODate } from "./../../../utils/FormatDate";
 import {
   deleteVocabDeck,
   toggleVocabDeck,
-  updateVocabDeck,
 } from "../../../api/servers/vocabDeckApi";
 import toast from "react-hot-toast";
 import Modal from "../Modal";
@@ -17,6 +16,8 @@ import {
   Library,
 } from "lucide-react";
 import { logError } from "../../../utils/LogError";
+import { useNavigate } from "react-router-dom";
+import VocabDeckViewModal from "./VocabDeckViewModal";
 
 const VocabDecksTable = ({
   columns,
@@ -27,10 +28,11 @@ const VocabDecksTable = ({
 }) => {
   const [enabledStates, setEnabledStates] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedDeckIndex, setSelectedDeckIndex] = useState(null);
   const [selectedDeck, setSelectedDeck] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setEnabledStates(decks.map((deck) => deck.enabled));
@@ -59,32 +61,13 @@ const VocabDecksTable = ({
   };
 
   const handleUpdateClick = (index) => {
-    setSelectedDeckIndex(index);
-    setSelectedDeck(decks[index]);
-    setIsUpdateModalOpen(true);
+    const vocabDeckId = decks[index].id;
+    navigate(`/server/vocab-deck/${vocabDeckId}/update`);
   };
 
   const handleDeleteClick = (index) => {
     setSelectedDeckIndex(index);
     setIsDeleteModalOpen(true);
-  };
-
-  const handleConfirmUpdate = async (data) => {
-    if (selectedDeckIndex === null) return;
-
-    try {
-      const deckId = decks[selectedDeckIndex].id;
-      await updateVocabDeck(deckId, data);
-      await reloadDecks();
-
-      setSelectedDeckIndex(null);
-      setSelectedDeck(null);
-      setIsUpdateModalOpen(false);
-
-      toast.success("Vocab deck updated successfully");
-    } catch (err) {
-      logError(err);
-    }
   };
 
   const handleConfirmDelete = async () => {
@@ -231,24 +214,13 @@ const VocabDecksTable = ({
       </div>
 
       {/* Modal view deck */}
-      {/* {selectedDeck && (
+      {selectedDeck && (
         <VocabDeckViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
           deck={selectedDeck}
         />
-      )} */}
-
-      {/* Modal update deck */}
-      {/* {selectedDeck && (
-        <VocabDeckFormModal
-          isOpen={isUpdateModalOpen}
-          onClose={() => setIsUpdateModalOpen(false)}
-          mode={"update"}
-          initialData={selectedDeck}
-          onSubmit={handleConfirmUpdate}
-        />
-      )} */}
+      )}
 
       {/* Modal delete deck */}
       {selectedDeckIndex !== null && selectedDeckIndex !== undefined && (

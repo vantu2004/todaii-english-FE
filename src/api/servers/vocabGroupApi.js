@@ -1,5 +1,15 @@
 import { serverInstance } from "../../config/axios";
 
+export const fetchVocabGroupsNoPaged = async () => {
+  try {
+    const response = await serverInstance.get("/vocab-group/no-paged");
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchVocabGroups = async (
   page = 1,
   size = 10,

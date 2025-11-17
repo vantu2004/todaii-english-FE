@@ -167,7 +167,7 @@ const ArticlesTable = ({
                   <div className="flex items-center text-sm">
                     <button
                       onClick={() => handleParagraphClick(i)}
-                      className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                      className="p-2 text-orange-600 hover:bg-purple-50 rounded-lg transition-colors"
                       aria-label="Paragraph"
                     >
                       <Pilcrow className="w-5 h-5" />

@@ -172,7 +172,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => handleLyricClick(i)}
-                    className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                    className="p-2 text-orange-600 hover:bg-purple-50 rounded-lg transition-colors"
                   >
                     <FileText className="w-5 h-5" />
                   </button>
