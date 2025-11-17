@@ -1,4 +1,3 @@
-// src/hooks/clients/useArticles.js
 import { useState, useEffect } from "react";
 import {
   getLastestArticles,

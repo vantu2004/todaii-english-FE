@@ -22,6 +22,16 @@ export const getTopArticles = async (size) => {
   }
 };
 
+export const getArticleById = async (id) => {
+  try {
+    const response = await clientInstance.get(`/article/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Get top articles error:", err);
+    throw err;
+  }
+};
+
 export const getArticlesByDate = async (
   date,
   page = 1,
@@ -100,3 +110,5 @@ export const filterArticles = async ({
     throw err;
   }
 };
+
+

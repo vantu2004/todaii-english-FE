@@ -1,4 +1,3 @@
-// src/pages/clients/SearchResults.jsx
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useSearchParams, useNavigate } from "react-router-dom";
