@@ -1,8 +1,10 @@
 import React from "react";
 import { formatISODate } from "../../../utils/FormatDate";
 import { Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const LongArticleCard = ({
+  id,
   image_url,
   title,
   cefr_level,
@@ -13,7 +15,8 @@ const LongArticleCard = ({
   updated_at
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4 flex gap-4 hover:shadow-md transition hover:scale-101 duration-300 ease-in-out article-card">
+    <Link to={`/client/article/${id}`}
+     className="bg-white rounded-lg shadow-sm p-4 flex gap-4 hover:shadow-md transition hover:scale-101 duration-300 ease-in-out article-card">
       <img
         src={image_url}
         alt={title}
@@ -38,7 +41,7 @@ const LongArticleCard = ({
           <span>{formatISODate(updated_at)}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
