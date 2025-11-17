@@ -15,7 +15,7 @@ const VideoDetails = ({ video }) => {
   return (
     <div className="space-y-6">
       {/* === Video Player - Full Width === */}
-      <div className="rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all aspect-video">
+      <div className="rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all aspect-video max-w-4xl mx-auto">
         {video.embed_html ? (
           <div
             className="w-full h-full"

@@ -16,6 +16,8 @@ import { SearchX } from "lucide-react";
 import LyricFormModal from "../../../components/servers/manage_lyrics_page/LyricFormModal";
 import UploadSrtFileModal from "../../../components/servers/manage_lyrics_page/UploadSrtFileModal";
 import DeleteAllLyricsModal from "../../../components/servers/manage_lyrics_page/DeleteAllLyricsModal";
+import PreviewModal from "../../../components/servers/manage_lyrics_page/PreviewModal";
+import { fetchVideo } from "../../../api/servers/videoApi";
 
 const ManageLyrics = () => {
   const { id } = useParams();
@@ -26,6 +28,8 @@ const ManageLyrics = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteAllModalOpen, setIsDeleteAllModalOpen] = useState(false);
+
+  const [videoUrl, setVideoUrl] = useState("");
 
   const [query, setQuery] = useState({
     sortBy: "lineOrder",
@@ -68,6 +72,27 @@ const ManageLyrics = () => {
 
   const updateQuery = (newValues) => {
     setQuery((prev) => ({ ...prev, ...newValues }));
+  };
+
+  const handleFetchVideo = async () => {
+    try {
+      const response = await fetchVideo(id);
+      return response;
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  // custom hàm open preview modal thay vì dùng trực tiếp setIsPreviewModalOpen(true)
+  const openPreviewModal = async () => {
+    try {
+      const video = await handleFetchVideo();
+      setVideoUrl(video?.video_url || "");
+
+      setIsPreviewModalOpen(true);
+    } catch (err) {
+      logError(err);
+    }
   };
 
   const handleUploadSrtFile = async (file) => {
@@ -128,7 +153,7 @@ const ManageLyrics = () => {
 
         <LyricToolBar
           updateQuery={updateQuery}
-          setIsPreviewModalOpen={setIsPreviewModalOpen}
+          setIsPreviewModalOpen={openPreviewModal}
           setIsUploadModalOpen={setIsUploadModalOpen}
           setIsCreateModalOpen={setIsCreateModalOpen}
           setIsDeleteAllModalOpen={setIsDeleteAllModalOpen}
@@ -166,14 +191,13 @@ const ManageLyrics = () => {
         )}
       </motion.div>
 
-      {/* Modal Tạo mới */}
-      {isCreateModalOpen && (
-        <LyricFormModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          mode="create"
-          initialData={{}}
-          onSubmit={handleCreateLyric}
+      {/* Preview */}
+      {isPreviewModalOpen && (
+        <PreviewModal
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          videoUrl={videoUrl}
+          lyrics={lyrics}
         />
       )}
 
@@ -184,6 +208,17 @@ const ManageLyrics = () => {
           onClose={() => setIsUploadModalOpen(false)}
           onUpload={handleUploadSrtFile}
           onCreateBatch={handleCreateLyricBatch}
+        />
+      )}
+
+      {/* Create */}
+      {isCreateModalOpen && (
+        <LyricFormModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          mode="create"
+          initialData={{}}
+          onSubmit={handleCreateLyric}
         />
       )}
 

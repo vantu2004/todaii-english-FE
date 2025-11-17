@@ -18,6 +18,7 @@ const LyricFormModal = ({
   });
 
   const isCreate = mode === "create";
+  const primaryColor = isCreate ? "blue" : "yellow";
 
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
@@ -49,11 +50,9 @@ const LyricFormModal = ({
       title={
         <div className="flex items-center gap-3">
           <div
-            className={`p-2 bg-gradient-to-br ${
-              isCreate
-                ? "from-green-500 to-emerald-600"
-                : "from-blue-500 to-indigo-600"
-            } rounded-lg`}
+            className={`p-2 rounded-lg ${
+              isCreate ? "bg-blue-600" : "bg-yellow-500"
+            }`}
           >
             <Music className="text-white" size={24} />
           </div>
@@ -77,11 +76,11 @@ const LyricFormModal = ({
           </button>
           <button
             onClick={() => onSubmit(formData)}
-            className={`px-5 py-2.5 bg-gradient-to-r ${
+            className={`px-5 py-2.5 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 ${
               isCreate
-                ? "from-green-600 to-emerald-600"
-                : "from-blue-600 to-indigo-600"
-            } text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105`}
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-yellow-500 hover:bg-yellow-600"
+            }`}
           >
             {isCreate ? "Create Lyric" : "Save Changes"}
           </button>
@@ -90,9 +89,11 @@ const LyricFormModal = ({
     >
       <div className="space-y-5">
         {/* Line Order */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-blue-200/50 hover:border-blue-300 hover:shadow-md transition-all">
+        <div
+          className={`bg-${primaryColor}-50 rounded-2xl p-6 hover:border-${primaryColor}-300 hover:shadow-md transition-all`}
+        >
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <Type size={16} className="text-blue-600" />
+            <Type size={16} className={`text-${primaryColor}-600`} />
             Line Order <span className="text-red-500">*</span>
           </label>
           <input
@@ -100,14 +101,16 @@ const LyricFormModal = ({
             value={formData.line_order}
             onChange={(e) => updateField("line_order", Number(e.target.value))}
             placeholder="1"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+            className={`w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-${primaryColor}-500 focus:ring-2 focus:ring-${primaryColor}-200 outline-none transition-all`}
           />
         </div>
 
         {/* Start ms */}
-        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-6 border border-purple-200/50 hover:border-purple-300 hover:shadow-md transition-all">
+        <div
+          className={`bg-${primaryColor}-50 rounded-2xl p-6 hover:border-${primaryColor}-300 hover:shadow-md transition-all`}
+        >
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <Clock size={16} className="text-purple-600" />
+            <Clock size={16} className={`text-${primaryColor}-600`} />
             Start (ms) <span className="text-red-500">*</span>
           </label>
           <input
@@ -115,14 +118,16 @@ const LyricFormModal = ({
             value={formData.start_ms}
             onChange={(e) => updateField("start_ms", Number(e.target.value))}
             placeholder="0"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+            className={`w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-${primaryColor}-500 focus:ring-2 focus:ring-${primaryColor}-200 outline-none transition-all`}
           />
         </div>
 
         {/* End ms */}
-        <div className="bg-gradient-to-br from-slate-50 to-orange-50 rounded-2xl p-6 border border-orange-200/50 hover:border-orange-300 hover:shadow-md transition-all">
+        <div
+          className={`bg-${primaryColor}-50 rounded-2xl p-6 hover:border-${primaryColor}-300 hover:shadow-md transition-all`}
+        >
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <Clock size={16} className="text-orange-600" />
+            <Clock size={16} className={`text-${primaryColor}-600`} />
             End (ms) <span className="text-red-500">*</span>
           </label>
           <input
@@ -130,35 +135,39 @@ const LyricFormModal = ({
             value={formData.end_ms}
             onChange={(e) => updateField("end_ms", Number(e.target.value))}
             placeholder="3000"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+            className={`w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-${primaryColor}-500 focus:ring-2 focus:ring-${primaryColor}-200 outline-none transition-all`}
           />
         </div>
 
         {/* English Text */}
-        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-6 border border-green-200/50 hover:border-green-300 hover:shadow-md transition-all">
+        <div
+          className={`bg-${primaryColor}-50 rounded-2xl p-6 hover:border-${primaryColor}-300 hover:shadow-md transition-all`}
+        >
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <Type size={16} className="text-green-600" />
+            <Type size={16} className={`text-${primaryColor}-600`} />
             English Text <span className="text-red-500">*</span>
           </label>
           <textarea
             value={formData.text_en}
             onChange={(e) => updateField("text_en", e.target.value)}
             placeholder="Enter English lyrics..."
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all resize-y"
+            className={`w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-${primaryColor}-500 focus:ring-2 focus:ring-${primaryColor}-200 outline-none transition-all resize-y`}
           />
         </div>
 
         {/* Vietnamese Text */}
-        <div className="bg-gradient-to-br from-slate-50 to-pink-50 rounded-2xl p-6 border border-pink-200/50 hover:border-pink-300 hover:shadow-md transition-all">
+        <div
+          className={`bg-${primaryColor}-50 rounded-2xl p-6 hover:border-${primaryColor}-300 hover:shadow-md transition-all`}
+        >
           <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <Type size={16} className="text-pink-600" />
+            <Type size={16} className={`text-${primaryColor}-600`} />
             Vietnamese Text <span className="text-red-500">*</span>
           </label>
           <textarea
             value={formData.text_vi}
             onChange={(e) => updateField("text_vi", e.target.value)}
             placeholder="Nhập lời Việt..."
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all resize-y"
+            className={`w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-${primaryColor}-500 focus:ring-2 focus:ring-${primaryColor}-200 outline-none transition-all resize-y`}
           />
         </div>
       </div>

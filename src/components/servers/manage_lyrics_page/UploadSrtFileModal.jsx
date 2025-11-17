@@ -53,7 +53,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
       title={
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
               <FileText className="text-white" size={20} />
             </div>
             <div>
@@ -93,7 +93,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
             <button
               onClick={handleSave}
               disabled={lines.length === 0}
-              className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className="px-5 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
             >
               Save Changes
             </button>
@@ -112,12 +112,12 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
             type="file"
             accept=".srt,.txt"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
           />
         </div>
 
         <p className="mt-2 text-xs text-red-500">
-          Only supported formats ".srt"
+          Only supported format ".srt"
         </p>
       </div>
 
@@ -175,7 +175,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             Number(e.target.value)
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
                       />
                     </td>
 
@@ -190,7 +190,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             Number(e.target.value)
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
                       />
                     </td>
 
@@ -205,7 +205,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             e.target.value
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
                       />
                     </td>
 
@@ -220,7 +220,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             e.target.value
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
                       />
                     </td>
 
