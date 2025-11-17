@@ -41,6 +41,7 @@ export const fetchVideos = async (
 };
 
 export const fetchVideo = async (videoId) => {
+  console.log(videoId);
   try {
     const response = await serverInstance.get(`/video/${videoId}`);
     return response.data;

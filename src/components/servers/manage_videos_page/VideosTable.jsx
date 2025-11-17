@@ -15,6 +15,7 @@ import {
 import { toggleVideo, deleteVideo } from "../../../api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
 import { logError } from "../../../utils/LogError";
+import VideoViewModal from "./VideoViewModal";
 
 const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
   const [statusStates, setStatusStates] = useState([]);
@@ -237,13 +238,13 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
       </div>
 
       {/* View Modal */}
-      {/* {selectedVideo && (
+      {selectedVideo && (
         <VideoViewModal
           isOpen={isViewModalOpen}
           onClose={() => setIsViewModalOpen(false)}
           video={selectedVideo}
         />
-      )} */}
+      )}
 
       {/* Delete Modal */}
       {selectedIndex !== null && (

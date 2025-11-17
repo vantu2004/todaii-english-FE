@@ -21,6 +21,7 @@ import Youtube from "../../modules/servers/pages/manage_videos_page/Youtube";
 import ManageVideos from "../../modules/servers/pages/manage_videos_page/ManageVideos";
 import CreateVideo from "../../modules/servers/pages/manage_videos_page/CreateVideo";
 import UpdateVideo from "../../modules/servers/pages/manage_videos_page/UpdateVideo";
+import ManageLyrics from "../../modules/servers/pages/ManageLyrics";
 import ManageVocabGroups from "../../modules/servers/pages/ManageVocabGroups";
 import ManageVocabDecks from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabDecks";
 
@@ -182,14 +183,14 @@ export default function ServerRoutes() {
             }
           />
 
-          {/* <Route
+          <Route
             path="/video/:id/lyric"
             element={
               <ServerProtectRoutes>
-                <ManageParagraphs />
+                <ManageLyrics />
               </ServerProtectRoutes>
             }
-          /> */}
+          />
 
           <Route
             path="/vocab-group"
