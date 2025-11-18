@@ -55,6 +55,11 @@ const VocabDecksTable = ({
     }
   };
 
+  const handleVocabClick = (index) => {
+    const vocabDeckId = decks[index].id;
+    navigate(`/server/vocab-deck/${vocabDeckId}/vocab`);
+  };
+
   const handleViewClick = (index) => {
     setSelectedDeck(decks[index]);
     setIsViewModalOpen(true);
@@ -157,6 +162,7 @@ const VocabDecksTable = ({
                 <td className="px-4 py-3">
                   <div className="flex items-center text-sm">
                     <button
+                      onClick={() => handleVocabClick(i)}
                       className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                       aria-label="Vocabulary"
                     >

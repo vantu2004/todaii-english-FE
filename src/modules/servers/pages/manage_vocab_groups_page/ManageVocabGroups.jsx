@@ -37,7 +37,8 @@ const ManageVocabGroups = () => {
     { key: "id", label: "ID", sortField: "id" },
     { key: "name", label: "Group Name", sortField: "name" },
     { key: "alias", label: "Alias", sortField: "alias" },
-    { key: "updatedAt", label: "Updated At", sortField: "updatedAt" },
+    { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
+    { key: "vocab_deck", label: "Vocab Decks" },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];

@@ -29,6 +29,7 @@ import UpdateVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page
 import ArticlesInTopic from "../../modules/servers/pages/manage_topics_page/ArticlesInTopic";
 import VideosInTopic from "../../modules/servers/pages/manage_topics_page/VideosInTopic";
 import VocabDecksInGroup from "../../modules/servers/pages/manage_vocab_groups_page/VocabDecksInGroup";
+import ManageVocabs from "../../modules/servers/pages/manage_vocab_groups_page/ManageVocabs";
 
 export default function ServerRoutes() {
   return (
@@ -256,6 +257,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <UpdateVocabDeck />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/vocab-deck/:id/vocab"
+            element={
+              <ServerProtectRoutes>
+                <ManageVocabs />
               </ServerProtectRoutes>
             }
           />
