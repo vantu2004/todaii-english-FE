@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/Pagination";
-import { fetchTopics, createTopic } from "../../../api/servers/topicApi";
-import TopicsTable from "../../../components/servers/manage_topics_page/TopicsTable";
-import TopicFormModal from "../../../components/servers/manage_topics_page/TopicFormModal";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/Pagination";
+import { fetchTopics, createTopic } from "../../../../api/servers/topicApi";
+import TopicsTable from "../../../../components/servers/manage_topics_page/TopicsTable";
+import TopicFormModal from "../../../../components/servers/manage_topics_page/TopicFormModal";
 import { motion } from "framer-motion";
-import { logError } from "../../../utils/LogError";
+import { logError } from "../../../../utils/LogError";
 
 const ManageTopics = ({ topicType }) => {
   const [topics, setTopics] = useState([]);
@@ -36,6 +36,10 @@ const ManageTopics = ({ topicType }) => {
     { key: "alias", label: "Alias", sortField: "alias" },
     { key: "topicType", label: "Type", sortField: "topicType" },
     { key: "updatedAt", label: "Updated At", sortField: "updatedAt" },
+    {
+      key: `${topicType} === "video" ? "video" : "article`,
+      label: `${topicType === "video" ? "Videos" : "Articles"}`,
+    },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];
@@ -116,6 +120,7 @@ const ManageTopics = ({ topicType }) => {
           className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
         >
           <TopicsTable
+            topicType={topicType}
             columns={columns}
             topics={topics}
             reloadTopics={reloadTopics}

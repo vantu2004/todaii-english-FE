@@ -39,6 +39,25 @@ export const fetchArticles = async (
   }
 };
 
+export const fetchArticlesByTopic = async (
+  topicId,
+  page = 1,
+  size = 10,
+  sortBy = "id",
+  direction = "desc",
+  keyword = ""
+) => {
+  try {
+    const response = await serverInstance.get(`/article/topic/${topicId}`, {
+      params: { page, size, sortBy, direction, keyword },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchArticle = async (articleId) => {
   try {
     const response = await serverInstance.get(`/article/${articleId}`);

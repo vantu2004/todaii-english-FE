@@ -10,6 +10,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  TextAlignStart,
 } from "lucide-react";
 import {
   deleteTopic,
@@ -17,17 +18,37 @@ import {
   updateTopic,
 } from "../../../api/servers/topicApi";
 import { logError } from "../../../utils/LogError";
+import { useNavigate } from "react-router-dom";
 
-const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
+const TopicsTable = ({
+  topicType,
+  columns,
+  topics,
+  reloadTopics,
+  query,
+  updateQuery,
+}) => {
   const [enabledStates, setEnabledStates] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedName, setEditedName] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTopicIndex, setSelectedTopicIndex] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setEnabledStates(topics.map((topic) => topic.enabled));
   }, [topics]);
+
+  const handleListClick = (index) => {
+    const topicId = topics[index].id;
+
+    if (topicType === "article") {
+      navigate(`/server/topic/${topicId}/article`);
+    } else if (topicType === "video") {
+      navigate(`/server/topic/${topicId}/video`);
+    }
+  };
 
   const handleToggle = async (index) => {
     setEnabledStates((prev) => {
@@ -178,6 +199,15 @@ const TopicsTable = ({ columns, topics, reloadTopics, query, updateQuery }) => {
                   <td className="px-4 py-3 text-sm">{topic.topic_type}</td>
                   <td className="px-4 py-3 text-sm">
                     {formatISODate(topic.updated_at)}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => handleListClick(i)}
+                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                    >
+                      <TextAlignStart className="w-5 h-5" />
+                    </button>
                   </td>
 
                   {/* Enable toggle */}

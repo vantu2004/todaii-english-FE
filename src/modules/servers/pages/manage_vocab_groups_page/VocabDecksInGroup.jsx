@@ -1,9 +1,12 @@
-import { fetchVocabDecks } from "../../../../api/servers/vocabDeckApi";
+import { fetchVocabDecksByGroup } from "../../../../api/servers/vocabDeckApi";
 import GenericVocabGroupList from "../../../../components/servers/GenericVocabGroupList";
+import { useParams } from "react-router-dom";
 
-const ManageVocabDecks = () => {
+const VocabDecksInGroup = () => {
+  const { id } = useParams();
   const fetchApi = (query) =>
-    fetchVocabDecks(
+    fetchVocabDecksByGroup(
+      id,
       query.page,
       query.size,
       query.sortBy,
@@ -13,10 +16,10 @@ const ManageVocabDecks = () => {
 
   return (
     <GenericVocabGroupList
-      title="Manage Vocabulary Decks"
+      title="Vocabulary Decks in Group"
       fetchApi={fetchApi}
     />
   );
 };
 
-export default ManageVocabDecks;
+export default VocabDecksInGroup;

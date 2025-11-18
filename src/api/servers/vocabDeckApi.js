@@ -18,6 +18,25 @@ export const fetchVocabDecks = async (
   }
 };
 
+export const fetchVocabDecksByGroup = async (
+  groupId,
+  page = 1,
+  size = 10,
+  sortBy = "id",
+  direction = "desc",
+  keyword = ""
+) => {
+  try {
+    const response = await serverInstance.get(`/vocab-deck/group/${groupId}`, {
+      params: { page, size, sortBy, direction, keyword },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchVocabDeck = async (id) => {
   try {
     const response = await serverInstance.get(`/vocab-deck/${id}`);

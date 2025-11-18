@@ -10,6 +10,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  TextAlignStart,
 } from "lucide-react";
 
 import {
@@ -17,8 +18,8 @@ import {
   toggleVocabGroup,
   updateVocabGroup,
 } from "../../../api/servers/vocabGroupApi";
-
 import { logError } from "../../../utils/LogError";
+import { useNavigate } from "react-router-dom";
 
 const VocabGroupsTable = ({
   columns,
@@ -33,9 +34,16 @@ const VocabGroupsTable = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setEnabledStates(groups.map((g) => g.enabled));
   }, [groups]);
+
+  const handleListClick = (index) => {
+    const vocabGroupId = groups[index].id;
+    navigate(`/server/vocab-group/${vocabGroupId}/vocab-deck`);
+  };
 
   const handleToggle = async (index) => {
     setEnabledStates((prev) => {
@@ -187,6 +195,15 @@ const VocabGroupsTable = ({
 
                   <td className="px-4 py-3 text-sm">
                     {formatISODate(group.updated_at)}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => handleListClick(i)}
+                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                    >
+                      <TextAlignStart className="w-5 h-5" />
+                    </button>
                   </td>
 
                   {/* Enable toggle */}

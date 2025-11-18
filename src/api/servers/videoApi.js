@@ -40,6 +40,25 @@ export const fetchVideos = async (
   }
 };
 
+export const fetchVideosByTopic = async (
+  topicId,
+  page = 1,
+  size = 10,
+  sortBy = "id",
+  direction = "desc",
+  keyword = ""
+) => {
+  try {
+    const response = await serverInstance.get(`/video/topic/${topicId}`, {
+      params: { page, size, sortBy, direction, keyword },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchVideo = async (videoId) => {
   try {
     const response = await serverInstance.get(`/video/${videoId}`);

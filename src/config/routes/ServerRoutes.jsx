@@ -9,7 +9,7 @@ import ServerLayout from "../../modules/servers/layouts/ServerLayout";
 import Dashboard from "../../modules/servers/pages/Dashboard";
 import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
 import ManageUsers from "../../modules/servers/pages/ManageUsers";
-import ManageTopics from "../../modules/servers/pages/ManageTopics";
+import ManageTopics from "../../modules/servers/pages/manage_topics_page/ManageTopics";
 import ManageDictionary from "../../modules/servers/pages/manage_dictionary_page/ManageDictionary";
 import DictionaryApi from "../../modules/servers/pages/manage_dictionary_page/DictionaryApi";
 import NewsApi from "../../modules/servers/pages/manage_articles_page/NewsApi";
@@ -22,10 +22,13 @@ import ManageVideos from "../../modules/servers/pages/manage_videos_page/ManageV
 import CreateVideo from "../../modules/servers/pages/manage_videos_page/CreateVideo";
 import UpdateVideo from "../../modules/servers/pages/manage_videos_page/UpdateVideo";
 import ManageLyrics from "../../modules/servers/pages/ManageLyrics";
-import ManageVocabGroups from "../../modules/servers/pages/ManageVocabGroups";
+import ManageVocabGroups from "../../modules/servers/pages/manage_vocab_groups_page/ManageVocabGroups";
 import ManageVocabDecks from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabDecks";
 import CreateVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/CreateVocabDeck";
 import UpdateVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/UpdateVocabDeck";
+import ArticlesInTopic from "../../modules/servers/pages/manage_topics_page/ArticlesInTopic";
+import VideosInTopic from "../../modules/servers/pages/manage_topics_page/VideosInTopic";
+import VocabDecksInGroup from "../../modules/servers/pages/manage_vocab_groups_page/VocabDecksInGroup";
 
 export default function ServerRoutes() {
   return (
@@ -105,6 +108,15 @@ export default function ServerRoutes() {
           />
 
           <Route
+            path="/topic/:id/article"
+            element={
+              <ServerProtectRoutes>
+                <ArticlesInTopic />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
             path="/article"
             element={
               <ServerProtectRoutes>
@@ -145,6 +157,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageTopics topicType="video" />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/topic/:id/video"
+            element={
+              <ServerProtectRoutes>
+                <VideosInTopic />
               </ServerProtectRoutes>
             }
           />
@@ -199,6 +220,15 @@ export default function ServerRoutes() {
             element={
               <ServerProtectRoutes>
                 <ManageVocabGroups />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/vocab-group/:id/vocab-deck"
+            element={
+              <ServerProtectRoutes>
+                <VocabDecksInGroup />
               </ServerProtectRoutes>
             }
           />
