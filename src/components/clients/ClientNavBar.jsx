@@ -67,7 +67,7 @@ const ClientNavBar = () => {
         {/* Logo with gradient */}
         <Link
           to="/"
-          className="text-3xl font-extrabold select-none flex-shrink-0 group"
+          className="text-3xl font-extrabold select-none flex-shrink-0 group ml-13"
         >
           <span className="bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-blue-600 transition-all duration-300">
             Todaii
@@ -78,7 +78,7 @@ const ClientNavBar = () => {
         </Link>
 
         {/* Desktop menu with icons */}
-        <div className="hidden lg:flex items-center gap-2 ml-12">
+        <div className="hidden lg:flex items-center gap-2 -ml-10">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
