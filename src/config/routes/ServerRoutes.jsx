@@ -29,7 +29,7 @@ import UpdateVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page
 import ArticlesInTopic from "../../modules/servers/pages/manage_topics_page/ArticlesInTopic";
 import VideosInTopic from "../../modules/servers/pages/manage_topics_page/VideosInTopic";
 import VocabDecksInGroup from "../../modules/servers/pages/manage_vocab_groups_page/VocabDecksInGroup";
-import ManageVocabs from "../../modules/servers/pages/manage_vocab_groups_page/ManageVocabs";
+import ManageVocabs from "../../modules/servers/pages/ManageVocabs";
 
 export default function ServerRoutes() {
   return (

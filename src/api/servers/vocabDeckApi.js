@@ -83,6 +83,15 @@ export const deleteWordFromDeck = async (deckId, wordId) => {
   }
 };
 
+export const deleteAllWordsFromDeck = async (deckId) => {
+  try {
+    await serverInstance.delete(`/vocab-deck/${deckId}/word`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const updateVocabDeck = async (id, data) => {
   try {
     await serverInstance.put(`/vocab-deck/${id}`, data);
