@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
+
 import {
   Menu,
   X,
@@ -29,7 +30,7 @@ const ClientNavBar = () => {
 
   const { authUser, isLoggedIn, handleLogout } = useClientAuthContext();
 
-  console.log(isLoggedIn)
+  console.log(isLoggedIn);
 
   // Handle scroll effect
   useEffect(() => {
