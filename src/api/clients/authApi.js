@@ -32,6 +32,18 @@ export const login = async (email, password) => {
   }
 };
 
+export const logout = async (email) => {
+  try {
+    await clientInstance.post(`/auth/logout?email=${email}`);
+  } catch (err) {
+    console.log("Error:", err);
+    console.log("Status:", err.response.status);
+    console.log("Error message:", err.response.data.message);
+    console.error("Logout error:", err);
+    throw err;
+  }
+};
+
 export const verifyOtp = async (email, otp) => {
   try {
     const response = await clientInstance.post("/auth/verify-otp", {

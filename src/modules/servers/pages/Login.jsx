@@ -31,7 +31,7 @@ const Login = () => {
       setAuthUser(myProfile);
       setIsLoggedIn(true);
 
-      toast.success("Login successful!");
+      toast.success("Login successfully!");
 
       navigate("/server");
     } catch (err) {

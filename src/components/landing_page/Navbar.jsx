@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useClientAuthContext } from '../../hooks/clients/useClientAuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-
-  const { isLoggedIn } = useClientAuthContext();
 
   return (
     <nav className="w-[90%] max-w-[1100px] mx-auto mt-4 relative z-[100]">
@@ -25,7 +22,7 @@ const Navbar = () => {
         {/* Desktop buttons */}
         <div className="hidden md:flex items-center gap-4">
           <button
-            onClick={() => {isLoggedIn ? navigate("/client/home") : navigate("/client/login")}}
+            onClick={() => navigate("/client/home")}
             className="px-5 py-2.5 rounded-full font-semibold text-white bg-[#13183f] hover:bg-indigo-600 hover:scale-105 transition-all duration-200"
           >
             Get Started

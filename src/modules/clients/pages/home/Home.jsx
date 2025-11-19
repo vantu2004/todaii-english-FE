@@ -1,6 +1,4 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import BigArticleCard from "../../../../components/clients/home_page/BigArticleCard";
 import ArticleCard from "../../../../components/clients/home_page/ArticleCard";
 import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";
@@ -32,7 +30,7 @@ const Home = () => {
   } = useArticlesByDate();
 
   return (
-    <div className="mt-15 bg-[#f9fafc] min-h-screen py-6">
+    <div className="mt-20 bg-[#f9fafc] min-h-screen py-6">
       <div className="flex flex-wrap max-w-300 mx-auto gap-6">
         {/* LEFT SIDE */}
         <div className="flex-1 px-10">

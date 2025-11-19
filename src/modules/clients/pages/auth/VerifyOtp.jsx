@@ -20,7 +20,7 @@ const VerifyOtp = () => {
 
     try {
       await verifyOtp(email, otp);
-      toast.success("Verify successful!");
+      toast.success("Verify successfully!");
       navigate("/client/login");
     } catch (err) {
       if (err.response?.status === 401) {
