@@ -7,8 +7,11 @@ import ArticleDetails from "../../../../components/servers/manage_articles_page/
 import ListParagraphs from "../../../../components/servers/manage_articles_page/ListParagraphs";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageParagraphs = () => {
+  const { setHeader } = useHeaderContext();
+
   const { id } = useParams();
 
   const [article, setArticle] = useState(null);
@@ -24,6 +27,17 @@ const ManageParagraphs = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Articles",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Articles", to: "/server/article" },
+        { label: "Manage Paragraphs" },
+      ],
+    });
+  }, []);
 
   useEffect(() => {
     handleFetchArticle();
@@ -44,30 +58,22 @@ const ManageParagraphs = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex-none flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Paragraphs
-        </h2>
+      <div className="flex items-center justify-between mb-2">
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-sm sm:text-base">Back to previous page</span>
+        </button>
 
-        <div className="flex items-center gap-3">
-          {/* Reload */}
-          <button
-            onClick={handleFetchArticle}
-            className="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-sm hover:shadow-md active:scale-95 transition-all"
-            aria-label="Reload"
-          >
-            <RefreshCw className="w-5 h-5" />
-          </button>
-
-          {/* Back */}
-          <button
-            onClick={() => window.history.back()}
-            className="p-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md active:scale-95 transition-all"
-            aria-label="Back"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-        </div>
+        <button
+          onClick={handleFetchArticle}
+          className="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-sm hover:shadow-md active:scale-95 transition-all"
+          aria-label="Reload"
+        >
+          <RefreshCw className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Main Content */}

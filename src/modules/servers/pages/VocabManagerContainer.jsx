@@ -9,6 +9,7 @@ import SelectedWordsPanel from "../../../components/servers/manage_vocabs_page/S
 import { logError } from "../../../utils/LogError";
 import { createDictionaryEntryByGemini } from "../../../api/servers/dictionaryApi";
 import DictionaryViewModal from "../../../components/servers/manage_dictionary_page/DictionaryViewModal";
+import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 
 const VocanManagerContainer = ({
   fetchApi, // (id) => fetch data
@@ -18,6 +19,8 @@ const VocanManagerContainer = ({
   title,
   onAutoGenerate, // optional
 }) => {
+  const { setHeader } = useHeaderContext();
+
   const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
@@ -110,6 +113,32 @@ const VocanManagerContainer = ({
     setIsViewModalOpen(true);
   };
 
+  useEffect(() => {
+    const breadcrumbs = [
+      { label: "Home", to: "/server" },
+      ...(title === "ARTICLE"
+        ? [{ label: "Manage Articles", to: "/server/article" }]
+        : title === "VIDEO"
+        ? [{ label: "Manage Videos", to: "/server/video" }]
+        : title === "VOCABULARY DECK"
+        ? [{ label: "Manage Vocabulary Decks", to: "/server/vocab-deck" }]
+        : []),
+      { label: "Manage Vocabularies" },
+    ];
+
+    setHeader({
+      title:
+        title === "ARTICLE"
+          ? "Manage Articles"
+          : title === "VIDEO"
+          ? "Manage Videos"
+          : title === "VOCABULARY DECK"
+          ? "Manage Vocabulary Decks"
+          : title,
+      breadcrumb: breadcrumbs,
+    });
+  }, [title]);
+
   return (
     <>
       <div className="flex flex-col h-full">
@@ -120,7 +149,7 @@ const VocanManagerContainer = ({
             className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-3 sm:mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-sm sm:text-base">Back to Content</span>
+            <span className="text-sm sm:text-base">Back to previous page</span>
           </button>
 
           <VocabHeader

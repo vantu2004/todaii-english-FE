@@ -7,8 +7,11 @@ import TopicsTable from "../../../../components/servers/manage_topics_page/Topic
 import TopicFormModal from "../../../../components/servers/manage_topics_page/TopicFormModal";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageTopics = ({ topicType }) => {
+  const { setHeader } = useHeaderContext();
+
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -73,6 +76,18 @@ const ManageTopics = ({ topicType }) => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: `Manage ${topicType === "video" ? "Videos" : "Articles"}`,
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        {
+          label: `Manage ${topicType === "video" ? "Video" : "Article"} Topics`,
+        },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadTopics();
   }, [topicType, query]); // reload khi query thay đổi
 
@@ -96,20 +111,10 @@ const ManageTopics = ({ topicType }) => {
   return (
     <>
       <div className="flex flex-col h-full">
-        <div className="flex-none">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Manage Topics
-          </h2>
-
-          <ToolBar
-            updateQuery={updateQuery}
-            setIsModalOpen={setIsCreateModalOpen}
-          />
-
-          <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-            Topics Table
-          </h4>
-        </div>
+        <ToolBar
+          updateQuery={updateQuery}
+          setIsModalOpen={setIsCreateModalOpen}
+        />
 
         {/* Bảng cuộn riêng */}
         <motion.div

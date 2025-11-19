@@ -8,14 +8,28 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const UpdateArticle = () => {
+  const { setHeader } = useHeaderContext();
+
   const { id } = useParams();
 
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Articles",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Articles", to: "/server/article" },
+        { label: "Update Article" },
+      ],
+    });
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -55,12 +69,6 @@ const UpdateArticle = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Articles
-        </h2>
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}

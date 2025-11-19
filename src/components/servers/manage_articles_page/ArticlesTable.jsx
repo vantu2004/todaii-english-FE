@@ -10,7 +10,7 @@ import {
   ArrowDown,
   AlertTriangle,
   Pilcrow,
-  Library,
+  BookA,
 } from "lucide-react";
 import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
@@ -172,7 +172,7 @@ const ArticlesTable = ({
                   <div className="flex items-center text-sm">
                     <button
                       onClick={() => handleParagraphClick(i)}
-                      className="p-2 text-orange-600 hover:bg-purple-50 rounded-lg transition-colors"
+                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                       aria-label="Paragraph"
                     >
                       <Pilcrow className="w-5 h-5" />
@@ -186,7 +186,7 @@ const ArticlesTable = ({
                       className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                       aria-label="Vocabulary"
                     >
-                      <Library className="w-5 h-5" />
+                      <BookA className="w-5 h-5" />
                     </button>
                   </div>
                 </td>

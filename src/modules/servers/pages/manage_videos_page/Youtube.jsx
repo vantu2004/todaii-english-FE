@@ -6,6 +6,7 @@ import {
   fetchVideoByUrl,
   fetchVideoByKeyword,
 } from "../../../../api/servers/videoApi";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const truncateText = (text, maxLength = 50) =>
   text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
@@ -13,6 +14,8 @@ const truncateText = (text, maxLength = 50) =>
 const isUrl = (text) => /^https?:\/\//.test(text);
 
 const Youtube = () => {
+  const { setHeader } = useHeaderContext();
+
   const [videoUrl, setVideoUrl] = useState();
   const [videosKeyword, setVideosKeyword] = useState({
     video: [],
@@ -21,6 +24,13 @@ const Youtube = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Videos",
+      breadcrumb: [{ label: "Home", to: "/server" }, { label: "Youtube" }],
+    });
+  }, []);
 
   // Load recent searches
   useEffect(() => {

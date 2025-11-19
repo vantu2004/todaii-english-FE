@@ -18,8 +18,11 @@ import UploadSrtFileModal from "../../../components/servers/manage_lyrics_page/U
 import DeleteAllLyricsModal from "../../../components/servers/manage_lyrics_page/DeleteAllLyricsModal";
 import PreviewModal from "../../../components/servers/manage_lyrics_page/PreviewModal";
 import { fetchVideo } from "../../../api/servers/videoApi";
+import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 
 const ManageLyrics = () => {
+  const { setHeader } = useHeaderContext();
+
   const { id } = useParams();
 
   const [lyrics, setLyrics] = useState([]);
@@ -65,6 +68,17 @@ const ManageLyrics = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Videos",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Videos", to: "/server/video" },
+        { label: "Manage Lyrics" },
+      ],
+    });
+  }, []);
 
   useEffect(() => {
     reloadLyrics();
@@ -146,23 +160,13 @@ const ManageLyrics = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Lyrics
-        </h2>
-
-        <LyricToolBar
-          updateQuery={updateQuery}
-          setIsPreviewModalOpen={openPreviewModal}
-          setIsUploadModalOpen={setIsUploadModalOpen}
-          setIsCreateModalOpen={setIsCreateModalOpen}
-          setIsDeleteAllModalOpen={setIsDeleteAllModalOpen}
-        />
-
-        <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Lyrics Table
-        </h4>
-      </div>
+      <LyricToolBar
+        updateQuery={updateQuery}
+        setIsPreviewModalOpen={openPreviewModal}
+        setIsUploadModalOpen={setIsUploadModalOpen}
+        setIsCreateModalOpen={setIsCreateModalOpen}
+        setIsDeleteAllModalOpen={setIsDeleteAllModalOpen}
+      />
 
       {/* Table Scroll */}
       <motion.div

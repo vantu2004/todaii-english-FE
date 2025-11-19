@@ -5,8 +5,11 @@ import { logError } from "../../utils/LogError";
 import VocabDecksTable from "../../components/servers/manage_vocab_decks_page/VocabDecksTable";
 import { useNavigate } from "react-router-dom";
 import RedirectToolbar from "../../components/servers/RedirectToolbar";
+import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
 
 const GenericVocabGroupList = ({ title, fetchApi }) => {
+  const { setHeader } = useHeaderContext();
+
   const REDIRECT_URL = "/server/vocab-deck/create";
 
   const [decks, setDecks] = useState([]);
@@ -62,6 +65,19 @@ const GenericVocabGroupList = ({ title, fetchApi }) => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: title,
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        ...(window.location.pathname !== "/server/vocab-deck"
+          ? [{ label: "Manage Vocabulary Groups", to: "/server/vocab-group" }]
+          : []),
+        { label: title },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadDecks();
   }, [query]);
 
@@ -72,20 +88,10 @@ const GenericVocabGroupList = ({ title, fetchApi }) => {
   return (
     <>
       <div className="flex flex-col h-full">
-        <div className="flex-none">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {title}
-          </h2>
-
-          <RedirectToolbar
-            updateQuery={updateQuery}
-            handleRedirect={() => navigate(REDIRECT_URL)}
-          />
-
-          <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-            Vocab Decks Table
-          </h4>
-        </div>
+        <RedirectToolbar
+          updateQuery={updateQuery}
+          handleRedirect={() => navigate(REDIRECT_URL)}
+        />
 
         {/* Table Wrapper */}
         <motion.div

@@ -9,7 +9,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
-  Library,
+  BookA,
   FileText,
 } from "lucide-react";
 import { toggleVideo, deleteVideo } from "../../../api/servers/videoApi";
@@ -177,7 +177,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => handleLyricClick(i)}
-                    className="p-2 text-orange-600 hover:bg-purple-50 rounded-lg transition-colors"
+                    className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                   >
                     <FileText className="w-5 h-5" />
                   </button>
@@ -189,7 +189,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                     onClick={() => handleVocabClick(i)}
                     className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                   >
-                    <Library className="w-5 h-5" />
+                    <BookA className="w-5 h-5" />
                   </button>
                 </td>
 

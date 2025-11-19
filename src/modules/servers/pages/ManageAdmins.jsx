@@ -7,8 +7,11 @@ import Pagination from "../../../components/servers/Pagination";
 import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
 import { motion } from "framer-motion";
 import { logError } from "../../../utils/LogError";
+import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 
 const ManageAdmins = () => {
+  const { setHeader } = useHeaderContext();
+
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -70,6 +73,16 @@ const ManageAdmins = () => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Users",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Admins" },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadAdmins();
   }, [query]); // tự động reload admins khi query thay đổi
 
@@ -92,20 +105,10 @@ const ManageAdmins = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Admins
-        </h2>
-
-        <ToolBar
-          updateQuery={updateQuery}
-          setIsModalOpen={setIsCreateModalOpen}
-        />
-
-        <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Admins Table
-        </h4>
-      </div>
+      <ToolBar
+        updateQuery={updateQuery}
+        setIsModalOpen={setIsCreateModalOpen}
+      />
 
       {/* Vùng bảng cuộn riêng */}
       <motion.div

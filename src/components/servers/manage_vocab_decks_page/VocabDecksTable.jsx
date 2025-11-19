@@ -13,7 +13,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
-  Library,
+  BookA,
 } from "lucide-react";
 import { logError } from "../../../utils/LogError";
 import { useNavigate } from "react-router-dom";
@@ -166,7 +166,7 @@ const VocabDecksTable = ({
                       className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                       aria-label="Vocabulary"
                     >
-                      <Library className="w-5 h-5" />
+                      <BookA className="w-5 h-5" />
                     </button>
                   </div>
                 </td>

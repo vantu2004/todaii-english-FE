@@ -10,8 +10,11 @@ import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
 import VocabGroupsTable from "../../../../components/servers/manage_vocab_groups_page/VocabGroupsTable";
 import VocabGroupFormModal from "../../../../components/servers/manage_vocab_groups_page/VocabGroupFormModal";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageVocabGroups = () => {
+  const { setHeader } = useHeaderContext();
+
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -72,6 +75,16 @@ const ManageVocabGroups = () => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Vocabulary Groups",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Vocabulary Groups" },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadGroups();
   }, [query]);
 
@@ -94,20 +107,10 @@ const ManageVocabGroups = () => {
   return (
     <>
       <div className="flex flex-col h-full">
-        <div className="flex-none">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Manage Vocabulary Groups
-          </h2>
-
-          <ToolBar
-            updateQuery={updateQuery}
-            setIsModalOpen={setIsCreateModalOpen}
-          />
-
-          <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-            Vocab Groups Table
-          </h4>
-        </div>
+        <ToolBar
+          updateQuery={updateQuery}
+          setIsModalOpen={setIsCreateModalOpen}
+        />
 
         {/* Table wrapper */}
         <motion.div

@@ -4,8 +4,12 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { logError } from "../../../../utils/LogError";
 import VocabDeckForm from "../../../../components/servers/manage_vocab_decks_page/VocabDeckForm";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { useEffect } from "react";
 
 const CreateVocabDeck = () => {
+  const { setHeader } = useHeaderContext();
+
   const navigate = useNavigate();
   const [initialData] = useState({
     name: "",
@@ -23,15 +27,19 @@ const CreateVocabDeck = () => {
     }
   };
 
+  useEffect(() => {
+    setHeader({
+      title: "Manage Vocabulary Decks",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Vocabulary Decks", to: "/server/vocab-deck" },
+        { label: "Create Vocabulary Deck" },
+      ],
+    });
+  }, []);
+
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Vocabulary Decks
-        </h2>
-      </div>
-
       {/* Deck Form */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

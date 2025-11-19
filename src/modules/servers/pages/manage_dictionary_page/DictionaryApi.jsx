@@ -10,13 +10,26 @@ import { fetchRawWord } from "../../../../api/servers/dictionaryApi";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const DictionaryApi = () => {
+  const { setHeader } = useHeaderContext();
+
   const [rawWord, setRawWord] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
   const debounceTimerRef = useRef(null);
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Dictionary",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Dictionary API" },
+      ],
+    });
+  }, []);
 
   // Load history from localStorage on mount
   useEffect(() => {

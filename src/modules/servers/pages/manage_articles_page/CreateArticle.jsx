@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import { useNewsApiStore } from "../../../../stores/useNewsApiStore";
 import { useEffect, useState } from "react";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const CreateArticle = () => {
+  const { setHeader } = useHeaderContext();
+
   const navigate = useNavigate();
   const [initialData, setInitialData] = useState({});
   const { rawArticle, clearRawArticle } = useNewsApiStore();
@@ -38,6 +41,17 @@ const CreateArticle = () => {
     };
   };
 
+  useEffect(() => {
+    setHeader({
+      title: "Manage Articles",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Articles", to: "/server/article" },
+        { label: "Create Article" },
+      ],
+    });
+  }, []);
+
   // Khi mở trang, nếu có rawArticle thì chuẩn hóa
   useEffect(() => {
     if (rawArticle) {
@@ -50,13 +64,6 @@ const CreateArticle = () => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Articles
-        </h2>
-      </div>
-
       {/* Article Form */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

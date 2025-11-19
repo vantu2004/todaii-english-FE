@@ -5,8 +5,11 @@ import ToolBar from "../../../../components/servers/ToolBar";
 import Pagination from "../../../../components/servers/news_api_page/Pagination";
 import ArticlesTable from "../../../../components/servers/news_api_page/ArticlesTable";
 import { motion } from "framer-motion";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const NewsApi = () => {
+  const { setHeader } = useHeaderContext();
+
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +50,13 @@ const NewsApi = () => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Articles",
+      breadcrumb: [{ label: "Home", to: "/server" }, { label: "News API" }],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadArticles();
   }, [query]);
 
@@ -80,19 +90,13 @@ const NewsApi = () => {
 
       <ToolBar updateQuery={updateQuery} setIsModalOpen={null} />
 
-      <div className="flex items-center gap-3">
-        <h4 className="text-lg font-semibold text-gray-600 dark:text-gray-300 flex-1">
-          News Table
-        </h4>
-      </div>
-
       {/* Table */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm mt-4"
+        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
       >
         {loading ? (
           <div className="flex items-center justify-center h-full">

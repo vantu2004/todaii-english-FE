@@ -11,7 +11,7 @@ const ManageVideos = () => {
       query.keyword
     );
 
-  return <GenericVideoList title="Manage Articles" fetchApi={fetchApi} />;
+  return <GenericVideoList title="Manage Videos" fetchApi={fetchApi} />;
 };
 
 export default ManageVideos;

@@ -1,12 +1,19 @@
-import React from "react";
+import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import { useEffect } from "react";
 
 const Dashboard = () => {
+  const { setHeader } = useHeaderContext();
+
+  useEffect(() => {
+    setHeader({
+      title: "Dashboard",
+      breadcrumb: [],
+    });
+  }, []);
+
   return (
     <main className="h-full overflow-y-auto">
       <div className="container px-6 mx-auto grid">
-        <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Dashboard
-        </h2>
         <div className="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
           <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
             <div className="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">

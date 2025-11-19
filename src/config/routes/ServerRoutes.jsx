@@ -32,265 +32,268 @@ import VocabDecksInGroup from "../../modules/servers/pages/manage_vocab_groups_p
 import ManageVocabsInArticle from "../../modules/servers/pages/manage_articles_page/ManageVocabsInArticle";
 import ManageVocabsInVideo from "../../modules/servers/pages/manage_videos_page/ManageVocabsInVideo";
 import ManageVocabsInVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
+import { HeaderProvider } from "../../context/servers/HeaderContext";
 
 export default function ServerRoutes() {
   return (
     <ServerAuthProvider>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <RedirectAuthenticatedUser>
-              <Login />
-            </RedirectAuthenticatedUser>
-          }
-        />
-
-        <Route element={<ServerLayout />}>
+      <HeaderProvider>
+        <Routes>
           <Route
-            path="/"
+            path="/login"
             element={
-              <ServerProtectRoutes>
-                <Dashboard />
-              </ServerProtectRoutes>
+              <RedirectAuthenticatedUser>
+                <Login />
+              </RedirectAuthenticatedUser>
             }
           />
 
-          <Route
-            path="/admin"
-            element={
-              <ServerProtectRoutes>
-                <ManageAdmins />
-              </ServerProtectRoutes>
-            }
-          />
+          <Route element={<ServerLayout />}>
+            <Route
+              path="/"
+              element={
+                <ServerProtectRoutes>
+                  <Dashboard />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/user"
-            element={
-              <ServerProtectRoutes>
-                <ManageUsers />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/admin"
+              element={
+                <ServerProtectRoutes>
+                  <ManageAdmins />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/dictionary"
-            element={
-              <ServerProtectRoutes>
-                <ManageDictionary />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/user"
+              element={
+                <ServerProtectRoutes>
+                  <ManageUsers />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/dictionary-api"
-            element={
-              <ServerProtectRoutes>
-                <DictionaryApi />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/dictionary"
+              element={
+                <ServerProtectRoutes>
+                  <ManageDictionary />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/news-api"
-            element={
-              <ServerProtectRoutes>
-                <NewsApi />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/dictionary-api"
+              element={
+                <ServerProtectRoutes>
+                  <DictionaryApi />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article-topic"
-            element={
-              <ServerProtectRoutes>
-                <ManageTopics topicType="article" />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/news-api"
+              element={
+                <ServerProtectRoutes>
+                  <NewsApi />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/topic/:id/article"
-            element={
-              <ServerProtectRoutes>
-                <ArticlesInTopic />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article-topic"
+              element={
+                <ServerProtectRoutes>
+                  <ManageTopics topicType="article" />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article"
-            element={
-              <ServerProtectRoutes>
-                <ManageArticles />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/topic/:id/article"
+              element={
+                <ServerProtectRoutes>
+                  <ArticlesInTopic />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article/create"
-            element={
-              <ServerProtectRoutes>
-                <CreateArticle />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article"
+              element={
+                <ServerProtectRoutes>
+                  <ManageArticles />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article/:id/update"
-            element={
-              <ServerProtectRoutes>
-                <UpdateArticle />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article/create"
+              element={
+                <ServerProtectRoutes>
+                  <CreateArticle />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article/:id/paragraph"
-            element={
-              <ServerProtectRoutes>
-                <ManageParagraphs />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article/:id/update"
+              element={
+                <ServerProtectRoutes>
+                  <UpdateArticle />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/article/:id/vocab"
-            element={
-              <ServerProtectRoutes>
-                <ManageVocabsInArticle />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article/:id/paragraph"
+              element={
+                <ServerProtectRoutes>
+                  <ManageParagraphs />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video-topic"
-            element={
-              <ServerProtectRoutes>
-                <ManageTopics topicType="video" />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/article/:id/vocab"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVocabsInArticle />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/topic/:id/video"
-            element={
-              <ServerProtectRoutes>
-                <VideosInTopic />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video-topic"
+              element={
+                <ServerProtectRoutes>
+                  <ManageTopics topicType="video" />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/youtube"
-            element={
-              <ServerProtectRoutes>
-                <Youtube />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/topic/:id/video"
+              element={
+                <ServerProtectRoutes>
+                  <VideosInTopic />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video"
-            element={
-              <ServerProtectRoutes>
-                <ManageVideos />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/youtube"
+              element={
+                <ServerProtectRoutes>
+                  <Youtube />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video/create"
-            element={
-              <ServerProtectRoutes>
-                <CreateVideo />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVideos />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video/:id/update"
-            element={
-              <ServerProtectRoutes>
-                <UpdateVideo />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video/create"
+              element={
+                <ServerProtectRoutes>
+                  <CreateVideo />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video/:id/lyric"
-            element={
-              <ServerProtectRoutes>
-                <ManageLyrics />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video/:id/update"
+              element={
+                <ServerProtectRoutes>
+                  <UpdateVideo />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/video/:id/vocab"
-            element={
-              <ServerProtectRoutes>
-                <ManageVocabsInVideo />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video/:id/lyric"
+              element={
+                <ServerProtectRoutes>
+                  <ManageLyrics />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-group"
-            element={
-              <ServerProtectRoutes>
-                <ManageVocabGroups />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/video/:id/vocab"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVocabsInVideo />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-group/:id/vocab-deck"
-            element={
-              <ServerProtectRoutes>
-                <VocabDecksInGroup />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/vocab-group"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVocabGroups />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-deck"
-            element={
-              <ServerProtectRoutes>
-                <ManageVocabDecks />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/vocab-group/:id/vocab-deck"
+              element={
+                <ServerProtectRoutes>
+                  <VocabDecksInGroup />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-deck/create"
-            element={
-              <ServerProtectRoutes>
-                <CreateVocabDeck />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/vocab-deck"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVocabDecks />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-deck/:id/update"
-            element={
-              <ServerProtectRoutes>
-                <UpdateVocabDeck />
-              </ServerProtectRoutes>
-            }
-          />
+            <Route
+              path="/vocab-deck/create"
+              element={
+                <ServerProtectRoutes>
+                  <CreateVocabDeck />
+                </ServerProtectRoutes>
+              }
+            />
 
-          <Route
-            path="/vocab-deck/:id/vocab"
-            element={
-              <ServerProtectRoutes>
-                <ManageVocabsInVocabDeck />
-              </ServerProtectRoutes>
-            }
-          />
-        </Route>
-      </Routes>
+            <Route
+              path="/vocab-deck/:id/update"
+              element={
+                <ServerProtectRoutes>
+                  <UpdateVocabDeck />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/vocab-deck/:id/vocab"
+              element={
+                <ServerProtectRoutes>
+                  <ManageVocabsInVocabDeck />
+                </ServerProtectRoutes>
+              }
+            />
+          </Route>
+        </Routes>
+      </HeaderProvider>
     </ServerAuthProvider>
   );
 }

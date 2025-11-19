@@ -8,14 +8,28 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
 import VocabDeckForm from "../../../../components/servers/manage_vocab_decks_page/VocabDeckForm";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const UpdateVocabDeck = () => {
+  const { setHeader } = useHeaderContext();
+
   const { id } = useParams();
 
   const [deck, setDeck] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setHeader({
+      title: "Manage Vocabulary Decks",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Vocabulary Decks", to: "/server/vocab-deck" },
+        { label: "Update Vocabulary Deck" },
+      ],
+    });
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -55,12 +69,6 @@ const UpdateVocabDeck = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Vocabulary Decks
-        </h2>
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}

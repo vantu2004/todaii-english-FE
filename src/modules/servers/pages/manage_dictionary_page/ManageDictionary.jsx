@@ -13,8 +13,11 @@ import { Sparkles, Loader } from "lucide-react";
 import DictionaryViewModal from "../../../../components/servers/manage_dictionary_page/DictionaryViewModal";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageDictionary = () => {
+  const { setHeader } = useHeaderContext();
+
   const [dictionary, setDictionary] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -79,6 +82,16 @@ const ManageDictionary = () => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Dictionary",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Manage Dictionary" },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadDictionary();
   }, [query]); // tự động reload khi query thay đổi
 
@@ -129,23 +142,12 @@ const ManageDictionary = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Dictionary
-        </h2>
-
         <ToolBar
           updateQuery={updateQuery}
           setIsModalOpen={setIsCreateModalOpen}
         />
 
         <div className="mt-6 mb-6">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <h4 className="text-lg font-semibold text-gray-600 dark:text-gray-300 flex-1">
-              Dictionary Entries Table
-            </h4>
-          </div>
-
           {/* Input Section */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {/* AI Create Button */}

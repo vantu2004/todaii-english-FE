@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import { logError } from "../../utils/LogError";
 import VideosTable from "../../components/servers/manage_videos_page/VideosTable";
 import { useNavigate } from "react-router-dom";
+import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
 
 const GenericVideoList = ({ title, fetchApi }) => {
+  const { setHeader } = useHeaderContext();
+
   const REDIRECT_URL = "/server/video/create";
 
   const [videos, setVideos] = useState([]);
@@ -65,6 +68,19 @@ const GenericVideoList = ({ title, fetchApi }) => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Videos",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        ...(window.location.pathname !== "/server/video"
+          ? [{ label: "Manage Video Topics", to: "/server/video-topic" }]
+          : []),
+        { label: title },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadVideos();
   }, [query]);
 
@@ -75,20 +91,10 @@ const GenericVideoList = ({ title, fetchApi }) => {
   return (
     <>
       <div className="flex flex-col h-full">
-        <div className="flex-none">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            {title}
-          </h2>
-
-          <RedirectToolbar
-            updateQuery={updateQuery}
-            handleRedirect={() => navigate(REDIRECT_URL)}
-          />
-
-          <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-            Videos Table
-          </h4>
-        </div>
+        <RedirectToolbar
+          updateQuery={updateQuery}
+          handleRedirect={() => navigate(REDIRECT_URL)}
+        />
 
         {/* Bảng */}
         <motion.div

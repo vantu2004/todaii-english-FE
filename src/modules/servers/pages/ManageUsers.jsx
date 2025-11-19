@@ -4,10 +4,13 @@ import ToolBar from "../../../components/servers/ToolBar";
 import Pagination from "../../../components/servers/Pagination";
 import { fetchUsers } from "../../../api/servers/userApi";
 import UsersTable from "../../../components/servers/manage_users_page/UsersTable";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { logError } from "../../../utils/LogError";
+import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 
 const ManageUsers = () => {
+  const { setHeader } = useHeaderContext();
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +71,13 @@ const ManageUsers = () => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Users",
+      breadcrumb: [{ label: "Home", to: "/server" }, { label: "Manage Users" }],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadUsers();
   }, [query]); // tự động reload users khi query thay đổi
 
@@ -77,18 +87,7 @@ const ManageUsers = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          Manage Users
-        </h2>
-
-        {/* Ko cho tạo user */}
-        <ToolBar updateQuery={updateQuery} setIsModalOpen={null} />
-
-        <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Users Table
-        </h4>
-      </div>
+      <ToolBar updateQuery={updateQuery} setIsModalOpen={null} />
 
       {/* Vùng bảng cuộn riêng */}
       <motion.div

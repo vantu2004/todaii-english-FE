@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 import RedirectToolbar from "../../components/servers/RedirectToolbar";
 import { motion } from "framer-motion";
 import { logError } from "../../utils/LogError";
+import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
 
 const GenericArticleList = ({ title, fetchApi }) => {
+  const { setHeader } = useHeaderContext();
+
   const REDIRECT_URL = "/server/article/create";
 
   const [articles, setArticles] = useState([]);
@@ -64,6 +67,19 @@ const GenericArticleList = ({ title, fetchApi }) => {
   };
 
   useEffect(() => {
+    setHeader({
+      title: "Manage Articles",
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        ...(window.location.pathname !== "/server/article"
+          ? [{ label: "Manage Article Topics", to: "/server/article-topic" }]
+          : []),
+        { label: title },
+      ],
+    });
+  }, []);
+
+  useEffect(() => {
     reloadArticles();
   }, [query]);
 
@@ -73,22 +89,10 @@ const GenericArticleList = ({ title, fetchApi }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex-none">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-          {title}
-        </h2>
-
-        <RedirectToolbar
-          updateQuery={updateQuery}
-          handleRedirect={() => navigate(REDIRECT_URL)}
-        />
-
-        <h4 className="mt-6 mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Articles Table
-        </h4>
-      </div>
-
+      <RedirectToolbar
+        updateQuery={updateQuery}
+        handleRedirect={() => navigate(REDIRECT_URL)}
+      />
       {/* Table */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
