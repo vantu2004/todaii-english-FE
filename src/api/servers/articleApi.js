@@ -103,3 +103,30 @@ export const deleteArticle = async (articleId) => {
     throw err;
   }
 };
+
+export const addWordToArticle = async (articleId, wordId) => {
+  try {
+    await serverInstance.post(`/article/${articleId}/word/${wordId}`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteWordFromArticle = async (articleId, wordId) => {
+  try {
+    await serverInstance.delete(`/article/${articleId}/word/${wordId}`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteAllWordsFromArticle = async (articleId) => {
+  try {
+    await serverInstance.delete(`/article/${articleId}/word`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};

@@ -104,3 +104,30 @@ export const deleteVideo = async (videoId) => {
     throw err;
   }
 };
+
+export const addWordToVideo = async (videoId, wordId) => {
+  try {
+    await serverInstance.post(`/video/${videoId}/word/${wordId}`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteWordFromVideo = async (videoId, wordId) => {
+  try {
+    await serverInstance.delete(`/video/${videoId}/word/${wordId}`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteAllWordsFromVideo = async (videoId) => {
+  try {
+    await serverInstance.delete(`/video/${videoId}/word`);
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};

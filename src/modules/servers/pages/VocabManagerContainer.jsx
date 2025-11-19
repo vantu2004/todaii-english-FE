@@ -15,7 +15,7 @@ const VocanManagerContainer = ({
   addApi, // (id, wordId) => add word
   deleteApi, // (id, wordId) => remove word
   clearApi, // (id) => clear vocab
-  title = "VOCABULARY",
+  title,
   onAutoGenerate, // optional
 }) => {
   const { id } = useParams();
@@ -32,14 +32,14 @@ const VocanManagerContainer = ({
 
       const response = await fetchApi(id); // <== dùng API truyền vào module
 
-      const sortedWords = response.words.sort((a, b) =>
+      const sortedWords = response.words?.sort((a, b) =>
         a.headword.localeCompare(b.headword)
       );
 
-      setSelectedWords(sortedWords);
+      setSelectedWords(sortedWords || []);
       setContentInfo({
         type: title,
-        title: response.name,
+        title: response.name || response.title,
       });
     } catch (error) {
       logError(error);
@@ -125,7 +125,7 @@ const VocanManagerContainer = ({
 
           <VocabHeader
             contentInfo={contentInfo}
-            onAutoGenerate={handleAutoGenerate}
+            onAutoGenerate={onAutoGenerate ? handleAutoGenerate : null}
           />
         </div>
 
