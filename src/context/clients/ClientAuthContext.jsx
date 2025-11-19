@@ -9,20 +9,6 @@ export const ClientAuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const autoFetchProfile = async () => {
-      try {
-        const myProfile = await fetchProfile();
-        setAuthUser(myProfile);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    };
-
-    autoFetchProfile();
-  }, []);
-
   const handleLogout = async (email) => {
     try {
       await logout(email);

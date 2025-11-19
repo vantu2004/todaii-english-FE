@@ -1,8 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, User, LogOut, BookOpen, Video, FileText, BookMarked } from "lucide-react";
-import { useClientAuthContext } from './../../hooks/clients/useClientAuthContext';
-
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
+  BookOpen,
+  Video,
+  FileText,
+  BookMarked,
+} from "lucide-react";
+import { useClientAuthContext } from "./../../hooks/clients/useClientAuthContext";
 
 const navItems = [
   { label: "Home", path: "/client/home", icon: BookOpen },
@@ -20,6 +28,8 @@ const ClientNavBar = () => {
   const profileRef = useRef(null);
 
   const { authUser, isLoggedIn, handleLogout } = useClientAuthContext();
+
+  console.log(isLoggedIn)
 
   // Handle scroll effect
   useEffect(() => {
@@ -46,10 +56,10 @@ const ClientNavBar = () => {
   }, []);
 
   return (
-    <nav 
+    <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-blue-100" 
+        scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-blue-100"
           : "bg-white border-b border-blue-50 shadow-sm"
       }`}
     >
@@ -85,7 +95,10 @@ const ClientNavBar = () => {
               >
                 {({ isActive }) => (
                   <>
-                    <Icon size={18} className={isActive ? "text-white" : "text-blue-500"} />
+                    <Icon
+                      size={18}
+                      className={isActive ? "text-white" : "text-blue-500"}
+                    />
                     {item.label}
                   </>
                 )}
@@ -153,7 +166,9 @@ const ClientNavBar = () => {
                       <p className="text-sm font-bold text-gray-800 truncate">
                         {authUser?.display_name}
                       </p>
-                      <p className="text-xs text-gray-600 truncate">{authUser?.email}</p>
+                      <p className="text-xs text-gray-600 truncate">
+                        {authUser?.email}
+                      </p>
                     </div>
                   </div>
 
@@ -232,7 +247,10 @@ const ClientNavBar = () => {
               >
                 {({ isActive }) => (
                   <>
-                    <Icon size={20} className={isActive ? "text-white" : "text-blue-500"} />
+                    <Icon
+                      size={20}
+                      className={isActive ? "text-white" : "text-blue-500"}
+                    />
                     {item.label}
                   </>
                 )}
