@@ -16,16 +16,8 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedLyric, setSelectedLyric] = useState(null);
 
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  // ===== ACTION HANDLERS =====
-  const handleViewClick = (index) => {
-    setSelectedIndex(index);
-    setSelectedLyric(lyrics[index]);
-    setIsViewModalOpen(true);
-  };
 
   const handleUpdateClick = (index) => {
     setSelectedIndex(index);
@@ -161,15 +153,6 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
           </tbody>
         </table>
       </div>
-
-      {/* === VIEW MODAL === */}
-      {/* {selectedLyric && (
-        <LyricViewModal
-          isOpen={isViewModalOpen}
-          lyric={selectedLyric}
-          onClose={() => setIsViewModalOpen(false)}
-        />
-      )} */}
 
       {/* === UPDATE MODAL === */}
       {selectedLyric && (

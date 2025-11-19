@@ -47,6 +47,11 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
     }
   };
 
+  const handleVocabClick = (index) => {
+    const videoId = videos[index].id;
+    navigate(`/server/video/${videoId}/vocab`);
+  };
+
   const handleLyricClick = (index) => {
     const videoId = videos[index].id;
     navigate(`/server/video/${videoId}/lyric`);
@@ -181,7 +186,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 {/* Vocabulary */}
                 <td className="px-4 py-3">
                   <button
-                    onClick={() => handleVocabularyClick(i)}
+                    onClick={() => handleVocabClick(i)}
                     className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                   >
                     <Library className="w-5 h-5" />

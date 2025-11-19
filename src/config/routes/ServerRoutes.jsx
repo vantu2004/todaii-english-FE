@@ -29,7 +29,9 @@ import UpdateVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page
 import ArticlesInTopic from "../../modules/servers/pages/manage_topics_page/ArticlesInTopic";
 import VideosInTopic from "../../modules/servers/pages/manage_topics_page/VideosInTopic";
 import VocabDecksInGroup from "../../modules/servers/pages/manage_vocab_groups_page/VocabDecksInGroup";
-import ManageVocabs from "../../modules/servers/pages/ManageVocabs";
+import ManageVocabsInArticle from "../../modules/servers/pages/manage_articles_page/ManageVocabsInArticle";
+import ManageVocabsInVideo from "../../modules/servers/pages/manage_videos_page/ManageVocabsInVideo";
+import ManageVocabsInVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
 
 export default function ServerRoutes() {
   return (
@@ -154,6 +156,15 @@ export default function ServerRoutes() {
           />
 
           <Route
+            path="/article/:id/vocab"
+            element={
+              <ServerProtectRoutes>
+                <ManageVocabsInArticle />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
             path="/video-topic"
             element={
               <ServerProtectRoutes>
@@ -217,6 +228,15 @@ export default function ServerRoutes() {
           />
 
           <Route
+            path="/video/:id/vocab"
+            element={
+              <ServerProtectRoutes>
+                <ManageVocabsInVideo />
+              </ServerProtectRoutes>
+            }
+          />
+
+          <Route
             path="/vocab-group"
             element={
               <ServerProtectRoutes>
@@ -265,7 +285,7 @@ export default function ServerRoutes() {
             path="/vocab-deck/:id/vocab"
             element={
               <ServerProtectRoutes>
-                <ManageVocabs />
+                <ManageVocabsInVocabDeck />
               </ServerProtectRoutes>
             }
           />

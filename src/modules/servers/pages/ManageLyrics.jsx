@@ -173,8 +173,8 @@ const ManageLyrics = () => {
         className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
       >
         {lyrics.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-gray-400">
-            <SearchX className="w-18 h-18 mt-12 mb-5" />
+          <div className="flex flex-col justify-center items-center h-full text-gray-400">
+            <SearchX className="w-18 h-18 mb-5" />
             <p className="text-lg font-medium">No lyrics found</p>
             <p className="text-sm text-gray-500 mt-1">
               Try uploading or creating new lyrics

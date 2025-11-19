@@ -53,6 +53,11 @@ const ArticlesTable = ({
     }
   };
 
+  const handleVocabClick = (index) => {
+    const articleId = articles[index].id;
+    navigate(`/server/article/${articleId}/vocab`);
+  };
+
   const handleParagraphClick = (index) => {
     const articleId = articles[index].id;
     navigate(`/server/article/${articleId}/paragraph`);
@@ -177,6 +182,7 @@ const ArticlesTable = ({
                 <td className="px-4 py-3">
                   <div className="flex items-center text-sm">
                     <button
+                      onClick={() => handleVocabClick(i)}
                       className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                       aria-label="Vocabulary"
                     >
