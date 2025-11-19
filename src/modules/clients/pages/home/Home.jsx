@@ -1,6 +1,4 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import BigArticleCard from "../../../../components/clients/home_page/BigArticleCard";
 import ArticleCard from "../../../../components/clients/home_page/ArticleCard";
 import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";

@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { fetchProfile } from "../../api/clients/userApi";
+import { logout } from "../../api/clients/authApi";
+import toast from "react-hot-toast";
 
 export const ClientAuthContext = createContext();
 
@@ -21,11 +23,24 @@ export const ClientAuthProvider = ({ children }) => {
     autoFetchProfile();
   }, []);
 
+  const handleLogout = async (email) => {
+    try {
+      await logout(email);
+      toast.success("Logout successfully!");
+
+      setAuthUser(null);
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
   const value = {
     authUser,
     setAuthUser,
     isLoggedIn,
     setIsLoggedIn,
+    handleLogout,
   };
 
   return (
