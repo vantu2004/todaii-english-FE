@@ -111,4 +111,28 @@ export const filterArticles = async ({
   }
 };
 
+export const saveArticle = async (articleId) => {
+  try {
+    const response = await clientInstance.post(`article/bookmark/${articleId}`);
+    return response.data;
+  } catch (err) {
+    console.error("Save article error:", err);
+    throw err;
+  }
+};
+
+export const unsavedArticle = async (articleId) => {
+  try {
+    const response = await clientInstance.delete(`article/bookmark/${articleId}`);
+    return response.data;
+  } catch (err) {
+    console.error("Unsaved article error:", err);
+    throw err;
+  }
+};
+
+
+
+
+
 

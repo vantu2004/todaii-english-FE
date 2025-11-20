@@ -39,8 +39,12 @@ const ArticleContent = ({ paragraphs }) => {
 
       utterance.onboundary = (event) => {
         if (event.name === "word") {
-          let chars = p.text_en.slice(0, event.charIndex).trim();
-          currentWordIndexRef.current = chars.split(/\s+/).length - 1;
+          // Calculate word index from character position
+          // This gives us the index of the word that is STARTING
+          let textUpToChar = p.text_en.slice(0, event.charIndex).trim();
+          let wordIndex = textUpToChar ? textUpToChar.split(/\s+/).length : 0;
+
+          currentWordIndexRef.current = wordIndex;
           forceRender((r) => r + 1); // minimal render for highlight
         }
       };

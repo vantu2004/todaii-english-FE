@@ -13,8 +13,14 @@ import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
-import SearchResults from "../../modules/clients/pages/SearchResults";
+import SearchResults from "../../modules/clients/pages/results/SearchResults";
 import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
+import SavedArticles from "../../modules/clients/pages/userData/SavedArticles";
+import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
+import PageNotFound from "../../pages/PageNotFound";
+import Profile from "../../modules/clients/pages/userData/Profile";
+import TopicResults from "../../modules/clients/pages/results/TopicResults";
+import VideoDetails from './../../modules/clients/pages/video/VideoDetails';
 
 export default function ClientRoutes() {
   return (
@@ -76,14 +82,37 @@ export default function ClientRoutes() {
           <Route path="home" element={<Home />}></Route>
           <Route path="search" element={<SearchResults />}></Route>
           <Route path="article/:id" element={<ArticleDetails />} />
+          <Route path="video" element={<VideoDetails />}></Route>
+          <Route path="dictionary" element={<Dictionary />}></Route>
+          <Route path="/client/topics/:topicId" element={<TopicResults />} />
+
+          <Route
+            path="saved-articles"
+            element={
+              <ClientProtectRoutes>
+                <SavedArticles />
+              </ClientProtectRoutes>
+            }
+          />
+
+          <Route
+            path="profile"
+            element={
+              <ClientProtectRoutes>
+                <Profile />
+              </ClientProtectRoutes>
+            }
+          />
         </Route>
+
+        <Route path="*" element={<PageNotFound />} />
 
         {/* PROTECTED routes (phải login mới vào được) */}
         {/* <Route
-          path="/home"
+          path="/test"
           element={
             <ClientProtectRoutes>
-              <ClientLayout/>
+              <SavedArticles />
             </ClientProtectRoutes>
           }
         /> */}

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
-import Pagination from "../../../components/clients/Pagination";
-import ArticleFilter from "../../../components/clients/search_result_page/ArticleFilter";
-import SearchBar from "../../../components/clients/SearchBar";
-import useArticleSearch from "../../../hooks/clients/useArticleSearch";
+import LongArticleCard from "../../../../components/clients/home_page/LongArticleCard";
+import Pagination from "../../../../components/clients/Pagination";
+import ArticleFilter from "../../../../components/clients/search_result_page/ArticleFilter";
+import SearchBar from "../../../../components/clients/SearchBar";
+import useArticleSearch from "../../../../hooks/clients/useArticleSearch";
 
 // Static filter options
 const sourceOptions = [
@@ -56,7 +56,7 @@ const SearchResults = () => {
   }, [query.keyword]);
 
   return (
-    <div className="mb-10 min-h-screen bg-[#f9fafc] pt-20 px-4 md:px-8">
+    <div className="mt-6 mb-10 min-h-screen bg-[#f9fafc] pt-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
         {/* LEFT FILTER PANEL */}
         <ArticleFilter
@@ -70,9 +70,11 @@ const SearchResults = () => {
         {/* RIGHT RESULTS */}
         <div className="w-full md:w-3/4 space-y-6">
           <SearchBar
-            query={query}
-            updateQuery={updateQuery}
+            value={query.keyword}
             placeholder="Tìm kiếm bài viết..."
+            onSearch={(keyword) => {
+              updateQuery({ keyword, page: 1 });
+            }}
           />
 
           {/* HEADER */}
