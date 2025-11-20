@@ -33,6 +33,7 @@ import ManageVocabsInArticle from "../../modules/servers/pages/manage_articles_p
 import ManageVocabsInVideo from "../../modules/servers/pages/manage_videos_page/ManageVocabsInVideo";
 import ManageVocabsInVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
 import { HeaderProvider } from "../../context/servers/HeaderContext";
+import Profile from "../../modules/servers/pages/manage_profile_page/Profile";
 
 export default function ServerRoutes() {
   return (
@@ -288,6 +289,15 @@ export default function ServerRoutes() {
               element={
                 <ServerProtectRoutes>
                   <ManageVocabsInVocabDeck />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/profile"
+              element={
+                <ServerProtectRoutes>
+                  <Profile />
                 </ServerProtectRoutes>
               }
             />

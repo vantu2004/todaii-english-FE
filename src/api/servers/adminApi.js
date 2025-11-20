@@ -10,6 +10,16 @@ export const fetchProfile = async () => {
   }
 };
 
+export const updateProfile = async (data) => {
+  try {
+    const response = await serverInstance.put("/admin/me", data);
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchAdmins = async (
   page = 1,
   size = 10,

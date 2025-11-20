@@ -22,13 +22,13 @@ import {
   ListVideo,
   BookMarked,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { fetchProfile } from "../../api/servers/adminApi";
+import { useState } from "react";
 import { logout } from "../../api/servers/authApi";
 import { useNavigate } from "react-router-dom";
+import { useServerAuthContext } from "../../hooks/servers/useServerAuthContext";
 
 const Sidebar = () => {
-  const [profile, setProfile] = useState(null); // state lưu profile
+  const { authUser } = useServerAuthContext();
   const [loading, setLoading] = useState(false); // state lưu loading
 
   const location = useLocation();
@@ -128,15 +128,6 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
 
-  const handleFetchProfile = async () => {
-    try {
-      const response = await fetchProfile();
-      setProfile(response);
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  };
-
   const handleLogout = async (email) => {
     setLoading(true);
 
@@ -149,10 +140,6 @@ const Sidebar = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    handleFetchProfile();
-  }, []);
 
   return (
     <div className="hidden w-64 bg-white md:flex md:flex-col border-r border-gray-200">
@@ -249,16 +236,24 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="p-3 border-t border-gray-200">
-        <div className="flex items-center gap-3 px-3 py-2 mb-2">
+        <div className="flex items-center gap-3 py-2 mb-2">
           <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-            <User className="text-blue-600" size={18} />
+            {authUser?.avatar_url ? (
+              <img
+                src={authUser.avatar_url}
+                alt="Avatar"
+                className="w-8 h-8 rounded-lg"
+              />
+            ) : (
+              <User className="text-blue-600" size={18} />
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-medium text-gray-900 truncate">
-              {profile?.display_name}
+              {authUser?.display_name}
             </div>
             <div className="text-xs text-gray-500 truncate">
-              {profile?.email}
+              {authUser?.email}
             </div>
           </div>
         </div>
@@ -273,7 +268,7 @@ const Sidebar = () => {
           </Link>
           <button
             onClick={() => {
-              handleLogout(profile?.email);
+              handleLogout(authUser?.email);
             }}
             disabled={loading}
             className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
