@@ -30,7 +30,7 @@ import { useServerAuthContext } from "../../hooks/servers/useServerAuthContext";
 
 const Sidebar = () => {
   const { authUser } = useServerAuthContext();
-  const [loading, setLoading] = useState(false); // state lưu loading
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState(["content"]);
@@ -39,6 +39,32 @@ const Sidebar = () => {
     setExpandedMenus((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
+  };
+
+  // Lấy role code list
+  const userRoles = authUser?.roles?.map((r) => r.code) || [];
+
+  const hasRole = (role) => userRoles.includes(role);
+
+  // Kiểm tra quyền xem menu item
+  const canViewMenu = (item) => {
+    if (hasRole("SUPER_ADMIN")) return true;
+
+    switch (item.id) {
+      case "dashboard":
+        return hasRole("USER_MANAGER") || hasRole("CONTENT_MANAGER");
+      case "user":
+        return hasRole("USER_MANAGER");
+      case "dictionary":
+      case "article":
+      case "video":
+      case "learning":
+        return hasRole("CONTENT_MANAGER");
+      case "settings":
+        return false;
+      default:
+        return false;
+    }
   };
 
   const menuItems = [
@@ -112,11 +138,7 @@ const Sidebar = () => {
       name: "System Settings",
       icon: Settings,
       children: [
-        {
-          name: "Gemini",
-          to: "/server/setting/gemini",
-          icon: Sparkles,
-        },
+        { name: "Gemini", to: "/server/setting/gemini", icon: Sparkles },
         { name: "SMTP", to: "/server/setting/smtp", icon: Mails },
         { name: "Youtube", to: "/server/setting/youtube", icon: TvMinimalPlay },
         { name: "News API", to: "/server/setting/news-api", icon: BookMarked },
@@ -128,6 +150,26 @@ const Sidebar = () => {
       ],
     },
   ];
+
+  // Lọc menu theo quyền
+  const filteredMenuItems = menuItems
+    .map((item) => {
+      if (!canViewMenu(item)) return null;
+
+      // lọc children nếu user không phải SUPER_ADMIN
+      let children = item.children || [];
+      if (!hasRole("SUPER_ADMIN")) {
+        children = children.filter((child) => {
+          if (item.id === "user" && hasRole("USER_MANAGER")) {
+            return child.to === "/server/user"; // USER_MANAGER chỉ được thấy tab Users
+          }
+          return true;
+        });
+      }
+
+      return { ...item, children };
+    })
+    .filter(Boolean);
 
   const isPathActive = (path) => location.pathname === path;
   const isParentActive = (children) =>
@@ -151,7 +193,6 @@ const Sidebar = () => {
   return (
     <div className="hidden w-64 bg-white md:flex md:flex-col border-r border-gray-200">
       <div className="flex-1 py-6 px-3 overflow-y-auto">
-        {/* Logo */}
         <a
           href="/server"
           className="flex items-center px-3 mb-6 text-2xl font-extrabold tracking-tight select-none"
@@ -162,9 +203,8 @@ const Sidebar = () => {
           </span>
         </a>
 
-        {/* Navigation */}
         <nav className="space-y-1">
-          {menuItems.map((item) => {
+          {filteredMenuItems.map((item) => {
             const hasChildren = item.children?.length > 0;
             const isExpanded = expandedMenus.includes(item.id);
             const isActive = item.to ? isPathActive(item.to) : false;
@@ -241,7 +281,6 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      {/* Footer */}
       <div className="p-3 border-t border-gray-200">
         <div className="flex items-center gap-3 py-2 mb-2">
           <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -274,9 +313,7 @@ const Sidebar = () => {
             Settings
           </Link>
           <button
-            onClick={() => {
-              handleLogout(authUser?.email);
-            }}
+            onClick={() => handleLogout(authUser?.email)}
             disabled={loading}
             className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
           >

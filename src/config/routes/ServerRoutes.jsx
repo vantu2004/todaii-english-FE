@@ -39,6 +39,7 @@ import SmtpSetting from "../../modules/servers/pages/manage_setting_page/SmtpSet
 import YoutubeSetting from "../../modules/servers/pages/manage_setting_page/YoutubeSetting";
 import NewsApiSetting from "../../modules/servers/pages/manage_setting_page/NewsApiSetting";
 import CloudinarySetting from "../../modules/servers/pages/manage_setting_page/CloudinarySetting";
+import NotFound from "../../pages/NotFound";
 
 export default function ServerRoutes() {
   return (
@@ -55,37 +56,51 @@ export default function ServerRoutes() {
           />
 
           <Route element={<ServerLayout />}>
+            {/* Dashboard: SUPER_ADMIN, USER_MANAGER, CONTENT_MANAGER */}
             <Route
               path="/"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={[
+                    "SUPER_ADMIN",
+                    "USER_MANAGER",
+                    "CONTENT_MANAGER",
+                  ]}
+                >
                   <Dashboard />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Admins: chỉ SUPER_ADMIN */}
             <Route
               path="/admin"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <ManageAdmins />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Users: SUPER_ADMIN + USER_MANAGER */}
             <Route
               path="/user"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "USER_MANAGER"]}
+                >
                   <ManageUsers />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Dictionaries: SUPER_ADMIN + CONTENT_MANAGER */}
             <Route
               path="/dictionary"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageDictionary />
                 </ServerProtectRoutes>
               }
@@ -94,25 +109,33 @@ export default function ServerRoutes() {
             <Route
               path="/dictionary-api"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <DictionaryApi />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* News API */}
             <Route
               path="/news-api"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <NewsApi />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Articles */}
             <Route
               path="/article-topic"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageTopics topicType="article" />
                 </ServerProtectRoutes>
               }
@@ -121,7 +144,9 @@ export default function ServerRoutes() {
             <Route
               path="/topic/:id/article"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ArticlesInTopic />
                 </ServerProtectRoutes>
               }
@@ -130,7 +155,9 @@ export default function ServerRoutes() {
             <Route
               path="/article"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageArticles />
                 </ServerProtectRoutes>
               }
@@ -139,7 +166,9 @@ export default function ServerRoutes() {
             <Route
               path="/article/create"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <CreateArticle />
                 </ServerProtectRoutes>
               }
@@ -148,7 +177,9 @@ export default function ServerRoutes() {
             <Route
               path="/article/:id/update"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <UpdateArticle />
                 </ServerProtectRoutes>
               }
@@ -157,7 +188,9 @@ export default function ServerRoutes() {
             <Route
               path="/article/:id/paragraph"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageParagraphs />
                 </ServerProtectRoutes>
               }
@@ -166,16 +199,21 @@ export default function ServerRoutes() {
             <Route
               path="/article/:id/vocab"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVocabsInArticle />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Videos */}
             <Route
               path="/video-topic"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageTopics topicType="video" />
                 </ServerProtectRoutes>
               }
@@ -184,7 +222,9 @@ export default function ServerRoutes() {
             <Route
               path="/topic/:id/video"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <VideosInTopic />
                 </ServerProtectRoutes>
               }
@@ -193,7 +233,9 @@ export default function ServerRoutes() {
             <Route
               path="/youtube"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <Youtube />
                 </ServerProtectRoutes>
               }
@@ -202,7 +244,9 @@ export default function ServerRoutes() {
             <Route
               path="/video"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVideos />
                 </ServerProtectRoutes>
               }
@@ -211,7 +255,9 @@ export default function ServerRoutes() {
             <Route
               path="/video/create"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <CreateVideo />
                 </ServerProtectRoutes>
               }
@@ -220,7 +266,9 @@ export default function ServerRoutes() {
             <Route
               path="/video/:id/update"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <UpdateVideo />
                 </ServerProtectRoutes>
               }
@@ -229,7 +277,9 @@ export default function ServerRoutes() {
             <Route
               path="/video/:id/lyric"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageLyrics />
                 </ServerProtectRoutes>
               }
@@ -238,16 +288,21 @@ export default function ServerRoutes() {
             <Route
               path="/video/:id/vocab"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVocabsInVideo />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Learning Tools (Vocab) */}
             <Route
               path="/vocab-group"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVocabGroups />
                 </ServerProtectRoutes>
               }
@@ -256,7 +311,9 @@ export default function ServerRoutes() {
             <Route
               path="/vocab-group/:id/vocab-deck"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <VocabDecksInGroup />
                 </ServerProtectRoutes>
               }
@@ -265,7 +322,9 @@ export default function ServerRoutes() {
             <Route
               path="/vocab-deck"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVocabDecks />
                 </ServerProtectRoutes>
               }
@@ -274,7 +333,9 @@ export default function ServerRoutes() {
             <Route
               path="/vocab-deck/create"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <CreateVocabDeck />
                 </ServerProtectRoutes>
               }
@@ -283,7 +344,9 @@ export default function ServerRoutes() {
             <Route
               path="/vocab-deck/:id/update"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <UpdateVocabDeck />
                 </ServerProtectRoutes>
               }
@@ -292,25 +355,35 @@ export default function ServerRoutes() {
             <Route
               path="/vocab-deck/:id/vocab"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
                   <ManageVocabsInVocabDeck />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Profile: tất cả user */}
             <Route
               path="/profile"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes
+                  rolesAllowed={[
+                    "SUPER_ADMIN",
+                    "USER_MANAGER",
+                    "CONTENT_MANAGER",
+                  ]}
+                >
                   <Profile />
                 </ServerProtectRoutes>
               }
             />
 
+            {/* Settings: chỉ SUPER_ADMIN */}
             <Route
               path="/setting/gemini"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <GeminiSetting />
                 </ServerProtectRoutes>
               }
@@ -319,7 +392,7 @@ export default function ServerRoutes() {
             <Route
               path="/setting/smtp"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <SmtpSetting />
                 </ServerProtectRoutes>
               }
@@ -328,7 +401,7 @@ export default function ServerRoutes() {
             <Route
               path="/setting/youtube"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <YoutubeSetting />
                 </ServerProtectRoutes>
               }
@@ -337,7 +410,7 @@ export default function ServerRoutes() {
             <Route
               path="/setting/news-api"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <NewsApiSetting />
                 </ServerProtectRoutes>
               }
@@ -346,12 +419,14 @@ export default function ServerRoutes() {
             <Route
               path="/setting/cloudinary"
               element={
-                <ServerProtectRoutes>
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <CloudinarySetting />
                 </ServerProtectRoutes>
               }
             />
           </Route>
+
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </HeaderProvider>
     </ServerAuthProvider>

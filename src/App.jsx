@@ -5,6 +5,8 @@ import LandingPage from "./pages/LandingPage";
 import ClientRoutes from "./config/routes/ClientRoutes";
 import ServerRoutes from "./config/routes/ServerRoutes.jsx";
 import { ClientAuthProvider } from "./context/clients/ClientAuthContext.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import { ServerAuthProvider } from "./context/servers/ServerAuthContext.jsx";
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
 
           <Route path="/client/*" element={<ClientRoutes />} />
           <Route path="/server/*" element={<ServerRoutes />} />
+
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
