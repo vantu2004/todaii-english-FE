@@ -14,13 +14,14 @@ import {
   PenTool,
   BookCopy,
   FolderArchive,
-  LockKeyhole,
   Mails,
   Newspaper,
   PanelRight,
   TvMinimalPlay,
   ListVideo,
   BookMarked,
+  Sparkles,
+  CloudUpload,
 } from "lucide-react";
 import { useState } from "react";
 import { logout } from "../../api/servers/authApi";
@@ -112,12 +113,18 @@ const Sidebar = () => {
       icon: Settings,
       children: [
         {
-          name: "API Keys",
-          to: "/server/api-key",
-          icon: LockKeyhole,
+          name: "Gemini",
+          to: "/server/setting/gemini",
+          icon: Sparkles,
         },
-
-        { name: "SMTP", to: "/server/smtp", icon: Mails },
+        { name: "SMTP", to: "/server/setting/smtp", icon: Mails },
+        { name: "Youtube", to: "/server/setting/youtube", icon: TvMinimalPlay },
+        { name: "News API", to: "/server/setting/news-api", icon: BookMarked },
+        {
+          name: "Cloudinary",
+          to: "/server/setting/cloudinary",
+          icon: CloudUpload,
+        },
       ],
     },
   ];

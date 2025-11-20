@@ -34,6 +34,11 @@ import ManageVocabsInVideo from "../../modules/servers/pages/manage_videos_page/
 import ManageVocabsInVocabDeck from "../../modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
 import { HeaderProvider } from "../../context/servers/HeaderContext";
 import Profile from "../../modules/servers/pages/manage_profile_page/Profile";
+import GeminiSetting from "../../modules/servers/pages/manage_setting_page/GeminiSetting";
+import SmtpSetting from "../../modules/servers/pages/manage_setting_page/SmtpSetting";
+import YoutubeSetting from "../../modules/servers/pages/manage_setting_page/YoutubeSetting";
+import NewsApiSetting from "../../modules/servers/pages/manage_setting_page/NewsApiSetting";
+import CloudinarySetting from "../../modules/servers/pages/manage_setting_page/CloudinarySetting";
 
 export default function ServerRoutes() {
   return (
@@ -298,6 +303,51 @@ export default function ServerRoutes() {
               element={
                 <ServerProtectRoutes>
                   <Profile />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/setting/gemini"
+              element={
+                <ServerProtectRoutes>
+                  <GeminiSetting />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/setting/smtp"
+              element={
+                <ServerProtectRoutes>
+                  <SmtpSetting />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/setting/youtube"
+              element={
+                <ServerProtectRoutes>
+                  <YoutubeSetting />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/setting/news-api"
+              element={
+                <ServerProtectRoutes>
+                  <NewsApiSetting />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/setting/cloudinary"
+              element={
+                <ServerProtectRoutes>
+                  <CloudinarySetting />
                 </ServerProtectRoutes>
               }
             />
