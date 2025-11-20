@@ -8,6 +8,23 @@ export const ClientAuthContext = createContext();
 export const ClientAuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    const autoFetchProfile = async () => {
+      try {
+        const myProfile = await fetchProfile();
+        setAuthUser(myProfile);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    autoFetchProfile();
+  }, []);
 
   const handleLogout = async (email) => {
     try {
@@ -27,6 +44,7 @@ export const ClientAuthProvider = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     handleLogout,
+    loading, 
   };
 
   return (

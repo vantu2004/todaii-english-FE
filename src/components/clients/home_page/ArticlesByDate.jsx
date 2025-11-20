@@ -38,7 +38,7 @@ const ArticlesByDate = ({
       <div className="flex items-center gap-5 h-20">
         {/* SCROLL LEFT */}
         <button
-          className="p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
+          className="cursor-pointer p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
           onClick={scrollLeft}
         >
           <ChevronLeft size={20} className="text-gray-700" />
@@ -54,7 +54,7 @@ const ArticlesByDate = ({
             return (
               <button
                 key={i}
-                className={`px-4 py-2 rounded border border-gray-300 font-medium flex-shrink-0 transition-all ${
+                className={`cursor-pointer px-4 py-2 rounded border border-gray-300 font-medium flex-shrink-0 transition-all ${
                   isActive
                     ? "bg-blue-600 text-white shadow-md"
                     : "bg-white text-gray-700 hover:bg-gray-50 shadow-sm"
@@ -69,7 +69,7 @@ const ArticlesByDate = ({
 
         {/* SCROLL RIGHT */}
         <button
-          className="p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
+          className="cursor-pointer p-2 hover:bg-blue-500 rounded-full transition-colors bg-white shadow-sm"
           onClick={scrollRight}
         >
           <ChevronRight size={20} className="text-gray-700" />

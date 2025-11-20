@@ -15,9 +15,9 @@ import { useClientAuthContext } from "./../../hooks/clients/useClientAuthContext
 
 const navItems = [
   { label: "Home", path: "/client/home", icon: BookOpen },
-  { label: "Video", path: "/video", icon: Video },
-  { label: "Thi thử", path: "/thi-thu", icon: FileText },
-  { label: "Từ điển", path: "/tu-dien", icon: BookMarked },
+  { label: "Video", path: "/client/video", icon: Video },
+  { label: "Thi thử", path: "/client/mock-test", icon: FileText },
+  { label: "Từ điển", path: "/client/dictionary", icon: BookMarked },
 ];
 
 const ClientNavBar = () => {
@@ -29,8 +29,6 @@ const ClientNavBar = () => {
   const profileRef = useRef(null);
 
   const { authUser, isLoggedIn, handleLogout } = useClientAuthContext();
-
-  console.log(isLoggedIn);
 
   // Handle scroll effect
   useEffect(() => {
@@ -127,7 +125,7 @@ const ClientNavBar = () => {
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => setIsProfileOpen((prev) => !prev)}
-                className="hidden lg:flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 transition-all duration-200 border border-blue-100 hover:border-blue-200 active:scale-95"
+                className="hidden cursor-pointer lg:flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 transition-all duration-200 border border-blue-100 hover:border-blue-200 active:scale-95"
               >
                 {authUser?.avatar ? (
                   <img
@@ -206,7 +204,7 @@ const ClientNavBar = () => {
                   {/* Logout */}
                   <button
                     onClick={() => handleLogout(authUser?.email)}
-                    className="w-full text-left px-5 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 border-t border-gray-100 transition-colors duration-150 flex items-center gap-3 font-medium rounded-b-2xl"
+                    className="cursor-pointer w-full text-left px-5 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 border-t border-gray-100 transition-colors duration-150 flex items-center gap-3 font-medium rounded-b-2xl"
                   >
                     <LogOut size={18} />
                     <span>Log out</span>

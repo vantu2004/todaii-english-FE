@@ -26,6 +26,7 @@ const LoginPage = () => {
       setAuthUser(myProfile);
       setIsLoggedIn(true);
 
+      
       toast.success("Login successfully!");
 
       navigate("/client");
