@@ -426,7 +426,7 @@ export default function ServerRoutes() {
             />
           </Route>
 
-          <Route path="*" element={<NotFound />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </HeaderProvider>
     </ServerAuthProvider>

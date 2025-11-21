@@ -19,9 +19,7 @@ import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
 import Profile from "../../modules/clients/pages/userData/Profile";
 import TopicResults from "../../modules/clients/pages/results/TopicResults";
-import VideoDetails from './../../modules/clients/pages/video/VideoDetails';
-
-import TestUI from "../../components/clients/TestUI";
+import VideoDetails from "./../../modules/clients/pages/video/VideoDetails";
 
 export default function ClientRoutes() {
   return (
@@ -104,19 +102,7 @@ export default function ClientRoutes() {
           />
         </Route>
 
-        <Route path="*" element={<PageNotFound />} />
-
-        {/* PROTECTED routes (phải login mới vào được) */}
-        {/* <Route
-          path="/test"
-          element={
-            <ClientProtectRoutes>
-              <SavedArticles />
-            </ClientProtectRoutes>
-          }
-        /> */}
-
-        <Route path="/test-ui" element={<TestUI />} />
+        <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </ClientAuthProvider>
   );

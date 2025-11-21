@@ -13,7 +13,7 @@ const Footer = () => {
     >
       <motion.div
         variants={slideUp(0.2)}
-        className="w-[90%] max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left"
+        className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left"
       >
         {/* Logo + tagline */}
         <div>

@@ -27,8 +27,8 @@ const App = () => {
 
           <Route path="/client/*" element={<ClientRoutes />} />
           <Route path="/server/*" element={<ServerRoutes />} />
-          <Route path="*" element={<NotFound/>}/>
-          
+
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
