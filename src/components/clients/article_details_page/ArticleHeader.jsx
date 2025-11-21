@@ -1,8 +1,19 @@
 import { Clock, Eye, Globe } from "lucide-react";
+import BookmarkButton from "./BookmarkButton";
+import { useState } from "react";
 
 const ArticleHeader = ({ data, formatDate }) => {
+
+
   return (
     <div className="bg-white rounded-2xl shadow-sm p-8 mb-6 relative">
+      {/* BOOKMARK BUTTON FIXED */}
+      <div className="absolute top-4 right-4 ">
+        <BookmarkButton
+          articleId={data.id}
+        />
+      </div>
+
       {/* BADGES */}
       <div className="flex items-center gap-2 mb-4">
         {data.topics?.map((t) => (
