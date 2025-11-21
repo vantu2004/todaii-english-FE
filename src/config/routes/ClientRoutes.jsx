@@ -8,13 +8,14 @@ import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
 import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
 import ClientLayout from "../../modules/clients/layouts/ClientLayout";
 import Home from "../../modules/clients/pages/home/Home";
-
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
 import SearchResults from "../../modules/clients/pages/SearchResults";
 import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
+
+import TestUI from "../../components/clients/TestUI";
 
 export default function ClientRoutes() {
   return (
@@ -45,7 +46,6 @@ export default function ClientRoutes() {
             </RedirectAuthenticatedUser>
           }
         />
-
         <Route
           path="/verify-email"
           element={
@@ -54,7 +54,6 @@ export default function ClientRoutes() {
             </RedirectAuthenticatedUser>
           }
         />
-
         <Route
           path="/forgot-password"
           element={
@@ -87,6 +86,8 @@ export default function ClientRoutes() {
             </ClientProtectRoutes>
           }
         /> */}
+
+        <Route path="/test-ui" element={<TestUI />} />
       </Routes>
     </ClientAuthProvider>
   );

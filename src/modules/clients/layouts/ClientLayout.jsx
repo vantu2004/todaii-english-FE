@@ -5,7 +5,8 @@ import ClientNavBar from "../../../components/clients/ClientNavBar";
 const ClientLayout = () => {
   return (
     <div className="font-inter h-screen bg-stale-50 dark:bg-gray-900">
-        <ClientNavBar />
+      <ClientNavBar />
+
       <main>
         <Outlet />
       </main>
