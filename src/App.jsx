@@ -7,6 +7,7 @@ import ServerRoutes from "./config/routes/ServerRoutes.jsx";
 import { ClientAuthProvider } from "./context/clients/ClientAuthContext.jsx";
 import PageNotFound from "./pages/PageNotFound";
 import Home from "./modules/clients/pages/home/Home.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const App = () => {
   return (
@@ -26,7 +27,8 @@ const App = () => {
 
           <Route path="/client/*" element={<ClientRoutes />} />
           <Route path="/server/*" element={<ServerRoutes />} />
-
+          <Route path="*" element={<NotFound/>}/>
+          
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
