@@ -1,47 +1,38 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import { saveArticle, unsavedArticle } from "../../../api/clients/articleApi";
-import { getArticleSavedStatus } from './../../../api/clients/userApi';
 import toast from "react-hot-toast";
+import { isSavedArticle } from "../../../api/clients/articleApi";
+import { toggleSavedArticle } from "../../../api/clients/userApi";
 
 const BookmarkButton = ({ articleId }) => {
   const [bookmarked, setBookmarked] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch saved status on mount
   useEffect(() => {
-    const fetchSavedStatus = async () => {
-      try {
-        const status = await getArticleSavedStatus(articleId);
-        setBookmarked(status); 
-      } catch (err) {
-        console.error("Error fetching saved status:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSavedStatus();
   }, [articleId]);
 
-  // Toggle bookmark
+  const fetchSavedStatus = async () => {
+    try {
+      const status = await isSavedArticle(articleId);
+      setBookmarked(status);
+    } catch (err) {
+      console.error("Error fetching saved status:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleBookmark = async () => {
     try {
-      if (bookmarked) {
-        await unsavedArticle(articleId);
-        toast.success("Article has been removed from saved");
-        setBookmarked(false);
-      } else {
-        await saveArticle(articleId);
-        toast.success("Article has been saved");
-        setBookmarked(true);
-      }
+      await toggleSavedArticle(articleId);
+      await fetchSavedStatus();
     } catch (err) {
       console.error("Error toggling bookmark:", err);
     }
   };
 
-  if (loading) return null; 
+  if (loading) return null;
 
   return (
     <button

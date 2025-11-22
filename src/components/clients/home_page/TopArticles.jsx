@@ -43,7 +43,7 @@ const TopArticles = ({ topArticles = [] }) => {
         {/* 1. LEFT COLUMN: BIG ARTICLE */}
         {mainArticle && (
           <Link
-            to={`/article/${mainArticle.id}`}
+            to={`/client/article/${mainArticle.id}`}
             className="group relative w-full h-80 lg:h-full rounded-3xl overflow-hidden shadow-sm"
           >
             {/* Image Background */}
@@ -82,7 +82,7 @@ const TopArticles = ({ topArticles = [] }) => {
           {subArticles.map((article) => (
             <Link
               key={article.id}
-              to={`/article/${article.id}`}
+              to={`/client/article/${article.id}`}
               className="group relative flex-1 rounded-3xl overflow-hidden shadow-sm min-h-[200px]"
             >
               {/* Image Background */}

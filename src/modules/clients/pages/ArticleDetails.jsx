@@ -1,20 +1,17 @@
-import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import useArticleDetails from "../../../hooks/clients/useArticleDetails";
-
-import BookmarkButton from "./../../../components/clients/article_details_page/BookmarkButton";
 import ArticleHeader from "./../../../components/clients/article_details_page/ArticleHeader";
 import ArticleImage from "./../../../components/clients/article_details_page/ArticleImage";
 import ArticleContent from "./../../../components/clients/article_details_page/ArticleContent";
 import ArticleWords from "./../../../components/clients/article_details_page/ArticleWords";
+import TopicTags from "../../../components/clients/home_page/sidebar/TopicTags";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ArticleDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { article } = useArticleDetails(id);
-
-  
 
   if (!article) return null;
 
@@ -40,25 +37,45 @@ const ArticleDetails = () => {
     });
 
   return (
-    <div className="mt-10 min-h-screen bg-[#f9fafc] pt-20 px-4 md:px-8 pb-12">
-      <div className="max-w-4xl mx-auto">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span>Quay lại</span>
-        </button>
+    <AnimatePresence>
+      <motion.div
+        key="search-results-page"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 50 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4"
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Main Content */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* LEFT - Main Content */}
+            <div className="flex-1 min-w-0">
+              <ArticleHeader data={data} formatDate={formatDate} />
 
-        <ArticleHeader data={data} formatDate={formatDate} />
+              <ArticleImage src={data.image} title={data.title} />
 
-        <ArticleImage src={data.image} title={data.title} />
+              <ArticleContent paragraphs={data.paragraphs} />
 
-        <ArticleContent paragraphs={data.paragraphs} />
+              <ArticleWords entries={data.entries} />
+            </div>
 
-        <ArticleWords entries={data.entries} />
-      </div>
-    </div>
+            {/* RIGHT - Sidebar */}
+            <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0">
+              <div className="lg:sticky lg:top-24 space-y-6">
+                {/* Topics */}
+                <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
+                    Chủ đề
+                  </h3>
+                  <TopicTags />
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Search, SlidersHorizontal, ArrowLeft } from "lucide-react";
 import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
 import Pagination from "../../../components/clients/Pagination";
 import ArticleFilter from "../../../components/clients/search_result_page/ArticleFilter";
@@ -55,43 +55,57 @@ const Filter = () => {
         <div className="bg-white border-b border-neutral-100 px-4">
           <div className="max-w-7xl mx-auto py-8">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-              <div>
-                <p className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
-                  Kết quả tìm kiếm
-                </p>
-                <h1 className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
-                  {query.keyword ? (
-                    <>
-                      Tìm kiếm cho "
-                      <span className="font-medium">{query.keyword}</span>"
-                    </>
-                  ) : (
-                    "Tất cả bài viết "
-                  )}
+              {/* --- LEFT SECTION --- */}
+              <div className="flex items-start gap-4">
+                <button
+                  onClick={() => window.history.back()}
+                  className="mt-1 p-2.5 rounded-full bg-white border border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 hover:border-neutral-300 transition-all shadow-sm group flex-shrink-0"
+                  title="Quay lại"
+                >
+                  <ArrowLeft
+                    size={20}
+                    className="group-hover:-translate-x-1 transition-transform"
+                  />
+                </button>
 
-                  {(query.sourceName || query.alias || query.cefrLevel) && (
-                    <>
-                      {" "}
-                      & Lọc theo "
-                      <span className="font-medium">
-                        {[query.sourceName, query.alias, query.cefrLevel]
-                          .filter(Boolean)
-                          .join(", ")}
-                      </span>
-                      "
-                    </>
-                  )}
-                </h1>
-                <p className="mt-2 text-neutral-500 text-sm">
-                  Tìm thấy{" "}
-                  <span className="font-medium text-neutral-700">
-                    {totalResults}
-                  </span>{" "}
-                  bài viết
-                </p>
+                <div>
+                  <p className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
+                    Kết quả tìm kiếm
+                  </p>
+                  <h1 className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
+                    {query.keyword ? (
+                      <>
+                        Tìm kiếm cho "
+                        <span className="font-medium">{query.keyword}</span>"
+                      </>
+                    ) : (
+                      "Tất cả bài viết "
+                    )}
+
+                    {(query.sourceName || query.alias || query.cefrLevel) && (
+                      <>
+                        {" "}
+                        & Lọc theo "
+                        <span className="font-medium">
+                          {[query.sourceName, query.alias, query.cefrLevel]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </span>
+                        "
+                      </>
+                    )}
+                  </h1>
+                  <p className="mt-2 text-neutral-500 text-sm">
+                    Tìm thấy{" "}
+                    <span className="font-medium text-neutral-700">
+                      {totalResults}
+                    </span>{" "}
+                    bài viết
+                  </p>
+                </div>
               </div>
 
-              {/* Search Input */}
+              {/* --- RIGHT SECTION: SEARCH INPUT --- */}
               <div className="w-full lg:w-96">
                 <SearchBar
                   value={query.keyword || ""}

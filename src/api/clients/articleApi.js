@@ -120,24 +120,20 @@ export const getAllSources = async () => {
   }
 };
 
-export const saveArticle = async (articleId) => {
+export const getSavedArticlesByUser = async () => {
   try {
-    const response = await clientInstance.post(`article/bookmark/${articleId}`);
+    const response = await clientInstance.get("/article/saved");
     return response.data;
   } catch (err) {
-    console.error("Save article error:", err);
     throw err;
   }
 };
 
-export const unsavedArticle = async (articleId) => {
+export const isSavedArticle = async (articleId) => {
   try {
-    const response = await clientInstance.delete(
-      `article/bookmark/${articleId}`
-    );
+    const response = await clientInstance.get(`/article/${articleId}/is-saved`);
     return response.data;
   } catch (err) {
-    console.error("Unsaved article error:", err);
     throw err;
   }
 };
