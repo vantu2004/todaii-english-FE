@@ -100,7 +100,7 @@ const ClientNavBar = () => {
               </div>
             </div>
 
-            {/* Right Section */}
+            {/* Profile */}
             <div className="flex items-center gap-4">
               {/* Mobile Menu Toggle */}
               <button

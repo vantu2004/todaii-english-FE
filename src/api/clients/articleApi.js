@@ -81,7 +81,7 @@ export const searchArticles = async (
 export const filterArticles = async ({
   keyword = "",
   sourceName = "",
-  topicId = "",
+  alias = "",
   cefrLevel = "",
   minViews = 0,
   page = 1,
@@ -94,7 +94,7 @@ export const filterArticles = async ({
       params: {
         keyword,
         sourceName,
-        topicId,
+        alias,
         cefrLevel,
         minViews,
         page,

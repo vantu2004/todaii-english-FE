@@ -29,7 +29,7 @@ export default function useArticleSearch(query) {
     // ko dùng quan sát query nữa mà đổi qua quan sát giá trị từng field bên trong
     query.keyword,
     query.sourceName,
-    query.topicId,
+    query.alias,
     query.cefrLevel,
     query.minViews,
     query.page,

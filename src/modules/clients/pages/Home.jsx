@@ -1,24 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import BigArticleCard from "../../../../components/clients/home_page/BigArticleCard";
-import ArticleCard from "../../../../components/clients/home_page/ArticleCard";
-import ArticlesByDate from "../../../../components/clients/home_page/ArticlesByDate";
-import TopArticles from "../../../../components/clients/home_page/TopArticles";
-import useArticle from "../../../../hooks/clients/useArticle";
-import useArticlesByDate from "../../../../hooks/clients/useArticleByDate";
-import SocialStats from "../../../../components/clients/home_page/sidebar/SocialStats";
-import VideoCard from "../../../../components/clients/home_page/sidebar/VideoCard";
-import TopicTags from "./../../../../components/clients/home_page/sidebar/TopicTags";
-import SearchBar from "./../../../../components/clients/SearchBar";
+import BigArticleCard from "../../../components/clients/home_page/BigArticleCard";
+import ArticleCard from "../../../components/clients/home_page/ArticleCard";
+import ArticlesByDate from "../../../components/clients/home_page/ArticlesByDate";
+import TopArticles from "../../../components/clients/home_page/TopArticles";
+import useArticle from "../../../hooks/clients/useArticle";
+import useArticlesByDate from "../../../hooks/clients/useArticleByDate";
+import SocialStats from "../../../components/clients/home_page/sidebar/SocialStats";
+import VideoCard from "../../../components/clients/home_page/sidebar/VideoCard";
+import TopicTags from "../../../components/clients/home_page/sidebar/TopicTags";
+import SearchBar from "../../../components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Home = () => {
+  // lấy 9 bài vì 1 bài nổi bật + 8 bài mới cập nhật dùng cho slide
   const {
     latestArticles,
     topArticles,
     loading: articlesLoading,
-  } = useArticle(10);
+  } = useArticle(9);
 
   const {
     articlesByDate,
@@ -88,7 +89,9 @@ const Home = () => {
                 placeholder="Tìm kiếm bài viết..."
                 onSearch={(text) => {
                   setKeyword(text);
-                  navigate(`/client/search?q=${encodeURIComponent(text)}`);
+                  navigate(
+                    `/client/article/filter?q=${encodeURIComponent(text)}`
+                  );
                 }}
               />
             </div>

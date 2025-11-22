@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
-import LongArticleCard from "../../../../components/clients/home_page/LongArticleCard";
-import Pagination from "../../../../components/clients/Pagination";
-import ArticleFilter from "../../../../components/clients/search_result_page/ArticleFilter";
-import useArticleSearch from "../../../../hooks/clients/useArticleSearch";
-import SearchBar from "../../../../components/clients/SearchBar";
+import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
+import Pagination from "../../../components/clients/Pagination";
+import ArticleFilter from "../../../components/clients/search_result_page/ArticleFilter";
+import useArticleSearch from "../../../hooks/clients/useArticleSearch";
+import SearchBar from "../../../components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 
 const sortOptions = [
@@ -15,14 +15,15 @@ const sortOptions = [
   { value: "views-asc", label: "Xem ít nhất" },
 ];
 
-const SearchResults = () => {
+const Filter = () => {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
+  const alias = searchParams.get("alias") || "";
 
   const [query, setQuery] = useState({
     keyword: q,
     sourceName: "",
-    topicId: "",
+    alias: alias,
     cefrLevel: "",
     minViews: 0,
     page: 1,
@@ -65,7 +66,20 @@ const SearchResults = () => {
                       <span className="font-medium">{query.keyword}</span>"
                     </>
                   ) : (
-                    "Tất cả bài viết"
+                    "Tất cả bài viết "
+                  )}
+
+                  {(query.sourceName || query.alias || query.cefrLevel) && (
+                    <>
+                      {" "}
+                      & Lọc theo "
+                      <span className="font-medium">
+                        {[query.sourceName, query.alias, query.cefrLevel]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </span>
+                      "
+                    </>
                   )}
                 </h1>
                 <p className="mt-2 text-neutral-500 text-sm">
@@ -231,4 +245,4 @@ const SearchResults = () => {
   );
 };
 
-export default SearchResults;
+export default Filter;

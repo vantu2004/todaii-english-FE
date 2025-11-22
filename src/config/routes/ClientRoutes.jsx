@@ -7,18 +7,17 @@ import VerifyEmail from "../../modules/clients/pages/auth/VerifyEmail";
 import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
 import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
 import ClientLayout from "../../modules/clients/layouts/ClientLayout";
-import Home from "../../modules/clients/pages/home/Home";
+import Home from "../../modules/clients/pages/Home";
+import Filter from "../../modules/clients/pages/Filter";
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
-import SearchResults from "../../modules/clients/pages/results/SearchResults";
 import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
 import SavedArticles from "../../modules/clients/pages/userData/SavedArticles";
 import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
 import Profile from "../../modules/clients/pages/userData/Profile";
-import TopicResults from "../../modules/clients/pages/results/TopicResults";
 import VideoDetails from "./../../modules/clients/pages/video/VideoDetails";
 
 export default function ClientRoutes() {
@@ -75,16 +74,15 @@ export default function ClientRoutes() {
           }
         />
 
-        <Route path="/" element={<ClientLayout />}>
-          <Route path="home" element={<Home />}></Route>
-          <Route path="search" element={<SearchResults />}></Route>
-          <Route path="article/:id" element={<ArticleDetails />} />
-          <Route path="video" element={<VideoDetails />}></Route>
-          <Route path="dictionary" element={<Dictionary />}></Route>
-          <Route path="/client/topics/:topicId" element={<TopicResults />} />
+        <Route path="" element={<ClientLayout />}>
+          <Route path="/home" element={<Home />}></Route>
+          <Route path="/article/filter" element={<Filter />}></Route>
+          <Route path="/article/:id" element={<ArticleDetails />} />
+          <Route path="/video" element={<VideoDetails />}></Route>
+          <Route path="/dictionary" element={<Dictionary />}></Route>
 
           <Route
-            path="saved-articles"
+            path="/saved-articles"
             element={
               <ClientProtectRoutes>
                 <SavedArticles />
@@ -93,7 +91,7 @@ export default function ClientRoutes() {
           />
 
           <Route
-            path="profile"
+            path="/profile"
             element={
               <ClientProtectRoutes>
                 <Profile />

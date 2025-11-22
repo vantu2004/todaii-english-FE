@@ -8,7 +8,7 @@ export const ClientAuthContext = createContext();
 export const ClientAuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const autoFetchProfile = async () => {
@@ -44,7 +44,7 @@ export const ClientAuthProvider = ({ children }) => {
     isLoggedIn,
     setIsLoggedIn,
     handleLogout,
-    loading, 
+    loading,
   };
 
   return (

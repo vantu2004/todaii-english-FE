@@ -5,7 +5,7 @@ export const fetchProfile = async () => {
     const response = await clientInstance.get("/user/me");
     return response.data;
   } catch (err) {
-    console.error("Error:", err);
+    throw err;
   }
 };
 

@@ -23,10 +23,10 @@ const LoginPage = () => {
       await login(form.email, form.password);
 
       const myProfile = await fetchProfile();
+
       setAuthUser(myProfile);
       setIsLoggedIn(true);
 
-      
       toast.success("Login successfully!");
 
       navigate("/client");
@@ -34,7 +34,7 @@ const LoginPage = () => {
       if (err.response?.status === 401) {
         toast.error("Invalid email or password");
       } else if (err.response?.status === 400) {
-        toast.error("Wrong email format"); 
+        toast.error("Wrong email format");
       } else {
         toast.error("Internal server error");
       }
@@ -141,7 +141,7 @@ const LoginPage = () => {
                   className="text-sm font-medium text-blue-600 dark:text-purple-400 hover:underline"
                   to="../verify-email"
                 >
-                 Verify email
+                  Verify email
                 </Link>
               </p>
             </form>

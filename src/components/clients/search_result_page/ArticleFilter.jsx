@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronDown, RotateCcw, Check } from "lucide-react";
 import { getAllSources } from "../../../api/clients/articleApi";
 import { getAllTopics } from "../../../api/clients/topicApi";
+import { logError } from "../../../utils/LogError";
 
 const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
   const cefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
@@ -20,7 +21,7 @@ const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
         setSources(sourceRes || []);
         setTopics(topicRes || []);
       } catch (err) {
-        console.error("Filter fetch error:", err);
+        logError(err);
       } finally {
         setLoading(false);
       }
@@ -36,7 +37,7 @@ const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
 
   const topicOptions = [
     { value: "", label: "Tất cả chủ đề" },
-    ...topics.map((t) => ({ value: t.id, label: t.name })),
+    ...topics.map((t) => ({ value: t.alias, label: t.name })),
   ];
 
   const [expandedSections, setExpandedSections] = useState({
@@ -53,12 +54,12 @@ const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
     }));
   };
 
-  const hasActiveFilters = query.sourceName || query.topicId || query.cefrLevel;
+  const hasActiveFilters = query.sourceName || query.alias || query.cefrLevel;
 
   const resetFilters = () => {
     updateQuery({
       sourceName: "",
-      topicId: "",
+      alias: "",
       cefrLevel: "",
       page: 1,
     });
@@ -166,15 +167,15 @@ const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
             {topicOptions.map((option) => (
               <button
                 key={option.value}
-                onClick={() => updateQuery({ topicId: option.value, page: 1 })}
+                onClick={() => updateQuery({ alias: option.value, page: 1 })}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all ${
-                  query.topicId === option.value
+                  query.alias === option.value
                     ? "bg-neutral-900 text-white"
                     : "text-neutral-600 hover:bg-neutral-50"
                 }`}
               >
                 {option.label}
-                {query.topicId === option.value && <Check size={14} />}
+                {query.alias === option.value && <Check size={14} />}
               </button>
             ))}
           </div>
