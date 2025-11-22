@@ -9,7 +9,7 @@ const LongArticleCard = ({
   title,
   cefr_level,
   description,
-  source,
+  source_name,
   views,
   published_at,
   updated_at,
@@ -39,7 +39,7 @@ const LongArticleCard = ({
         <div className="relative sm:w-56 lg:w-64 flex-shrink-0 overflow-hidden">
           <div className="aspect-[16/10] sm:aspect-auto sm:h-full">
             <img
-              src={image_url}
+              src={image_url || null}
               alt={title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -48,7 +48,7 @@ const LongArticleCard = ({
           {/* Source badge on image */}
           <div className="absolute top-3 left-3">
             <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-xs font-medium text-neutral-700">
-              {source}
+              {source_name}
             </span>
           </div>
         </div>

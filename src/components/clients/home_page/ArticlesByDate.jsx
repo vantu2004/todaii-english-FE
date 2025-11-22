@@ -1,5 +1,4 @@
-import React from "react";
-import { ChevronLeft, ChevronRight, Calendar, BookOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import BasicDatePicker from "./BasicDatePicker";
 import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
 

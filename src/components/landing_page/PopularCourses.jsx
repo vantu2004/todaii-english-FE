@@ -42,7 +42,7 @@ const PopularCourses = () => {
       viewport={{ once: true }}
       className="mt-20 mb-40"
     >
-      <div className="w-[90%] max-w-275 ml-auto mr-auto">
+      <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-4xl font-extrabold text-[#13183f] mb-12">
           Discover Key Learning Areas
         </h2>

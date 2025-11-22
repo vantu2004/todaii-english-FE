@@ -87,7 +87,7 @@ const TopArticles = ({ topArticles = [] }) => {
             >
               {/* Image Background */}
               <img
-                src={article.image_url}
+                src={article.image_url || null}
                 alt={article.title}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

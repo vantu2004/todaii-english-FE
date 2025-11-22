@@ -249,14 +249,6 @@ const Home = () => {
                 />
               </div>
 
-              {/* Topic Grid */}
-              <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
-                  Danh mục
-                </h3>
-                <TopicGrid />
-              </div>
-
               {/* Social Stats */}
               <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">

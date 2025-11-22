@@ -6,7 +6,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="w-[90%] max-w-[1100px] mx-auto mt-4 relative z-[100]">
+    <nav className="max-w-7xl mx-auto px-4 mt-4 relative z-[100]">
       <div className="flex justify-between items-center">
         {/* Logo text */}
         <a

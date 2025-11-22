@@ -20,7 +20,7 @@ const ArticleCard = ({
       {/* Image Container */}
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100">
         <img
-          src={image_url}
+          src={image_url ? image_url : null}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"

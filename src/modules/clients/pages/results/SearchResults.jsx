@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, ChevronDown } from "lucide-react";
 import LongArticleCard from "../../../../components/clients/home_page/LongArticleCard";
 import Pagination from "../../../../components/clients/Pagination";
 import ArticleFilter from "../../../../components/clients/search_result_page/ArticleFilter";
 import useArticleSearch from "../../../../hooks/clients/useArticleSearch";
+import SearchBar from "../../../../components/clients/SearchBar";
 
 const sortOptions = [
   { value: "published_at-desc", label: "Mới nhất" },
@@ -31,39 +32,40 @@ const cefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const q = searchParams.get("q") || "";
 
   const [query, setQuery] = useState({
     keyword: q,
     sourceName: "",
+    topicId: "",
     cefrLevel: "",
+    minViews: 0,
     page: 1,
     size: 5,
-    sortBy: "published_at",
+    sortBy: "publishedAt",
     direction: "desc",
   });
 
-  const [showMobileFilter, setShowMobileFilter] = useState(false);
-  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  console.log(query);
 
-  const updateQuery = (values) => setQuery((prev) => ({ ...prev, ...values }));
+  const updateQuery = (newValues) => {
+    setQuery((prev) => ({ ...prev, ...newValues }));
+  };
 
   const { results, totalResults, totalPages, loading } =
     useArticleSearch(query);
 
-  useEffect(() => {
-    navigate(`/client/search?q=${encodeURIComponent(query.keyword)}`);
-  }, [query.keyword]);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
 
   const currentSort = sortOptions.find(
     (o) => o.value === `${query.sortBy}-${query.direction}`
   );
 
   return (
-    <div className="min-h-screen bg-neutral-50/50 px-4 pt-20">
+    <div className="min-h-screen bg-neutral-100/50  pt-20">
       {/* Header */}
-      <div className="bg-white border-b border-neutral-100">
+      <div className="bg-white border-b border-neutral-100 px-4">
         <div className="max-w-7xl mx-auto py-8">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
@@ -91,43 +93,21 @@ const SearchResults = () => {
 
             {/* Search Input */}
             <div className="w-full lg:w-96">
-              <div className="relative">
-                <Search
-                  size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
-                <input
-                  type="text"
-                  value={query.keyword}
-                  onChange={(e) => updateQuery({ keyword: e.target.value })}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") updateQuery({ page: 1 });
-                  }}
-                  placeholder="Tìm kiếm bài viết..."
-                  className="w-full h-12 pl-11 pr-4 bg-neutral-50 border-0 rounded-full text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-200 transition-all"
-                />
-              </div>
+              <SearchBar
+                value={query.keyword || ""}
+                placeholder="Tìm kiếm bài viết..."
+                onChangeSearch={(text) => {
+                  updateQuery({ keyword: text, page: 1 });
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-0 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filter Sidebar - Desktop */}
-          <div className="hidden lg:block w-72 flex-shrink-0">
-            <div className="sticky top-24">
-              <ArticleFilter
-                query={query}
-                updateQuery={updateQuery}
-                sourceOptions={sourceOptions}
-                topicOptions={topicOptions}
-                cefrLevels={cefrLevels}
-              />
-            </div>
-          </div>
-
           {/* Results */}
           <div className="flex-1 min-w-0">
             {/* Toolbar */}
@@ -244,6 +224,19 @@ const SearchResults = () => {
                 />
               </div>
             )}
+          </div>
+
+          {/* Filter Sidebar - Desktop */}
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="sticky top-24">
+              <ArticleFilter
+                query={query}
+                updateQuery={updateQuery}
+                sourceOptions={sourceOptions}
+                topicOptions={topicOptions}
+                cefrLevels={cefrLevels}
+              />
+            </div>
           </div>
         </div>
       </div>

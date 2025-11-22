@@ -25,20 +25,19 @@ const SearchBar = ({
   // Xử lý nút Xóa (Clear)
   const handleClear = () => {
     setInputValue("");
-    onSearch?.(""); // Gọi search với rỗng hoặc logic tùy ý
     onChangeSearch?.("");
   };
 
-  // Debounce: Tự động search sau khi ngừng gõ 0.4s
+  // Debounce: Tự động search sau khi ngừng gõ 0.5s
   useEffect(() => {
     if (!onChangeSearch) return;
 
     const delay = setTimeout(() => {
       onChangeSearch(inputValue);
-    }, 400);
+    }, 500);
 
     return () => clearTimeout(delay);
-  }, [inputValue, onChangeSearch]);
+  }, [inputValue]);
 
   return (
     <div className={`w-full relative group ${className}`}>

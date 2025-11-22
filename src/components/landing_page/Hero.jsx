@@ -15,7 +15,7 @@ const Hero = () => {
       viewport={{ once: true, amount: 0.3 }}
       className="max-[740px]:mt-12 min-h-screen"
     >
-      <div className="w-[90%] max-w-275 ml-auto mr-auto">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex max-[740px]:flex-col items-center justify-between">
           {/* Left content */}
           <motion.div

@@ -16,7 +16,9 @@ const useArticleByDate = (initialDate = new Date()) => {
         setLoading(true);
         setError(null);
         setPage(1);
-        const data = await getArticlesByDate(selectedDate, 1, 1);
+
+        const data = await getArticlesByDate(selectedDate, 1, 10);
+
         setArticlesByDate(data.content || []);
         setHasMore(data.total_pages > 1);
       } catch (err) {
@@ -26,7 +28,7 @@ const useArticleByDate = (initialDate = new Date()) => {
         setLoading(false);
       }
     };
-    
+
     fetchByDate();
   }, [selectedDate]);
 
@@ -37,12 +39,9 @@ const useArticleByDate = (initialDate = new Date()) => {
     try {
       setLoading(true);
       setError(null);
+
       const nextPage = page + 1;
-      const data = await getArticlesByDate(
-        selectedDate,
-        nextPage,
-        1,
-      );
+      const data = await getArticlesByDate(selectedDate, nextPage, 1);
 
       setArticlesByDate((prev) => [...prev, ...data.content]);
       setPage(nextPage);
