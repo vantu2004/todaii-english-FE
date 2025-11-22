@@ -1,7 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Eye, Clock, ArrowUpRight } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "../../utils/FormatDate";
+import BookmarkButton from "./BookmarkButton";
 
 const LongArticleCard = ({
   id,
@@ -30,10 +30,7 @@ const LongArticleCard = ({
   };
 
   return (
-    <Link
-      to={`/client/article/${id}`}
-      className="group block bg-white rounded-2xl border border-neutral-100 hover:border-neutral-200 transition-all duration-300 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] overflow-hidden"
-    >
+    <div className="group block bg-white rounded-2xl border border-neutral-100 hover:border-neutral-200 transition-all duration-300 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] overflow-hidden">
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
         <div className="relative sm:w-56 lg:w-64 flex-shrink-0 overflow-hidden">
@@ -68,12 +65,18 @@ const LongArticleCard = ({
               <Clock size={12} />
               {formatISODate(updated_at || published_at)}
             </span>
+            <div className="ml-auto">
+              <BookmarkButton articleId={id} />
+            </div>
           </div>
 
           {/* Title */}
-          <h2 className="text-lg font-semibold text-neutral-900 leading-snug line-clamp-2 group-hover:text-neutral-700 transition-colors mb-2">
+          <Link
+            to={`/client/article/${id}`}
+            className="text-lg font-semibold text-neutral-900 hover:text-blue-600 leading-snug line-clamp-2 group-hover:text-neutral-700 transition-colors mb-2"
+          >
             {title}
-          </h2>
+          </Link>
 
           {/* Description */}
           <p className="text-sm text-neutral-500 leading-relaxed line-clamp-2 mb-4">
@@ -100,7 +103,7 @@ const LongArticleCard = ({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

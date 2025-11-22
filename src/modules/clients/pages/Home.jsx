@@ -12,6 +12,7 @@ import VideoCard from "../../../components/clients/home_page/sidebar/VideoCard";
 import TopicTags from "../../../components/clients/home_page/sidebar/TopicTags";
 import SearchBar from "../../../components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
+import SavedArticleTags from "../../../components/clients/home_page/sidebar/SavedArticleTags";
 
 const Home = () => {
   // lấy 9 bài vì 1 bài nổi bật + 8 bài mới cập nhật dùng cho slide
@@ -242,10 +243,12 @@ const Home = () => {
               <div className="lg:sticky lg:top-24 space-y-6">
                 {/* Topics */}
                 <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                  <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
-                    Chủ đề
-                  </h3>
                   <TopicTags />
+                </div>
+
+                {/* Saved Articles */}
+                <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+                  <SavedArticleTags />
                 </div>
 
                 {/* Video Section */}
@@ -263,9 +266,6 @@ const Home = () => {
 
                 {/* Social Stats */}
                 <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                  <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
-                    Kết nối
-                  </h3>
                   <SocialStats />
                 </div>
               </div>

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, ArrowLeft } from "lucide-react";
-import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
+import LongArticleCard from "../../../components/clients/LongArticleCard";
 import Pagination from "../../../components/clients/Pagination";
-import ArticleFilter from "../../../components/clients/search_result_page/ArticleFilter";
+import ArticleFilterSidebar from "../../../components/clients/search_result_page/ArticleFilterSidebar";
 import useArticleSearch from "../../../hooks/clients/useArticleSearch";
 import SearchBar from "../../../components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,7 +15,7 @@ const sortOptions = [
   { value: "views-asc", label: "Xem ít nhất" },
 ];
 
-const Filter = () => {
+const ArticleFilter = () => {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
   const alias = searchParams.get("alias") || "";
@@ -218,7 +218,7 @@ const Filter = () => {
             {/* Filter Sidebar - Desktop */}
             <div className="hidden lg:block w-72 flex-shrink-0">
               <div className="sticky top-24">
-                <ArticleFilter query={query} updateQuery={updateQuery} />
+                <ArticleFilterSidebar query={query} updateQuery={updateQuery} />
               </div>
             </div>
           </div>
@@ -259,4 +259,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default ArticleFilter;

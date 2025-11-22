@@ -8,7 +8,7 @@ import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
 import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
 import ClientLayout from "../../modules/clients/layouts/ClientLayout";
 import Home from "../../modules/clients/pages/Home";
-import Filter from "../../modules/clients/pages/Filter";
+import ArticleFilter from "../../modules/clients/pages/ArticleFilter";
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
@@ -76,7 +76,7 @@ export default function ClientRoutes() {
 
         <Route path="" element={<ClientLayout />}>
           <Route path="/home" element={<Home />}></Route>
-          <Route path="/article/filter" element={<Filter />}></Route>
+          <Route path="/article/filter" element={<ArticleFilter />}></Route>
           <Route path="/article/:id" element={<ArticleDetails />} />
           <Route path="/video" element={<VideoDetails />}></Route>
           <Route path="/dictionary" element={<Dictionary />}></Route>

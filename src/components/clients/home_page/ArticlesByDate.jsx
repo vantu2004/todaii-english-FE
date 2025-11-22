@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import BasicDatePicker from "./BasicDatePicker";
-import LongArticleCard from "../../../components/clients/home_page/LongArticleCard";
+import LongArticleCard from "../../../components/clients/LongArticleCard";
 
 import {
   formatDate,

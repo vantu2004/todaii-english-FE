@@ -11,7 +11,7 @@ const TopicTags = () => {
   const navigate = useNavigate();
 
   // Cấu hình số lượng tag hiển thị mặc định
-  const INITIAL_DISPLAY_COUNT = 10;
+  const INITIAL_DISPLAY_COUNT = 5;
 
   useEffect(() => {
     const fetchData = async () => {

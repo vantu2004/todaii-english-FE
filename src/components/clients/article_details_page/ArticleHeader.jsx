@@ -1,5 +1,5 @@
-import { Clock, Eye, Globe, Calendar, User } from "lucide-react";
-import BookmarkButton from "./BookmarkButton";
+import { Clock, Eye, Globe, User } from "lucide-react";
+import BookmarkButton from "../BookmarkButton";
 import { ArrowLeft } from "lucide-react";
 
 const ArticleHeader = ({ data, formatDate }) => {

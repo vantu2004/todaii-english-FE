@@ -54,30 +54,6 @@ export const getArticlesByDate = async (
   }
 };
 
-export const searchArticles = async (
-  keyword,
-  page,
-  size,
-  sortBy,
-  direction = "desc"
-) => {
-  try {
-    const response = await clientInstance.get(`/article/search`, {
-      params: {
-        page,
-        size,
-        sortBy,
-        direction,
-        keyword,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    console.error("Search articles error:", err);
-    throw err;
-  }
-};
-
 export const filterArticles = async ({
   keyword = "",
   sourceName = "",

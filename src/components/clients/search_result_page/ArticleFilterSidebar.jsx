@@ -4,7 +4,12 @@ import { getAllSources } from "../../../api/clients/articleApi";
 import { getAllTopics } from "../../../api/clients/topicApi";
 import { logError } from "../../../utils/LogError";
 
-const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
+const ArticleFilterSidebar = ({
+  query,
+  updateQuery,
+  onApply,
+  isMobile = false,
+}) => {
   const cefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
   const [sources, setSources] = useState([]);
@@ -258,4 +263,4 @@ const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
   );
 };
 
-export default ArticleFilter;
+export default ArticleFilterSidebar;

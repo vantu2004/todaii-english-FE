@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import toast from "react-hot-toast";
-import { isSavedArticle } from "../../../api/clients/articleApi";
-import { toggleSavedArticle } from "../../../api/clients/userApi";
+import { isSavedArticle } from "../../api/clients/articleApi";
+import { toggleSavedArticle } from "../../api/clients/userApi";
 
 const BookmarkButton = ({ articleId }) => {
   const [bookmarked, setBookmarked] = useState(false);
