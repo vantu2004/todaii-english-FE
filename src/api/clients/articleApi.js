@@ -11,7 +11,6 @@ export const getLastestArticles = async (size) => {
   }
 };
 
-
 export const getTopArticles = async (size) => {
   try {
     const response = await clientInstance.get(`/article/top?size=${size}`);
@@ -80,7 +79,7 @@ export const searchArticles = async (
 };
 
 export const filterArticles = async ({
-  keyword= "",
+  keyword = "",
   sourceName = "",
   topicId = "",
   cefrLevel = "",
@@ -111,6 +110,16 @@ export const filterArticles = async ({
   }
 };
 
+export const getAllSources = async () => {
+  try {
+    const response = await clientInstance.get(`/article/source`);
+    return response.data;
+  } catch (err) {
+    console.error("Get all sources error:", err);
+    throw err;
+  }
+};
+
 export const saveArticle = async (articleId) => {
   try {
     const response = await clientInstance.post(`article/bookmark/${articleId}`);
@@ -123,16 +132,12 @@ export const saveArticle = async (articleId) => {
 
 export const unsavedArticle = async (articleId) => {
   try {
-    const response = await clientInstance.delete(`article/bookmark/${articleId}`);
+    const response = await clientInstance.delete(
+      `article/bookmark/${articleId}`
+    );
     return response.data;
   } catch (err) {
     console.error("Unsaved article error:", err);
     throw err;
   }
 };
-
-
-
-
-
-

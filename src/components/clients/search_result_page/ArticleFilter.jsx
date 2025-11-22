@@ -1,25 +1,55 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, RotateCcw, Check } from "lucide-react";
+import { getAllSources } from "../../../api/clients/articleApi";
+import { getAllTopics } from "../../../api/clients/topicApi";
 
-const ArticleFilter = ({
-  query,
-  updateQuery,
-  sourceOptions,
-  topicOptions,
-  cefrLevels,
-  onApply,
-  isMobile = false,
-}) => {
+const ArticleFilter = ({ query, updateQuery, onApply, isMobile = false }) => {
+  const cefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
+  const [sources, setSources] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [sourceRes, topicRes] = await Promise.all([
+          getAllSources(),
+          getAllTopics(),
+        ]);
+        setSources(sourceRes || []);
+        setTopics(topicRes || []);
+      } catch (err) {
+        console.error("Filter fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const sourceOptions = [
+    { value: "", label: "Tất cả nguồn" },
+    ...sources.map((s) => ({ value: s, label: s })),
+  ];
+
+  const topicOptions = [
+    { value: "", label: "Tất cả chủ đề" },
+    ...topics.map((t) => ({ value: t.id, label: t.name })),
+  ];
+
   const [expandedSections, setExpandedSections] = useState({
     source: true,
-    topic: true,
-    cefr: true,
+    topic: false,
+    cefr: false,
   });
 
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
+      source: section === "source" ? !prev.source : false,
+      topic: section === "topic" ? !prev.topic : false,
+      cefr: section === "cefr" ? !prev.cefr : false,
     }));
   };
 
@@ -86,9 +116,9 @@ const ArticleFilter = ({
           </button>
 
           <div
-            className={`space-y-1 overflow-hidden transition-all duration-200 ${
+            className={`space-y-1  overflow-y-auto transition-all duration-200 ${
               expandedSections.source
-                ? "max-h-48 opacity-100 mt-2"
+                ? "max-h-64 opacity-100 mt-2"
                 : "max-h-0 opacity-0"
             }`}
           >
@@ -127,7 +157,7 @@ const ArticleFilter = ({
           </button>
 
           <div
-            className={`space-y-1 overflow-hidden transition-all duration-200 ${
+            className={`space-y-1 overflow-y-auto transition-all duration-200 ${
               expandedSections.topic
                 ? "max-h-48 opacity-100 mt-2"
                 : "max-h-0 opacity-0"
