@@ -1,32 +1,49 @@
 import { Clock, Eye, Globe, User } from "lucide-react";
 import BookmarkButton from "../BookmarkButton";
 import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ArticleHeader = ({ data, formatDate }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (q, alias) => {
+    if (q) {
+      navigate(`/client/article/filter?q=${encodeURIComponent(q)}`);
+    } else {
+      navigate(`/client/article/filter?alias=${alias}`);
+    }
+  };
+
   return (
     <div className="relative mb-2">
       {/* Top Meta: Topics & Source */}
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:scale-105 transition-transform duration-200"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Quay lại</span>
         </button>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           {data.topics?.map((t) => (
-            <span
+            <button
               key={t}
-              className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs font-bold uppercase tracking-wider border border-neutral-200"
+              onClick={() => handleNavigate(null, t.alias)}
+              className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs font-bold uppercase tracking-wider border border-neutral-200
+                hover:bg-neutral-200 hover:text-neutral-900 hover:scale-105 transition-all duration-200"
             >
-              {t}
-            </span>
+              {t.name}
+            </button>
           ))}
-          <span className="px-3 py-1 bg-neutral-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">
+          <button
+            onClick={() => handleNavigate(data.cefr)}
+            className="px-3 py-1 bg-neutral-900 text-white rounded-full text-xs font-bold uppercase tracking-wider
+              hover:bg-neutral-800 hover:scale-105 transition-all duration-200"
+          >
             {data.cefr}
-          </span>
+          </button>
         </div>
       </div>
 
@@ -43,7 +60,12 @@ const ArticleHeader = ({ data, formatDate }) => {
               <div className="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center">
                 <User size={14} />
               </div>
-              <span>{data.author}</span>
+              <button
+                onClick={() => handleNavigate(data.author, null)}
+                className="hover:text-blue-600 hover:underline transition-colors duration-200"
+              >
+                {data.author}
+              </button>
             </div>
           )}
 
@@ -65,7 +87,12 @@ const ArticleHeader = ({ data, formatDate }) => {
 
           <div className="flex items-center gap-1.5">
             <Globe size={16} />
-            <span className="text-neutral-700">{data.source}</span>
+            <button
+              onClick={() => handleNavigate(data.source, null)}
+              className="text-neutral-700 hover:text-blue-600 hover:underline transition-colors duration-200"
+            >
+              {data.source}
+            </button>
           </div>
         </div>
 

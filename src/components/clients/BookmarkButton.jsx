@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
 import { Bookmark, BookmarkCheck } from "lucide-react";
-import toast from "react-hot-toast";
 import { isSavedArticle } from "../../api/clients/articleApi";
 import { toggleSavedArticle } from "../../api/clients/userApi";
+import { useClientAuthContext } from "../../hooks/clients/useClientAuthContext";
+import toast from "react-hot-toast";
 
 const BookmarkButton = ({ articleId }) => {
+  const { isLoggedIn } = useClientAuthContext();
+
   const [bookmarked, setBookmarked] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchSavedStatus();
-  }, [articleId]);
+    if (isLoggedIn) {
+      fetchSavedStatus();
+    } else {
+      setBookmarked(false);
+    }
+  }, [articleId, isLoggedIn]);
 
   const fetchSavedStatus = async () => {
     try {
+      setLoading(true);
+
       const status = await isSavedArticle(articleId);
       setBookmarked(status);
     } catch (err) {
@@ -29,6 +38,9 @@ const BookmarkButton = ({ articleId }) => {
       await fetchSavedStatus();
     } catch (err) {
       console.error("Error toggling bookmark:", err);
+      if (err.status === 401) {
+        toast.error("Please log in to save articles.");
+      }
     }
   };
 

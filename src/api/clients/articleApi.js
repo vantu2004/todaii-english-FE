@@ -34,7 +34,7 @@ export const getArticleById = async (id) => {
 export const getArticlesByDate = async (
   date,
   page = 1,
-  size = 5,
+  size = 10,
   sortBy = "id",
   direction = "asc",
   keyword = ""
@@ -108,6 +108,17 @@ export const getSavedArticlesByUser = async () => {
 export const isSavedArticle = async (articleId) => {
   try {
     const response = await clientInstance.get(`/article/${articleId}/is-saved`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getRelatedArticles = async (articleId, limit = 5) => {
+  try {
+    const response = await clientInstance.get(`/article/${articleId}/related`, {
+      params: { size: limit },
+    });
     return response.data;
   } catch (err) {
     throw err;

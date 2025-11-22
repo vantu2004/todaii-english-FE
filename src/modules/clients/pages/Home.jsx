@@ -241,15 +241,9 @@ const Home = () => {
             {/* RIGHT - Sidebar */}
             <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0">
               <div className="lg:sticky lg:top-24 space-y-6">
-                {/* Topics */}
-                <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                  <TopicTags />
-                </div>
+                <TopicTags />
 
-                {/* Saved Articles */}
-                <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                  <SavedArticleTags />
-                </div>
+                <SavedArticleTags />
 
                 {/* Video Section */}
                 <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
