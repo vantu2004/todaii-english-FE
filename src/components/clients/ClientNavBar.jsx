@@ -134,9 +134,9 @@ const ClientNavBar = () => {
                     onClick={() => setIsProfileOpen((prev) => !prev)}
                     className="flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-2xl hover:bg-neutral-100/80 transition-all duration-300 cursor-pointer group"
                   >
-                    {authUser?.avatar ? (
+                    {authUser?.avatar_url ? (
                       <img
-                        src={authUser.avatar}
+                        src={authUser.avatar_url}
                         alt=""
                         className="w-8 h-8 rounded-xl object-cover ring-1 ring-neutral-200/50"
                       />
@@ -167,9 +167,9 @@ const ClientNavBar = () => {
                     {/* User Info */}
                     <div className="p-4 border-b border-neutral-100">
                       <div className="flex items-center gap-3">
-                        {authUser?.avatar ? (
+                        {authUser?.avatar_url ? (
                           <img
-                            src={authUser.avatar}
+                            src={authUser.avatar_url}
                             className="w-12 h-12 rounded-xl object-cover"
                             alt=""
                           />
@@ -305,9 +305,9 @@ const ClientNavBar = () => {
               {isLoggedIn ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-3 mb-2 bg-neutral-50/80 rounded-xl">
-                    {authUser?.avatar ? (
+                    {authUser?.avatar_url ? (
                       <img
-                        src={authUser.avatar}
+                        src={authUser.avatar_url}
                         alt=""
                         className="w-10 h-10 rounded-xl object-cover"
                       />

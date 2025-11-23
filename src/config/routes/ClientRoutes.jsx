@@ -14,10 +14,9 @@ import {
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
 import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
-import SavedArticles from "../../modules/clients/pages/userData/SavedArticles";
 import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
-import Profile from "../../modules/clients/pages/userData/Profile";
+import Profile from "../../modules/clients/pages/Profile";
 import VideoDetails from "./../../modules/clients/pages/video/VideoDetails";
 
 export default function ClientRoutes() {
@@ -80,15 +79,6 @@ export default function ClientRoutes() {
           <Route path="/article/:id" element={<ArticleDetails />} />
           <Route path="/video" element={<VideoDetails />}></Route>
           <Route path="/dictionary" element={<Dictionary />}></Route>
-
-          <Route
-            path="/saved-articles"
-            element={
-              <ClientProtectRoutes>
-                <SavedArticles />
-              </ClientProtectRoutes>
-            }
-          />
 
           <Route
             path="/profile"

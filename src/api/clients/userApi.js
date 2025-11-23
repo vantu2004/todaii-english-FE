@@ -9,6 +9,15 @@ export const fetchProfile = async () => {
   }
 };
 
+export const updateProfile = async (profileData) => {
+  try {
+    const response = await clientInstance.put("/user/me", profileData);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const toggleSavedArticle = async (articleId) => {
   try {
     const response = await clientInstance.put(`/user/article/${articleId}`);
