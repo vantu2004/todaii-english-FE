@@ -17,7 +17,7 @@ import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
 import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
 import Profile from "../../modules/clients/pages/Profile";
-import VideoDetails from "./../../modules/clients/pages/video/VideoDetails";
+import Video from "./../../modules/clients/pages/Video";
 
 export default function ClientRoutes() {
   return (
@@ -77,7 +77,7 @@ export default function ClientRoutes() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/article/filter" element={<ArticleFilter />}></Route>
           <Route path="/article/:id" element={<ArticleDetails />} />
-          <Route path="/video" element={<VideoDetails />}></Route>
+          <Route path="/video" element={<Video />}></Route>
           <Route path="/dictionary" element={<Dictionary />}></Route>
 
           <Route
