@@ -17,7 +17,7 @@ const TopicTags = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const topicRes = await getAllTopics();
+        const topicRes = await getAllTopics("ARTICLE");
         setTopics(topicRes || []);
       } catch (err) {
         logError(err);

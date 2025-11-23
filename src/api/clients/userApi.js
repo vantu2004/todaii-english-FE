@@ -26,3 +26,12 @@ export const toggleSavedArticle = async (articleId) => {
     throw err;
   }
 };
+
+export const toggleSavedVideo = async (videoId) => {
+  try {
+    const response = await clientInstance.put(`/user/video/${videoId}`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};

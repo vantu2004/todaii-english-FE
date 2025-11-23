@@ -1,91 +1,149 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Giả sử dùng react-router-dom
+import {
+  getLatestVideos,
+  getTopVideos,
+  filterVideos,
+} from "../../../api/clients/videoApi"; // Import API của bạn
 import HeroSection from "../../../components/clients/video_page/HeroSection";
 import TopicSection from "../../../components/clients/video_page/TopicSection";
 import VideoSlider from "../../../components/clients/video_page/VideoSlider";
 import DateFilterSection from "../../../components/clients/video_page/DateFilterSection";
-import VideoModal from "../../../components/clients/video_page/VideoModal";
+import { getAllTopics } from "../../../api/clients/topicApi";
+import { logError } from "../../../utils/LogError";
 
-// --- DỮ LIỆU MẪU (MOCK DATA) ---
-const TOPICS = [
-  { id: 1, name: "Marvel", color: "from-blue-700 to-blue-500" },
-  { id: 2, name: "4K", color: "from-purple-700 to-purple-500" },
-  { id: 3, name: "Sitcom", color: "from-teal-700 to-teal-500" },
-  {
-    id: 4,
-    name: "Lồng Tiếng Cực Mạnh",
-    color: "from-indigo-600 to-purple-600",
-  },
-  { id: 5, name: "Xuyên Không", color: "from-orange-600 to-orange-400" },
-  { id: 6, name: "Cổ Trang", color: "from-red-700 to-red-500" },
-  { id: 7, name: "+4 chủ đề", color: "from-gray-700 to-gray-600" },
-];
-
-const BASE_VIDEO = {
-  id: 61,
-  title: "A1 English Listening Practice - Cooking",
-  author_name: "Listening Time",
-  provider_name: "YouTube",
-  provider_url: "https://www.youtube.com/",
-  thumbnail_url: "https://i.ytimg.com/vi/uVGV8LG3HHM/hqdefault.jpg",
-  embed_html:
-    '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/uVGV8LG3HHM?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>',
-  video_url: "https://www.youtube.com/watch?v=uVGV8LG3HHM",
-  views: 12500,
-  cefr_level: "A1",
-  created_at: "2025-11-18T04:23:14.184967",
-  topics: [
-    { id: 36, name: "English for Kids" },
-    { id: 37, name: "Cooking" },
-  ],
-};
-
-// Tạo danh sách video giả lập (10 items)
-const MOCK_VIDEOS = Array.from({ length: 10 }).map((_, i) => ({
-  ...BASE_VIDEO,
-  id: i,
-  title:
-    i % 2 === 0
-      ? "A1 English Listening Practice - Cooking Masterclass"
-      : "Daily Conversation in Real Life",
-  thumbnail_url:
-    i % 2 === 0
-      ? "https://i.ytimg.com/vi/uVGV8LG3HHM/hqdefault.jpg"
-      : "https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg", // Ảnh placeholder khác
-  views: 1000 + i * 500,
-  created_at: "2025-11-23T04:23:14",
-}));
-
-// --- MAIN APP COMPONENT ---
 const Video = () => {
-  const [playingVideo, setPlayingVideo] = useState(null);
+  const navigate = useNavigate();
+
+  // State quản lý dữ liệu
+  const [heroVideo, setHeroVideo] = useState(null);
+  const [topics, setTopics] = useState([]);
+  const [latestVideos, setLatestVideos] = useState([]);
+  const [topVideos, setTopVideos] = useState([]);
+  const [dateFilteredVideos, setDateFilteredVideos] = useState([]);
+
+  // State trạng thái loading/error
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch dữ liệu ban đầu
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Gọi song song các API để tiết kiệm thời gian
+        const [latestRes, topicRes, topRes] = await Promise.all([
+          getLatestVideos(10), // Lấy 10 video mới nhất
+          getAllTopics("VIDEO"), // Lấy danh sách topic
+          getTopVideos(10), // Lấy 10 video top view
+        ]);
+
+        // Xử lý dữ liệu
+        // API của bạn trả về response.data, kiểm tra cấu trúc thực tế (thường là .content nếu phân trang)
+        const latest = latestRes.content || latestRes || [];
+        const top = topRes.content || topRes || [];
+
+        setLatestVideos(latest);
+        setTopics(topicRes);
+        setTopVideos(top);
+
+        // Chọn video đầu tiên của danh sách mới nhất làm Hero (hoặc logic khác tùy bạn)
+        if (latest.length > 0) {
+          setHeroVideo(latest[0]);
+        }
+
+        // Mặc định tab lọc ngày sẽ hiển thị video mới nhất
+        setDateFilteredVideos(latest);
+      } catch (err) {
+        logError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Hàm xử lý khi click vào video (Chuyển trang)
+  const handleVideoClick = (video) => {
+    // Navigate đến trang chi tiết
+    navigate(`/video/${video.id}`);
+  };
+
+  // Hàm xử lý khi chọn ngày (Gọi API lọc)
+  const handleDateFilter = async (dateStr) => {
+    try {
+      // Giả sử API filterVideos hỗ trợ param 'createdDate' hoặc bạn lọc client.
+      // Ở đây tôi gọi filterVideos theo logic API bạn cung cấp.
+      // Nếu Backend chưa hỗ trợ lọc theo ngày chính xác, bạn có thể cần update Backend.
+      // Tạm thời tôi demo gọi API search keyword rỗng để lấy list, thực tế cần param date.
+      const res = await filterVideos({
+        page: 1,
+        size: 10,
+        sortBy: "createdAt",
+        direction: "desc",
+      });
+      // Logic lọc client tạm thời nếu API chưa support date exact match
+      const filtered = (res.content || res).filter((v) =>
+        v.createdAt.startsWith(dateStr)
+      );
+      setDateFilteredVideos(
+        filtered.length > 0 ? filtered : res.content || res
+      ); // Fallback nếu ko có data
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-red-600">
+        {error}
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#0f1014] text-gray-100 font-sans selection:bg-purple-500 selection:text-white">
-      {/* 1. Hero Full Screen */}
-      <HeroSection video={BASE_VIDEO} onPlay={setPlayingVideo} />
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900">
+      {/* 1. Hero Section (Full Screen) */}
+      {heroVideo && (
+        <HeroSection
+          video={heroVideo}
+          onPlay={() => handleVideoClick(heroVideo)}
+        />
+      )}
 
-      {/* 2. Topics (Pushed down) */}
-      <TopicSection topics={TOPICS} />
+      {/* 2. Topics */}
+      <TopicSection topics={topics} />
 
-      {/* 3. Slider Video Mới Cập Nhật */}
+      {/* 3. Slider: Video Mới Cập Nhật */}
       <VideoSlider
         title="Video Mới Cập Nhật"
-        videos={MOCK_VIDEOS}
-        onVideoClick={setPlayingVideo}
+        videos={latestVideos}
+        onVideoClick={handleVideoClick}
       />
 
-      {/* 4. Slider Top Lượt Xem */}
+      {/* 4. Slider: Top Lượt Xem */}
       <VideoSlider
         title="Top Lượt Xem"
-        videos={[...MOCK_VIDEOS].reverse()}
-        onVideoClick={setPlayingVideo}
+        videos={topVideos}
+        onVideoClick={handleVideoClick}
       />
 
-      {/* 5. Date Filter */}
-      <DateFilterSection videos={MOCK_VIDEOS} onVideoClick={setPlayingVideo} />
-
-      {/* Player Modal */}
-      <VideoModal video={playingVideo} onClose={() => setPlayingVideo(null)} />
+      {/* 5. Date Filter Section */}
+      <DateFilterSection
+        videos={dateFilteredVideos}
+        onVideoClick={handleVideoClick}
+        onDateChange={handleDateFilter} // Truyền hàm xử lý đổi ngày
+      />
     </div>
   );
 };

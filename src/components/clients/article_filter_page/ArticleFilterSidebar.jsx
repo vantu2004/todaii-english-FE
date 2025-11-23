@@ -21,7 +21,7 @@ const ArticleFilterSidebar = ({
       try {
         const [sourceRes, topicRes] = await Promise.all([
           getAllSources(),
-          getAllTopics(),
+          getAllTopics("ARTICLE"),
         ]);
         setSources(sourceRes || []);
         setTopics(topicRes || []);
