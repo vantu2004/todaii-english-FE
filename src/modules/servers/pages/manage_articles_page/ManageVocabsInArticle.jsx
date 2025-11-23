@@ -1,4 +1,4 @@
-import VocanManagerContainer from "../VocabManagerContainer";
+import VocabManagerContainer from "../VocabManagerContainer";
 import {
   fetchArticle,
   addWordToArticle,
@@ -8,7 +8,7 @@ import {
 
 const ManageVocabsInArticle = () => {
   return (
-    <VocanManagerContainer
+    <VocabManagerContainer
       fetchApi={fetchArticle}
       addApi={addWordToArticle}
       deleteApi={deleteWordFromArticle}

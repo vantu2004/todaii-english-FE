@@ -1,4 +1,4 @@
-import { BookOpen, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowLeft, Sparkles, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 const VocabHeader = ({ contentInfo, onAutoGenerate }) => {
@@ -14,13 +14,15 @@ const VocabHeader = ({ contentInfo, onAutoGenerate }) => {
     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 sm:gap-3 md:gap-4 mb-4 sm:mb-5 md:mb-6">
       {/* Left Section */}
       <div className="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
-        <div className="p-2.5 sm:p-3 md:p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl shadow-lg flex-shrink-0">
-          <BookOpen className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white" />
-        </div>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1 sm:mb-1.5 md:mb-2 break-words">
-            Manage Vocabularies
-          </h1>
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-3 sm:mb-4 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">Back to previous page</span>
+          </button>
+
           {contentInfo && (
             <div className="flex flex-wrap items-center gap-2 md:gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               <span className="px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full font-medium whitespace-nowrap">

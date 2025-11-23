@@ -8,7 +8,7 @@ const SelectedWordsPanel = ({
   onViewWord,
 }) => {
   return (
-    <div className="lg:col-span-1 h-full flex flex-col">
+    <div className="lg:col-span-1 h-full flex flex-col min-h-0">
       <div className="bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 md:p-6 flex flex-col h-full lg:max-h-[calc(100vh-200px)]">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6 flex-shrink-0">

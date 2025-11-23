@@ -1,5 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, RotateCcw, Square, Volume2 } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Square,
+  Volume2,
+  Languages,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 const ArticleContent = ({ paragraphs }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -8,13 +16,23 @@ const ArticleContent = ({ paragraphs }) => {
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
 
-  // ... (Logic giữ nguyên như cũ của bạn) ...
+  // State quản lý việc ẩn/hiện dịch của từng đoạn (key: index, value: boolean)
+  const [showTranslations, setShowTranslations] = useState({});
+
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
     };
   }, []);
 
+  const toggleTranslation = (index) => {
+    setShowTranslations((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  // --- LOGIC TTS (Giữ nguyên) ---
   const speakParagraphs = (startIndex = 0) => {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
@@ -118,34 +136,36 @@ const ArticleContent = ({ paragraphs }) => {
       </div>
 
       {/* Paragraphs List */}
-      <div className="space-y-6">
+      <div className="space-y-8">
         {paragraphs?.map((p, index) => {
           const isCurrent = index === currentParagraph;
+          const isTranslated = showTranslations[index];
 
-          // Style highlights
+          // Style highlights container
           const containerClass = isCurrent
-            ? "bg-neutral-50 border-l-4 border-neutral-900 pl-4 py-2 pr-2 rounded-r-xl" // Highlight Style
-            : "bg-transparent border-l-4 border-transparent pl-4 py-0 pr-0"; // Normal Style
+            ? "bg-neutral-50 border-l-4 border-neutral-900 pl-6 py-4 pr-4 rounded-r-2xl shadow-sm"
+            : "bg-transparent border-l-4 border-transparent pl-4 py-0 pr-0";
 
           return (
             <div
               key={p.id}
-              className={`transition-all duration-500 ease-in-out ${containerClass}`}
+              className={`transition-all duration-500 ease-in-out group ${containerClass}`}
             >
-              <p className="text-lg md:text-xl text-neutral-800 leading-loose font-serif">
+              {/* ENGLISH TEXT */}
+              <p className="text-lg md:text-xl text-neutral-900 leading-loose font-serif mb-3">
                 {isCurrent
-                  ? // Active Paragraph Rendering
+                  ? // Active Paragraph Rendering (Highlight word)
                     p.text_en.split(/\s+/).map((word, i) => (
                       <span
                         key={i}
                         className={`
-                        transition-colors duration-150 rounded px-0.5
-                        ${
-                          i === currentWordIndexRef.current
-                            ? "bg-yellow-200 text-neutral-900 font-medium"
-                            : ""
-                        }
-                      `}
+                          transition-colors duration-150 rounded px-0.5
+                          ${
+                            i === currentWordIndexRef.current
+                              ? "bg-yellow-200 text-neutral-900 font-medium"
+                              : ""
+                          }
+                        `}
                       >
                         {word}{" "}
                       </span>
@@ -153,6 +173,47 @@ const ArticleContent = ({ paragraphs }) => {
                   : // Inactive Paragraph
                     p.text_en}
               </p>
+
+              {/* VIETNAMESE TRANSLATION (Collapsible) */}
+              <div
+                className={`
+                  overflow-hidden transition-all duration-300 ease-in-out
+                  ${
+                    isTranslated
+                      ? "max-h-[500px] opacity-100 mt-4"
+                      : "max-h-0 opacity-0 mt-0"
+                  }
+                `}
+              >
+                <div className="bg-white/50 border-t border-dashed border-neutral-300 pt-3">
+                  <p className="text-base text-neutral-600 leading-relaxed font-sans italic">
+                    {p.text_vi_system}
+                  </p>
+                </div>
+              </div>
+
+              {/* TOGGLE BUTTON */}
+              <div className="mt-2 flex justify-end transition-opacity duration-300">
+                <button
+                  onClick={() => toggleTranslation(index)}
+                  className={`
+                    flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all
+                    ${
+                      isTranslated
+                        ? "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
+                        : "bg-white border border-neutral-200 text-neutral-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50"
+                    }
+                  `}
+                >
+                  <Languages size={14} />
+                  <span>{isTranslated ? "Ẩn dịch" : "Dịch nghĩa"}</span>
+                  {isTranslated ? (
+                    <ChevronUp size={14} />
+                  ) : (
+                    <ChevronDown size={14} />
+                  )}
+                </button>
+              </div>
             </div>
           );
         })}

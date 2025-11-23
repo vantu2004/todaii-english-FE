@@ -1,4 +1,4 @@
-import VocanManagerContainer from "../VocabManagerContainer";
+import VocabManagerContainer from "../VocabManagerContainer";
 import {
   fetchVideo,
   addWordToVideo,
@@ -8,7 +8,7 @@ import {
 
 const ManageVocabsInVideo = () => {
   return (
-    <VocanManagerContainer
+    <VocabManagerContainer
       fetchApi={fetchVideo}
       addApi={addWordToVideo}
       deleteApi={deleteWordFromVideo}

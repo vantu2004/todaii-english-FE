@@ -11,7 +11,7 @@ import { createDictionaryEntryByGemini } from "../../../api/servers/dictionaryAp
 import DictionaryViewModal from "../../../components/servers/manage_dictionary_page/DictionaryViewModal";
 import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 
-const VocanManagerContainer = ({
+const VocabManagerContainer = ({
   fetchApi, // (id) => fetch data
   addApi, // (id, wordId) => add word
   deleteApi, // (id, wordId) => remove word
@@ -143,20 +143,11 @@ const VocanManagerContainer = ({
     <>
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex-none mb-4 sm:mb-5 md:mb-6 px-4 sm:px-6 lg:px-0">
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-3 sm:mb-4 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="text-sm sm:text-base">Back to previous page</span>
-          </button>
 
-          <VocabHeader
-            contentInfo={contentInfo}
-            onAutoGenerate={onAutoGenerate ? handleAutoGenerate : null}
-          />
-        </div>
+        <VocabHeader
+          contentInfo={contentInfo}
+          onAutoGenerate={onAutoGenerate ? handleAutoGenerate : null}
+        />
 
         {/* Main Content */}
         <motion.div
@@ -166,7 +157,7 @@ const VocanManagerContainer = ({
           transition={{ duration: 0.5 }}
           className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-0"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 h-full min-h-0">
             <DictionarySearchPanel
               selectedWords={selectedWords}
               onSelectWord={handleAdd}
@@ -196,4 +187,4 @@ const VocanManagerContainer = ({
   );
 };
 
-export default VocanManagerContainer;
+export default VocabManagerContainer;

@@ -56,7 +56,7 @@ const ArticleDetails = () => {
 
               <ArticleContent paragraphs={data.paragraphs} />
 
-              <ArticleWords entries={data.words} />
+              <ArticleWords articleId={data.id} />
             </div>
 
             {/* RIGHT - Sidebar */}
