@@ -6,6 +6,7 @@ import ClientRoutes from "./config/routes/ClientRoutes";
 import ServerRoutes from "./config/routes/ServerRoutes.jsx";
 import { ClientAuthProvider } from "./context/clients/ClientAuthContext.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 
 const App = () => {
   return (
@@ -13,6 +14,9 @@ const App = () => {
       <Toaster position="top-center" reverseOrder={false} />
 
       <BrowserRouter>
+        {/* giúp cuộn lên đầu trang khi chuyển route */}
+        <ScrollToTop />
+
         <Routes>
           <Route
             path="/"

@@ -125,7 +125,7 @@ export const getRelatedArticles = async (articleId, limit = 5) => {
   }
 };
 
-export const getEntryArticles = async (articleId, page = 1, size = 10) => {
+export const getEntriesByArticleId = async (articleId, page = 1, size = 10) => {
   try {
     const response = await clientInstance.get(`/article/${articleId}/entry`, {
       params: { page, size },

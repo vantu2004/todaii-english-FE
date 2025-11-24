@@ -1,12 +1,13 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useArticleDetails from "../../../hooks/clients/useArticleDetails";
 import ArticleHeader from "./../../../components/clients/article_details_page/ArticleHeader";
 import ArticleImage from "./../../../components/clients/article_details_page/ArticleImage";
 import ArticleContent from "./../../../components/clients/article_details_page/ArticleContent";
-import ArticleWords from "./../../../components/clients/article_details_page/ArticleWords";
 import { AnimatePresence, motion } from "framer-motion";
 import SavedArticleTags from "../../../components/clients/home_page/sidebar/SavedArticleTags";
 import RelatedArticles from "../../../components/clients/article_details_page/RelatedArticles";
+import { getEntriesByArticleId } from "../../../api/clients/articleApi";
+import EntryWordList from "../../../components/clients/EntryWordList";
 
 const ArticleDetails = () => {
   const { id } = useParams();
@@ -51,12 +52,9 @@ const ArticleDetails = () => {
             {/* LEFT - Main Content */}
             <div className="flex-1 min-w-0">
               <ArticleHeader data={data} formatDate={formatDate} />
-
               <ArticleImage src={data.image} title={data.title} />
-
               <ArticleContent paragraphs={data.paragraphs} />
-
-              <ArticleWords articleId={data.id} />
+              <EntryWordList id={data.id} fetchApi={getEntriesByArticleId} />
             </div>
 
             {/* RIGHT - Sidebar */}

@@ -15,7 +15,7 @@ const RANDOM_GRADIENTS = [
   "from-yellow-500 to-orange-300",
 ];
 
-const TopicSection = ({ topics = [] }) => {
+const TopicSection = ({ topics = [], onNavigate }) => {
   // Xử lý logic: Lấy 7 phần tử đầu & Gán màu ngẫu nhiên
   const displayTopics = useMemo(() => {
     // 1. Chỉ lấy 7 topic đầu tiên
@@ -51,6 +51,7 @@ const TopicSection = ({ topics = [] }) => {
         {displayTopics.map((topic) => (
           <div
             key={topic.id}
+            onClick={() => onNavigate(null, topic.alias)}
             className={`relative h-28 rounded-2xl bg-gradient-to-br ${topic.color} p-5 flex flex-col justify-end cursor-pointer hover:shadow-xl hover:shadow-purple-500/20 transition-all hover:-translate-y-1 shadow-md group overflow-hidden`}
           >
             {/* Decorative Circle - Hiệu ứng trang trí */}

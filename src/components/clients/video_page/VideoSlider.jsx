@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import VideoCard from "./VideoCard";
 
-const VideoSlider = ({ title, videos, onVideoClick }) => {
+const VideoSlider = ({ title, videos, onVideoClick, onNavigate }) => {
   const scrollRef = useRef(null);
 
   const scroll = (direction) => {
@@ -30,12 +30,12 @@ const VideoSlider = ({ title, videos, onVideoClick }) => {
           <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             {title}
           </h3>
-          <a
-            href="#"
-            className="text-sm font-medium text-gray-500 hover:text-purple-600 mt-1 flex items-center transition-colors"
+          <div
+            onClick={() => onNavigate(null, null)}
+            className="text-sm font-medium text-gray-500 hover:text-purple-600 mt-1 flex items-center transition-colors cursor-pointer"
           >
             Xem tất cả <ChevronRightIcon size={14} className="ml-0.5" />
-          </a>
+          </div>
         </div>
 
         <div className="flex gap-2">
@@ -66,7 +66,7 @@ const VideoSlider = ({ title, videos, onVideoClick }) => {
             key={video.id}
             className="snap-start flex-shrink-0 w-[240px] md:w-[calc(20%-19.2px)]"
           >
-            <VideoCard video={video} onClick={onVideoClick} />
+            <VideoCard video={video} onClick={() => onVideoClick(video.id)} />
           </div>
         ))}
       </div>

@@ -10,23 +10,23 @@ import TopicSection from "../../../components/clients/video_page/TopicSection";
 import VideoSlider from "../../../components/clients/video_page/VideoSlider";
 import DateFilterSection from "../../../components/clients/video_page/DateFilterSection";
 import { getAllTopics } from "../../../api/clients/topicApi";
-import { logError } from "../../../utils/LogError";
+import { logError } from "../../../utils/logError";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Video = () => {
   const navigate = useNavigate();
 
-  // --- 1. State Dữ liệu chung ---
   const [heroVideo, setHeroVideo] = useState(null);
   const [topics, setTopics] = useState([]);
   const [latestVideos, setLatestVideos] = useState([]);
   const [topVideos, setTopVideos] = useState([]);
 
-  // --- 2. State riêng cho phần Lọc Theo Ngày (Pagination) ---
+  // State cho phần lọc theo ngày
   const [dateFilteredVideos, setDateFilteredVideos] = useState([]);
-  const [dateFilterPage, setDateFilterPage] = useState(1); // Trang hiện tại
-  const [dateFilterHasMore, setDateFilterHasMore] = useState(false); // Còn dữ liệu để load không?
-  const [currentDateFilter, setCurrentDateFilter] = useState(null); // Ngày đang chọn
-  const [isDateLoading, setIsDateLoading] = useState(false); // Loading của nút "Xem thêm"
+  const [dateFilterPage, setDateFilterPage] = useState(1);
+  const [dateFilterHasMore, setDateFilterHasMore] = useState(false);
+  const [currentDateFilter, setCurrentDateFilter] = useState(null);
+  const [isDateLoading, setIsDateLoading] = useState(false);
 
   // State loading trang lần đầu
   const [loading, setLoading] = useState(true);
@@ -65,11 +65,21 @@ const Video = () => {
     fetchData();
   }, []);
 
-  const handleVideoClick = (video) => {
-    navigate(`/client/video/${video.id}`);
+  const handleNavigate = (keyword, alias) => {
+    if (keyword) {
+      navigate(`/client/video/filter?q=${encodeURIComponent(keyword)}`);
+    } else if (alias) {
+      navigate(`/client/video/filter?alias=${encodeURIComponent(alias)}`);
+    } else {
+      navigate(`/client/video/filter`);
+    }
   };
 
-  // --- 3. Xử lý khi chọn ngày mới (RESET LIST) ---
+  const handleVideoClick = (videoId) => {
+    navigate(`/client/video/${videoId}`);
+  };
+
+  // Xử lý khi chọn ngày mới (RESET LIST) ---
   const handleDateChange = async (dateStr) => {
     try {
       setIsDateLoading(true);
@@ -89,7 +99,7 @@ const Video = () => {
     }
   };
 
-  // --- 4. Xử lý khi bấm "Xem thêm" (APPEND LIST) ---
+  // Xử lý khi bấm "Xem thêm" (APPEND LIST) ---
   const handleLoadMoreDateVideos = async () => {
     if (!currentDateFilter || isDateLoading) return;
 
@@ -126,37 +136,49 @@ const Video = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900">
-      {heroVideo && (
-        <HeroSection
-          video={heroVideo}
-          onPlay={() => handleVideoClick(heroVideo)}
+    <AnimatePresence>
+      <motion.div
+        key="search-results-page"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 50 }}
+        transition={{ duration: 0.5 }}
+        className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900"
+      >
+        {heroVideo && (
+          <HeroSection
+            video={heroVideo}
+            onPlay={() => handleVideoClick(heroVideo.id)}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        <TopicSection topics={topics} onNavigate={handleNavigate} />
+
+        <VideoSlider
+          title="Video Mới Cập Nhật"
+          videos={latestVideos}
+          onVideoClick={handleVideoClick}
+          onNavigate={handleNavigate}
         />
-      )}
 
-      <TopicSection topics={topics} />
+        <VideoSlider
+          title="Top Lượt Xem"
+          videos={topVideos}
+          onVideoClick={handleVideoClick}
+          onNavigate={handleNavigate}
+        />
 
-      <VideoSlider
-        title="Video Mới Cập Nhật"
-        videos={latestVideos}
-        onVideoClick={handleVideoClick}
-      />
-
-      <VideoSlider
-        title="Top Lượt Xem"
-        videos={topVideos}
-        onVideoClick={handleVideoClick}
-      />
-
-      <DateFilterSection
-        videos={dateFilteredVideos}
-        onVideoClick={handleVideoClick}
-        onDateChange={handleDateChange}
-        onLoadMore={handleLoadMoreDateVideos}
-        hasMore={dateFilterHasMore}
-        isLoading={isDateLoading}
-      />
-    </div>
+        <DateFilterSection
+          videos={dateFilteredVideos}
+          onVideoClick={handleVideoClick}
+          onDateChange={handleDateChange}
+          onLoadMore={handleLoadMoreDateVideos}
+          hasMore={dateFilterHasMore}
+          isLoading={isDateLoading}
+        />
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

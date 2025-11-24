@@ -1,8 +1,11 @@
 import { Play, Clock, User, MonitorPlay, Eye, Tag } from "lucide-react";
 import { formatISODate } from "../../../utils/FormatDate";
 import SearchBar from "../SearchBar"; // Nhớ import
+import { useState } from "react";
 
-const HeroSection = ({ video, onPlay }) => {
+const HeroSection = ({ video, onPlay, onNavigate }) => {
+  const [keyword, setKeyword] = useState("");
+
   if (!video) return null;
 
   return (
@@ -20,7 +23,14 @@ const HeroSection = ({ video, onPlay }) => {
 
       {/* --- SEARCH BAR AREA (Đã tùy chỉnh Responsive) --- */}
       <div className="absolute z-30 top-20 left-4 right-4 md:top-24 md:right-12 md:left-auto md:w-[400px]">
-        <SearchBar />
+        <SearchBar
+          value={keyword}
+          placeholder="Tìm kiếm bài viết..."
+          onSearch={(text) => {
+            setKeyword(text);
+            onNavigate(text, null);
+          }}
+        />
       </div>
 
       {/* Content - Căn góc trái dưới */}

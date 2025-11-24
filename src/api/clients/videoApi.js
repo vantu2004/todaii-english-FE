@@ -31,6 +31,18 @@ export const getVideoById = async (id) => {
   }
 };
 
+export const getEntriesByVideoId = async (videoId, page = 1, size = 10) => {
+  try {
+    const response = await clientInstance.get(`/video/${videoId}/entry`, {
+      params: { page, size },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Get entries by video id error:", err);
+    throw err;
+  }
+};
+
 export const getRelatedVideos = async (videoId) => {
   try {
     const response = await clientInstance.get(`/video/${videoId}/related`);

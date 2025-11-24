@@ -123,7 +123,7 @@ const DateFilterSection = ({
               <VideoCard
                 key={`date-${video.id}`} // Dùng ID duy nhất để React không warn
                 video={video}
-                onClick={onVideoClick}
+                onClick={() => onVideoClick(video.id)}
               />
             ))}
           </div>
