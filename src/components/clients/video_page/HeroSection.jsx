@@ -1,9 +1,10 @@
-import { Play, Clock, User, MonitorPlay, Eye, Tag } from "lucide-react";
+import { Play, Clock, User, MonitorPlay, Eye, Tag, Link } from "lucide-react";
 import { formatISODate } from "../../../utils/FormatDate";
 import SearchBar from "../SearchBar"; // Nhớ import
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
-const HeroSection = ({ video, onPlay, onNavigate }) => {
+const HeroSection = ({ video, onNavigate }) => {
   const [keyword, setKeyword] = useState("");
 
   if (!video) return null;
@@ -85,16 +86,13 @@ const HeroSection = ({ video, onPlay, onNavigate }) => {
 
         {/* Actions */}
         <div className="flex gap-3 md:gap-4 animate-fade-in-up delay-300">
-          <button
-            onClick={() => onPlay(video)}
+          <RouterLink
+            to={`/client/video/${video.id}`}
             className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.5)] active:scale-95 border border-purple-500 text-sm md:text-base"
           >
             <Play fill="currentColor" size={18} />
             Xem Ngay
-          </button>
-          <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 md:px-6 py-3 md:py-3.5 rounded-full font-bold backdrop-blur-md border border-white/20 transition-all active:scale-95 text-sm md:text-base">
-            Chi tiết
-          </button>
+          </RouterLink>
         </div>
       </div>
     </section>

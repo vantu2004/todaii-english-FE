@@ -1,11 +1,14 @@
-import React from "react";
 import { Play } from "lucide-react";
 import { formatISODate } from "../../../utils/FormatDate";
+import { Link } from "react-router-dom";
+import { isSavedVideo } from "../../../api/clients/videoApi";
+import { toggleSavedVideo } from "../../../api/clients/userApi";
+import ToggleBookmarkButton from "../ToggleBookmarkButton";
 
-const VideoCard = ({ video, onClick }) => {
+const VideoCard = ({ video }) => {
   return (
-    <div
-      onClick={() => onClick(video)}
+    <Link
+      to={`/client/video/${video.id}`}
       className="group cursor-pointer w-full flex flex-col h-full"
     >
       {/* Image Container */}
@@ -25,7 +28,7 @@ const VideoCard = ({ video, onClick }) => {
         </div>
 
         {/* Level Badge */}
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 left-2">
           <span
             className={`text-[10px] font-bold px-2 py-0.5 rounded text-white shadow-sm 
             ${
@@ -38,6 +41,15 @@ const VideoCard = ({ video, onClick }) => {
           >
             {video.cefr_level}
           </span>
+        </div>
+
+        {/* Bookmark Button */}
+        <div className="absolute top-2 right-2 z-10">
+          <ToggleBookmarkButton
+            itemId={video.id}
+            checkSavedFn={isSavedVideo}
+            toggleSavedFn={toggleSavedVideo}
+          />
         </div>
 
         {/* Duration/Views Badge (Optional position) */}
@@ -68,7 +80,7 @@ const VideoCard = ({ video, onClick }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -75,10 +75,6 @@ const Video = () => {
     }
   };
 
-  const handleVideoClick = (videoId) => {
-    navigate(`/client/video/${videoId}`);
-  };
-
   // Xử lý khi chọn ngày mới (RESET LIST) ---
   const handleDateChange = async (dateStr) => {
     try {
@@ -146,11 +142,7 @@ const Video = () => {
         className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900"
       >
         {heroVideo && (
-          <HeroSection
-            video={heroVideo}
-            onPlay={() => handleVideoClick(heroVideo.id)}
-            onNavigate={handleNavigate}
-          />
+          <HeroSection video={heroVideo} onNavigate={handleNavigate} />
         )}
 
         <TopicSection topics={topics} onNavigate={handleNavigate} />
@@ -158,20 +150,17 @@ const Video = () => {
         <VideoSlider
           title="Video Mới Cập Nhật"
           videos={latestVideos}
-          onVideoClick={handleVideoClick}
           onNavigate={handleNavigate}
         />
 
         <VideoSlider
           title="Top Lượt Xem"
           videos={topVideos}
-          onVideoClick={handleVideoClick}
           onNavigate={handleNavigate}
         />
 
         <DateFilterSection
           videos={dateFilteredVideos}
-          onVideoClick={handleVideoClick}
           onDateChange={handleDateChange}
           onLoadMore={handleLoadMoreDateVideos}
           hasMore={dateFilterHasMore}

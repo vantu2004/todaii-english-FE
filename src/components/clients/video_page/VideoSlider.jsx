@@ -66,7 +66,7 @@ const VideoSlider = ({ title, videos, onVideoClick, onNavigate }) => {
             key={video.id}
             className="snap-start flex-shrink-0 w-[240px] md:w-[calc(20%-19.2px)]"
           >
-            <VideoCard video={video} onClick={() => onVideoClick(video.id)} />
+            <VideoCard video={video} />
           </div>
         ))}
       </div>

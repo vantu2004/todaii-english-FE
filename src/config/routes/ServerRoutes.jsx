@@ -39,7 +39,7 @@ import SmtpSetting from "../../modules/servers/pages/manage_setting_page/SmtpSet
 import YoutubeSetting from "../../modules/servers/pages/manage_setting_page/YoutubeSetting";
 import NewsApiSetting from "../../modules/servers/pages/manage_setting_page/NewsApiSetting";
 import CloudinarySetting from "../../modules/servers/pages/manage_setting_page/CloudinarySetting";
-import NotFound from "../../pages/NotFound";
+import PageNotFound from "../../pages/PageNotFound";
 
 export default function ServerRoutes() {
   return (
@@ -426,7 +426,7 @@ export default function ServerRoutes() {
             />
           </Route>
 
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </HeaderProvider>
     </ServerAuthProvider>

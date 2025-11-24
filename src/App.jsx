@@ -5,7 +5,7 @@ import LandingPage from "./pages/LandingPage";
 import ClientRoutes from "./config/routes/ClientRoutes";
 import ServerRoutes from "./config/routes/ServerRoutes.jsx";
 import { ClientAuthProvider } from "./context/clients/ClientAuthContext.jsx";
-import NotFound from "./pages/NotFound.jsx";
+import PageNotFound from "./pages/PageNotFound.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/client/*" element={<ClientRoutes />} />
           <Route path="/server/*" element={<ServerRoutes />} />
 
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

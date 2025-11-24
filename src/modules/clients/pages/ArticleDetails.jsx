@@ -8,12 +8,13 @@ import SavedArticleTags from "../../../components/clients/home_page/sidebar/Save
 import RelatedArticles from "../../../components/clients/article_details_page/RelatedArticles";
 import { getEntriesByArticleId } from "../../../api/clients/articleApi";
 import EntryWordList from "../../../components/clients/EntryWordList";
+import PageNotFound from "../../../pages/PageNotFound";
 
 const ArticleDetails = () => {
   const { id } = useParams();
   const { article } = useArticleDetails(id);
 
-  if (!article) return null;
+  if (!article) return <PageNotFound />;
 
   const data = {
     id: article.id,

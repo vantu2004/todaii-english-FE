@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { Eye, Clock, ArrowUpRight } from "lucide-react";
 import { formatISODate } from "../../utils/FormatDate";
-import BookmarkButton from "./BookmarkButton";
+import ToggleBookmarkButton from "./ToggleBookmarkButton";
+import { isSavedArticle } from "../../api/clients/articleApi";
+import { toggleSavedArticle } from "../../api/clients/userApi";
 
 const LongArticleCard = ({
   id,
@@ -66,7 +68,11 @@ const LongArticleCard = ({
               {formatISODate(updated_at || published_at)}
             </span>
             <div className="ml-auto">
-              <BookmarkButton articleId={id} />
+              <ToggleBookmarkButton
+                itemId={id}
+                checkSavedFn={isSavedArticle}
+                toggleSavedFn={toggleSavedArticle}
+              />
             </div>
           </div>
 

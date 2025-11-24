@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, LayoutGrid } from "lucide-react";
+import { ChevronDown, LayoutGrid, ArrowLeft } from "lucide-react";
 import SearchBar from "../../../components/clients/SearchBar";
 import Pagination from "../../../components/clients/Pagination";
 import { filterVideos } from "../../../api/clients/videoApi";
 import { getAllTopics } from "../../../api/clients/topicApi";
-import { logError } from "../../../utils/logError";
+import { logError } from "../../../utils/LogError";
 import VideoFilterSidebar from "../../../components/clients/video_filter_page/VideoFilterSidebar";
 import VideoCard from "../../../components/clients/video_page/VideoCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export const SORT_OPTIONS = [
   { label: "Mới nhất", value: "createdAt-desc" },
   { label: "Cũ nhất", value: "createdAt-asc" },
@@ -26,7 +28,8 @@ const VideoFilter = () => {
   const [topics, setTopics] = useState([]);
   const [meta, setMeta] = useState({ totalPages: 0, totalElements: 0 });
 
-  // Filter State
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState({
     keyword: q || "",
     cefrLevel: "",
@@ -84,6 +87,10 @@ const VideoFilter = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
+  const handleVideoClick = (videoId) => {
+    navigate(`/client/video/${videoId}`);
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -95,42 +102,59 @@ const VideoFilter = () => {
         className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4"
       >
         <div className="max-w-7xl mx-auto">
-          {/* --- HEADER SECTION --- */}
-          <div className="flex flex-col lg:flex-row gap-6 items-end justify-between mb-10">
-            <div className="w-full lg:max-w-xl">
-              <h1 className="text-3xl font-light text-neutral-900 tracking-tight mb-4">
-                Thư viện Video
-              </h1>
-              {/* SEARCH BAR */}
-              <SearchBar
-                value={query.keyword}
-                placeholder="Tìm kiếm video học tiếng Anh..."
-                onChangeSearch={(val) => updateQuery({ keyword: val, page: 1 })}
-                className="w-full"
-              />
+          {/* --- HEADER SECTION (Redesigned) --- */}
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-6">
+              <button
+                onClick={() => window.history.back()}
+                className="group p-2.5 bg-white border border-neutral-200 rounded-full text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 hover:shadow-sm transition-all duration-200"
+                title="Quay lại"
+              >
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              </button>
+
+              <div>
+                <h1 className="text-3xl font-light text-neutral-900 tracking-tight">
+                  Thư viện Video
+                </h1>
+                {/* Optional: Breadcrumb nhỏ hoặc subtitle nếu cần */}
+                {/* <p className="text-xs text-neutral-400">Khám phá thế giới qua video</p> */}
+              </div>
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-neutral-500 font-medium">
-                Sắp xếp:
-              </span>
-              <div className="relative">
-                <select
-                  className="appearance-none bg-white border border-neutral-200 text-neutral-700 py-2.5 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-neutral-100 hover:border-neutral-300 transition-all cursor-pointer"
-                  onChange={handleSortChange}
-                  value={`${query.sortBy}-${query.direction}`}
-                >
-                  {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+            <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+              <div className="flex-1 max-w-2xl">
+                <SearchBar
+                  value={query.keyword}
+                  placeholder="Tìm kiếm video theo tiêu đề, tác giả..."
+                  onChangeSearch={(val) =>
+                    updateQuery({ keyword: val, page: 1 })
+                  }
+                  className="w-full"
                 />
+              </div>
+
+              <div className="flex items-center gap-3 flex-shrink-0 justify-end">
+                <span className="text-sm text-neutral-500 font-medium hidden sm:block">
+                  Sắp xếp:
+                </span>
+                <div className="relative w-full sm:w-auto">
+                  <select
+                    className="w-full sm:w-48 appearance-none bg-white border border-neutral-200 text-neutral-700 py-3 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:border-neutral-400 focus:ring-4 focus:ring-neutral-100 hover:border-neutral-300 transition-all cursor-pointer shadow-sm"
+                    onChange={handleSortChange}
+                    value={`${query.sortBy}-${query.direction}`}
+                  >
+                    {SORT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={16}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -145,7 +169,6 @@ const VideoFilter = () => {
 
             {/* --- RIGHT CONTENT (VIDEO GRID) --- */}
             <div className="flex-1 w-full">
-              {/* Results Count */}
               <div className="flex items-center justify-between mb-6">
                 <p className="text-sm text-neutral-500">
                   Hiển thị{" "}
@@ -160,7 +183,11 @@ const VideoFilter = () => {
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {videos.map((video) => (
-                      <VideoCard key={video.id} video={video} />
+                      <VideoCard
+                        key={video.id}
+                        video={video}
+                        onClick={() => handleVideoClick(video.id)}
+                      />
                     ))}
                   </div>
 
