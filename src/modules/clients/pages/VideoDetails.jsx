@@ -1,26 +1,39 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import VideoPlayer from "../../../components/clients/video_details_page/VideoPlayer";
 import VideoInfo from "../../../components/clients/video_details_page/VideoInfo";
 import RelatedVideos from "../../../components/clients/video_details_page/RelatedVideos";
-import LyricsPanel from "../../../components/clients/video_details_page/LyricsPanel";
 import {
   getVideoById,
   getRelatedVideos,
   getEntriesByVideoId,
 } from "../../../api/clients/videoApi";
-import { logError } from "../../../utils/logError";
+import { logError } from "../../../utils/LogError";
 import EntryWordList from "../../../components/clients/EntryWordList";
 import { motion, AnimatePresence } from "framer-motion";
 import PageNotFound from "../../../pages/PageNotFound";
+import { getVideoLyrics } from "../../../api/clients/videoLyricApi";
+import useVideoPlayer from "../../../hooks/useVideoPlayer";
+import VideoPlayer from "../../../components/video/VideoPlayer";
+import LyricsPanel from "../../../components/video/LyricsPanel";
 
 const VideoDetails = () => {
   const { id } = useParams();
 
   const [videoData, setVideoData] = useState(null);
+  const [lyrics, setLyrics] = useState([]);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("related"); // 'related' hoặc 'lyrics'
+
+  const {
+    state,
+    setState,
+    setPlayerRef,
+    handleTimeUpdate,
+    handleDuration,
+    activeLyricIndex,
+    lyricRefs,
+    seekToMs,
+  } = useVideoPlayer(lyrics);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +55,24 @@ const VideoDetails = () => {
     };
 
     fetchData();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchLyrics = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getVideoLyrics(id);
+
+        setLyrics(data || []);
+      } catch (err) {
+        logError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLyrics();
   }, [id]);
 
   if (loading) {
@@ -68,45 +99,32 @@ const VideoDetails = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* --- CỘT TRÁI: VIDEO & INFO (Chiếm 2/3) --- */}
             <div className="lg:col-span-2">
-              <VideoPlayer video={videoData} />
+              <VideoPlayer
+                videoUrl={videoData.video_url}
+                state={state}
+                setPlayerRef={setPlayerRef}
+                onPlay={() => setState((s) => ({ ...s, playing: true }))}
+                onPause={() => setState((s) => ({ ...s, playing: false }))}
+                onEnded={() => setState((s) => ({ ...s, playing: false }))}
+                onTimeUpdate={handleTimeUpdate}
+                onDuration={handleDuration}
+              />
+
               <VideoInfo video={videoData} />
+
               <EntryWordList id={videoData.id} fetchApi={getEntriesByVideoId} />
             </div>
 
             {/* --- CỘT PHẢI: SIDEBAR (Chiếm 1/3) --- */}
             <div className="lg:col-span-1">
-              {/* Tabs Chuyển đổi: Video liên quan / Lyric */}
-              <div className="flex items-center gap-2 mb-4 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
-                <button
-                  onClick={() => setActiveTab("related")}
-                  className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-                    activeTab === "related"
-                      ? "bg-gray-100 text-gray-900 shadow-sm"
-                      : "text-gray-500 hover:bg-gray-50"
-                  }`}
-                >
-                  Tiếp theo
-                </button>
-                <button
-                  onClick={() => setActiveTab("lyrics")}
-                  className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${
-                    activeTab === "lyrics"
-                      ? "bg-purple-100 text-purple-700 shadow-sm"
-                      : "text-gray-500 hover:bg-gray-50"
-                  }`}
-                >
-                  Lyrics
-                </button>
-              </div>
+              <LyricsPanel
+                lyricLines={lyrics}
+                lyricRefs={lyricRefs}
+                activeIndex={activeLyricIndex}
+                onSeek={seekToMs}
+              />
 
-              {/* Content Sidebar */}
-              <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm min-h-[400px]">
-                {activeTab === "related" ? (
-                  <RelatedVideos videos={relatedVideos} />
-                ) : (
-                  <LyricsPanel videoId={videoData.id} />
-                )}
-              </div>
+              <RelatedVideos videos={relatedVideos} />
             </div>
           </div>
         </div>

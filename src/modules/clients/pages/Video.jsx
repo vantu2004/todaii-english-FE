@@ -10,7 +10,7 @@ import TopicSection from "../../../components/clients/video_page/TopicSection";
 import VideoSlider from "../../../components/clients/video_page/VideoSlider";
 import DateFilterSection from "../../../components/clients/video_page/DateFilterSection";
 import { getAllTopics } from "../../../api/clients/topicApi";
-import { logError } from "../../../utils/logError";
+import { logError } from "../../../utils/LogError";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Video = () => {
