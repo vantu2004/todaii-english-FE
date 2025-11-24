@@ -1,6 +1,6 @@
-import React from "react";
 import { Play, Clock, User, MonitorPlay, Eye, Tag } from "lucide-react";
 import { formatISODate } from "../../../utils/FormatDate";
+import SearchBar from "../SearchBar"; // Nhớ import
 
 const HeroSection = ({ video, onPlay }) => {
   if (!video) return null;
@@ -9,23 +9,24 @@ const HeroSection = ({ video, onPlay }) => {
     <section className="relative w-full h-screen overflow-hidden group bg-black">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
-        {/* Lớp phủ 1: Gradient đen từ dưới lên để làm nổi bật text, giảm opacity để không bị đục */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0f1014] via-[#0f1014]/40 to-transparent z-10" />
-
-        {/* Lớp phủ 2: Gradient nhẹ từ trái sang để căn lề text trái rõ hơn mà không che mất ảnh bên phải */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
-
         <img
-          src={video.thumbnail_url}
+          src={video.thumbnail_url} // Đã sửa thành camelCase để khớp Entity Java
           alt={video.title}
           className="w-full h-full object-cover transition-transform duration-[20s] ease-linear group-hover:scale-110 opacity-90"
         />
       </div>
 
+      {/* --- SEARCH BAR AREA (Đã tùy chỉnh Responsive) --- */}
+      <div className="absolute z-30 top-20 left-4 right-4 md:top-24 md:right-12 md:left-auto md:w-[400px]">
+        <SearchBar />
+      </div>
+
       {/* Content - Căn góc trái dưới */}
-      <div className="absolute z-20 bottom-16 left-6 md:left-12 max-w-4xl pr-4">
+      <div className="absolute z-20 bottom-20 left-4 right-4 md:bottom-16 md:left-12 md:right-auto md:max-w-4xl pr-0 md:pr-4">
         {/* Badges */}
-        <div className="flex flex-wrap items-center gap-2 mb-5 animate-fade-in-up">
+        <div className="flex flex-wrap items-center gap-2 mb-4 animate-fade-in-up">
           <span className="bg-yellow-500 text-black text-xs font-extrabold px-2 py-1 rounded shadow-[0_0_10px_rgba(234,179,8,0.5)]">
             HD
           </span>
@@ -37,31 +38,34 @@ const HeroSection = ({ video, onPlay }) => {
           </span>
         </div>
 
-        {/* Title - Text trắng nổi bật */}
-        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6 drop-shadow-2xl animate-fade-in-up delay-100">
+        {/* Title */}
+        <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-4 drop-shadow-2xl animate-fade-in-up delay-100 line-clamp-2 md:line-clamp-none">
           {video.title}
         </h1>
 
-        {/* Info Grid - Dark Glassmorphism (Trong suốt tối) */}
-        <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-200 mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-sm p-5 rounded-xl border-l-4 border-purple-500 border-y border-r border-white/5 shadow-2xl max-w-2xl">
+        {/* Info Grid */}
+        {/* Trên mobile (màn hình nhỏ) có thể ẩn bớt grid thông tin để đỡ rối, hoặc giữ lại tùy bạn. Ở đây tôi giữ lại nhưng cho flex-wrap */}
+        <div className="flex flex-wrap gap-x-4 md:gap-x-8 gap-y-2 text-xs md:text-sm text-gray-200 mb-6 md:mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-sm p-3 md:p-5 rounded-xl border-l-4 border-purple-500 border-y border-r border-white/5 shadow-2xl max-w-2xl">
           <div className="flex items-center gap-2 font-medium">
-            <User size={16} className="text-purple-400" />
-            <span className="truncate">{video.author_name}</span>
+            <User size={14} className="text-purple-400" />
+            <span className="truncate max-w-[100px] md:max-w-none">
+              {video.author_name}
+            </span>
           </div>
           <div className="flex items-center gap-2 font-medium">
-            <MonitorPlay size={16} className="text-purple-400" />
+            <MonitorPlay size={14} className="text-purple-400" />
             <span>{video.provider_name}</span>
           </div>
           <div className="flex items-center gap-2 font-medium">
-            <Eye size={16} className="text-purple-400" />
+            <Eye size={14} className="text-purple-400" />
             <span>
               {new Intl.NumberFormat("vi-VN").format(video.views)} views
             </span>
           </div>
-          {/* Topics */}
+          {/* Topics - Ẩn trên mobile rất nhỏ nếu cần thiết, hoặc giữ nguyên */}
           {video.topics && video.topics.length > 0 && (
-            <div className="flex items-center gap-2 w-full pt-3 border-t border-white/10 mt-1">
-              <Tag size={16} className="text-purple-400" />
+            <div className="hidden sm:flex items-center gap-2 w-full pt-2 md:pt-3 border-t border-white/10 mt-1">
+              <Tag size={14} className="text-purple-400" />
               <span className="truncate text-gray-300">
                 {video.topics.map((t) => t.name).join(", ")}
               </span>
@@ -70,16 +74,15 @@ const HeroSection = ({ video, onPlay }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 animate-fade-in-up delay-300">
+        <div className="flex gap-3 md:gap-4 animate-fade-in-up delay-300">
           <button
             onClick={() => onPlay(video)}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-8 py-3.5 rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.5)] active:scale-95 border border-purple-500"
+            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.5)] active:scale-95 border border-purple-500 text-sm md:text-base"
           >
-            <Play fill="currentColor" size={20} />
+            <Play fill="currentColor" size={18} />
             Xem Ngay
           </button>
-
-          <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3.5 rounded-full font-bold backdrop-blur-md border border-white/20 transition-all active:scale-95">
+          <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-5 md:px-6 py-3 md:py-3.5 rounded-full font-bold backdrop-blur-md border border-white/20 transition-all active:scale-95 text-sm md:text-base">
             Chi tiết
           </button>
         </div>

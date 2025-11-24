@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Giả sử dùng react-router-dom
+import { useNavigate } from "react-router-dom";
 import {
   getLatestVideos,
   getTopVideos,
-  filterVideos,
-} from "../../../api/clients/videoApi"; // Import API của bạn
+  getVideosByDate,
+} from "../../../api/clients/videoApi";
 import HeroSection from "../../../components/clients/video_page/HeroSection";
 import TopicSection from "../../../components/clients/video_page/TopicSection";
 import VideoSlider from "../../../components/clients/video_page/VideoSlider";
@@ -15,45 +15,46 @@ import { logError } from "../../../utils/LogError";
 const Video = () => {
   const navigate = useNavigate();
 
-  // State quản lý dữ liệu
+  // --- 1. State Dữ liệu chung ---
   const [heroVideo, setHeroVideo] = useState(null);
   const [topics, setTopics] = useState([]);
   const [latestVideos, setLatestVideos] = useState([]);
   const [topVideos, setTopVideos] = useState([]);
+
+  // --- 2. State riêng cho phần Lọc Theo Ngày (Pagination) ---
   const [dateFilteredVideos, setDateFilteredVideos] = useState([]);
+  const [dateFilterPage, setDateFilterPage] = useState(1); // Trang hiện tại
+  const [dateFilterHasMore, setDateFilterHasMore] = useState(false); // Còn dữ liệu để load không?
+  const [currentDateFilter, setCurrentDateFilter] = useState(null); // Ngày đang chọn
+  const [isDateLoading, setIsDateLoading] = useState(false); // Loading của nút "Xem thêm"
 
-  // State trạng thái loading/error
+  // State loading trang lần đầu
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Fetch dữ liệu ban đầu
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Gọi song song các API để tiết kiệm thời gian
         const [latestRes, topicRes, topRes] = await Promise.all([
-          getLatestVideos(10), // Lấy 10 video mới nhất
-          getAllTopics("VIDEO"), // Lấy danh sách topic
-          getTopVideos(10), // Lấy 10 video top view
+          getLatestVideos(10),
+          getAllTopics("VIDEO"),
+          getTopVideos(10),
         ]);
 
-        // Xử lý dữ liệu
-        // API của bạn trả về response.data, kiểm tra cấu trúc thực tế (thường là .content nếu phân trang)
-        const latest = latestRes.content || latestRes || [];
-        const top = topRes.content || topRes || [];
+        const latest = latestRes || [];
+        const top = topRes || [];
 
         setLatestVideos(latest);
         setTopics(topicRes);
         setTopVideos(top);
 
-        // Chọn video đầu tiên của danh sách mới nhất làm Hero (hoặc logic khác tùy bạn)
+        // Chọn video đầu tiên làm hero video
         if (latest.length > 0) {
           setHeroVideo(latest[0]);
         }
 
-        // Mặc định tab lọc ngày sẽ hiển thị video mới nhất
-        setDateFilteredVideos(latest);
+        // Mặc định lấy video của ngày hôm nay
+        handleDateChange(new Date());
       } catch (err) {
         logError(err);
       } finally {
@@ -64,34 +65,55 @@ const Video = () => {
     fetchData();
   }, []);
 
-  // Hàm xử lý khi click vào video (Chuyển trang)
   const handleVideoClick = (video) => {
-    // Navigate đến trang chi tiết
-    navigate(`/video/${video.id}`);
+    navigate(`/client/video/${video.id}`);
   };
 
-  // Hàm xử lý khi chọn ngày (Gọi API lọc)
-  const handleDateFilter = async (dateStr) => {
+  // --- 3. Xử lý khi chọn ngày mới (RESET LIST) ---
+  const handleDateChange = async (dateStr) => {
     try {
-      // Giả sử API filterVideos hỗ trợ param 'createdDate' hoặc bạn lọc client.
-      // Ở đây tôi gọi filterVideos theo logic API bạn cung cấp.
-      // Nếu Backend chưa hỗ trợ lọc theo ngày chính xác, bạn có thể cần update Backend.
-      // Tạm thời tôi demo gọi API search keyword rỗng để lấy list, thực tế cần param date.
-      const res = await filterVideos({
-        page: 1,
-        size: 10,
-        sortBy: "createdAt",
-        direction: "desc",
-      });
-      // Logic lọc client tạm thời nếu API chưa support date exact match
-      const filtered = (res.content || res).filter((v) =>
-        v.createdAt.startsWith(dateStr)
-      );
-      setDateFilteredVideos(
-        filtered.length > 0 ? filtered : res.content || res
-      ); // Fallback nếu ko có data
+      setIsDateLoading(true);
+      setCurrentDateFilter(dateStr);
+      setDateFilterPage(1);
+
+      const res = await getVideosByDate(dateStr, 1, 5, "createdAt", "desc");
+
+      setDateFilteredVideos(res.content || []);
+      setDateFilterHasMore(!res.last);
     } catch (err) {
-      console.error(err);
+      logError(err);
+      setDateFilteredVideos([]);
+      setDateFilterHasMore(false);
+    } finally {
+      setIsDateLoading(false);
+    }
+  };
+
+  // --- 4. Xử lý khi bấm "Xem thêm" (APPEND LIST) ---
+  const handleLoadMoreDateVideos = async () => {
+    if (!currentDateFilter || isDateLoading) return;
+
+    try {
+      setIsDateLoading(true);
+      const nextPage = dateFilterPage + 1;
+
+      // Gọi API lấy trang tiếp theo
+      const res = await getVideosByDate(
+        currentDateFilter,
+        nextPage,
+        5,
+        "createdAt",
+        "desc"
+      );
+
+      setDateFilteredVideos((prev) => [...prev, ...(res.content || [])]);
+
+      setDateFilterPage(nextPage);
+      setDateFilterHasMore(!res.last);
+    } catch (err) {
+      logError(err);
+    } finally {
+      setIsDateLoading(false);
     }
   };
 
@@ -103,17 +125,8 @@ const Video = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-red-600">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900">
-      {/* 1. Hero Section (Full Screen) */}
       {heroVideo && (
         <HeroSection
           video={heroVideo}
@@ -121,28 +134,27 @@ const Video = () => {
         />
       )}
 
-      {/* 2. Topics */}
       <TopicSection topics={topics} />
 
-      {/* 3. Slider: Video Mới Cập Nhật */}
       <VideoSlider
         title="Video Mới Cập Nhật"
         videos={latestVideos}
         onVideoClick={handleVideoClick}
       />
 
-      {/* 4. Slider: Top Lượt Xem */}
       <VideoSlider
         title="Top Lượt Xem"
         videos={topVideos}
         onVideoClick={handleVideoClick}
       />
 
-      {/* 5. Date Filter Section */}
       <DateFilterSection
         videos={dateFilteredVideos}
         onVideoClick={handleVideoClick}
-        onDateChange={handleDateFilter} // Truyền hàm xử lý đổi ngày
+        onDateChange={handleDateChange}
+        onLoadMore={handleLoadMoreDateVideos}
+        hasMore={dateFilterHasMore}
+        isLoading={isDateLoading}
       />
     </div>
   );

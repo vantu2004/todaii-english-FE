@@ -1,20 +1,32 @@
-import React, { useState, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { useState, useRef } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Loader2,
+  ChevronDown,
+} from "lucide-react";
+import { formatDate, formatISODate } from "../../../utils/FormatDate";
 import VideoCard from "./VideoCard";
 
-const DateFilterSection = ({ videos, onVideoClick, onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+const DateFilterSection = ({
+  videos,
+  onVideoClick,
+  onDateChange,
+  onLoadMore,
+  hasMore,
+  isLoading,
+}) => {
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(formatDate(today));
   const scrollRef = useRef(null);
 
-  // Tạo danh sách 14 ngày gần nhất
-  const days = Array.from({ length: 14 }, (_, i) => {
+  // Tạo danh sách 30 ngày
+  const days = Array.from({ length: 30 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - i);
     return {
-      value: d.toISOString().split("T")[0],
+      value: formatDate(d),
       label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     };
   });
@@ -22,13 +34,16 @@ const DateFilterSection = ({ videos, onVideoClick, onDateChange }) => {
   const scrollDays = (direction) => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: direction === "left" ? -150 : 150,
+        left: direction === "left" ? -200 : 200,
         behavior: "smooth",
       });
     }
   };
 
   const handleSelectDate = (dateValue) => {
+    // Nếu chọn lại ngày đang active thì không làm gì
+    if (selectedDate === dateValue) return;
+
     setSelectedDate(dateValue);
     if (onDateChange) {
       onDateChange(dateValue);
@@ -69,7 +84,7 @@ const DateFilterSection = ({ videos, onVideoClick, onDateChange }) => {
 
           <div
             ref={scrollRef}
-            className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide px-1 py-1"
+            className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide px-1 py-1 scroll-smooth"
             style={{ scrollbarWidth: "none" }}
           >
             {days.map((day) => {
@@ -102,27 +117,54 @@ const DateFilterSection = ({ videos, onVideoClick, onDateChange }) => {
 
       {/* Video Grid */}
       {videos.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {videos.slice(0, 10).map((video) => (
-            <VideoCard
-              key={`date-${video.id}`}
-              video={video}
-              onClick={onVideoClick}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-10 text-gray-500">
-          Không có video nào trong ngày này.
-        </div>
-      )}
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 animate-fade-in">
+            {videos.map((video) => (
+              <VideoCard
+                key={`date-${video.id}`} // Dùng ID duy nhất để React không warn
+                video={video}
+                onClick={onVideoClick}
+              />
+            ))}
+          </div>
 
-      {/* Show More Button */}
-      {videos.length > 0 && (
-        <div className="mt-10 flex justify-center">
-          <button className="px-8 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold rounded-full hover:bg-gray-50 hover:border-purple-400 hover:text-purple-600 transition-all shadow-sm">
-            Xem thêm ngày {formatISODate(selectedDate)}
-          </button>
+          {/* Load More Button (Pagination) */}
+          {hasMore && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={onLoadMore}
+                disabled={isLoading}
+                className="group px-8 py-3 bg-white border border-gray-300 text-gray-700 font-bold rounded-full hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all shadow-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Đang tải thêm...
+                  </>
+                ) : (
+                  <>
+                    Xem thêm ngày {formatISODate(selectedDate)}
+                    <ChevronDown
+                      size={18}
+                      className="group-hover:translate-y-1 transition-transform"
+                    />
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-dashed border-gray-300 shadow-sm">
+          <div className="bg-gray-50 p-4 rounded-full mb-4">
+            <Calendar size={40} className="text-gray-300" />
+          </div>
+          <h3 className="text-lg font-bold text-gray-900">
+            Không có video nào
+          </h3>
+          <p className="text-gray-500 text-sm">
+            Ngày {formatISODate(selectedDate)} chưa có nội dung cập nhật.
+          </p>
         </div>
       )}
     </section>

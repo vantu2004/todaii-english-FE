@@ -18,6 +18,7 @@ import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
 import Profile from "../../modules/clients/pages/Profile";
 import Video from "./../../modules/clients/pages/Video";
+import VideoFilter from "../../modules/clients/pages/VideoFilter";
 
 export default function ClientRoutes() {
   return (
@@ -78,6 +79,8 @@ export default function ClientRoutes() {
           <Route path="/article/filter" element={<ArticleFilter />}></Route>
           <Route path="/article/:id" element={<ArticleDetails />} />
           <Route path="/video" element={<Video />}></Route>
+          <Route path="/video/filter" element={<VideoFilter />}></Route>
+          <Route path="/video/:id" element={<VideoFilter />}></Route>
           <Route path="/dictionary" element={<Dictionary />}></Route>
 
           <Route
