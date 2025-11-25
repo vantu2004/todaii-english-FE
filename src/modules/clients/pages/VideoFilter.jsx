@@ -22,7 +22,7 @@ const VideoFilter = () => {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
   const alias = searchParams.get("alias") || "";
-  const views = searchParams.get("views") || "";
+  const cefrLevel = searchParams.get("cefr_level") || "";
 
   const [videos, setVideos] = useState([]);
   const [topics, setTopics] = useState([]);
@@ -32,8 +32,8 @@ const VideoFilter = () => {
 
   const [query, setQuery] = useState({
     keyword: q || "",
-    cefrLevel: "",
-    minViews: views ? parseInt(views) : 0,
+    cefrLevel: cefrLevel || "",
+    minViews: 0,
     alias: alias || "",
     page: 1,
     size: 9,

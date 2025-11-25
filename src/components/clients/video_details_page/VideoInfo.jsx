@@ -2,8 +2,25 @@ import { formatISODate } from "../../../utils/FormatDate";
 import { isSavedVideo } from "../../../api/clients/videoApi";
 import { toggleSavedVideo } from "../../../api/clients/userApi";
 import ToggleBookmarkButton from "../ToggleBookmarkButton";
+import { useNavigate } from "react-router-dom";
 
 const VideoInfo = ({ video }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (keyword, alias, cefrLevel) => {
+    if (keyword) {
+      navigate(`/client/video/filter?q=${encodeURIComponent(keyword)}`);
+    } else if (alias) {
+      navigate(`/client/video/filter?alias=${encodeURIComponent(alias)}`);
+    } else if (cefrLevel) {
+      navigate(
+        `/client/video/filter?cefr_level=${encodeURIComponent(cefrLevel)}`
+      );
+    } else {
+      navigate(`/client/video/filter`);
+    }
+  };
+
   return (
     <div className="w-full max-w-5xl mx-auto mt-6 px-4 sm:px-0">
       <h1 className="text-xl md:text-2xl font-bold text-neutral-900 leading-snug mb-4">
@@ -23,7 +40,10 @@ const VideoInfo = ({ video }) => {
             />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm font-bold text-neutral-900 cursor-pointer hover:text-blue-600 transition-colors truncate">
+            <h3
+              onClick={() => handleNavigate(video.author_name, null, null)}
+              className="text-sm font-bold text-neutral-900 cursor-pointer hover:text-blue-600 transition-colors truncate"
+            >
               {video.author_name}
             </h3>
             <p className="text-xs text-neutral-500 truncate">
@@ -57,7 +77,10 @@ const VideoInfo = ({ video }) => {
 
             {/* Tag Container - Wrap on mobile */}
             <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
-              <span className="px-2 py-0.5 bg-neutral-900 text-white rounded text-xs font-bold tracking-wide whitespace-nowrap">
+              <span
+                className="px-2 py-0.5 bg-neutral-900 text-white rounded text-xs font-bold tracking-wide whitespace-nowrap hover:opacity-90 transition-opacity cursor-pointer"
+                onClick={() => handleNavigate(null, null, video.cefr_level)}
+              >
                 {video.cefr_level}
               </span>
 
@@ -65,7 +88,8 @@ const VideoInfo = ({ video }) => {
                 Array.from(video.topics).map((t) => (
                   <span
                     key={t.id}
-                    className="text-xs text-neutral-500 bg-white px-2 py-0.5 rounded border border-neutral-200 whitespace-nowrap"
+                    className="text-xs text-neutral-500 bg-white px-2 py-0.5 rounded border border-neutral-200 whitespace-nowrap hover:opacity-90 transition-opacity cursor-pointer"
+                    onClick={() => handleNavigate(null, t.alias, null)}
                   >
                     #{t.name}
                   </span>

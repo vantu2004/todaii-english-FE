@@ -9,7 +9,7 @@ import {
 import SearchHistory from "../../../components/clients/dictionary_page/SearchHistory";
 import DictDetailWord from "../../../components/clients/dictionary_page/DictDetailWord";
 import RawDetailWord from "../../../components/clients/dictionary_page/RawDetailWord";
-import RightSidebar from "../../../components/clients/dictionary_page/RightSidebar";
+import AIChatBox from "../../../components/clients/dictionary_page/AIChatBox";
 import SearchBar from "../../../components/clients/SearchBar";
 import RelatedWords from "../../../components/clients/dictionary_page/RelatedWords";
 
@@ -121,7 +121,7 @@ const Dictionary = () => {
       >
         <div className="max-w-7xl mx-auto">
           {/* --- SEARCH SECTION  --- */}
-          <div className="max-w-7xl mx-auto mb-10">
+          <div className="max-w-7xl mx-auto mb-6">
             <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
               {/* 1. Search Bar (Chiếm phần lớn không gian) */}
               <div className="flex-1 relative z-10">
@@ -230,7 +230,7 @@ const Dictionary = () => {
 
             {/* Right Sidebar (AI & Trends) - 4/12 */}
             <div className="lg:col-span-4 hidden lg:block sticky top-24">
-              <RightSidebar />
+              <AIChatBox />
             </div>
           </div>
         </div>
