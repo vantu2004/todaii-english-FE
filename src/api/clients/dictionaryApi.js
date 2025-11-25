@@ -45,3 +45,27 @@ export const getWordByGemini = async (word) => {
     throw err;
   }
 };
+
+export const getRelatedWords = async (word) => {
+  try {
+    const response = await clientInstance.get("/dictionary/related-word", {
+      params: { word },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Get related words error:", err);
+    throw err;
+  }
+};
+
+export const askGemini = async (question) => {
+  try {
+    const response = await clientInstance.get("/dictionary/ask-gemini", {
+      params: { question },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Ask gemini error:", err);
+    throw err;
+  }
+};

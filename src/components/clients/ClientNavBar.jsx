@@ -158,7 +158,7 @@ const ClientNavBar = () => {
 
                   {/* Dropdown */}
                   <div
-                    className={`absolute right-0 mt-3 w-72 bg-white/80 backdrop-blur-2xl rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.04)] overflow-hidden transition-all duration-300 origin-top-right ${
+                    className={`absolute right-0 mt-3 w-72 bg-white/90 backdrop-blur-2xl rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.04)] overflow-hidden transition-all duration-300 origin-top-right ${
                       isProfileOpen
                         ? "opacity-100 scale-100 translate-y-0"
                         : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
