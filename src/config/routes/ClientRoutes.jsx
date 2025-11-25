@@ -14,12 +14,12 @@ import {
   RedirectAuthenticatedUser,
 } from "../../utils/ClientProtectRoutes";
 import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
-import Dictionary from "../../modules/clients/pages/dictionary/Dictionary";
 import PageNotFound from "../../pages/PageNotFound";
 import Profile from "../../modules/clients/pages/Profile";
 import Video from "./../../modules/clients/pages/Video";
 import VideoFilter from "../../modules/clients/pages/VideoFilter";
 import VideoDetails from "../../modules/clients/pages/VideoDetails";
+import Dictionary from "../../modules/clients/pages/Dictionary";
 
 export default function ClientRoutes() {
   return (

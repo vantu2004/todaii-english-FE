@@ -14,8 +14,8 @@ const RelatedVideos = ({ videos }) => {
 
   return (
     <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
-      {/* Header: Clean & Minimal (Đồng bộ với LyricsPanel) */}
-      <div className="px-6 py-4 border-b border-neutral-100 bg-neutral-50/50 flex items-center gap-2 sticky top-0 z-10">
+      {/* Header */}
+      <div className="px-4 py-4 border-b border-neutral-100 bg-neutral-50/50 flex items-center gap-2 sticky top-0 z-10">
         <div className="p-2 bg-white rounded-xl border border-neutral-100 shadow-sm text-neutral-700">
           <Clapperboard size={20} />
         </div>

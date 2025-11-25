@@ -89,7 +89,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
         {words.map((entry) => (
           <div
             key={entry.id}
-            className="group flex flex-col sm:flex-row gap-2 sm:gap-6 py-3 px-3 rounded-xl hover:bg-slate-50 transition-colors duration-200 border border-transparent hover:border-slate-100"
+            className="group flex flex-col sm:flex-row gap-2 sm:gap-6 py-3 px-3 rounded-xl hover:bg-slate-100 transition-colors duration-200 border border-transparent hover:border-slate-100"
           >
             {/* LEFT */}
             <div className="sm:w-40 flex-shrink-0 pt-0.5">
