@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import { Clock, Trash2 } from "lucide-react";
 
-const SearchHistory = ({ history, onSelectWord }) => {
-  const handleDelete = (wordToDelete, e) => {
-    e.stopPropagation();
-
-    const newHistory = history.filter((w) => w !== wordToDelete);
-    setHistory(newHistory);
-
-    localStorage.setItem("dict_history", JSON.stringify(newHistory));
-  };
-
+const SearchHistory = ({ history, onSelectWord, onDeleteHistoryItem }) => {
   return (
     <div className="bg-white p-4 rounded-2xl border border-neutral-100 shadow-sm">
       <div className="flex items-center gap-2 mb-3 text-neutral-700 font-bold pb-2 border-b border-neutral-100">
@@ -30,7 +21,7 @@ const SearchHistory = ({ history, onSelectWord }) => {
             >
               <span>{word}</span>
               <button
-                onClick={(e) => handleDelete(word, e)}
+                onClick={(e) => onDeleteHistoryItem(word, e)}
                 className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 transition-opacity"
               >
                 <Trash2 size={14} />

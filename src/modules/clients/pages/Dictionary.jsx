@@ -38,6 +38,15 @@ const Dictionary = () => {
     });
   };
 
+  const deleteHistoryItem = (wordToDelete, e) => {
+    e.stopPropagation();
+
+    const newHistory = history.filter((w) => w !== wordToDelete);
+    setHistory(newHistory);
+
+    localStorage.setItem("dict_history", JSON.stringify(newHistory));
+  };
+
   const handleSearch = async (term) => {
     const wordToSearch = term || searchTerm;
     if (!wordToSearch.trim()) return;
@@ -174,7 +183,11 @@ const Dictionary = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Left Sidebar (History & Related) - 2/12 */}
             <div className="lg:col-span-2 hidden lg:block sticky top-24 space-y-6">
-              <SearchHistory history={history} onSelectWord={handleSearch} />
+              <SearchHistory
+                history={history}
+                onSelectWord={handleSearch}
+                onDeleteHistoryItem={deleteHistoryItem}
+              />
               <RelatedWords
                 word={dbEntry[0]?.headword || rawEntry[0]?.word}
                 onSelectWord={handleSearch}
