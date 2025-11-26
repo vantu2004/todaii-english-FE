@@ -1,126 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom"; // IMPORT QUAN TRỌNG
 import { Tree } from "react-arborist";
-import {
-  Folder,
-  FolderOpen,
-  FileText,
-  Edit2,
-  Trash2,
-  MoreVertical,
-  Plus,
-  FilePlus,
-} from "lucide-react";
+import { Folder, Edit2, Trash2, FilePlus } from "lucide-react";
+import Node from "./Node";
 
-// --- NODE COMPONENT (Render từng dòng trong cây) ---
-const Node = ({ node, style, dragHandle, tree }) => {
-  if (!node?.data) return null;
-
-  const isFolder = node.data.type?.toUpperCase() === "FOLDER";
-  // Logic icon: Folder mở/đóng hoặc File note
-  const Icon = isFolder ? (node.isOpen ? FolderOpen : Folder) : FileText;
-
-  return (
-    <div
-      style={style}
-      ref={dragHandle}
-      onClick={() => node.toggle()}
-      onContextMenu={(e) => tree.props.onContextMenu(e, node)}
-      className={`
-        group flex items-center cursor-pointer px-3 py-1.5 mx-1 rounded-lg transition-all border border-transparent
-        ${
-          node.isSelected
-            ? "bg-neutral-200 border-neutral-300 text-neutral-900 font-semibold shadow-sm"
-            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
-        }
-      `}
-    >
-      {/* Icon */}
-      <div className="mr-2.5 w-5 h-5 flex items-center justify-center shrink-0">
-        <Icon
-          size={18}
-          className={
-            isFolder
-              ? node.isSelected
-                ? "text-yellow-600"
-                : "text-yellow-500 fill-yellow-500/20"
-              : node.isSelected
-              ? "text-neutral-700"
-              : "text-neutral-400"
-          }
-        />
-      </div>
-
-      {/* Text / Edit Input */}
-      <div className="flex-1 truncate select-none">
-        {node.isEditing ? (
-          <input
-            type="text"
-            defaultValue={node.data.name}
-            autoFocus
-            onFocus={(e) => e.currentTarget.select()}
-            onBlur={() => node.reset()}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") node.submit(e.currentTarget.value);
-              if (e.key === "Escape") node.reset();
-            }}
-            className="w-full px-1 py-0.5 text-sm bg-white border border-blue-500 rounded outline-none shadow-sm"
-          />
-        ) : (
-          <span className="text-sm">{node.data.name}</span>
-        )}
-      </div>
-
-      {/* Hover Menu Trigger */}
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-          tree.props.onContextMenu(e, node);
-        }}
-        className={`
-          p-1 rounded hover:bg-neutral-300 text-neutral-400 hover:text-neutral-700 transition-all
-          ${
-            node.isSelected
-              ? "opacity-100"
-              : "opacity-0 group-hover:opacity-100"
-          }
-        `}
-      >
-        <MoreVertical size={14} />
-      </div>
-    </div>
-  );
-};
-
-// --- MAIN TREE COMPONENT ---
-export default function NotebookTree({
-  data,
-  onSelectNote,
-  onRename,
-  onDelete,
-  onCreate,
-}) {
+const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
   const [menu, setMenu] = useState(null);
 
+  // Xử lý chuột phải (Context Menu)
   const handleContextMenu = (e, node) => {
     e.preventDefault();
     e.stopPropagation();
-    // Tính toán vị trí để menu không bị tràn màn hình (cơ bản)
+
+    // Lưu tọa độ chuột so với màn hình
     setMenu({ x: e.clientX, y: e.clientY, node });
   };
 
+  // Xử lý đóng menu
+  const closeMenu = () => setMenu(null);
+
   return (
-    <div
-      className="h-full relative"
-      onClick={() => setMenu(null)} // Click ra ngoài đóng menu
-      onScroll={() => setMenu(null)} // Scroll đóng menu
-    >
+    <div className="h-full relative">
       {data ? (
         <Tree
           data={data}
           idAccessor="id"
           childrenAccessor="children"
           width="100%"
-          height={600} // Lưu ý: Arborist cần fixed height hoặc container flex đúng
+          height={600}
           indent={20}
           rowHeight={36}
           paddingBottom={20}
@@ -138,53 +45,80 @@ export default function NotebookTree({
         </div>
       )}
 
-      {/* CUSTOM CONTEXT MENU */}
-      {menu?.node && (
-        <div
-          className="fixed z-[9999] bg-white border border-neutral-200 shadow-xl rounded-xl py-1.5 w-52 text-sm text-neutral-700 animate-in fade-in zoom-in-95 duration-100"
-          style={{ top: menu.y, left: menu.x }}
-        >
-          {/* Header: Tên node đang chọn */}
-          <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-100 mb-1 truncate bg-neutral-50/50">
-            {menu.node.data.name}
-          </div>
+      {/* PORTAL: Đưa Menu ra ngoài root div, gắn vào body 
+        giúp thoát khỏi overflow:hidden của sidebar 
+      */}
+      {menu?.node &&
+        createPortal(
+          <>
+            {/* Overlay trong suốt để click ra ngoài thì đóng menu */}
+            <div
+              className="fixed inset-0 z-[9998] bg-transparent"
+              onClick={closeMenu}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                closeMenu();
+              }}
+            />
 
-          {/* Folder Actions */}
-          {menu.node.data.type?.toUpperCase() === "FOLDER" && (
-            <>
+            {/* Menu Box */}
+            <div
+              className="fixed z-[9999] bg-white border border-neutral-200 shadow-xl rounded-xl py-1.5 w-52 text-sm text-neutral-700 animate-in fade-in zoom-in-95 duration-100"
+              style={{ top: menu.y, left: menu.x }}
+              onClick={(e) => e.stopPropagation()} // Chặn click xuyên qua menu
+            >
+              <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-100 mb-1 truncate bg-neutral-50/50 select-none">
+                {menu.node.data.name}
+              </div>
+
+              {menu.node.data.type?.toUpperCase() === "FOLDER" && (
+                <>
+                  <MenuItem
+                    icon={Folder}
+                    label="Tạo thư mục con"
+                    onClick={() => {
+                      onCreate(menu.node.id, "FOLDER");
+                      closeMenu();
+                    }}
+                  />
+                  <MenuItem
+                    icon={FilePlus}
+                    label="Tạo bộ từ vựng"
+                    onClick={() => {
+                      onCreate(menu.node.id, "NOTE");
+                      closeMenu();
+                    }}
+                  />
+                  <div className="border-t my-1 border-neutral-100"></div>
+                </>
+              )}
+
+              {/* Common Actions */}
               <MenuItem
-                icon={Folder}
-                label="Tạo thư mục con"
-                onClick={() => onCreate(menu.node.id, "FOLDER")}
+                icon={Edit2}
+                label="Đổi tên"
+                onClick={() => {
+                  menu.node.edit();
+                  closeMenu();
+                }}
               />
               <MenuItem
-                icon={FilePlus}
-                label="Tạo bộ từ vựng"
-                onClick={() => onCreate(menu.node.id, "NOTE")}
+                icon={Trash2}
+                label="Xóa"
+                onClick={() => {
+                  onDelete(menu.node);
+                  closeMenu();
+                }}
+                isDanger
               />
-              <div className="border-t my-1 border-neutral-100"></div>
-            </>
-          )}
-
-          {/* Common Actions */}
-          <MenuItem
-            icon={Edit2}
-            label="Đổi tên"
-            onClick={() => menu.node.edit()}
-          />
-          <MenuItem
-            icon={Trash2}
-            label="Xóa"
-            onClick={() => onDelete(menu.node)}
-            isDanger
-          />
-        </div>
-      )}
+            </div>
+          </>,
+          document.body // Render trực tiếp vào body
+        )}
     </div>
   );
-}
+};
 
-// Helper: Menu Item
 const MenuItem = ({ icon: Icon, label, onClick, isDanger }) => (
   <button
     onClick={onClick}
@@ -200,3 +134,5 @@ const MenuItem = ({ icon: Icon, label, onClick, isDanger }) => (
     <Icon size={16} strokeWidth={2} /> {label}
   </button>
 );
+
+export default NotebookTree;

@@ -17,11 +17,11 @@ import {
 import { useClientAuthContext } from "./../../hooks/clients/useClientAuthContext";
 
 const navItems = [
-  { label: "Trang chủ", path: "/client/home", icon: House },
+  { label: "Trang chủ", path: "/client", icon: House, end: true },
   { label: "Video", path: "/client/video", icon: TvMinimalPlay },
   { label: "Từ điển", path: "/client/dictionary", icon: BookA },
-  { label: "Sổ tay", path: "/client/notebook", icon: NotebookPen },
   { label: "Học từ vựng", path: "/client/vocabulary", icon: GraduationCap },
+  { label: "Sổ tay", path: "/client/notebook", icon: NotebookPen },
 ];
 
 const ClientNavBar = () => {
@@ -70,7 +70,7 @@ const ClientNavBar = () => {
           <div className="flex items-center justify-between h-[68px]">
             {/* Logo */}
             <a
-              href="/client/home"
+              href="/client"
               className="text-2xl font-extrabold tracking-tight select-none"
             >
               <span className="text-[#13183f]">Todaii</span>
@@ -86,6 +86,7 @@ const ClientNavBar = () => {
                   <NavLink
                     key={item.label}
                     to={item.path}
+                    end={item.end}
                     className={({ isActive }) =>
                       `relative px-5 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 rounded-xl ${
                         isActive
@@ -266,6 +267,7 @@ const ClientNavBar = () => {
                   <NavLink
                     key={item.label}
                     to={item.path}
+                    end={item.end}
                     onClick={() => setIsMenuOpen(false)}
                     className={({ isActive }) =>
                       `flex items-center gap-3 px-4 py-3.5 rounded-xl text-[14px] font-medium transition-all duration-300 ${

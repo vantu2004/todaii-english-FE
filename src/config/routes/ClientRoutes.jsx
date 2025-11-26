@@ -77,7 +77,7 @@ export default function ClientRoutes() {
         />
 
         <Route path="" element={<ClientLayout />}>
-          <Route path="/home" element={<Home />}></Route>
+          <Route path="/" element={<Home />}></Route>
           <Route path="/article/filter" element={<ArticleFilter />}></Route>
           <Route path="/article/:id" element={<ArticleDetails />} />
           <Route path="/video" element={<Video />}></Route>

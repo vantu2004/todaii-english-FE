@@ -4,7 +4,7 @@ import { useClientAuthContext } from "../hooks/clients/useClientAuthContext";
 export const ClientProtectRoutes = ({ children }) => {
   const { authUser, isLoggedIn, loading } = useClientAuthContext();
 
-  if (loading) return
+  if (loading) return;
 
   if (!isLoggedIn || !authUser) {
     return <Navigate to="/client/login" replace />;
@@ -16,10 +16,10 @@ export const ClientProtectRoutes = ({ children }) => {
 export const RedirectAuthenticatedUser = ({ children }) => {
   const { authUser, isLoggedIn, loading } = useClientAuthContext();
 
-  if (loading) return 
+  if (loading) return;
 
   if (isLoggedIn && authUser) {
-    return <Navigate to="/client/home" replace />;
+    return <Navigate to="/client" replace />;
   }
 
   return children;

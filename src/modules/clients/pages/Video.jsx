@@ -132,42 +132,33 @@ const Video = () => {
   }
 
   return (
-    <AnimatePresence>
-      <motion.div
-        key="search-results-page"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 50 }}
-        transition={{ duration: 0.5 }}
-        className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900"
-      >
-        {heroVideo && (
-          <HeroSection video={heroVideo} onNavigate={handleNavigate} />
-        )}
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900">
+      {heroVideo && (
+        <HeroSection video={heroVideo} onNavigate={handleNavigate} />
+      )}
 
-        <TopicSection topics={topics} onNavigate={handleNavigate} />
+      <TopicSection topics={topics} onNavigate={handleNavigate} />
 
-        <VideoSlider
-          title="Video Mới Cập Nhật"
-          videos={latestVideos}
-          onNavigate={handleNavigate}
-        />
+      <VideoSlider
+        title="Video Mới Cập Nhật"
+        videos={latestVideos}
+        onNavigate={handleNavigate}
+      />
 
-        <VideoSlider
-          title="Top Lượt Xem"
-          videos={topVideos}
-          onNavigate={handleNavigate}
-        />
+      <VideoSlider
+        title="Top Lượt Xem"
+        videos={topVideos}
+        onNavigate={handleNavigate}
+      />
 
-        <DateFilterSection
-          videos={dateFilteredVideos}
-          onDateChange={handleDateChange}
-          onLoadMore={handleLoadMoreDateVideos}
-          hasMore={dateFilterHasMore}
-          isLoading={isDateLoading}
-        />
-      </motion.div>
-    </AnimatePresence>
+      <DateFilterSection
+        videos={dateFilteredVideos}
+        onDateChange={handleDateChange}
+        onLoadMore={handleLoadMoreDateVideos}
+        hasMore={dateFilterHasMore}
+        isLoading={isDateLoading}
+      />
+    </div>
   );
 };
 

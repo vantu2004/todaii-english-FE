@@ -44,11 +44,11 @@ const ArticleFilter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="search-results-page"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 50 }}
-        transition={{ duration: 0.5 }}
+        key="dictionary-page"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.4 }}
         className="min-h-screen bg-neutral-100/50 pt-20"
       >
         {/* Header */}

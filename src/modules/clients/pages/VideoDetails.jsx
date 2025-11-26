@@ -88,11 +88,11 @@ const VideoDetails = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="search-results-page"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 50 }}
-        transition={{ duration: 0.5 }}
+        key="dictionary-page"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.4 }}
         className="min-h-screen bg-gray-50 text-gray-900 font-sans px-4 pt-24 pb-10"
       >
         <div className="max-w-7xl mx-auto">

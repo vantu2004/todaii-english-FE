@@ -19,19 +19,16 @@ import {
   Sidebar,
   Search,
 } from "lucide-react";
-
-// Components UI Reuse
 import SearchBar from "../../../components/clients/SearchBar";
 import DictDetailWord from "../../../components/clients/dictionary_page/DictDetailWord";
 import RawDetailWord from "../../../components/clients/dictionary_page/RawDetailWord";
 import RelatedWords from "../../../components/clients/dictionary_page/RelatedWords";
+import { logError } from "../../../utils/LogError";
 
-export default function NoteEditor({ note, onToggleSidebar, isSidebarOpen }) {
-  // --- STATE ---
+const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const [savedWords, setSavedWords] = useState([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
 
-  // Search State
   const [searchState, setSearchState] = useState({
     term: "",
     result: [],
@@ -40,21 +37,27 @@ export default function NoteEditor({ note, onToggleSidebar, isSidebarOpen }) {
     error: null,
   });
 
-  // --- EFFECTS ---
-  // 1. Load Saved Words khi Note thay đổi
+  // Load Saved Words khi Note thay đổi
   useEffect(() => {
-    if (!note) return;
-    setLoadingSaved(true);
-    setSearchState((prev) => ({ ...prev, term: "", result: [], error: null }));
+    if (!note?.id) return;
 
-    getWords(note.id)
-      .then(setSavedWords)
-      .catch((err) => console.error(err))
-      .finally(() => setLoadingSaved(false));
+    const fetchWords = async () => {
+      setLoadingSaved(true);
+      setSearchState({ term: "", result: [], error: null });
+
+      try {
+        const words = await getWords(note.id);
+        setSavedWords(words);
+      } catch (error) {
+        logError(error);
+      } finally {
+        setLoadingSaved(false);
+      }
+    };
+
+    fetchWords();
   }, [note?.id]);
 
-  // --- HANDLERS ---
-  // 2. Xử lý Search
   const handleSearch = async (term) => {
     const wordToSearch = term || searchState.term;
     if (!wordToSearch.trim()) return;
@@ -77,34 +80,30 @@ export default function NoteEditor({ note, onToggleSidebar, isSidebarOpen }) {
         const rawRes = await getRawWord(wordToSearch);
         if (rawRes?.length) {
           setSearchState((prev) => ({ ...prev, result: rawRes, type: "raw" }));
-        } else {
-          setSearchState((prev) => ({
-            ...prev,
-            error: "Không tìm thấy từ này trong từ điển.",
-          }));
         }
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
+
       setSearchState((prev) => ({
         ...prev,
-        error: "Lỗi kết nối tới máy chủ.",
+        error: "Không tìm thấy từ.",
       }));
     } finally {
       setSearchState((prev) => ({ ...prev, isSearching: false }));
     }
   };
 
-  // 3. Thêm từ vào Note
   const handleAddWord = async () => {
     if (!searchState.result.length || !note) return;
     const entry = searchState.result[0];
     const headword = entry.headword || entry.word;
 
+    // đảm bảo lưu 1 lần
     if (savedWords.some((w) => (w.headword || w.word) === headword)) {
-      return alert("Từ này đã có trong danh sách!");
+      return;
     }
 
-    // Optimistic Update UI
     const newWord = {
       id: entry.id || Date.now(), // Temp ID nếu là raw
       headword,
@@ -116,46 +115,45 @@ export default function NoteEditor({ note, onToggleSidebar, isSidebarOpen }) {
     setSavedWords([newWord, ...savedWords]);
 
     try {
+      // chỉ lưu khi từ có trong DB
       if (searchState.type === "db") await addWordToNotebook(note.id, entry.id);
-      // TODO: Handle raw word saving if API supports it
-    } catch {
-      alert("Lỗi lưu từ");
+    } catch (error) {
+      console.error(error);
+
       setSavedWords((prev) =>
         prev.filter((w) => (w.headword || w.word) !== headword)
       );
     }
   };
 
-  // 4. Xóa từ khỏi Note
   const handleRemoveWord = async (entryId, e) => {
     e.stopPropagation();
-    if (!confirm("Xóa từ này khỏi bộ từ vựng?")) return;
 
     const prev = [...savedWords];
     setSavedWords(savedWords.filter((w) => w.id !== entryId));
 
     try {
       await removeWordFromNotebook(note.id, entryId);
-    } catch {
+    } catch (error) {
+      console.error(error);
+
       setSavedWords(prev);
     }
   };
 
-  // 5. Dùng AI dịch từ
   const handleRequestAI = async (word) => {
     setSearchState((prev) => ({ ...prev, isSearching: true }));
     try {
       const res = await getWordByGemini(word);
       if (res?.length)
         setSearchState((prev) => ({ ...prev, result: res, type: "db" }));
-    } catch {
-      alert("Lỗi AI xử lý");
+    } catch (error) {
+      logError(error);
     } finally {
       setSearchState((prev) => ({ ...prev, isSearching: false }));
     }
   };
 
-  // --- RENDER ---
   if (!note) return <EmptyNoteState />;
 
   return (
@@ -232,9 +230,9 @@ export default function NoteEditor({ note, onToggleSidebar, isSidebarOpen }) {
       </div>
     </div>
   );
-}
+};
 
-// --- SUB-COMPONENTS (UI only) ---
+export default NoteEditor;
 
 const EmptyNoteState = () => (
   <div className="h-full flex flex-col items-center justify-center text-neutral-300 bg-white select-none">
