@@ -20,7 +20,7 @@ const navItems = [
   { label: "Trang chủ", path: "/client/home", icon: House },
   { label: "Video", path: "/client/video", icon: TvMinimalPlay },
   { label: "Từ điển", path: "/client/dictionary", icon: BookA },
-  { label: "Số tay", path: "/client/notebook", icon: NotebookPen },
+  { label: "Sổ tay", path: "/client/notebook", icon: NotebookPen },
   { label: "Học từ vựng", path: "/client/vocabulary", icon: GraduationCap },
 ];
 

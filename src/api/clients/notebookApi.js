@@ -10,21 +10,30 @@ export const getAllNotebooks = async () => {
   }
 };
 
-export const createNotebook = async (notebookData) => {
+export const createNotebook = async ({ name, type, parentId }) => {
   try {
-    const response = await clientInstance.post("/notebook", notebookData);
+    const payload = {
+      name,
+      type,
+      parent_id: parentId,
+    };
+    const response = await clientInstance.post("/notebook", payload);
     return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 };
 
 export const renameNotebook = async (notebookId, newName) => {
   try {
-    const response = await clientInstance.put(`/notebook/${notebookId}`, {
-      name: newName,
-    });
+    const response = await clientInstance.put(
+      `/notebook/${notebookId}`,
+      {},
+      {
+        params: { name: newName },
+      }
+    );
     return response.data;
   } catch (err) {
     console.log(err);

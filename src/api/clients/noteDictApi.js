@@ -1,6 +1,6 @@
 import { clientInstance } from "../../config/axios";
 
-export const getNotebooks = async (noteId) => {
+export const getWords = async (noteId) => {
   try {
     const response = await clientInstance.get(`/notebook/${noteId}/words`);
     return response.data;
@@ -12,7 +12,7 @@ export const getNotebooks = async (noteId) => {
 
 export const addWordToNotebook = async (noteId, entryId) => {
   try {
-    await clientInstance.post(`/notebook/${noteId}/word/${entryId}`);
+    await clientInstance.put(`/notebook/${noteId}/word/${entryId}`);
   } catch (err) {
     console.log(err);
     throw err;

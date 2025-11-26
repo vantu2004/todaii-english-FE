@@ -20,7 +20,7 @@ import Video from "./../../modules/clients/pages/Video";
 import VideoFilter from "../../modules/clients/pages/VideoFilter";
 import VideoDetails from "../../modules/clients/pages/VideoDetails";
 import Dictionary from "../../modules/clients/pages/Dictionary";
-import NoteBook from "../../modules/clients/pages/NoteBook";
+import Notebook from "../../modules/clients/pages/NoteBook";
 
 export default function ClientRoutes() {
   return (
@@ -89,7 +89,7 @@ export default function ClientRoutes() {
             path="/notebook"
             element={
               <ClientProtectRoutes>
-                <NoteBook />
+                <Notebook />
               </ClientProtectRoutes>
             }
           />
