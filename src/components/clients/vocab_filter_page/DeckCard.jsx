@@ -1,9 +1,8 @@
-import React from "react";
-import { BookOpen, Signal, Layers, Clock } from "lucide-react";
+import { BookOpen, Layers, Clock } from "lucide-react";
 import { formatISODate } from "../../../utils/FormatDate";
+import { Link } from "react-router-dom";
 
 const DeckCard = ({ deck }) => {
-  // Helper style cho CEFR Badge
   const getLevelStyle = (level) => {
     switch (level) {
       case "A1":
@@ -24,7 +23,10 @@ const DeckCard = ({ deck }) => {
   };
 
   return (
-    <div className="group flex flex-col bg-white rounded-3xl border border-neutral-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer">
+    <Link
+      to={`/client/vocabulary/${deck.id}`}
+      className="group flex flex-col bg-white rounded-3xl border border-neutral-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer"
+    >
       {/* Card Header / Abstract Pattern */}
       <div className="h-28 bg-neutral-50 border-b border-neutral-100 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
@@ -69,7 +71,7 @@ const DeckCard = ({ deck }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
