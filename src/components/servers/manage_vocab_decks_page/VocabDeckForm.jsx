@@ -65,7 +65,7 @@ const VocabDeckForm = ({ mode = "create", initialData = {}, onSubmit }) => {
       className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-slate-50"
     >
       {/* HEADER */}
-      <div className="flex items-center justify-between bg-white shadow-md rounded-b-lg px-8 py-6 border-b border-gray-200">
+      <div className="flex items-center justify-between bg-white shadow-md rounded-b-lg px-8 py-3 border-b border-gray-200">
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
             {mode === "create"
