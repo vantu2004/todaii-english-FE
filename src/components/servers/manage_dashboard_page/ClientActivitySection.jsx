@@ -9,7 +9,7 @@ import {
 } from "./dashboardUtils";
 import { useMemo } from "react";
 
-const UserSection = ({ data }) => {
+const ClientActivitySection = ({ data, type }) => {
   const tokenChartData = useMemo(
     () => getTokenChartData(data?.ai_token_trends),
     [data]
@@ -24,16 +24,12 @@ const UserSection = ({ data }) => {
   );
 
   return (
-    <div className="mb-8">
-      <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
-        <Users size={20} /> User Activities
-      </h2>
-
+    <div className="animate-fade-in">
       {/* 1. Hàng trên: AI Token & Distribution Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <ChartContainer
-          title="AI Token Usage (User)"
-          subtitle="Total tokens consumed by users"
+          title={`AI Token Usage (${type})`}
+          subtitle={`Tokens consumed by ${type}s`}
         >
           {tokenChartData ? (
             <Bar
@@ -45,13 +41,13 @@ const UserSection = ({ data }) => {
               }}
             />
           ) : (
-            <p>No Data</p>
+            <p className="text-gray-400">No AI Usage Data</p>
           )}
         </ChartContainer>
 
         <ChartContainer
           title="Activity Distribution"
-          subtitle="User action breakdown"
+          subtitle={`${type} action breakdown`}
         >
           <div className="h-full flex items-center justify-center p-2">
             {eventDistributionData ? (
@@ -69,7 +65,7 @@ const UserSection = ({ data }) => {
                 }}
               />
             ) : (
-              <p>No Data</p>
+              <p className="text-gray-400">No Activity Data</p>
             )}
           </div>
         </ChartContainer>
@@ -80,7 +76,7 @@ const UserSection = ({ data }) => {
         {eventCharts.map((chart) => (
           <div
             key={chart.key}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border border-gray-100 dark:border-gray-700 flex flex-col"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border border-gray-100 dark:border-gray-700 flex flex-col hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -98,7 +94,6 @@ const UserSection = ({ data }) => {
                 }}
               />
             </div>
-
             <div className="h-32 w-full mt-auto">
               {chart.isLineChart ? (
                 <Line data={chart.chartData} options={miniChartOptions} />
@@ -113,4 +108,4 @@ const UserSection = ({ data }) => {
   );
 };
 
-export default UserSection;
+export default ClientActivitySection;

@@ -16,18 +16,23 @@ import {
   LayoutDashboard,
   Calendar as CalendarIcon,
   RefreshCcw,
+  User,
+  Users,
+  UserCircle,
 } from "lucide-react";
 import {
   getSummary,
   getAdminDashboard,
   getUserChart,
+  getGuestChart,
 } from "../../../api/servers/dashboardApi";
 import AdminSection from "../../../components/servers/manage_dashboard_page/AdminSection";
-import UserSection from "../../../components/servers/manage_dashboard_page/UserSection";
+import ClientActivitySection from "../../../components/servers/manage_dashboard_page/ClientActivitySection";
 import SummaryStats from "../../../components/servers/manage_dashboard_page/SummaryStats";
 import { logError } from "../../../utils/LogError";
 import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
 import { formatDate } from "../../../utils/FormatDate";
+import { set } from "date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +53,9 @@ const Dashboard = () => {
   const [summary, setSummary] = useState(null);
   const [adminData, setAdminData] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [guestData, setGuestData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [clientViewMode, setClientViewMode] = useState("user");
 
   const [dateRange, setDateRange] = useState({
     startDate: formatDate(new Date().setDate(new Date().getDate() - 30)),
@@ -58,15 +65,17 @@ const Dashboard = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [sumRes, adminRes, userRes] = await Promise.all([
+      const [sumRes, adminRes, userRes, guestRes] = await Promise.all([
         getSummary(),
         getAdminDashboard(dateRange.startDate, dateRange.endDate),
         getUserChart(dateRange.startDate, dateRange.endDate),
+        getGuestChart(dateRange.startDate, dateRange.endDate),
       ]);
 
       setSummary(sumRes);
       setAdminData(adminRes);
       setUserData(userRes);
+      setGuestData(guestRes);
     } catch (error) {
       logError(error);
     } finally {
@@ -141,8 +150,46 @@ const Dashboard = () => {
         <>
           <SummaryStats data={summary} />
           <AdminSection data={adminData} />
-          <UserSection data={userData} />
-          <UserSection data={userData} />
+
+          {/* (User / Guest Switcher) */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                <Users size={20} /> Client Activities
+              </h2>
+
+              {/* Toggle Switch */}
+              <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+                <button
+                  onClick={() => setClientViewMode("user")}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+                    clientViewMode === "user"
+                      ? "bg-white dark:bg-gray-700 text-blue-600 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                  }`}
+                >
+                  <UserCircle size={16} /> Registered Users
+                </button>
+                <button
+                  onClick={() => setClientViewMode("guest")}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+                    clientViewMode === "guest"
+                      ? "bg-white dark:bg-gray-700 text-indigo-600 shadow-sm"
+                      : "text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                  }`}
+                >
+                  <User size={16} /> Guests
+                </button>
+              </div>
+            </div>
+
+            {/* Render Section based on Selection */}
+            {clientViewMode === "user" ? (
+              <ClientActivitySection data={userData} type="User" />
+            ) : (
+              <ClientActivitySection data={guestData} type="Guest" />
+            )}
+          </div>
         </>
       )}
 

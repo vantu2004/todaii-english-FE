@@ -40,3 +40,18 @@ export const getUserChart = async (startDate, endDate) => {
     throw error;
   }
 };
+
+export const getGuestChart = async (startDate, endDate) => {
+  try {
+    const response = await serverInstance.get("/dashboard/guest-chart", {
+      params: {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
