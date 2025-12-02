@@ -27,6 +27,7 @@ import UserSection from "../../../components/servers/manage_dashboard_page/UserS
 import SummaryStats from "../../../components/servers/manage_dashboard_page/SummaryStats";
 import { logError } from "../../../utils/LogError";
 import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import { formatDate } from "../../../utils/FormatDate";
 
 ChartJS.register(
   CategoryScale,
@@ -50,10 +51,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
 
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(new Date().setDate(new Date().getDate() - 30))
-      .toISOString()
-      .split("T")[0],
-    endDate: new Date().toISOString().split("T")[0],
+    startDate: formatDate(new Date().setDate(new Date().getDate() - 30)),
+    endDate: formatDate(new Date()),
   });
 
   const fetchData = async () => {
@@ -64,6 +63,7 @@ const Dashboard = () => {
         getAdminDashboard(dateRange.startDate, dateRange.endDate),
         getUserChart(dateRange.startDate, dateRange.endDate),
       ]);
+
       setSummary(sumRes);
       setAdminData(adminRes);
       setUserData(userRes);
@@ -77,9 +77,7 @@ const Dashboard = () => {
   useEffect(() => {
     setHeader({
       title: "Dashboard",
-      breadcrumb: [
-        { label: `Continuous Updates - ${new Date().toLocaleDateString()}` },
-      ],
+      breadcrumb: [{ label: `Continuous Updates - ${formatDate(new Date())}` }],
     });
   }, []);
 
@@ -96,7 +94,7 @@ const Dashboard = () => {
             <LayoutDashboard className="text-blue-500" /> Dashboard Overview
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            Analytics for Dictionary & AI Integrations
+            Real-time Insights for Todaii Ecosystem
           </p>
         </div>
 
@@ -144,11 +142,12 @@ const Dashboard = () => {
           <SummaryStats data={summary} />
           <AdminSection data={adminData} />
           <UserSection data={userData} />
+          <UserSection data={userData} />
         </>
       )}
 
       <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500">
-        TODAII - Team • {new Date().toLocaleDateString()}
+        TODAII - Team • {formatDate(new Date())}
       </div>
     </>
   );
