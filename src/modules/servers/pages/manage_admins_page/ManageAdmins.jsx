@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AdminsTable from "../../../components/servers/manage_admins_page/AdminsTable";
-import { fetchAdmins, createAdmin } from "../../../api/servers/adminApi";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/Pagination";
-import AdminFormModal from "../../../components/servers/manage_admins_page/AdminFormModal";
+import AdminsTable from "../../../../components/servers/manage_admins_page/AdminsTable";
+import { fetchAdmins, createAdmin } from "../../../../api/servers/adminApi";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/Pagination";
+import AdminFormModal from "../../../../components/servers/manage_admins_page/AdminFormModal";
 import { motion } from "framer-motion";
-import { logError } from "../../../utils/LogError";
-import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageAdmins = () => {
   const { setHeader } = useHeaderContext();
@@ -41,6 +41,7 @@ const ManageAdmins = () => {
     { key: "createdAt", label: "Created At", sortField: "createdAt" },
     { key: "status", label: "Status", sortField: "status" },
     { key: "enable", label: "Enable", sortField: "enabled" },
+    { key: "dashboard", label: "Dashboard" },
     { key: "actions", label: "Actions" },
   ];
 

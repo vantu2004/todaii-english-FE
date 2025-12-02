@@ -7,8 +7,8 @@ import {
 import Login from "../../modules/servers/pages/Login";
 import ServerLayout from "../../modules/servers/layouts/ServerLayout";
 import Dashboard from "../../modules/servers/pages/Dashboard";
-import ManageAdmins from "../../modules/servers/pages/ManageAdmins";
-import ManageUsers from "../../modules/servers/pages/ManageUsers";
+import ManageAdmins from "../../modules/servers/pages/manage_admins_page/ManageAdmins";
+import ManageUsers from "../../modules/servers/pages/manage_users_page/ManageUsers";
 import ManageTopics from "../../modules/servers/pages/manage_topics_page/ManageTopics";
 import ManageDictionary from "../../modules/servers/pages/manage_dictionary_page/ManageDictionary";
 import DictionaryApi from "../../modules/servers/pages/manage_dictionary_page/DictionaryApi";
@@ -40,6 +40,9 @@ import YoutubeSetting from "../../modules/servers/pages/manage_setting_page/Yout
 import NewsApiSetting from "../../modules/servers/pages/manage_setting_page/NewsApiSetting";
 import CloudinarySetting from "../../modules/servers/pages/manage_setting_page/CloudinarySetting";
 import PageNotFound from "../../pages/PageNotFound";
+import MyDashboard from "../../modules/servers/pages/manage_profile_page/MyDashboard";
+import AdminDashboard from "../../modules/servers/pages/manage_admins_page/AdminDashboard";
+import UserDashboard from "../../modules/servers/pages/manage_users_page/UserDashboard";
 
 export default function ServerRoutes() {
   return (
@@ -82,6 +85,15 @@ export default function ServerRoutes() {
               }
             />
 
+            <Route
+              path="/admin/:id/dashboard"
+              element={
+                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
+                  <AdminDashboard />
+                </ServerProtectRoutes>
+              }
+            />
+
             {/* Users: SUPER_ADMIN + USER_MANAGER */}
             <Route
               path="/user"
@@ -90,6 +102,17 @@ export default function ServerRoutes() {
                   rolesAllowed={["SUPER_ADMIN", "USER_MANAGER"]}
                 >
                   <ManageUsers />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/user/:id/dashboard"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "USER_MANAGER"]}
+                >
+                  <UserDashboard />
                 </ServerProtectRoutes>
               }
             />
@@ -375,6 +398,21 @@ export default function ServerRoutes() {
                   ]}
                 >
                   <Profile />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/my-dashboard"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={[
+                    "SUPER_ADMIN",
+                    "USER_MANAGER",
+                    "CONTENT_MANAGER",
+                  ]}
+                >
+                  <MyDashboard />
                 </ServerProtectRoutes>
               }
             />

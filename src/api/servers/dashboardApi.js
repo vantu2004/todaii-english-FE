@@ -26,9 +26,54 @@ export const getAdminDashboard = async (startDate, endDate) => {
   }
 };
 
+export const getAdminChartById = async (id, startDate, endDate) => {
+  try {
+    const response = await serverInstance.get(`/dashboard/admin-chart/${id}`, {
+      params: {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
+export const getMyChart = async (startDate, endDate) => {
+  try {
+    const response = await serverInstance.get("/dashboard/my-chart", {
+      params: {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
 export const getUserChart = async (startDate, endDate) => {
   try {
     const response = await serverInstance.get("/dashboard/user-chart", {
+      params: {
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
+
+export const getUserChartById = async (id, startDate, endDate) => {
+  try {
+    const response = await serverInstance.get(`/dashboard/user-chart/${id}`, {
       params: {
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),

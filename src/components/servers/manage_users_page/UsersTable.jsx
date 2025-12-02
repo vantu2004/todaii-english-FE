@@ -9,6 +9,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  LayoutDashboard,
 } from "lucide-react";
 import UserViewModal from "./UserViewModal";
 import {
@@ -18,6 +19,7 @@ import {
 } from "../../../api/servers/userApi";
 import UserFormModal from "./UserFormModal";
 import { logError } from "../../../utils/LogError";
+import { useNavigate } from "react-router-dom";
 
 const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
@@ -26,6 +28,8 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setEnabledStates(users.map((user) => user.enabled));
@@ -45,6 +49,10 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
     } catch (err) {
       logError(err);
     }
+  };
+
+  const handleDashboardClick = (index) => {
+    navigate(`/server/user/${users[index].id}/dashboard`);
   };
 
   const handleViewClick = (index) => {
@@ -234,6 +242,19 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                         }`}
                       ></div>
                     </button>
+                  </td>
+
+                  {/* Dashboard */}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex items-center text-sm">
+                      <button
+                        onClick={() => handleDashboardClick(i)}
+                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        aria-label="Vocabulary"
+                      >
+                        <LayoutDashboard className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
 
                   <td className="px-4 py-3">

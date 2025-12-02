@@ -31,10 +31,7 @@ const AdminSection = ({ data }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Token Chart */}
-        <ChartContainer
-          title="AI Token Usage (Global)"
-          subtitle="Total tokens consumed"
-        >
+        <ChartContainer title="AI Token Usage" subtitle="Total tokens consumed">
           {tokenChartData ? (
             <Bar
               data={tokenChartData}

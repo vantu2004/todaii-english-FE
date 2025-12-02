@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../components/servers/ToolBar";
-import Pagination from "../../../components/servers/Pagination";
-import { fetchUsers } from "../../../api/servers/userApi";
-import UsersTable from "../../../components/servers/manage_users_page/UsersTable";
+import ToolBar from "../../../../components/servers/ToolBar";
+import Pagination from "../../../../components/servers/Pagination";
+import { fetchUsers } from "../../../../api/servers/userApi";
+import UsersTable from "../../../../components/servers/manage_users_page/UsersTable";
 import { motion } from "framer-motion";
-import { logError } from "../../../utils/LogError";
-import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import { logError } from "../../../../utils/LogError";
+import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
 
 const ManageUsers = () => {
   const { setHeader } = useHeaderContext();
@@ -39,6 +39,7 @@ const ManageUsers = () => {
     { key: "createdAt", label: "Created At", sortField: "createdAt" },
     { key: "status", label: "Status", sortField: "status" },
     { key: "enable", label: "Enable", sortField: "enabled" },
+    { key: "dashboard", label: "Dashboard" },
     { key: "actions", label: "Actions" },
   ];
 

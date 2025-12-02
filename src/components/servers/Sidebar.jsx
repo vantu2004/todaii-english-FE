@@ -304,18 +304,26 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <div className="flex gap-2">
-          <Link
-            to="/server/profile"
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
-          >
-            <Settings size={14} />
-            Settings
-          </Link>
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <Link
+              to="/server/profile"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+            >
+              <Settings size={14} />
+              Profile
+            </Link>
+            <Link
+              to="/server/my-dashboard"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+            >
+              <BarChart3 size={14} /> Dashboard
+            </Link>
+          </div>
           <button
             onClick={() => handleLogout(authUser?.email)}
-            disabled={loading}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+            disabled={loading} // Thêm w-full để chiếm hết chiều rộng và đổi màu nền
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-100 hover:bg-red-200 rounded-lg text-xs font-medium text-red-700"
           >
             {loading ? (
               "Logging out..."

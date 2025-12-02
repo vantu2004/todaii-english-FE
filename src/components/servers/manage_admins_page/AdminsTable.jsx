@@ -14,10 +14,12 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  LayoutDashboard,
 } from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
 import AdminViewModal from "./AdminViewModal";
 import { logError } from "../../../utils/LogError";
+import { useNavigate } from "react-router-dom";
 
 const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const [enabledStates, setEnabledStates] = useState([]);
@@ -26,6 +28,8 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setEnabledStates(admins.map((admin) => admin.enabled));
@@ -46,6 +50,10 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
     } catch (err) {
       logError(err);
     }
+  };
+
+  const handleDashboardClick = (index) => {
+    navigate(`/server/admin/${admins[index].id}/dashboard`);
   };
 
   const handleViewClick = (index) => {
@@ -254,6 +262,19 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                         }`}
                       ></div>
                     </button>
+                  </td>
+
+                  {/* Dashboard */}
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex items-center text-sm">
+                      <button
+                        onClick={() => handleDashboardClick(i)}
+                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        aria-label="Vocabulary"
+                      >
+                        <LayoutDashboard className="w-5 h-5" />
+                      </button>
+                    </div>
                   </td>
 
                   {/* Actions */}
