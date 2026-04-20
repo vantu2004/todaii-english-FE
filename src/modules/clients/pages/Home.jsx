@@ -82,7 +82,7 @@ const Home = () => {
               onSearch={(text) => {
                 setKeyword(text);
                 navigate(
-                  `/client/article/filter?q=${encodeURIComponent(text)}`
+                  `/client/article/filter?q=${encodeURIComponent(text)}`,
                 );
               }}
             />

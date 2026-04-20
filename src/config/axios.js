@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const CLIENT_BASE_URL = import.meta.env.VITE_CLIENT_BASE_URL;
-const SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
+const CLIENT_BASE_URL = import.meta.env.VITE_CLIENT_LOCAL_URL;
+const SERVER_BASE_URL = import.meta.env.VITE_SERVER_LOCAL_URL;
 
 export const clientInstance = axios.create({
   baseURL: CLIENT_BASE_URL,
