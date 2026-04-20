@@ -1,7 +1,13 @@
 import axios from "axios";
 
-const CLIENT_BASE_URL = import.meta.env.VITE_CLIENT_BASE_URL;
-const SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
+const CLIENT_BASE_URL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_CLIENT_LOCAL_URL
+    : import.meta.env.VITE_CLIENT_PROD_URL;
+const SERVER_BASE_URL =
+  import.meta.env.MODE === "development"
+    ? import.meta.env.VITE_SERVER_LOCAL_URL
+    : import.meta.env.VITE_SERVER_PROD_URL;
 
 export const clientInstance = axios.create({
   baseURL: CLIENT_BASE_URL,
@@ -18,14 +24,3 @@ export const serverInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-// axiosInstance.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem("accessToken");
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
