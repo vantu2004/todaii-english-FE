@@ -8,13 +8,41 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import VoiceSelector from "./VoiceSelector";
 
 const ArticleContent = ({ paragraphs }) => {
+  const [voices, setVoices] = useState([]);
+  const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const currentWordIndexRef = useRef(0);
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
+
+  useEffect(() => {
+    const loadVoices = () => {
+      const allVoices = window.speechSynthesis.getVoices();
+      setVoices(allVoices);
+
+      const enVoice = allVoices.find((v) => v.lang.startsWith("en"));
+      setSelectedVoice(enVoice || allVoices[0]);
+    };
+
+    loadVoices();
+
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsVoiceOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // State quản lý việc ẩn/hiện dịch của từng đoạn (key: index, value: boolean)
   const [showTranslations, setShowTranslations] = useState({});
@@ -47,6 +75,9 @@ const ArticleContent = ({ paragraphs }) => {
       }
       const p = paragraphs[index];
       const utterance = new SpeechSynthesisUtterance(p.text_en);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
       utteranceRef.current = utterance;
 
       utterance.onstart = () => {
@@ -114,6 +145,12 @@ const ArticleContent = ({ paragraphs }) => {
               <span>Tạm dừng</span>
             </button>
           )}
+
+          <VoiceSelector
+            voices={voices}
+            selectedVoice={selectedVoice}
+            onChange={setSelectedVoice}
+          />
 
           <div className="w-px h-6 bg-neutral-200 mx-1"></div>
 
