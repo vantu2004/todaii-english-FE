@@ -49,7 +49,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="font-jarkata-sans flex items-center justify-center min-h-screen p-4 sm:p-6 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
+    <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
       <motion.div 
         variants={fadeIn(0.1)}
         initial="hidden"

@@ -131,7 +131,7 @@ const Register = () => {
   };
 
   return (
-    <div className="font-jarkata-sans flex items-center justify-center min-h-screen p-4 sm:p-6 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
+    <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
       <motion.div 
         variants={fadeIn(0.1)}
         initial="hidden"
@@ -165,7 +165,7 @@ const Register = () => {
         </div>
 
         {/* Right Form Panel */}
-        <div className="flex flex-col justify-center w-full lg:w-[55%] p-8 sm:p-12 md:p-16 h-full max-h-[90vh] overflow-y-auto">
+        <div className="flex flex-col justify-center w-full lg:w-[55%] p-8 sm:p-12 md:p-16">
           <form className="w-full max-w-sm mx-auto" onSubmit={handleRegister}>
             <div className="mb-8">
               <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-2">

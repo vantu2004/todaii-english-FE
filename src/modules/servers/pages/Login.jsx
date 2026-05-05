@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <main className="font-jarkata-sans min-h-screen flex items-center justify-center bg-neutral-950 text-white px-4 relative overflow-hidden">
+    <main className="font-jarkata-sans min-h-screen grid place-items-center bg-neutral-950 text-white p-4 sm:p-6 py-8 sm:py-12 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-500/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-accent-500/10 rounded-full blur-[100px] pointer-events-none" />
