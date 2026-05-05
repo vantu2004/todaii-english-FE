@@ -1,78 +1,74 @@
 import { useState } from "react";
-import RegisterOffice from "../../../../assets/img/register/register-office.jpeg";
-import RegisterOfficeDark from "../../../../assets/img/register/register-office-dark.jpeg";
 import InputField from "../../../../components/clients/InputField";
-import { useNavigate, useParams } from "react-router-dom";
 import { resetPassword } from "../../../../api/clients/authApi";
-import { Eye, EyeOff } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeIn } from "../../../../animations/fadeIn";
 
 const ResetPassword = () => {
-  const { token } = useParams();
-
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    newPassword: "",
-    confirmNewPassword: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState({
+    password: "",
+    confirmPassword: "",
   });
 
   const [touched, setTouched] = useState(false);
 
-  const [error, setError] = useState({
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
   const [showPassword, setShowPassword] = useState({
     password: false,
-    setShowPassword: false,
+    confirmPassword: false,
   });
-  const navigate = useNavigate();
-
-  const handleFocus = (e) => {
-    const { name } = e.target;
-    if (name === "confirmNewPassword") {
-      setTouched(true);
-    }
-  };
 
   const handleTogglePassword = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
+  const handleFocus = (e) => {
+    const { name } = e.target;
+    if (name === "confirmPassword") {
+      setTouched(true);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [name]: value });
 
     setError((prev) => {
       const updated = { ...prev, [name]: "" };
 
-      const { newPassword, confirmNewPassword } = {
+      const { password, confirmPassword } = {
         ...form,
         [name]: value,
       };
 
-      // Validate new password length
-      if (name === "newPassword" || name === "confirmNewPassword") {
-        if (!newPassword) {
-          updated.newPassword = "Please enter a password";
-        } else if (newPassword.length < 6) {
-          updated.newPassword = "Password must be at least 6 characters";
+      if (name === "password" || name === "confirmPassword") {
+        if (!password) {
+          updated.password = "Please enter a password";
+        } else if (password.length < 6) {
+          updated.password = "Password must be at least 6 characters";
         } else {
-          updated.newPassword = "";
+          updated.password = "";
         }
 
         // Validate confirm password after that field has been touched
-        if (!confirmNewPassword && touched) {
-          updated.confirmNewPassword = "Please confirm password";
+        if (!confirmPassword && touched) {
+          updated.confirmPassword = "Please confirm password";
         } else if (
-          newPassword &&
-          confirmNewPassword &&
-          newPassword !== confirmNewPassword
+          password &&
+          confirmPassword &&
+          password !== confirmPassword
         ) {
-          updated.confirmNewPassword = "Passwords don't match";
+          updated.confirmPassword = "Passwords don't match";
         } else {
-          updated.confirmNewPassword = "";
+          updated.confirmPassword = "";
         }
       }
 
@@ -80,123 +76,135 @@ const ResetPassword = () => {
     });
   };
 
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    const token = searchParams.get("token");
 
+    if (error.password || error.confirmPassword) {
+      toast.error("Please fix error above", {
+        style: { maxWidth: 600 },
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
-      await resetPassword(token, form.newPassword);
-      toast.success("Password reset successfully");
-      navigate("/client/login");
+      await resetPassword(token, form.password);
+      toast.success("Reset password successfully!");
+      navigate(`/client/login`);
     } catch (err) {
-      if (err.response?.status === 401) {
-        toast.error("Token has been expired");
-      } else if (err.response?.status === 404) {
-        toast.error("Token not found");
-      } else if (err.response?.status === 400) {
-        toast.error("Invalid password format");
+      if (err.response?.status === 400) {
+        toast.error("Token is not valid");
       } else {
         toast.error("Internal server error");
       }
-      console.error("Register error:", err);
+      console.error("Reset password error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="font-inter flex items-center min-h-screen p-6 bg-gray-50 dark:bg-neutral-900">
-      <div className="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-neutral-800">
-        <div className="flex flex-col overflow-y-auto md:flex-row">
-          <div className="h-32 md:h-auto md:w-1/2">
-            <img
-              aria-hidden="true"
-              className="object-cover w-full h-full dark:hidden"
-              src={RegisterOffice}
-              alt="Office"
-            />
-            <img
-              aria-hidden="true"
-              className="hidden object-cover w-full h-full dark:block"
-              src={RegisterOfficeDark}
-              alt="Office"
-            />
+    <div className="font-jarkata-sans flex items-center justify-center min-h-screen p-4 sm:p-6 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
+      <motion.div 
+        variants={fadeIn(0.1)}
+        initial="hidden"
+        animate="show"
+        className="flex w-full max-w-5xl mx-auto overflow-hidden bg-white dark:bg-neutral-900/60 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-neutral-100 dark:border-neutral-800/80 backdrop-blur-xl"
+      >
+        {/* Left Branded Panel */}
+        <div className="hidden lg:flex lg:w-[45%] p-12 flex-col justify-between relative overflow-hidden landing-gradient text-white">
+          <div className="absolute top-[-20%] left-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-brand-400/20 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10">
+            <div className="text-2xl font-extrabold tracking-tight select-none flex items-center">
+              <span className="text-white">Todaii</span>
+              <span className="ml-1 text-white/80">English</span>
+            </div>
           </div>
-          <div className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-            <form className="w-full" onSubmit={handleResetPassword}>
-              <h1 className="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                Reset password
-              </h1>
 
-              <div className="relative">
-                <InputField
-                  label="New password"
-                  name="newPassword"
-                  value={form.newPassword}
-                  onChange={handleChange}
-                  type={showPassword.newPassword ? "text" : "password"}
-                  placeholder="******"
-                  className="mt-4"
-                />
+          <div className="relative z-10 space-y-6">
+            <h2 className="text-4xl xl:text-5xl font-semibold leading-tight tracking-tight">
+              Create new password.
+            </h2>
+            <p className="text-white/80 text-lg leading-relaxed max-w-md">
+              Secure your account with a strong, unique password.
+            </p>
+          </div>
 
-                <span
-                  className="absolute top-[38px] right-3 cursor-pointer"
-                  onClick={() => handleTogglePassword("newPassword")}
-                >
-                  {showPassword.newPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
-                  )}
-                </span>
-              </div>
-
-              {error.newPassword && (
-                <span className="text-xs text-red-500">
-                  {error.newPassword}
-                </span>
-              )}
-
-              <div className="relative">
-                <InputField
-                  label="Confirm new password"
-                  name="confirmNewPassword"
-                  value={form.confirmNewPassword}
-                  onChange={handleChange}
-                  onFocus={handleFocus}
-                  type={showPassword.confirmNewPassword ? "text" : "password"}
-                  placeholder="******"
-                  className="mt-4"
-                />
-                <span
-                  className="absolute top-[38px] right-3 cursor-pointer"
-                  onClick={() => handleTogglePassword("confirmNewPassword")}
-                >
-                  {showPassword.confirmNewPassword ? (
-                    <EyeOff size={20} />
-                  ) : (
-                    <Eye size={20} />
-                  )}
-                </span>
-              </div>
-
-              {error.confirmNewPassword && (
-                <span className="text-xs text-red-500">
-                  {error.confirmNewPassword}
-                </span>
-              )}
-
-              <button
-                type="submit"
-                className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple"
-                disabled={loading}
-              >
-                {loading ? "Requesting..." : "Confirm"}
-              </button>
-            </form>
+          <div className="relative z-10 text-sm font-medium text-white/60">
+            © {new Date().getFullYear()} Todaii English
           </div>
         </div>
-      </div>
+
+        {/* Right Form Panel */}
+        <div className="flex flex-col justify-center w-full lg:w-[55%] p-8 sm:p-12 md:p-16">
+          <form className="w-full max-w-sm mx-auto" onSubmit={handleResetPassword}>
+            <div className="mb-8">
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-2">
+                Reset password
+              </h1>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                Please enter and confirm your new password.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="relative">
+                <InputField
+                  label="Password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  type={showPassword.password ? "text" : "password"}
+                  placeholder="••••••••"
+                  error={error.password}
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                  onClick={() => handleTogglePassword("password")}
+                >
+                  {showPassword.password ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+
+              <div className="relative">
+                <InputField
+                  label="Confirm password"
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  type={showPassword.confirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  error={error.confirmPassword}
+                />
+                <button
+                  type="button"
+                  className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                  onClick={() => handleTogglePassword("confirmPassword")}
+                >
+                  {showPassword.confirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-8 px-5 py-3 text-sm font-semibold text-white transition-all duration-300 bg-neutral-900 dark:bg-white dark:text-neutral-900 rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_1px_2px_rgba(0,0,0,0.1),0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-none hover:-translate-y-0.5"
+            >
+              {loading ? "Resetting..." : "Reset Password"}
+            </button>
+          </form>
+        </div>
+      </motion.div>
     </div>
   );
 };
