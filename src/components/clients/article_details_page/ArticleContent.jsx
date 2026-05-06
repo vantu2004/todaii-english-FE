@@ -96,11 +96,11 @@ const ArticleContent = ({ paragraphs }) => {
     <div className="relative">
       {/* Sticky Audio Controls Toolbar */}
       <div className="sticky top-24 z-30 mb-8 flex justify-end pointer-events-none">
-        <div className="pointer-events-auto bg-white/90 backdrop-blur-md border border-neutral-200 shadow-lg rounded-full p-1.5 flex items-center gap-1">
+        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-full p-1.5 flex items-center gap-1">
           {!isSpeaking ? (
             <button
               onClick={() => speakParagraphs(currentParagraph)}
-              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-full hover:bg-neutral-800 transition-all font-medium text-sm shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Play size={16} fill="currentColor" />
               <span>Đọc bài</span>
@@ -108,18 +108,18 @@ const ArticleContent = ({ paragraphs }) => {
           ) : (
             <button
               onClick={pauseSpeech}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transition-all font-medium text-sm shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transition-all font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Pause size={16} fill="currentColor" />
               <span>Tạm dừng</span>
             </button>
           )}
 
-          <div className="w-px h-6 bg-neutral-200 mx-1"></div>
+          <div className="w-px h-6 bg-neutral-200 dark:bg-neutral-700 mx-1"></div>
 
           <button
             onClick={resumeSpeech}
-            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-full transition-colors"
+            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors"
             title="Tiếp tục"
           >
             <Play size={18} />
@@ -127,7 +127,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           <button
             onClick={stopSpeech}
-            className="p-2 text-neutral-600 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-full transition-colors"
             title="Dừng hẳn"
           >
             <Square size={18} fill="currentColor" />
@@ -143,7 +143,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           // Style highlights container
           const containerClass = isCurrent
-            ? "bg-neutral-50 border-l-4 border-neutral-900 pl-6 py-4 pr-4 rounded-r-2xl shadow-sm"
+            ? "bg-neutral-50 dark:bg-neutral-800/50 border-l-4 border-neutral-900 dark:border-neutral-400 pl-6 py-4 pr-4 rounded-r-2xl shadow-sm dark:shadow-none"
             : "bg-transparent border-l-4 border-transparent pl-4 py-0 pr-0";
 
           return (
@@ -152,7 +152,7 @@ const ArticleContent = ({ paragraphs }) => {
               className={`transition-all duration-500 ease-in-out group ${containerClass}`}
             >
               {/* ENGLISH TEXT */}
-              <p className="text-lg md:text-xl text-neutral-900 leading-loose font-serif mb-3">
+              <p className="text-lg md:text-xl text-neutral-900 dark:text-neutral-100 leading-loose font-serif mb-3">
                 {isCurrent
                   ? // Active Paragraph Rendering (Highlight word)
                     p.text_en.split(/\s+/).map((word, i) => (
@@ -162,7 +162,7 @@ const ArticleContent = ({ paragraphs }) => {
                           transition-colors duration-150 rounded px-0.5
                           ${
                             i === currentWordIndexRef.current
-                              ? "bg-yellow-200 text-neutral-900 font-medium"
+                              ? "bg-yellow-200 dark:bg-yellow-500/30 text-neutral-900 dark:text-white font-medium"
                               : ""
                           }
                         `}
@@ -185,8 +185,8 @@ const ArticleContent = ({ paragraphs }) => {
                   }
                 `}
               >
-                <div className="bg-white/50 border-t border-dashed border-neutral-300 pt-3">
-                  <p className="text-base text-neutral-600 leading-relaxed font-sans italic">
+                <div className="bg-white/50 dark:bg-transparent border-t border-dashed border-neutral-300 dark:border-neutral-700 pt-3">
+                  <p className="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans italic">
                     {p.text_vi_system}
                   </p>
                 </div>
@@ -200,8 +200,8 @@ const ArticleContent = ({ paragraphs }) => {
                     flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all
                     ${
                       isTranslated
-                        ? "bg-neutral-200 text-neutral-700 hover:bg-neutral-300"
-                        : "bg-white border border-neutral-200 text-neutral-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50"
+                        ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+                        : "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-200 dark:hover:border-brand-900 hover:bg-brand-50 dark:hover:bg-brand-900/20"
                     }
                   `}
                 >
@@ -220,7 +220,7 @@ const ArticleContent = ({ paragraphs }) => {
       </div>
 
       {/* Audio Status Footer */}
-      <div className="mt-6 flex items-center gap-2 text-xs text-neutral-400 font-medium border-t border-neutral-100 pt-4">
+      <div className="mt-6 flex items-center gap-2 text-xs text-neutral-400 dark:text-neutral-500 font-medium border-t border-neutral-100 dark:border-neutral-800 pt-4">
         <Volume2 size={14} />
         {paragraphs && paragraphs[currentParagraph]
           ? `Đang đọc đoạn ${currentParagraph + 1} / ${paragraphs.length}`

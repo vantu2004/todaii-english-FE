@@ -85,17 +85,17 @@ const ArticleFilterSidebar = ({
 
   return (
     <div
-      className={`bg-white rounded-2xl border border-neutral-100 overflow-hidden ${
-        isMobile ? "" : "shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+      className={`bg-white dark:bg-neutral-900/60 rounded-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden ${
+        isMobile ? "" : "shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none"
       }`}
     >
       {/* Header */}
-      <div className="px-5 py-4 border-b border-neutral-100 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-neutral-900">Bộ lọc</h2>
+      <div className="px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Bộ lọc</h2>
         {hasActiveFilters && (
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-700 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
           >
             <RotateCcw size={12} />
             Đặt lại
@@ -105,17 +105,17 @@ const ArticleFilterSidebar = ({
 
       <div className="p-4 space-y-1">
         {/* Source Filter */}
-        <div className="border-b border-neutral-100 pb-3">
+        <div className="border-b border-neutral-100 dark:border-neutral-800 pb-3">
           <button
             onClick={() => toggleSection("source")}
             className="w-full flex items-center justify-between py-2 text-left"
           >
-            <span className="text-sm font-medium text-neutral-700">
+            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Nguồn tin
             </span>
             <ChevronDown
               size={16}
-              className={`text-neutral-400 transition-transform duration-200 ${
+              className={`text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
                 expandedSections.source ? "rotate-180" : ""
               }`}
             />
@@ -137,7 +137,7 @@ const ArticleFilterSidebar = ({
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all ${
                   query.sourceName === option.value
                     ? "bg-neutral-900 text-white"
-                    : "text-neutral-600 hover:bg-neutral-50"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 {option.label}
@@ -148,15 +148,15 @@ const ArticleFilterSidebar = ({
         </div>
 
         {/* Topic Filter */}
-        <div className="border-b border-neutral-100 py-3">
+        <div className="border-b border-neutral-100 dark:border-neutral-800 py-3">
           <button
             onClick={() => toggleSection("topic")}
             className="w-full flex items-center justify-between py-2 text-left"
           >
-            <span className="text-sm font-medium text-neutral-700">Chủ đề</span>
+            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Chủ đề</span>
             <ChevronDown
               size={16}
-              className={`text-neutral-400 transition-transform duration-200 ${
+              className={`text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
                 expandedSections.topic ? "rotate-180" : ""
               }`}
             />
@@ -176,7 +176,7 @@ const ArticleFilterSidebar = ({
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all ${
                   query.alias === option.value
                     ? "bg-neutral-900 text-white"
-                    : "text-neutral-600 hover:bg-neutral-50"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 }`}
               >
                 {option.label}
@@ -192,12 +192,12 @@ const ArticleFilterSidebar = ({
             onClick={() => toggleSection("cefr")}
             className="w-full flex items-center justify-between py-2 text-left"
           >
-            <span className="text-sm font-medium text-neutral-700">
+            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Trình độ CEFR
             </span>
             <ChevronDown
               size={16}
-              className={`text-neutral-400 transition-transform duration-200 ${
+              className={`text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
                 expandedSections.cefr ? "rotate-180" : ""
               }`}
             />
@@ -218,7 +218,7 @@ const ArticleFilterSidebar = ({
                   className={`relative flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all ${
                     query.cefrLevel === level
                       ? "bg-neutral-900 text-white"
-                      : "bg-neutral-50 text-neutral-600 hover:bg-neutral-100"
+                      : "bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                   }`}
                 >
                   <span
@@ -239,7 +239,7 @@ const ArticleFilterSidebar = ({
               className={`w-full px-3 py-2.5 rounded-xl text-sm transition-all ${
                 query.cefrLevel === ""
                   ? "bg-neutral-900 text-white"
-                  : "text-neutral-500 hover:bg-neutral-50"
+                  : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
               }`}
             >
               Tất cả trình độ
@@ -250,10 +250,10 @@ const ArticleFilterSidebar = ({
 
       {/* Mobile Apply Button */}
       {isMobile && (
-        <div className="p-4 border-t border-neutral-100">
+        <div className="p-4 border-t border-neutral-100 dark:border-neutral-800">
           <button
             onClick={onApply}
-            className="w-full py-3 bg-neutral-900 text-white text-sm font-medium rounded-xl hover:bg-neutral-800 transition-colors"
+            className="w-full py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-medium rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
           >
             Áp dụng bộ lọc
           </button>

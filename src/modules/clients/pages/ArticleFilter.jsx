@@ -49,17 +49,17 @@ const ArticleFilter = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-neutral-100/50 pt-20"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-20 transition-colors duration-300"
       >
         {/* Header */}
-        <div className="bg-white border-b border-neutral-100 px-4">
+        <div className="bg-white dark:bg-neutral-900/50 border-b border-neutral-100 dark:border-neutral-800 px-4 transition-colors duration-300">
           <div className="max-w-7xl mx-auto py-8">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               {/* --- LEFT SECTION --- */}
               <div className="flex items-start gap-4">
                 <button
                   onClick={() => window.history.back()}
-                  className="mt-1 p-2.5 rounded-full bg-white border border-neutral-200 text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900 hover:border-neutral-300 transition-all shadow-sm group flex-shrink-0"
+                  className="mt-1 p-2.5 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-sm dark:shadow-none group flex-shrink-0"
                   title="Quay lại"
                 >
                   <ArrowLeft
@@ -69,10 +69,10 @@ const ArticleFilter = () => {
                 </button>
 
                 <div>
-                  <p className="text-xs font-medium text-neutral-400 uppercase tracking-[0.2em] mb-2">
+                  <p className="text-xs font-medium text-neutral-400 dark:text-neutral-500 uppercase tracking-[0.2em] mb-2">
                     Kết quả tìm kiếm
                   </p>
-                  <h1 className="text-2xl sm:text-3xl font-light text-neutral-900 tracking-tight">
+                  <h1 className="text-2xl sm:text-3xl font-light text-neutral-900 dark:text-white tracking-tight">
                     {query.keyword ? (
                       <>
                         Tìm kiếm cho "
@@ -95,9 +95,9 @@ const ArticleFilter = () => {
                       </>
                     )}
                   </h1>
-                  <p className="mt-2 text-neutral-500 text-sm">
+                  <p className="mt-2 text-neutral-500 dark:text-neutral-400 text-sm">
                     Tìm thấy{" "}
-                    <span className="font-medium text-neutral-700">
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">
                       {totalResults}
                     </span>{" "}
                     bài viết
@@ -129,7 +129,7 @@ const ArticleFilter = () => {
                 {/* Mobile Filter Toggle */}
                 <button
                   onClick={() => setShowMobileFilter(true)}
-                  className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:border-neutral-300 transition-colors"
+                  className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
                 >
                   <SlidersHorizontal size={16} />
                   Bộ lọc
@@ -147,7 +147,7 @@ const ArticleFilter = () => {
                         direction: e.target.value.split("-")[1],
                       });
                     }}
-                    className="px-4 py-2.5 bg-white border border-neutral-200 rounded-xl text-sm font-medium text-neutral-700 hover:border-neutral-300 transition-colors"
+                    className="px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
                   >
                     {sortOptions.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -164,19 +164,19 @@ const ArticleFilter = () => {
                   {[1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="bg-white rounded-2xl p-5 animate-pulse"
+                      className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 animate-pulse"
                     >
                       <div className="flex gap-5">
-                        <div className="w-52 h-36 bg-neutral-100 rounded-xl flex-shrink-0" />
+                        <div className="w-52 h-36 bg-neutral-100 dark:bg-neutral-800 rounded-xl flex-shrink-0" />
                         <div className="flex-1 space-y-3">
-                          <div className="h-4 bg-neutral-100 rounded w-16" />
-                          <div className="h-5 bg-neutral-100 rounded w-3/4" />
-                          <div className="h-4 bg-neutral-100 rounded w-full" />
-                          <div className="h-4 bg-neutral-100 rounded w-2/3" />
+                          <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-16" />
+                          <div className="h-5 bg-neutral-100 dark:bg-neutral-800 rounded w-3/4" />
+                          <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-full" />
+                          <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-2/3" />
                           <div className="flex gap-4 pt-2">
-                            <div className="h-3 bg-neutral-100 rounded w-20" />
-                            <div className="h-3 bg-neutral-100 rounded w-16" />
-                            <div className="h-3 bg-neutral-100 rounded w-24" />
+                            <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded w-20" />
+                            <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded w-16" />
+                            <div className="h-3 bg-neutral-100 dark:bg-neutral-800 rounded w-24" />
                           </div>
                         </div>
                       </div>
@@ -184,14 +184,14 @@ const ArticleFilter = () => {
                   ))}
                 </div>
               ) : results.length === 0 ? (
-                <div className="bg-white rounded-2xl p-12 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-neutral-100 rounded-full flex items-center justify-center">
-                    <Search size={24} className="text-neutral-400" />
+                <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-12 text-center border border-neutral-100 dark:border-neutral-800">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                    <Search size={24} className="text-neutral-400 dark:text-neutral-500" />
                   </div>
-                  <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                  <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
                     Không tìm thấy kết quả
                   </h3>
-                  <p className="text-neutral-500 text-sm max-w-sm mx-auto">
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm max-w-sm mx-auto">
                     Thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc
                   </p>
                 </div>
@@ -231,14 +231,14 @@ const ArticleFilter = () => {
               className="absolute inset-0 bg-black/40"
               onClick={() => setShowMobileFilter(false)}
             />
-            <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white overflow-y-auto">
-              <div className="sticky top-0 bg-white border-b border-neutral-100 px-5 py-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900">
+            <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white dark:bg-neutral-950 overflow-y-auto">
+              <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-5 py-4 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
                   Bộ lọc
                 </h2>
                 <button
                   onClick={() => setShowMobileFilter(false)}
-                  className="w-9 h-9 rounded-full hover:bg-neutral-100 flex items-center justify-center text-neutral-500"
+                  className="w-9 h-9 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400"
                 >
                   ✕
                 </button>

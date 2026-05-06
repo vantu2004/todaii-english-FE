@@ -41,32 +41,32 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
   const getPosStyle = (pos) => {
     const p = pos?.toLowerCase() || "";
     if (p.includes("noun") || p.includes("n."))
-      return "bg-blue-50 text-blue-700 border-blue-100";
+      return "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800";
     if (p.includes("verb") || p.includes("v."))
-      return "bg-emerald-50 text-emerald-700 border-emerald-100";
+      return "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800";
     if (p.includes("adj"))
-      return "bg-purple-50 text-purple-700 border-purple-100";
-    if (p.includes("adv")) return "bg-amber-50 text-amber-700 border-amber-100";
-    if (p.includes("pro")) return "bg-pink-50 text-pink-700 border-pink-100";
+      return "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-800";
+    if (p.includes("adv")) return "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-800";
+    if (p.includes("pro")) return "bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-800";
     if (p.includes("det"))
-      return "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100";
-    if (p.includes("prep")) return "bg-cyan-50 text-cyan-700 border-cyan-100";
-    if (p.includes("conj")) return "bg-lime-50 text-lime-700 border-lime-100";
-    if (p.includes("interj")) return "bg-rose-50 text-rose-700 border-rose-100";
-    if (p.includes("phrase")) return "bg-gray-50 text-gray-700 border-gray-100";
-    return "bg-indigo-50 text-indigo-700 border-indigo-100";
+      return "bg-fuchsia-50 dark:bg-fuchsia-900/20 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-100 dark:border-fuchsia-800";
+    if (p.includes("prep")) return "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-100 dark:border-cyan-800";
+    if (p.includes("conj")) return "bg-lime-50 dark:bg-lime-900/20 text-lime-700 dark:text-lime-300 border-lime-100 dark:border-lime-800";
+    if (p.includes("interj")) return "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-100 dark:border-rose-800";
+    if (p.includes("phrase")) return "bg-gray-50 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-100 dark:border-neutral-700";
+    return "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-800";
   };
 
   if (isFirstLoad && loading) {
     return (
-      <div className="mt-8 pt-6 border-t border-dashed border-indigo-100">
+      <div className="mt-8 pt-6 border-t border-dashed border-indigo-100 dark:border-indigo-900/50">
         <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 bg-gray-100 rounded-lg animate-pulse" />
-          <div className="h-6 w-40 bg-gray-100 rounded animate-pulse" />
+          <div className="w-8 h-8 bg-gray-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
+          <div className="h-6 w-40 bg-gray-100 dark:bg-neutral-800 rounded animate-pulse" />
         </div>
         <div className="flex flex-col gap-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-gray-50 rounded-xl animate-pulse" />
+            <div key={i} className="h-24 bg-gray-50 dark:bg-neutral-800 rounded-xl animate-pulse" />
           ))}
         </div>
       </div>
@@ -76,10 +76,10 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
   if (!loading && words.length === 0) return null;
 
   return (
-    <div className="mt-8 pt-6 border-t border-dashed border-indigo-100">
+    <div className="mt-8 pt-6 border-t border-dashed border-indigo-100 dark:border-indigo-900/50">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-5 text-indigo-900">
-        <div className="p-1.5 bg-indigo-100 rounded-lg text-indigo-600">
+      <div className="flex items-center gap-2 mb-5 text-indigo-900 dark:text-indigo-200">
+        <div className="p-1.5 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg text-indigo-600 dark:text-indigo-400">
           <Languages size={18} />
         </div>
         <h2 className="text-lg font-bold">Từ vựng quan trọng</h2>
@@ -89,12 +89,12 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
         {words.map((entry) => (
           <div
             key={entry.id}
-            className="group flex flex-col sm:flex-row gap-2 sm:gap-6 py-3 px-3 rounded-xl hover:bg-slate-100 transition-colors duration-200 border border-transparent hover:border-slate-100"
+            className="group flex flex-col sm:flex-row gap-2 sm:gap-6 py-3 px-3 rounded-xl hover:bg-slate-100 dark:hover:bg-neutral-800/50 transition-colors duration-200 border border-transparent hover:border-slate-100 dark:hover:border-neutral-700"
           >
             {/* LEFT */}
             <div className="sm:w-40 flex-shrink-0 pt-0.5">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-indigo-700 group-hover:text-indigo-600 transition-colors">
+                <span className="font-bold text-lg text-indigo-700 dark:text-indigo-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-200 transition-colors">
                   {entry.headword}
                 </span>
 
@@ -104,7 +104,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
                       e.stopPropagation();
                       new Audio(entry.audio_url).play();
                     }}
-                    className="w-6 h-6 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all"
+                    className="w-6 h-6 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 dark:text-indigo-400 flex items-center justify-center hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white dark:hover:text-white transition-all"
                   >
                     <Volume2 size={12} />
                   </button>
@@ -112,7 +112,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
               </div>
 
               {entry.ipa && (
-                <span className="text-xs text-slate-500 font-mono block mt-0.5">
+                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono block mt-0.5">
                   {entry.ipa}
                 </span>
               )}
@@ -132,14 +132,14 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
                       {sense.pos}
                     </span>
 
-                    <span className="font-bold text-slate-900 mr-1.5">
+                    <span className="font-bold text-slate-900 dark:text-slate-100 mr-1.5">
                       {sense.meaning}
                     </span>
-                    <span className="text-slate-500">— {sense.definition}</span>
+                    <span className="text-slate-500 dark:text-slate-400">— {sense.definition}</span>
                   </div>
 
                   {sense.example && (
-                    <div className="mt-1.5 ml-1 pl-3 border-l-2 border-indigo-200 text-xs text-slate-600 italic">
+                    <div className="mt-1.5 ml-1 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800 text-xs text-slate-600 dark:text-slate-400 italic">
                       "{sense.example}"
                     </div>
                   )}
@@ -155,7 +155,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
           <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-indigo-600 bg-indigo-50 rounded-full border border-indigo-100 hover:bg-indigo-100 disabled:opacity-70"
+            className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 rounded-full border border-indigo-100 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 disabled:opacity-70"
           >
             {loading ? (
               <>

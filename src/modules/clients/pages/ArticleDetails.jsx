@@ -45,7 +45,7 @@ const ArticleDetails = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto">
           {/* Main Content */}

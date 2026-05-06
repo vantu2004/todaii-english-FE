@@ -79,7 +79,7 @@ const ToggleBookmarkButton = ({
         className={`w-6 h-6 transition-all duration-300 ${
           saved
             ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
-            : "text-gray-600 group-hover:text-yellow-200 drop-shadow-md"
+            : "text-neutral-500 dark:text-neutral-400 group-hover:text-yellow-200 drop-shadow-md"
         }`}
         strokeWidth={2}
       />

@@ -12,7 +12,7 @@ const Footer = () => {
       viewport={{ once: true }}
       className="bg-neutral-900 dark:bg-black text-neutral-400 py-16 border-t border-neutral-800"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={slideUp(0.2)}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"

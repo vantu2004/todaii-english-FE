@@ -45,13 +45,13 @@ const SystemIntegrations = () => {
   ];
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-neutral-100 shadow-sm">
+    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
       {/* Header Section (Đồng bộ với TopicTags/RelatedArticles) */}
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-neutral-50">
-        <div className="p-2 bg-neutral-100 rounded-xl text-neutral-700">
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-neutral-50 dark:border-neutral-800">
+        <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <Blocks size={20} />
         </div>
-        <h3 className="font-bold text-neutral-900 text-lg">Dịch vụ tích hợp</h3>
+        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">Dịch vụ tích hợp</h3>
       </div>
 
       {/* Grid Layout */}

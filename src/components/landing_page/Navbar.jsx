@@ -19,14 +19,14 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ease-out border-b ${
         scrolled
-          ? "glass-panel border-b border-neutral-200/50 dark:border-neutral-800/50 shadow-sm"
-          : "bg-transparent"
+          ? "bg-white/70 dark:bg-neutral-900/70 backdrop-blur-2xl border-neutral-200/50 dark:border-neutral-800/50 shadow-sm"
+          : "bg-transparent border-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex justify-between items-center">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-[68px]">
           {/* Logo text */}
           <a
             href="/"
@@ -73,7 +73,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full left-0 right-0 glass-panel border-b border-neutral-200/50 dark:border-neutral-800/50 py-5 px-4 shadow-xl flex flex-col gap-3"
+            className="md:hidden absolute top-full left-0 w-full bg-white/70 dark:bg-neutral-900/70 backdrop-blur-2xl border-b border-neutral-200/50 dark:border-neutral-800/50 py-5 px-4 sm:px-6 lg:px-8 shadow-xl flex flex-col gap-3"
           >
             <button
               onClick={() => {
