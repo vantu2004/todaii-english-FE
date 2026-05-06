@@ -125,14 +125,14 @@ const Video = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-purple-200 selection:text-purple-900">
+    <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 text-neutral-900 dark:text-white font-sans selection:bg-brand-100 selection:text-brand-900">
       {heroVideo && (
         <HeroSection video={heroVideo} onNavigate={handleNavigate} />
       )}

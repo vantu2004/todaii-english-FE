@@ -13,13 +13,13 @@ const RelatedVideos = ({ videos }) => {
     }).format(num);
 
   return (
-    <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm overflow-hidden flex flex-col">
+    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm overflow-hidden flex flex-col">
       {/* Header */}
-      <div className="px-4 py-4 border-b border-neutral-100 bg-neutral-50/50 flex items-center gap-2 sticky top-0 z-10">
-        <div className="p-2 bg-white rounded-xl border border-neutral-100 shadow-sm text-neutral-700">
+      <div className="px-4 py-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/50 flex items-center gap-2 sticky top-0 z-10">
+        <div className="p-2 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700 shadow-sm text-neutral-700 dark:text-neutral-300">
           <Clapperboard size={20} />
         </div>
-        <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
+        <h2 className="text-lg font-bold text-neutral-900 dark:text-white tracking-tight">
           Video tiếp theo
         </h2>
       </div>
@@ -33,7 +33,7 @@ const RelatedVideos = ({ videos }) => {
             className="group flex gap-3 items-start cursor-pointer"
           >
             {/* Thumbnail Container */}
-            <div className="relative w-36 flex-shrink-0 aspect-video rounded-xl overflow-hidden bg-neutral-100 border border-neutral-100">
+            <div className="relative w-36 flex-shrink-0 aspect-video rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700">
               <img
                 src={video.thumbnail_url}
                 alt={video.title}
@@ -63,22 +63,22 @@ const RelatedVideos = ({ videos }) => {
             {/* Info Container */}
             <div className="flex flex-col flex-1 min-w-0 py-0.5">
               <h4
-                className="text-sm font-bold text-neutral-900 line-clamp-2 leading-snug group-hover:text-purple-700 transition-colors mb-1"
+                className="text-sm font-bold text-neutral-900 dark:text-white line-clamp-2 leading-snug group-hover:text-brand-500 transition-colors mb-1"
                 title={video.title}
               >
                 {video.title}
               </h4>
 
-              <p className="text-xs text-neutral-500 font-medium truncate hover:text-neutral-800 mb-1">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium truncate hover:text-neutral-800 dark:hover:text-neutral-200 mb-1">
                 {video.author_name}
               </p>
 
-              <div className="flex items-center gap-2 text-[10px] text-neutral-400 font-medium mt-auto">
+              <div className="flex items-center gap-2 text-[10px] text-neutral-400 dark:text-neutral-500 font-medium mt-auto">
                 <div className="flex items-center gap-0.5">
                   <Eye size={10} />
                   <span>{formatViews(video.views)}</span>
                 </div>
-                <span className="w-0.5 h-0.5 rounded-full bg-neutral-300" />
+                <span className="w-0.5 h-0.5 rounded-full bg-neutral-300 dark:bg-neutral-600" />
                 <div className="flex items-center gap-0.5">
                   {/* <Calendar size={10} /> */}
                   <span>{formatISODate(video.created_at)}</span>

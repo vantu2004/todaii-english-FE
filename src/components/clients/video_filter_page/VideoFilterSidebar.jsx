@@ -28,16 +28,16 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
       {hasActiveFilter && (
         <button
           onClick={handleClearFilters}
-          className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition-colors mb-2"
+          className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-xl transition-colors mb-2"
         >
           <X size={14} /> Xóa tất cả bộ lọc
         </button>
       )}
 
       {/* 1. CEFR Level Filter */}
-      <div className="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm">
-        <div className="flex items-center gap-2 mb-4 text-neutral-900">
-          <BarChart3 size={18} className="text-neutral-400" />
+      <div className="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-100 dark:border-neutral-800 dark:shadow-none shadow-sm">
+        <div className="flex items-center gap-2 mb-4 text-neutral-900 dark:text-white">
+          <BarChart3 size={18} className="text-neutral-400 dark:text-neutral-500" />
           <h3 className="font-bold">Trình độ</h3>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -54,8 +54,8 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
                 py-2 rounded-xl text-sm font-bold transition-all border
                 ${
                   query.cefrLevel === level
-                    ? "bg-neutral-900 text-white border-neutral-900 shadow-md"
-                    : "bg-white text-neutral-600 border-neutral-100 hover:border-neutral-300 hover:bg-neutral-50"
+                    ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-md"
+                    : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border-neutral-100 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700/50"
                 }
               `}
             >
@@ -66,9 +66,9 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
       </div>
 
       {/* 2. Topics Filter */}
-      <div className="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm">
-        <div className="flex items-center gap-2 mb-4 text-neutral-900">
-          <Layers size={18} className="text-neutral-400" />
+      <div className="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-100 dark:border-neutral-800 dark:shadow-none shadow-sm">
+        <div className="flex items-center gap-2 mb-4 text-neutral-900 dark:text-white">
+          <Layers size={18} className="text-neutral-400 dark:text-neutral-500" />
           <h3 className="font-bold">Chủ đề</h3>
         </div>
         <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
@@ -76,8 +76,8 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
             onClick={() => updateQuery({ alias: "", page: 1 })}
             className={`text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               query.alias === ""
-                ? "bg-neutral-100 text-neutral-900"
-                : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
             }`}
           >
             Tất cả chủ đề
@@ -93,13 +93,13 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
               }
               className={`text-left px-3 py-2.5 rounded-xl text-sm font-medium transition-colors flex justify-between items-center ${
                 query.alias === t.alias
-                  ? "bg-neutral-100 text-neutral-900"
-                  : "text-neutral-500 hover:bg-neutral-50 hover:text-neutral-900"
+                  ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                  : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-white"
               }`}
             >
               <span className="truncate">{t.name}</span>
               {query.alias === t.alias && (
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-500 flex-shrink-0" />
               )}
             </button>
           ))}
@@ -107,9 +107,9 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
       </div>
 
       {/* 3. Min Views Filter */}
-      <div className="bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm">
-        <div className="flex items-center gap-2 mb-4 text-neutral-900">
-          <Eye size={18} className="text-neutral-400" />
+      <div className="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-100 dark:border-neutral-800 dark:shadow-none shadow-sm">
+        <div className="flex items-center gap-2 mb-4 text-neutral-900 dark:text-white">
+          <Eye size={18} className="text-neutral-400 dark:text-neutral-500" />
           <h3 className="font-bold">Lượt xem tối thiểu</h3>
         </div>
         <div className="space-y-1">
@@ -118,27 +118,27 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
               key={range.value}
               className={`flex items-center gap-3 cursor-pointer p-2 rounded-xl transition-all ${
                 query.minViews === range.value
-                  ? "bg-neutral-50"
-                  : "hover:bg-neutral-50"
+                  ? "bg-neutral-50 dark:bg-neutral-800"
+                  : "hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
               }`}
             >
               <div className="relative flex items-center">
                 <input
                   type="radio"
                   name="minViews"
-                  className="peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-neutral-300 checked:border-neutral-900 transition-all"
+                  className="peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-neutral-300 dark:border-neutral-600 checked:border-neutral-900 dark:checked:border-white transition-all"
                   checked={query.minViews === range.value}
                   onChange={() =>
                     updateQuery({ minViews: range.value, page: 1 })
                   }
                 />
-                <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-neutral-900 opacity-0 peer-checked:opacity-100 transition-opacity" />
+                <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-neutral-900 dark:bg-white opacity-0 peer-checked:opacity-100 transition-opacity" />
               </div>
               <span
                 className={`text-sm ${
                   query.minViews === range.value
-                    ? "text-neutral-900 font-bold"
-                    : "text-neutral-600"
+                    ? "text-neutral-900 dark:text-white font-bold"
+                    : "text-neutral-600 dark:text-neutral-400"
                 }`}
               >
                 {range.label}

@@ -24,8 +24,8 @@ export default function LyricLine({
         group relative flex gap-3 p-3.5 rounded-2xl cursor-pointer transition-all duration-300 border-l-4
         ${
           isActive
-            ? "bg-neutral-100 border-neutral-900 shadow-sm"
-            : "bg-transparent border-transparent hover:bg-neutral-50 hover:border-neutral-200"
+            ? "bg-neutral-100 dark:bg-neutral-800/50 border-neutral-900 dark:border-neutral-400 shadow-sm"
+            : "bg-transparent border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-800/30 hover:border-neutral-200 dark:hover:border-neutral-700"
         }
       `}
     >
@@ -37,7 +37,7 @@ export default function LyricLine({
           ${
             isActive
               ? "bg-neutral-900 text-white"
-              : "bg-neutral-100 text-neutral-400 group-hover:text-neutral-600"
+              : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-600 dark:group-hover:text-neutral-400"
           }
         `}
         >
@@ -52,8 +52,8 @@ export default function LyricLine({
           <p
             className={`text-base leading-snug mb-1 transition-colors ${
               isActive
-                ? "font-bold text-neutral-900"
-                : "font-medium text-neutral-700 group-hover:text-neutral-900"
+                ? "font-bold text-neutral-900 dark:text-neutral-100"
+                : "font-medium text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white"
             }`}
           >
             {line.text_en}
@@ -64,8 +64,8 @@ export default function LyricLine({
           <p
             className={`text-sm leading-relaxed italic transition-colors ${
               isActive
-                ? "text-neutral-600"
-                : "text-neutral-400 group-hover:text-neutral-500"
+                ? "text-neutral-600 dark:text-neutral-400"
+                : "text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-500 dark:group-hover:text-neutral-300"
             }`}
           >
             {line.text_vi}

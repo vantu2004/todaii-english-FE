@@ -23,13 +23,13 @@ const VideoInfo = ({ video }) => {
 
   return (
     <div className="w-full max-w-5xl mx-auto mt-6 px-4 sm:px-0">
-      <h1 className="text-xl md:text-2xl font-bold text-neutral-900 leading-snug mb-4">
+      <h1 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white leading-snug mb-4">
         {video.title}
       </h1>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100 dark:border-neutral-800">
         {/* Left: Author Profile */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden border border-neutral-200 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
+          <div className="w-10 h-10 rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-700 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
             <img
               src={
                 video.thumbnail_url ||
@@ -42,11 +42,11 @@ const VideoInfo = ({ video }) => {
           <div className="min-w-0">
             <h3
               onClick={() => handleNavigate(video.author_name, null, null)}
-              className="text-sm font-bold text-neutral-900 cursor-pointer hover:text-blue-600 transition-colors truncate"
+              className="text-sm font-bold text-neutral-900 dark:text-white cursor-pointer hover:text-brand-500 transition-colors truncate"
             >
               {video.author_name}
             </h3>
-            <p className="text-xs text-neutral-500 truncate">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
               {video.provider_name || "YouTube"}
             </p>
           </div>
@@ -62,14 +62,14 @@ const VideoInfo = ({ video }) => {
         </div>
       </div>
       {/* 3. DESCRIPTION / STATS BOX */}
-      <div className="mt-4 bg-neutral-100 rounded-2xl p-4">
+      <div className="mt-4 bg-neutral-100 dark:bg-neutral-800/50 rounded-2xl p-4">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-neutral-700 w-full">
-            <span className="font-bold text-neutral-900 whitespace-nowrap">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 w-full">
+            <span className="font-bold text-neutral-900 dark:text-white whitespace-nowrap">
               {video.views} lượt xem
             </span>
 
-            <span className="text-neutral-400 text-xs hidden sm:inline">•</span>
+            <span className="text-neutral-400 dark:text-neutral-500 text-xs hidden sm:inline">•</span>
 
             <span className="whitespace-nowrap">
               {formatISODate(video.created_at)}
@@ -88,7 +88,7 @@ const VideoInfo = ({ video }) => {
                 Array.from(video.topics).map((t) => (
                   <span
                     key={t.id}
-                    className="text-xs text-neutral-500 bg-white px-2 py-0.5 rounded border border-neutral-200 whitespace-nowrap hover:opacity-90 transition-opacity cursor-pointer"
+                    className="text-xs text-neutral-500 dark:text-neutral-400 bg-white dark:bg-neutral-800 px-2 py-0.5 rounded border border-neutral-200 dark:border-neutral-700 whitespace-nowrap hover:opacity-90 transition-opacity cursor-pointer"
                     onClick={() => handleNavigate(null, t.alias, null)}
                   >
                     #{t.name}
