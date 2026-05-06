@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const ActionButton = ({ icon: Icon, onClick, title }) => (
   <button
     onClick={onClick}
-    className="p-2 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-neutral-900 transition-colors"
+    className="p-2 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-neutral-900 transition-colors dark:hover:bg-neutral-800 dark:text-neutral-400 dark:hover:text-white"
     title={title}
   >
     <Icon size={18} />
@@ -91,17 +91,17 @@ const Notebook = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="dictionary-page"
+        key="notebook-page"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="flex h-[calc(100vh-64px)] w-full max-w-[1920px] mx-auto mt-24 bg-white border-t border-neutral-200 overflow-hidden font-sans text-sm"
+        className="flex h-[calc(100vh-64px)] w-full max-w-[1920px] mx-auto mt-[64px] bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 overflow-hidden font-sans text-sm"
       >
         {/* LEFT SIDEBAR: TREE */}
         <div
           className={`
-          flex-shrink-0 bg-neutral-50 border-r border-neutral-200 flex flex-col h-full transition-all duration-300 ease-in-out
+          flex-shrink-0 bg-neutral-50 border-r border-neutral-200 flex flex-col h-full transition-all duration-300 ease-in-out dark:bg-neutral-900/80 dark:border-neutral-800
           ${
             isSidebarOpen
               ? "w-80 translate-x-0"
@@ -110,8 +110,8 @@ const Notebook = () => {
         `}
         >
           {/* Sidebar Header - tạo thư mục, file gốc */}
-          <div className="h-14 border-b border-neutral-200 flex items-center justify-between px-4 bg-white shrink-0">
-            <span className="font-bold text-neutral-800 text-base">
+          <div className="h-14 border-b border-neutral-200 flex items-center justify-between px-4 bg-white shrink-0 dark:bg-neutral-900 dark:border-neutral-800">
+            <span className="font-bold text-neutral-800 text-base dark:text-white">
               Thư viện
             </span>
             <div className="flex gap-1">
@@ -147,12 +147,12 @@ const Notebook = () => {
         </div>
 
         {/* RIGHT CONTENT: EDITOR */}
-        <div className="flex-1 h-full bg-white relative flex flex-col min-w-0">
+        <div className="flex-1 h-full bg-white relative flex flex-col min-w-0 dark:bg-neutral-950">
           {/* Mobile Toggle Button (Overlay) */}
           {!isSidebarOpen && (
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="absolute top-4 left-4 z-20 p-2 bg-white border border-neutral-200 rounded-lg shadow-sm text-neutral-500 hover:text-neutral-900"
+              className="absolute top-4 left-4 z-20 p-2 bg-white border border-neutral-200 rounded-lg shadow-sm text-neutral-500 hover:text-neutral-900 dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-400 dark:hover:text-white"
             >
               <Sidebar size={18} />
             </button>

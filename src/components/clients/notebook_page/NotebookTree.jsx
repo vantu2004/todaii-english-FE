@@ -40,7 +40,7 @@ const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
           {Node}
         </Tree>
       ) : (
-        <div className="p-4 text-xs text-neutral-400 italic text-center">
+        <div className="p-4 text-xs text-neutral-400 italic text-center dark:text-neutral-500">
           Đang tải dữ liệu...
         </div>
       )}
@@ -63,11 +63,11 @@ const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
 
             {/* Menu Box */}
             <div
-              className="fixed z-[9999] bg-white border border-neutral-200 shadow-xl rounded-xl py-1.5 w-52 text-sm text-neutral-700 animate-in fade-in zoom-in-95 duration-100"
+              className="fixed z-[9999] bg-white border border-neutral-200 shadow-xl rounded-xl py-1.5 w-52 text-sm text-neutral-700 animate-in fade-in zoom-in-95 duration-100 dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-300"
               style={{ top: menu.y, left: menu.x }}
               onClick={(e) => e.stopPropagation()} // Chặn click xuyên qua menu
             >
-              <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-100 mb-1 truncate bg-neutral-50/50 select-none">
+              <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-100 mb-1 truncate bg-neutral-50/50 select-none dark:text-neutral-500 dark:border-neutral-800 dark:bg-neutral-800/50">
                 {menu.node.data.name}
               </div>
 
@@ -89,7 +89,7 @@ const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
                       closeMenu();
                     }}
                   />
-                  <div className="border-t my-1 border-neutral-100"></div>
+                  <div className="border-t my-1 border-neutral-100 dark:border-neutral-800"></div>
                 </>
               )}
 
@@ -126,8 +126,8 @@ const MenuItem = ({ icon: Icon, label, onClick, isDanger }) => (
       w-full text-left px-4 py-2 flex gap-3 items-center transition-colors text-sm
       ${
         isDanger
-          ? "hover:bg-red-50 text-red-600"
-          : "hover:bg-neutral-50 text-neutral-700"
+          ? "hover:bg-red-50 text-red-600 dark:hover:bg-red-900/20 dark:text-red-400"
+          : "hover:bg-neutral-50 text-neutral-700 dark:hover:bg-neutral-800 dark:text-neutral-300"
       }
     `}
   >
