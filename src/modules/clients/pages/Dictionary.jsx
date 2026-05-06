@@ -128,7 +128,7 @@ const Dictionary = () => {
         transition={{ duration: 0.4 }}
         className="flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
       >
-        <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col">
           {/* --- SEARCH SECTION  --- */}
           <div className="max-w-7xl mx-auto w-full mb-6">
             <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
@@ -182,7 +182,7 @@ const Dictionary = () => {
           {/* --- MAIN GRID --- */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1 w-full">
             {/* Left Sidebar (History & Related) - 3/12 */}
-            <div className="lg:col-span-3 hidden lg:block sticky top-24 space-y-6">
+            <div className="lg:col-span-2 hidden lg:block sticky top-24 space-y-6">
               <SearchHistory
                 history={history}
                 onSelectWord={handleSearch}
@@ -242,7 +242,7 @@ const Dictionary = () => {
             </div>
 
             {/* Right Sidebar (AI & Trends) - 3/12 */}
-            <div className="lg:col-span-3 hidden lg:block sticky top-24">
+            <div className="lg:col-span-4 hidden lg:block sticky top-24">
               <AIChatBox />
             </div>
           </div>

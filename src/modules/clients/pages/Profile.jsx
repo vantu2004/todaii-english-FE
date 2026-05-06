@@ -101,7 +101,7 @@ const Profile = () => {
         transition={{ duration: 0.4 }}
         className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 sm:px-6 lg:px-8"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <input
             type="file"
             ref={fileInputRef}

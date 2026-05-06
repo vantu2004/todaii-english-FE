@@ -93,7 +93,7 @@ const VocabDeckDetails = () => {
         <QuizGame words={words} onClose={() => setMode("list")} />
       )}
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* --- HEADER --- */}
         <div className="mb-8">
           <button

@@ -53,7 +53,7 @@ const ArticleFilter = () => {
       >
         {/* Header */}
         <div className="bg-white dark:bg-neutral-900/50 border-b border-neutral-100 dark:border-neutral-800 px-4 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto py-8">
+          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               {/* --- LEFT SECTION --- */}
               <div className="flex items-start gap-4">
@@ -120,7 +120,7 @@ const ArticleFilter = () => {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Results */}
             <div className="flex-1 min-w-0">

@@ -72,7 +72,7 @@ const VocabularyFilter = () => {
         transition={{ duration: 0.4 }}
         className="flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 sm:px-6"
       >
-        <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* --- HEADER SECTION --- */}
           <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-end justify-between mb-10">
             <div className="w-full lg:max-w-3xl">
