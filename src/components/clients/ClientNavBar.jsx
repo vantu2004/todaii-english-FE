@@ -31,6 +31,7 @@ const ClientNavBar = () => {
 
   const menuRef = useRef(null);
   const profileRef = useRef(null);
+  const toggleBtnRef = useRef(null);
 
   const { authUser, isLoggedIn, handleLogout } = useClientAuthContext();
 
@@ -44,8 +45,14 @@ const ClientNavBar = () => {
     const closeOnOutside = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target))
         setIsProfileOpen(false);
-      if (menuRef.current && !menuRef.current.contains(e.target))
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target) &&
+        toggleBtnRef.current &&
+        !toggleBtnRef.current.contains(e.target)
+      ) {
         setIsMenuOpen(false);
+      }
     };
     document.addEventListener("mousedown", closeOnOutside);
     return () => document.removeEventListener("mousedown", closeOnOutside);
@@ -99,6 +106,7 @@ const ClientNavBar = () => {
           <div className="flex items-center gap-4">
             {/* Mobile Menu Toggle */}
             <button
+              ref={toggleBtnRef}
               className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200"
               onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Toggle menu"

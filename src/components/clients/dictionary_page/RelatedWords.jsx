@@ -38,8 +38,8 @@ const RelatedWords = ({ word, onSelectWord }) => {
   }, [word]);
 
   return (
-    <div className="bg-white p-4 rounded-2xl border border-neutral-100 shadow-sm">
-      <div className="flex items-center gap-2 mb-3 text-neutral-700 font-bold pb-2 border-b border-neutral-100">
+    <div className="bg-white dark:bg-neutral-900/60 p-4 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
+      <div className="flex items-center gap-2 mb-3 text-neutral-700 dark:text-white font-bold pb-2 border-b border-neutral-100 dark:border-neutral-800">
         <Hash size={18} />
         <h3>Từ liên quan</h3>
       </div>
@@ -52,11 +52,11 @@ const RelatedWords = ({ word, onSelectWord }) => {
             .map((_, idx) => (
               <span
                 key={idx}
-                className="w-16 h-5 bg-neutral-200 rounded animate-pulse"
+                className="w-16 h-5 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"
               />
             ))
         ) : relatedWords.length === 0 ? (
-          <p className="text-xs text-neutral-400 italic">
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 italic">
             Không có từ liên quan
           </p>
         ) : (
@@ -64,7 +64,7 @@ const RelatedWords = ({ word, onSelectWord }) => {
             <span
               key={idx}
               onClick={() => onSelectWord(relatedWord)}
-              className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded cursor-pointer hover:bg-blue-100"
+              className="text-xs bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded cursor-pointer hover:bg-brand-100 dark:hover:bg-brand-900/40"
             >
               {relatedWord}
             </span>

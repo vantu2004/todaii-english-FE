@@ -126,11 +126,11 @@ const Dictionary = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-full bg-neutral-50 pt-24 pb-12 px-4"
+        className="flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
           {/* --- SEARCH SECTION  --- */}
-          <div className="max-w-7xl mx-auto mb-6">
+          <div className="max-w-7xl mx-auto w-full mb-6">
             <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
               {/* 1. Search Bar (Chiếm phần lớn không gian) */}
               <div className="flex-1 relative z-10">
@@ -148,13 +148,13 @@ const Dictionary = () => {
 
               {/* 2. Mode Switcher (Nằm bên phải) */}
               <div className="flex-shrink-0">
-                <div className="bg-white p-1.5 rounded-full border border-neutral-200 shadow-sm flex items-center h-full">
+                <div className="bg-white dark:bg-neutral-900 p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm flex items-center h-full">
                   <button
                     onClick={() => setSearchMode("en-vi")}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
                       searchMode === "en-vi"
-                        ? "bg-neutral-900 text-white shadow-md"
-                        : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
+                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md"
+                        : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
                     }`}
                   >
                     <Languages size={16} />
@@ -166,8 +166,8 @@ const Dictionary = () => {
                     onClick={() => setSearchMode("en-en")}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
                       searchMode === "en-en"
-                        ? "bg-neutral-900 text-white shadow-md"
-                        : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
+                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md"
+                        : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
                     }`}
                   >
                     <BookA size={16} />
@@ -180,9 +180,9 @@ const Dictionary = () => {
           </div>
 
           {/* --- MAIN GRID --- */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Sidebar (History & Related) - 2/12 */}
-            <div className="lg:col-span-2 hidden lg:block sticky top-24 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1 w-full">
+            {/* Left Sidebar (History & Related) - 3/12 */}
+            <div className="lg:col-span-3 hidden lg:block sticky top-24 space-y-6">
               <SearchHistory
                 history={history}
                 onSelectWord={handleSearch}
@@ -197,24 +197,24 @@ const Dictionary = () => {
             {/* Center Content (Result) - 6/12 */}
             <div className="lg:col-span-6 min-h-[600px]">
               {loading ? (
-                <div className="flex flex-col items-center justify-center h-64 bg-white rounded-3xl border border-neutral-100 shadow-sm">
+                <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
                   <Loader2
                     className="animate-spin text-neutral-400 mb-3"
                     size={40}
                   />
-                  <p className="text-neutral-500 text-sm font-medium animate-pulse">
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium animate-pulse">
                     Đang tra cứu...
                   </p>
                 </div>
               ) : error ? (
-                <div className="bg-white p-12 rounded-3xl border border-neutral-100 text-center shadow-sm">
-                  <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-white dark:bg-neutral-900/60 p-12 rounded-3xl border border-neutral-100 dark:border-neutral-800 text-center shadow-sm">
+                  <div className="w-16 h-16 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl">🤔</span>
                   </div>
-                  <h3 className="text-lg font-bold text-neutral-900 mb-2">
+                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
                     Không tìm thấy kết quả
                   </h3>
-                  <p className="text-neutral-500 text-sm">{error}</p>
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">{error}</p>
                 </div>
               ) : dbEntry.length > 0 ? (
                 <DictDetailWord data={dbEntry} />
@@ -226,14 +226,14 @@ const Dictionary = () => {
                 />
               ) : (
                 /* Empty State */
-                <div className="bg-white p-16 rounded-3xl border border-neutral-100 text-center shadow-sm">
-                  <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <BookA size={32} className="text-neutral-300" />
+                <div className="bg-white dark:bg-neutral-900/60 p-16 rounded-3xl border border-neutral-100 dark:border-neutral-800 text-center shadow-sm">
+                  <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <BookA size={32} className="text-neutral-300 dark:text-neutral-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-neutral-900 mb-2">
+                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
                     Từ điển trực tuyến
                   </h3>
-                  <p className="text-neutral-400 text-sm max-w-xs mx-auto">
+                  <p className="text-neutral-400 dark:text-neutral-500 text-sm max-w-xs mx-auto">
                     Hãy nhập từ vựng vào ô tìm kiếm để xem định nghĩa, phát âm
                     và ví dụ.
                   </p>
@@ -241,8 +241,8 @@ const Dictionary = () => {
               )}
             </div>
 
-            {/* Right Sidebar (AI & Trends) - 4/12 */}
-            <div className="lg:col-span-4 hidden lg:block sticky top-24">
+            {/* Right Sidebar (AI & Trends) - 3/12 */}
+            <div className="lg:col-span-3 hidden lg:block sticky top-24">
               <AIChatBox />
             </div>
           </div>
