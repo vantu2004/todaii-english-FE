@@ -45,16 +45,16 @@ const FlashcardGame = ({ words, onClose }) => {
   if (!currentWord) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col bg-neutral-50 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[9999] flex flex-col bg-surface-primary dark:bg-neutral-950 animate-in fade-in duration-200">
       {/* Header */}
-      <div className="px-6 py-4 flex items-center justify-between bg-white border-b border-neutral-200">
-        <h2 className="text-lg font-bold text-neutral-900">Flashcard</h2>
-        <div className="px-3 py-1 rounded-full bg-neutral-100 text-xs font-bold text-neutral-600">
+      <div className="px-6 py-4 flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+        <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Flashcard</h2>
+        <div className="px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-600 dark:text-neutral-400">
           {currentIndex + 1} / {words.length}
         </div>
         <button
           onClick={onClose}
-          className="p-2 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900 transition-colors"
+          className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <X size={24} />
         </button>
@@ -78,25 +78,25 @@ const FlashcardGame = ({ words, onClose }) => {
             style={{ transformStyle: "preserve-3d" }}
           >
             {/* --- FRONT SIDE (English) --- */}
-            <div className="absolute inset-0 bg-white rounded-[2.5rem] shadow-2xl border border-neutral-100 flex flex-col items-center justify-center p-8 backface-hidden select-none">
-              <span className="text-neutral-300 text-xs font-bold uppercase tracking-[0.2em] mb-8">
+            <div className="absolute inset-0 bg-white dark:bg-neutral-900 rounded-[2.5rem] shadow-2xl border border-neutral-100 dark:border-neutral-800 flex flex-col items-center justify-center p-8 backface-hidden select-none">
+              <span className="text-neutral-300 dark:text-neutral-600 text-xs font-bold uppercase tracking-[0.2em] mb-8">
                 Từ vựng
               </span>
 
-              <h3 className="text-4xl sm:text-6xl font-black text-neutral-900 mb-4 text-center break-words max-w-full">
+              <h3 className="text-3xl sm:text-5xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-4 text-center break-words max-w-full">
                 {currentWord.word}
               </h3>
 
               <div className="flex items-center gap-3 mt-2">
                 {currentWord.ipa && (
-                  <span className="text-lg text-neutral-400 font-mono bg-neutral-50 px-3 py-1 rounded-lg border border-neutral-100">
+                  <span className="text-lg text-neutral-400 dark:text-neutral-500 font-mono bg-neutral-50 dark:bg-neutral-800 px-3 py-1 rounded-lg border border-neutral-100 dark:border-neutral-700">
                     {currentWord.ipa}
                   </span>
                 )}
                 {currentWord.audio_url && (
                   <button
                     onClick={playAudio}
-                    className="w-10 h-10 rounded-full bg-neutral-900 text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:bg-neutral-800"
+                    className="w-10 h-10 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:bg-neutral-800 dark:hover:bg-neutral-100"
                     title="Nghe phát âm"
                   >
                     <Volume2 size={20} />
@@ -104,7 +104,7 @@ const FlashcardGame = ({ words, onClose }) => {
                 )}
               </div>
 
-              <p className="mt-auto text-neutral-300 text-xs flex items-center gap-2 font-medium">
+              <p className="mt-auto text-neutral-300 dark:text-neutral-700 text-xs flex items-center gap-2 font-medium">
                 <RotateCw size={12} /> Chạm để lật
               </p>
             </div>
@@ -139,18 +139,18 @@ const FlashcardGame = ({ words, onClose }) => {
       </div>
 
       {/* Navigation Footer */}
-      <div className="px-6 py-6 bg-white border-t border-neutral-200 flex justify-center gap-4">
+      <div className="px-6 py-6 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 flex justify-center gap-4">
         <button
           onClick={handlePrev}
           disabled={currentIndex === 0}
-          className="flex items-center gap-2 px-6 py-3 rounded-full border border-neutral-200 hover:bg-neutral-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-bold text-neutral-600 text-sm hover:border-neutral-300"
+          className="flex items-center gap-2 px-6 py-3 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-bold text-neutral-600 dark:text-neutral-400 text-sm hover:border-neutral-300 dark:hover:border-neutral-600"
         >
           <ArrowLeft size={18} /> Trước
         </button>
         <button
           onClick={handleNext}
           disabled={currentIndex === words.length - 1}
-          className="flex items-center gap-2 px-8 py-3 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-bold text-sm shadow-xl shadow-neutral-200 hover:-translate-y-0.5"
+          className="flex items-center gap-2 px-8 py-3 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all font-bold text-sm shadow-xl shadow-neutral-200 dark:shadow-none hover:-translate-y-0.5"
         >
           Tiếp theo <ArrowRight size={18} />
         </button>
