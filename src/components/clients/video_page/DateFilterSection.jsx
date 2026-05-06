@@ -50,33 +50,33 @@ const DateFilterSection = ({
   };
 
   return (
-    <section className="px-6 md:px-12 py-12 bg-gray-50 border-t border-gray-200">
+    <section className="px-6 md:px-12 py-12 bg-surface-primary dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800">
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900 border-l-4 border-purple-600 pl-3">
+        <h3 className="text-xl font-bold text-neutral-900 dark:text-white border-l-4 border-brand-500 pl-3">
           Video Theo Ngày
         </h3>
       </div>
 
       {/* Date Controls Bar */}
-      <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-8 bg-white p-2.5 rounded-xl border border-gray-200 shadow-sm">
+      <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-8 bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm">
         {/* Date Display Box */}
-        <div className="relative bg-gray-50 text-gray-900 rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[180px] border border-gray-200">
-          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">
+        <div className="relative bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[180px] border border-neutral-200 dark:border-neutral-700">
+          <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider absolute -top-2 left-3 bg-white dark:bg-neutral-900 px-1">
             Đang chọn
           </span>
-          <Calendar size={18} className="text-purple-600" />
+          <Calendar size={18} className="text-brand-500" />
           <span className="text-sm font-bold">
             {formatISODate(selectedDate)}
           </span>
         </div>
 
-        <div className="h-8 w-[1px] bg-gray-200 hidden md:block mx-2"></div>
+        <div className="h-8 w-[1px] bg-neutral-200 dark:bg-neutral-700 hidden md:block mx-2"></div>
 
         {/* Scrollable Date Pills */}
         <div className="flex-1 flex items-center gap-2 overflow-hidden w-full">
           <button
             onClick={() => scrollDays("left")}
-            className="p-2 bg-white text-gray-600 rounded-full border border-gray-200 hover:bg-gray-50 hover:text-purple-600 transition-colors shadow-sm flex-shrink-0"
+            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors shadow-sm flex-shrink-0"
           >
             <ChevronLeft size={16} />
           </button>
@@ -95,8 +95,8 @@ const DateFilterSection = ({
                   className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all border
                     ${
                       isSelected
-                        ? "bg-gray-900 text-white border-gray-900 shadow-md transform scale-105"
-                        : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-purple-200"
+                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-md transform scale-105"
+                        : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:border-brand-200 dark:hover:border-brand-800"
                     }`}
                 >
                   {day.label}
@@ -107,7 +107,7 @@ const DateFilterSection = ({
 
           <button
             onClick={() => scrollDays("right")}
-            className="p-2 bg-white text-gray-600 rounded-full border border-gray-200 hover:bg-gray-50 hover:text-purple-600 transition-colors shadow-sm flex-shrink-0"
+            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors shadow-sm flex-shrink-0"
           >
             <ChevronRight size={16} />
           </button>
@@ -132,7 +132,7 @@ const DateFilterSection = ({
               <button
                 onClick={onLoadMore}
                 disabled={isLoading}
-                className="group px-8 py-3 bg-white border border-gray-300 text-gray-700 font-bold rounded-full hover:bg-purple-50 hover:border-purple-400 hover:text-purple-700 transition-all shadow-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group px-8 py-3 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 font-bold rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-brand-400 hover:text-brand-500 transition-all shadow-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
@@ -153,14 +153,14 @@ const DateFilterSection = ({
           )}
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-dashed border-gray-300 shadow-sm">
-          <div className="bg-gray-50 p-4 rounded-full mb-4">
-            <Calendar size={40} className="text-gray-300" />
+        <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-neutral-900/50 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 shadow-sm">
+          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-full mb-4">
+            <Calendar size={40} className="text-neutral-300 dark:text-neutral-600" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900">
+          <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
             Không có video nào
           </h3>
-          <p className="text-gray-500 text-sm">
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm">
             Ngày {formatISODate(selectedDate)} chưa có nội dung cập nhật.
           </p>
         </div>

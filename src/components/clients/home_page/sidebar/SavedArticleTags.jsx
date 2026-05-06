@@ -47,16 +47,16 @@ const SavedArticleTags = () => {
   // Skeleton Loader (Updated style)
   if (loading) {
     return (
-      <div className="bg-white rounded-3xl p-6 border border-neutral-100 shadow-sm">
+      <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-9 h-9 bg-neutral-100 rounded-xl animate-pulse" />
-          <div className="h-5 w-32 bg-neutral-100 rounded animate-pulse" />
+          <div className="w-9 h-9 bg-neutral-100 dark:bg-neutral-800 rounded-xl animate-pulse" />
+          <div className="h-5 w-32 bg-neutral-100 dark:bg-neutral-800 rounded animate-pulse" />
         </div>
         <div className="flex flex-col gap-3">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="flex gap-3 items-center">
-              <div className="w-8 h-8 rounded-lg bg-neutral-100 animate-pulse flex-shrink-0" />
-              <div className="h-4 w-full bg-neutral-100 rounded animate-pulse" />
+              <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 animate-pulse flex-shrink-0" />
+              <div className="h-4 w-full bg-neutral-100 dark:bg-neutral-800 rounded animate-pulse" />
             </div>
           ))}
         </div>
@@ -67,13 +67,13 @@ const SavedArticleTags = () => {
   if (!isLoggedIn || !articles.length) return null;
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-neutral-100 shadow-sm">
+    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-neutral-50">
-        <div className="p-2 bg-neutral-100 rounded-xl text-neutral-700">
+      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-neutral-50 dark:border-neutral-800">
+        <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <Bookmark size={20} />
         </div>
-        <h3 className="font-bold text-neutral-900 text-lg">Đã lưu gần đây</h3>
+        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">Đã lưu gần đây</h3>
       </div>
 
       {/* List Container */}
@@ -82,16 +82,16 @@ const SavedArticleTags = () => {
           <button
             key={i}
             onClick={() => navigate(`/client/article/${a.id}`)}
-            className="group flex items-start gap-3 w-full p-2.5 rounded-xl hover:bg-neutral-50 transition-all duration-200 text-left"
+            className="group flex items-start gap-3 w-full p-2.5 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all duration-200 text-left"
           >
             {/* Icon Box */}
-            <div className="flex-shrink-0 mt-0.5 w-8 h-8 rounded-lg bg-neutral-50 flex items-center justify-center text-neutral-400 group-hover:bg-white group-hover:text-neutral-600 group-hover:shadow-sm transition-all">
+            <div className="flex-shrink-0 mt-0.5 w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-800 flex items-center justify-center text-neutral-400 dark:text-neutral-500 group-hover:bg-white dark:group-hover:bg-neutral-700 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 group-hover:shadow-sm dark:group-hover:shadow-none transition-all">
               <FileText size={16} />
             </div>
 
             {/* Title */}
             <div className="flex-1 min-w-0">
-              <span className="block text-sm font-medium text-neutral-600 group-hover:text-neutral-900 line-clamp-2 leading-relaxed transition-colors">
+              <span className="block text-sm font-medium text-neutral-600 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white line-clamp-2 leading-relaxed transition-colors">
                 {a.title}
               </span>
             </div>
@@ -106,12 +106,12 @@ const SavedArticleTags = () => {
 
       {/* Show More / Less Footer */}
       {articles.length > INITIAL_DISPLAY_COUNT && (
-        <div className="mt-2 pt-2 border-t border-neutral-50">
+        <div className="mt-2 pt-2 border-t border-neutral-50 dark:border-neutral-800">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="
-              flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-500 
-              hover:text-neutral-900 transition-colors duration-200 w-full justify-center py-2
+              flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400
+              hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 w-full justify-center py-2
             "
           >
             {isExpanded ? (

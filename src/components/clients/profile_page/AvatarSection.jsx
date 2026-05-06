@@ -13,7 +13,7 @@ const AvatarSection = ({
         onClick={triggerFileInput}
         title="Nhấn để thay đổi ảnh đại diện"
       >
-        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white shadow-lg overflow-hidden bg-neutral-100 relative">
+        <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white dark:border-neutral-800 shadow-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
           {previewAvatar ? (
             <img
               src={previewAvatar}
@@ -25,7 +25,7 @@ const AvatarSection = ({
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-neutral-300 bg-neutral-50">
+            <div className="w-full h-full flex items-center justify-center text-neutral-300 dark:text-neutral-600 bg-neutral-50 dark:bg-neutral-800">
               <User size={64} />
             </div>
           )}
@@ -36,31 +36,31 @@ const AvatarSection = ({
         </div>
 
         <div
-          className={`absolute bottom-2 right-2 w-6 h-6 border-4 border-white rounded-full ${
+          className={`absolute bottom-2 right-2 w-6 h-6 border-4 border-white dark:border-neutral-900 rounded-full ${
             authUser.enabled ? "bg-green-500" : "bg-red-500"
           }`}
         ></div>
       </div>
 
-      <h2 className="mt-4 text-xl font-bold text-neutral-900">
+      <h2 className="mt-4 text-xl font-bold text-neutral-900 dark:text-white">
         {authUser.display_name}
       </h2>
-      <p className="text-sm text-neutral-500 font-medium break-all">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400 font-medium break-all">
         {authUser.email}
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2 justify-center">
         {authUser.status === "ACTIVE" && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-100">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-100 dark:border-green-800">
             <CheckCircle2 size={12} /> Active
           </span>
         )}
         {authUser.emailVerifiedAt ? (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
             <Shield size={12} /> Verified
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-100">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800">
             <AlertCircle size={12} /> Unverified
           </span>
         )}

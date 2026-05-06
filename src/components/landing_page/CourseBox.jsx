@@ -1,21 +1,16 @@
 const CourseBox = ({ course }) => {
   return (
-    <div className="relative w-87 h-80 min-[850px]:max-lg:w-85 max-[850px]:w-full max-[360px]:h-90 bg-white rounded-xl shadow-md">
-      <div className="relative left-5 -top-5">
-        <div className="w-16 h-16 rounded-full bg-gradient-to-b from-[#FF6F48] to-[#F02AA6] flex items-center justify-center shadow-md">
-          {/* icon màu trắng cho nổi bật trên nền gradient */}
-          <div className="text-white">{course.icon}</div>
-        </div>
+    <div className="group relative w-full h-full min-h-[280px] bg-white dark:bg-neutral-800/50 rounded-2xl p-6 lg:p-8 border border-neutral-100 dark:border-neutral-700/50 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-xl transition-all duration-300 flex flex-col">
+      <div className="w-14 h-14 rounded-xl bg-brand-50 dark:bg-brand-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-500 group-hover:text-white transition-all duration-300 text-brand-500">
+        {course.icon}
       </div>
 
-      <div className="pt-4 pl-7">
-        <h3 className="text-2xl font-extrabold text-[#13183f] mb-6">
-          {course.title}
-        </h3>
-        <p className="max-[850px]:w-[70%] w-[90%] text-[#83869a] font-medium text-lg leading-7">
-          {course.desc}
-        </p>
-      </div>
+      <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-3 group-hover:text-brand-500 transition-colors">
+        {course.title}
+      </h3>
+      <p className="text-sm text-text-secondary leading-relaxed flex-grow">
+        {course.desc}
+      </p>
     </div>
   );
 };

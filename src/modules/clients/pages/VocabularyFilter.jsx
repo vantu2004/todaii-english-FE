@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, BookOpen, LayoutGrid, Loader2 } from "lucide-react";
+import { ChevronDown, BookOpen, LayoutGrid, Loader2, Filter, X as CloseX } from "lucide-react";
 import { filterVocabDecks } from "../../../api/clients/vocabDeckApi";
 import { logError } from "../../../utils/LogError";
 import SearchBar from "../../../components/clients/SearchBar";
@@ -19,6 +19,7 @@ const VocabularyFilter = () => {
   const [decks, setDecks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [meta, setMeta] = useState({ totalPages: 0, totalElements: 0 });
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const [query, setQuery] = useState({
     keyword: "",
@@ -62,127 +63,183 @@ const VocabularyFilter = () => {
   };
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
-        key="dictionary-page"
+        key="vocab-filter-page"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4 sm:px-6"
+        className="flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 sm:px-6"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* --- HEADER SECTION --- */}
-          <div className="flex flex-col lg:flex-row gap-6 items-end justify-between mb-10">
-            <div className="w-full lg:max-w-2xl">
-              <h1 className="text-3xl font-light text-neutral-900 tracking-tight mb-6">
+          <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-end justify-between mb-10">
+            <div className="w-full lg:max-w-3xl">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight mb-6">
                 Thư viện Từ vựng
               </h1>
-              <SearchBar
-                value={query.keyword}
-                placeholder="Tìm kiếm bộ từ vựng..."
-                onChangeSearch={(val) => updateQuery({ keyword: val, page: 1 })}
-              />
+              <div className="w-full">
+                <SearchBar
+                  value={query.keyword}
+                  placeholder="Tìm kiếm bộ từ vựng..."
+                  onChangeSearch={(val) => updateQuery({ keyword: val, page: 1 })}
+                />
+              </div>
             </div>
 
-            {/* Sort Combobox */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-neutral-500 font-medium hidden sm:inline">
-                Sắp xếp:
-              </span>
-              <div className="relative w-full sm:w-48">
-                <select
-                  className="w-full appearance-none bg-white border border-neutral-200 text-neutral-700 py-3 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-neutral-100 hover:border-neutral-300 transition-all cursor-pointer"
-                  onChange={handleSortChange}
-                  value={`${query.sortBy}-${query.direction}`}
-                >
-                  {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
-                />
+            {/* Sort & Mobile Filter Toggle */}
+            <div className="flex items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+              <button
+                onClick={() => setShowMobileFilter(true)}
+                className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm font-bold text-neutral-700 dark:text-neutral-300 shadow-sm"
+              >
+                <Filter size={18} /> Bộ lọc
+              </button>
+
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-neutral-500 dark:text-neutral-400 font-medium hidden sm:inline">
+                  Sắp xếp:
+                </span>
+                <div className="relative w-40 sm:w-48">
+                  <select
+                    className="w-full appearance-none bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 py-2.5 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:ring-4 focus:ring-neutral-100 dark:focus:ring-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all cursor-pointer shadow-sm"
+                    onChange={handleSortChange}
+                    value={`${query.sortBy}-${query.direction}`}
+                  >
+                    {SORT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={16}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
+          {/* Mobile Sidebar Overlay - Outside flex layout to avoid disrupting it */}
+          <AnimatePresence>
+            {showMobileFilter && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowMobileFilter(false)}
+                  className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm lg:hidden"
+                />
+                <motion.div
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className="fixed right-0 top-0 bottom-0 z-[70] w-[280px] bg-white dark:bg-neutral-900 p-6 shadow-2xl lg:hidden overflow-y-auto"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-bold text-neutral-900 dark:text-white">Bộ lọc</h3>
+                    <button
+                      onClick={() => setShowMobileFilter(false)}
+                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-500 dark:text-neutral-400"
+                    >
+                      <CloseX size={20} />
+                    </button>
+                  </div>
+                  <VocabFilterSidebar
+                    query={query}
+                    updateQuery={(val) => {
+                      updateQuery(val);
+                    }}
+                  />
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
           {/* --- MAIN LAYOUT --- */}
           <div className="flex flex-col lg:flex-row gap-8 items-start">
-            {/* Sidebar (Component tách rời) */}
-            <VocabFilterSidebar query={query} updateQuery={updateQuery} />
+            {/* Sidebar (Desktop) */}
+            <div className="hidden lg:block w-72 flex-shrink-0">
+              <VocabFilterSidebar query={query} updateQuery={updateQuery} />
+            </div>
 
             {/* Content Grid */}
-            <main className="flex-1 w-full">
+            <main className="flex-1 min-w-0">
               {/* Result Count */}
               <div className="mb-6 flex items-center justify-between">
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">
                   Hiển thị{" "}
-                  <span className="font-bold text-neutral-900">
+                  <span className="font-bold text-neutral-900 dark:text-white">
                     {meta.totalElements}
                   </span>{" "}
                   bộ từ vựng
                 </p>
               </div>
 
-              {/* List / Loading / Empty */}
-              {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-48 bg-white rounded-3xl border border-neutral-100 animate-pulse shadow-sm"
-                    />
-                  ))}
-                </div>
-              ) : decks.length > 0 ? (
-                <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="relative min-h-[400px]">
+                {decks.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {decks.map((deck) => (
                       <DeckCard key={deck.id} deck={deck} />
                     ))}
                   </div>
-
-                  {/* Pagination */}
-                  <div className="mt-12 flex justify-center">
-                    <Pagination
-                      currentPage={query.page}
-                      totalPages={meta.totalPages}
-                      onPageChange={(p) => {
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                        updateQuery({ page: p });
-                      }}
-                    />
-                  </div>
-                </>
-              ) : (
-                /* Empty State */
-                <div className="bg-white rounded-3xl p-16 text-center border border-neutral-100 shadow-sm">
-                  <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <LayoutGrid size={32} className="text-neutral-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-neutral-900">
-                    Không tìm thấy kết quả
-                  </h3>
-                  <p className="text-neutral-500 text-sm mt-2 max-w-xs mx-auto">
-                    Hãy thử thay đổi từ khóa hoặc bộ lọc của bạn.
-                  </p>
-                  <button
-                    onClick={() =>
-                      updateQuery({
-                        keyword: "",
-                        cefrLevel: "",
-                        alias: "",
-                        page: 1,
-                      })
-                    }
-                    className="mt-6 px-6 py-2.5 bg-neutral-900 text-white text-sm font-bold rounded-xl hover:bg-neutral-800 transition-colors"
+                ) : !loading && (
+                  <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-16 text-center border border-neutral-100 dark:border-neutral-800 shadow-sm"
                   >
-                    Xóa bộ lọc
-                  </button>
+                      <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <LayoutGrid size={32} className="text-neutral-300 dark:text-neutral-600" />
+                      </div>
+                      <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
+                        Không tìm thấy kết quả
+                      </h3>
+                      <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-2 max-w-xs mx-auto">
+                        Hãy thử thay đổi từ khóa hoặc bộ lọc của bạn.
+                      </p>
+                      <button
+                        onClick={() =>
+                          updateQuery({
+                            keyword: "",
+                            cefrLevel: "",
+                            alias: "",
+                            page: 1,
+                          })
+                        }
+                        className="mt-6 px-6 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-bold rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors shadow-sm"
+                      >
+                        Xóa bộ lọc
+                      </button>
+                  </div>
+                )}
+
+                {/* Subtle Loading Overlay - Only shows when loading but doesn't hide content */}
+                {loading && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 z-10 bg-surface-primary/10 dark:bg-neutral-950/10 backdrop-blur-[1px] flex items-start justify-center pt-20 pointer-events-none"
+                  >
+                    <div className="bg-white dark:bg-neutral-900 p-3 rounded-full shadow-xl border border-neutral-100 dark:border-neutral-800">
+                      <Loader2 size={24} className="animate-spin text-brand-500" />
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Pagination */}
+              {decks.length > 0 && (
+                <div className="mt-12 flex justify-center">
+                  <Pagination
+                    currentPage={query.page}
+                    totalPages={meta.totalPages}
+                    onPageChange={(p) => {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      updateQuery({ page: p });
+                    }}
+                  />
                 </div>
               )}
             </main>

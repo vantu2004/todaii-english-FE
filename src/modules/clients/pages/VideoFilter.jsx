@@ -99,22 +99,22 @@ const VideoFilter = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* --- HEADER SECTION (Redesigned) --- */}
           <div className="mb-10">
             <div className="flex items-center gap-4 mb-6">
               <button
                 onClick={() => window.history.back()}
-                className="group p-2.5 bg-white border border-neutral-200 rounded-full text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 hover:shadow-sm transition-all duration-200"
+                className="group p-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-full text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-sm transition-all duration-200"
                 title="Quay lại"
               >
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
 
               <div>
-                <h1 className="text-3xl font-light text-neutral-900 tracking-tight">
+                <h1 className="text-3xl font-light text-neutral-900 dark:text-white tracking-tight">
                   Thư viện Video
                 </h1>
                 {/* Optional: Breadcrumb nhỏ hoặc subtitle nếu cần */}
@@ -140,7 +140,7 @@ const VideoFilter = () => {
                 </span>
                 <div className="relative w-full sm:w-auto">
                   <select
-                    className="w-full sm:w-48 appearance-none bg-white border border-neutral-200 text-neutral-700 py-3 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:border-neutral-400 focus:ring-4 focus:ring-neutral-100 hover:border-neutral-300 transition-all cursor-pointer shadow-sm"
+                    className="w-full sm:w-48 appearance-none bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 py-3 pl-4 pr-10 rounded-xl text-sm font-medium focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all cursor-pointer shadow-sm"
                     onChange={handleSortChange}
                     value={`${query.sortBy}-${query.direction}`}
                   >
@@ -152,7 +152,7 @@ const VideoFilter = () => {
                   </select>
                   <ChevronDown
                     size={16}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500 pointer-events-none"
                   />
                 </div>
               </div>
@@ -170,9 +170,9 @@ const VideoFilter = () => {
             {/* --- RIGHT CONTENT (VIDEO GRID) --- */}
             <div className="flex-1 w-full">
               <div className="flex items-center justify-between mb-6">
-                <p className="text-sm text-neutral-500">
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">
                   Hiển thị{" "}
-                  <span className="font-bold text-neutral-900">
+                  <span className="font-bold text-neutral-900 dark:text-white">
                     {meta.totalElements}
                   </span>{" "}
                   video phù hợp
@@ -206,14 +206,14 @@ const VideoFilter = () => {
                 </>
               ) : (
                 /* Empty State */
-                <div className="bg-white rounded-3xl p-16 text-center border border-neutral-100">
-                  <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <LayoutGrid size={32} className="text-neutral-300" />
+                <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-16 text-center border border-neutral-100 dark:border-neutral-800">
+                  <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <LayoutGrid size={32} className="text-neutral-300 dark:text-neutral-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-neutral-900">
+                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
                     Không tìm thấy video
                   </h3>
-                  <p className="text-neutral-500 text-sm mt-2">
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-2">
                     Thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm của bạn.
                   </p>
                   <button
@@ -226,7 +226,7 @@ const VideoFilter = () => {
                         page: 1,
                       })
                     }
-                    className="mt-6 px-6 py-2.5 bg-neutral-900 text-white text-sm font-medium rounded-xl hover:bg-neutral-800 transition-colors"
+                    className="mt-6 px-6 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-medium rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
                   >
                     Xóa bộ lọc
                   </button>

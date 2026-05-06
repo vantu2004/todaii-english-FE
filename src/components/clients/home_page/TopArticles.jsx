@@ -44,7 +44,7 @@ const TopArticles = ({ topArticles = [] }) => {
         {mainArticle && (
           <Link
             to={`/client/article/${mainArticle.id}`}
-            className="group relative w-full h-80 lg:h-full rounded-3xl overflow-hidden shadow-sm"
+            className="group relative w-full h-80 lg:h-full rounded-3xl overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none dark:hover:shadow-none hover:-translate-y-0.5 transition-all duration-300"
           >
             {/* Image Background */}
             <img
@@ -83,7 +83,7 @@ const TopArticles = ({ topArticles = [] }) => {
             <Link
               key={article.id}
               to={`/client/article/${article.id}`}
-              className="group relative flex-1 rounded-3xl overflow-hidden shadow-sm min-h-[200px]"
+              className="group relative flex-1 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none dark:hover:shadow-none hover:-translate-y-0.5 transition-all duration-300 min-h-[200px]"
             >
               {/* Image Background */}
               <img

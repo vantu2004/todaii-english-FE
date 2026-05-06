@@ -15,7 +15,7 @@ export default function VideoPlayer({
     <div className="w-full max-w-5xl mx-auto mb-8">
       <button
         onClick={() => window.history.back()}
-        className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:scale-105 transition-transform duration-200 mb-4"
+        className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-transform duration-200 mb-4"
       >
         <ArrowLeft className="w-5 h-5" />
         <span>Quay lại</span>

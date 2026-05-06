@@ -16,8 +16,8 @@ const Node = ({ node, style, dragHandle, tree }) => {
         group flex items-center cursor-pointer px-3 py-1.5 mx-1 rounded-lg transition-all border border-transparent select-none
         ${
           node.isSelected
-            ? "bg-neutral-200 border-neutral-300 text-neutral-900 font-semibold shadow-sm"
-            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+            ? "bg-neutral-200 border-neutral-300 text-neutral-900 font-semibold shadow-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-white"
+            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
         }
       `}
     >
@@ -31,8 +31,8 @@ const Node = ({ node, style, dragHandle, tree }) => {
                 ? "text-yellow-600"
                 : "text-yellow-500 fill-yellow-500/20"
               : node.isSelected
-              ? "text-neutral-700"
-              : "text-neutral-400"
+              ? "text-neutral-700 dark:text-neutral-300"
+              : "text-neutral-400 dark:text-neutral-500"
           }
         />
       </div>
@@ -51,7 +51,7 @@ const Node = ({ node, style, dragHandle, tree }) => {
               if (e.key === "Escape") node.reset();
             }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full px-1 py-0.5 text-sm bg-white border border-blue-500 rounded outline-none shadow-sm"
+            className="w-full px-1 py-0.5 text-sm bg-white border border-brand-500 rounded outline-none shadow-sm dark:bg-neutral-800 dark:text-white"
           />
         ) : (
           <span className="text-sm">{node.data.name}</span>
@@ -66,7 +66,7 @@ const Node = ({ node, style, dragHandle, tree }) => {
           tree.props.onContextMenu(e, node);
         }}
         className={`
-          p-1 rounded hover:bg-neutral-300 text-neutral-400 hover:text-neutral-700 transition-all
+          p-1 rounded hover:bg-neutral-300 text-neutral-400 hover:text-neutral-700 transition-all dark:hover:bg-neutral-700 dark:text-neutral-500 dark:hover:text-neutral-200
           ${
             node.isSelected
               ? "opacity-100"

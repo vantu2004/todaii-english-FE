@@ -22,7 +22,7 @@ const ArticleHeader = ({ data, formatDate }) => {
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 hover:scale-105 transition-transform duration-200"
+          className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-transform duration-200"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Quay lại</span>
@@ -33,16 +33,16 @@ const ArticleHeader = ({ data, formatDate }) => {
             <button
               key={t}
               onClick={() => handleNavigate(null, t.alias)}
-              className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs font-bold uppercase tracking-wider border border-neutral-200
-                hover:bg-neutral-200 hover:text-neutral-900 hover:scale-105 transition-all duration-200"
+              className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full text-xs font-bold uppercase tracking-wider border border-neutral-200 dark:border-neutral-700
+                hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-all duration-200"
             >
               {t.name}
             </button>
           ))}
           <button
             onClick={() => handleNavigate(data.cefr)}
-            className="px-3 py-1 bg-neutral-900 text-white rounded-full text-xs font-bold uppercase tracking-wider
-              hover:bg-neutral-800 hover:scale-105 transition-all duration-200"
+            className="px-3 py-1 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-xs font-bold uppercase tracking-wider
+              hover:bg-neutral-800 dark:hover:bg-neutral-200 hover:scale-105 transition-all duration-200"
           >
             {data.cefr}
           </button>
@@ -50,48 +50,48 @@ const ArticleHeader = ({ data, formatDate }) => {
       </div>
 
       {/* Title */}
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4 leading-tight tracking-tight">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-4 leading-tight tracking-tight">
         {data.title}
       </h1>
 
       {/* Meta Data Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-y border-neutral-100">
-        <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-500 font-medium">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 border-y border-neutral-100 dark:border-neutral-800">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400 font-medium">
           {data.author && (
-            <div className="flex items-center gap-2 text-neutral-900">
-              <div className="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center">
+            <div className="flex items-center gap-2 text-neutral-900 dark:text-white">
+              <div className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center">
                 <User size={14} />
               </div>
               <button
                 onClick={() => handleNavigate(data.author, null)}
-                className="hover:text-blue-600 hover:underline transition-colors duration-200"
+                className="hover:text-brand-500 hover:underline transition-colors duration-200"
               >
                 {data.author}
               </button>
             </div>
           )}
 
-          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300" />
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
 
           <div className="flex items-center gap-1.5">
             <Clock size={16} />
             <span>{formatDate(data.publishedAt)}</span>
           </div>
 
-          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300" />
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
 
           <div className="flex items-center gap-1.5">
             <Eye size={16} />
             <span>{data.views} lượt xem</span>
           </div>
 
-          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300" />
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-700" />
 
           <div className="flex items-center gap-1.5">
             <Globe size={16} />
             <button
               onClick={() => handleNavigate(data.source, null)}
-              className="text-neutral-700 hover:text-blue-600 hover:underline transition-colors duration-200"
+              className="text-neutral-700 dark:text-neutral-300 hover:text-brand-500 hover:underline transition-colors duration-200"
             >
               {data.source}
             </button>

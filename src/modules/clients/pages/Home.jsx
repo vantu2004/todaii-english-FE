@@ -61,12 +61,12 @@ const Home = () => {
   const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % slides.length);
 
   return (
-    <div className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 transition-colors duration-300">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="mb-8">
           <div className="max-w-2xl">
-            <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-white tracking-tight">
               Khám phá tin tức
             </h1>
             <p className="mt-2 text-neutral-500 text-sm sm:text-base leading-relaxed">
@@ -96,14 +96,14 @@ const Home = () => {
             {/* Featured Article */}
             <section className="mb-10">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                   Nổi bật
                 </h2>
-                <div className="h-px flex-1 bg-neutral-200 ml-4" />
+                <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
               </div>
 
               {articlesLoading ? (
-                <div className="animate-pulse bg-neutral-200 h-80 sm:h-96 rounded-2xl" />
+                <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 sm:h-96 rounded-2xl" />
               ) : latestArticles.length > 0 ? (
                 <BigArticleCard {...latestArticles[0]} />
               ) : null}
@@ -116,7 +116,7 @@ const Home = () => {
               onMouseLeave={() => setIsHovered(false)}
             >
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                   Mới cập nhật
                 </h2>
 
@@ -125,13 +125,13 @@ const Home = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={prevSlide}
-                      className="w-8 h-8 rounded-full bg-white border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 transition-all duration-200 hover:shadow-sm"
+                      className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 hover:shadow-sm"
                     >
                       <ChevronLeft size={16} />
                     </button>
                     <button
                       onClick={nextSlide}
-                      className="w-8 h-8 rounded-full bg-white border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:border-neutral-300 transition-all duration-200 hover:shadow-sm"
+                      className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 hover:shadow-sm"
                     >
                       <ChevronRight size={16} />
                     </button>
@@ -153,7 +153,7 @@ const Home = () => {
                           .map((_, i) => (
                             <div
                               key={i}
-                              className="animate-pulse bg-neutral-200 h-52 rounded-xl"
+                              className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-52 rounded-xl"
                             />
                           ))}
                       </div>
@@ -187,8 +187,8 @@ const Home = () => {
                       onClick={() => goToSlide(idx)}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
                         idx === currentIndex
-                          ? "bg-neutral-800 w-6"
-                          : "bg-neutral-300 w-1.5 hover:bg-neutral-400"
+                          ? "bg-neutral-800 dark:bg-white w-6"
+                          : "bg-neutral-300 dark:bg-neutral-700 w-1.5 hover:bg-neutral-400 dark:hover:bg-neutral-600"
                       }`}
                     />
                   ))}
@@ -199,10 +199,10 @@ const Home = () => {
             {/* Top Articles */}
             <section className="mb-12">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                   Đọc nhiều nhất
                 </h2>
-                <div className="h-px flex-1 bg-neutral-200 ml-4" />
+                <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
               </div>
               <TopArticles
                 topArticles={topArticles}
@@ -213,10 +213,10 @@ const Home = () => {
             {/* Articles by Date */}
             <section>
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
                   Theo ngày
                 </h2>
-                <div className="h-px flex-1 bg-neutral-200 ml-4" />
+                <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
               </div>
               <ArticlesByDate
                 selectedDate={selectedDate}
@@ -237,8 +237,8 @@ const Home = () => {
               <SavedArticleTags />
 
               {/* Video Section */}
-              <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-4">
+              <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 border border-neutral-100 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-none">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 mb-4">
                   Video học tiếng Anh
                 </h3>
                 <VideoCard
@@ -250,7 +250,7 @@ const Home = () => {
               </div>
 
               {/* Social Stats */}
-              <div className="bg-white rounded-2xl p-5 border border-neutral-100 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+              <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 border border-neutral-100 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-none">
                 <SocialStats />
               </div>
             </div>

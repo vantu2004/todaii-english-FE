@@ -38,7 +38,7 @@ const HeroSection = ({ video, onNavigate }) => {
       <div className="absolute z-20 bottom-20 left-4 right-4 md:bottom-16 md:left-12 md:right-auto md:max-w-4xl pr-0 md:pr-4">
         {/* Badges */}
         <div className="flex flex-wrap items-center gap-2 mb-4 animate-fade-in-up">
-          <span className="bg-yellow-500 text-black text-xs font-extrabold px-2 py-1 rounded shadow-[0_0_10px_rgba(234,179,8,0.5)]">
+          <span className="bg-yellow-500 text-black text-xs font-extrabold px-2 py-1 rounded shadow-sm">
             HD
           </span>
           <span className="bg-white/10 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded border border-white/20">
@@ -50,25 +50,25 @@ const HeroSection = ({ video, onNavigate }) => {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-4 drop-shadow-2xl animate-fade-in-up delay-100 line-clamp-2 md:line-clamp-none">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-tight mb-4 drop-shadow-lg animate-fade-in-up delay-100 line-clamp-2 md:line-clamp-none">
           {video.title}
         </h1>
 
         {/* Info Grid */}
         {/* Trên mobile (màn hình nhỏ) có thể ẩn bớt grid thông tin để đỡ rối, hoặc giữ lại tùy bạn. Ở đây tôi giữ lại nhưng cho flex-wrap */}
-        <div className="flex flex-wrap gap-x-4 md:gap-x-8 gap-y-2 text-xs md:text-sm text-gray-200 mb-6 md:mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-sm p-3 md:p-5 rounded-xl border-l-4 border-purple-500 border-y border-r border-white/5 shadow-2xl max-w-2xl">
+        <div className="flex flex-wrap gap-x-4 md:gap-x-8 gap-y-2 text-xs md:text-sm text-neutral-300 mb-6 md:mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-md p-3 md:p-5 rounded-2xl border border-white/10 shadow-lg max-w-2xl">
           <div className="flex items-center gap-2 font-medium">
-            <User size={14} className="text-purple-400" />
+            <User size={14} className="text-neutral-300" />
             <span className="truncate max-w-[100px] md:max-w-none">
               {video.author_name}
             </span>
           </div>
           <div className="flex items-center gap-2 font-medium">
-            <MonitorPlay size={14} className="text-purple-400" />
+            <MonitorPlay size={14} className="text-neutral-300" />
             <span>{video.provider_name}</span>
           </div>
           <div className="flex items-center gap-2 font-medium">
-            <Eye size={14} className="text-purple-400" />
+            <Eye size={14} className="text-neutral-300" />
             <span>
               {new Intl.NumberFormat("vi-VN").format(video.views)} views
             </span>
@@ -76,7 +76,7 @@ const HeroSection = ({ video, onNavigate }) => {
           {/* Topics - Ẩn trên mobile rất nhỏ nếu cần thiết, hoặc giữ nguyên */}
           {video.topics && video.topics.length > 0 && (
             <div className="hidden sm:flex items-center gap-2 w-full pt-2 md:pt-3 border-t border-white/10 mt-1">
-              <Tag size={14} className="text-purple-400" />
+              <Tag size={14} className="text-neutral-300" />
               <span className="truncate text-gray-300">
                 {video.topics.map((t) => t.name).join(", ")}
               </span>
@@ -88,7 +88,7 @@ const HeroSection = ({ video, onNavigate }) => {
         <div className="flex gap-3 md:gap-4 animate-fade-in-up delay-300">
           <RouterLink
             to={`/client/video/${video.id}`}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-full font-bold transition-all hover:scale-105 shadow-[0_0_20px_rgba(147,51,234,0.5)] active:scale-95 border border-purple-500 text-sm md:text-base"
+            className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-100 px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold transition-all shadow-md active:scale-95 text-sm md:text-base"
           >
             <Play fill="currentColor" size={18} />
             Xem Ngay

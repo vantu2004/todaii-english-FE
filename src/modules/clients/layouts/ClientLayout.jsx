@@ -4,10 +4,10 @@ import ClientNavBar from "../../../components/clients/ClientNavBar";
 
 const ClientLayout = () => {
   return (
-    <div className="font-inter h-screen bg-stale-50 dark:bg-gray-900">
+    <div className="font-inter min-h-screen bg-surface-primary dark:bg-neutral-950 flex flex-col">
       <ClientNavBar />
 
-      <main>
+      <main className="flex-1 flex flex-col">
         <Outlet />
       </main>
 

@@ -13,7 +13,7 @@ const HighlightText = ({ text, keyword }) => {
         part.toLowerCase() === keyword.toLowerCase() ? (
           <span
             key={i}
-            className="text-purple-600 font-bold bg-purple-50 px-1 rounded"
+            className="text-brand-600 dark:text-brand-400 font-bold bg-brand-50 dark:bg-brand-900/30 px-1 rounded"
           >
             {part}
           </span>

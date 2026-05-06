@@ -94,14 +94,14 @@ const Profile = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="dictionary-page"
+        key="profile-page"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-neutral-50/50 pt-24 pb-12 px-4 sm:px-6 lg:px-8"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 sm:px-6 lg:px-8"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <input
             type="file"
             ref={fileInputRef}
@@ -111,17 +111,17 @@ const Profile = () => {
           />
 
           <div className="mb-8">
-            <h1 className="text-3xl font-light text-neutral-900 tracking-tight">
+            <h1 className="text-3xl font-light text-neutral-900 dark:text-white tracking-tight">
               Hồ sơ cá nhân
             </h1>
-            <p className="mt-2 text-neutral-500 text-sm">
+            <p className="mt-2 text-neutral-500 dark:text-neutral-400 text-sm">
               Quản lý thông tin cá nhân và bảo mật tài khoản của bạn
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-3xl border border-neutral-100 shadow-sm p-6 sm:p-8 sticky top-24">
+              <div className="bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm p-6 sm:p-8 sticky top-24">
                 <AvatarSection
                   authUser={authUser}
                   previewAvatar={previewAvatar}
@@ -129,7 +129,7 @@ const Profile = () => {
                   handleRemoveImage={handleRemoveImage}
                 />
 
-                <div className="my-6 border-t border-neutral-100" />
+                <div className="my-6 border-t border-neutral-100 dark:border-neutral-800" />
 
                 <div className="space-y-4">
                   <InfoRow
@@ -178,7 +178,7 @@ const Profile = () => {
                       });
                       setPreviewAvatar(authUser.avatar_url || "");
                     }}
-                    className="px-6 py-3 rounded-xl border border-neutral-200 text-sm font-bold text-neutral-600 hover:bg-neutral-50 transition-colors"
+                    className="px-6 py-3 rounded-xl border border-neutral-200 dark:border-neutral-700 text-sm font-bold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                   >
                     Hủy bỏ
                   </button>
@@ -186,10 +186,10 @@ const Profile = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-8 py-3 rounded-xl bg-neutral-900 text-white text-sm font-bold shadow-lg hover:bg-neutral-800 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="px-8 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-bold shadow-lg hover:bg-neutral-800 dark:hover:bg-neutral-100 hover:-translate-y-0.5 transition-all active:scale-95 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {loading ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white/30 dark:border-neutral-900/30 border-t-white dark:border-t-neutral-900 rounded-full animate-spin" />
                     ) : (
                       <Save size={18} />
                     )}
