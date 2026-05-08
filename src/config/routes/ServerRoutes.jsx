@@ -43,6 +43,9 @@ import PageNotFound from "../../pages/PageNotFound";
 import MyDashboard from "../../modules/servers/pages/manage_profile_page/MyDashboard";
 import AdminDashboard from "../../modules/servers/pages/manage_admins_page/AdminDashboard";
 import UserDashboard from "../../modules/servers/pages/manage_users_page/UserDashboard";
+import ManageToeicCollections from "../../modules/servers/pages/manage_toeic_page/ManageToeicCollections";
+import ManageToeicTags from "../../modules/servers/pages/manage_toeic_page/ManageToeicTags";
+import ManageToeicTests from "../../modules/servers/pages/manage_toeic_page/ManageToeicTests";
 
 export default function ServerRoutes() {
   return (
@@ -382,6 +385,40 @@ export default function ServerRoutes() {
                   rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
                 >
                   <ManageVocabsInVocabDeck />
+                </ServerProtectRoutes>
+              }
+            />
+
+            {/* TOEIC */}
+            <Route
+              path="/toeic-collection"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageToeicCollections />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/toeic-test"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageToeicTests />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/toeic-tag"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageToeicTags />
                 </ServerProtectRoutes>
               }
             />

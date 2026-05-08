@@ -22,6 +22,9 @@ import {
   BookMarked,
   Sparkles,
   CloudUpload,
+  GraduationCap,
+  Layers,
+  Tag,
 } from "lucide-react";
 import { useState } from "react";
 import { logout } from "../../api/servers/authApi";
@@ -59,6 +62,7 @@ const Sidebar = () => {
       case "article":
       case "video":
       case "learning":
+      case "toeic":
         return hasRole("CONTENT_MANAGER");
       case "settings":
         return false;
@@ -131,6 +135,20 @@ const Sidebar = () => {
           icon: FolderArchive,
         },
         { name: "Vocabulary Decks", to: "/server/vocab-deck", icon: BookCopy },
+      ],
+    },
+    {
+      id: "toeic",
+      name: "TOEIC Tests",
+      icon: GraduationCap,
+      children: [
+        {
+          name: "Collections",
+          to: "/server/toeic-collection",
+          icon: Layers,
+        },
+        { name: "Tests", to: "/server/toeic-test", icon: FileText },
+        { name: "Tags", to: "/server/toeic-tag", icon: Tag },
       ],
     },
     {
