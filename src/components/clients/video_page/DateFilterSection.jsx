@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { formatDate, formatISODate } from "../../../utils/FormatDate";
 import VideoCard from "./VideoCard";
+import BasicDatePicker from "../home_page/BasicDatePicker";
 
 const DateFilterSection = ({
   videos,
@@ -59,15 +60,15 @@ const DateFilterSection = ({
 
       {/* Date Controls Bar */}
       <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-8 bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm">
-        {/* Date Display Box */}
-        <div className="relative bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[180px] border border-neutral-200 dark:border-neutral-700">
-          <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider absolute -top-2 left-3 bg-white dark:bg-neutral-900 px-1">
-            Đang chọn
-          </span>
-          <Calendar size={18} className="text-brand-500" />
-          <span className="text-sm font-bold">
-            {formatISODate(selectedDate)}
-          </span>
+        {/* MUI Date Picker (from home page) */}
+        <div className="relative z-10 flex-shrink-0 bg-white dark:bg-neutral-900 rounded-lg min-w-[180px] min-h-[60px] flex items-center">
+          <BasicDatePicker
+            selectedDate={selectedDate}
+            setSelectedDate={(dateObj) => {
+              const dateStr = formatDate(dateObj);
+              handleSelectDate(dateStr);
+            }}
+          />
         </div>
 
         <div className="h-8 w-[1px] bg-neutral-200 dark:bg-neutral-700 hidden md:block mx-2"></div>

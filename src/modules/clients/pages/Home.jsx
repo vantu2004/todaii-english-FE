@@ -8,7 +8,7 @@ import TopArticles from "../../../components/clients/home_page/TopArticles";
 import useArticle from "../../../hooks/clients/useArticle";
 import useArticlesByDate from "../../../hooks/clients/useArticleByDate";
 import SocialStats from "../../../components/clients/home_page/sidebar/SocialStats";
-import VideoCard from "../../../components/clients/home_page/sidebar/VideoCard";
+import SidebarVideos from "../../../components/clients/home_page/sidebar/SidebarVideos";
 import TopicTags from "../../../components/clients/home_page/sidebar/TopicTags";
 import SearchBar from "../../../components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
@@ -241,12 +241,7 @@ const Home = () => {
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 mb-4">
                   Video học tiếng Anh
                 </h3>
-                <VideoCard
-                  videoURL="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg"
-                  title="Online Marketing 101"
-                  duration="1:05"
-                  views="20,298"
-                />
+                <SidebarVideos />
               </div>
 
               {/* Social Stats */}
