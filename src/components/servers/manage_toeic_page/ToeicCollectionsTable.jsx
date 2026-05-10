@@ -15,6 +15,15 @@ import {
 } from "../../../api/servers/toeicCollectionApi";
 import { logError } from "../../../utils/LogError";
 
+const truncateWords = (str, maxWords = 150) => {
+  if (!str) return "";
+  const words = str.split(/\s+/);
+  if (words.length > maxWords) {
+    return words.slice(0, maxWords).join(" ") + "...";
+  }
+  return str;
+};
+
 const ToeicCollectionsTable = ({
   columns,
   collections,
@@ -132,6 +141,14 @@ const ToeicCollectionsTable = ({
                 <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                 <td className="px-4 py-3 text-sm font-medium">{item.name}</td>
                 <td className="px-4 py-3 text-sm">{item.alias}</td>
+                
+                <td 
+                  className="px-4 py-3 text-sm max-w-xs truncate cursor-help" 
+                  title={item.description || ""}
+                >
+                  {truncateWords(item.description, 150)}
+                </td>
+
                 <td className="px-4 py-3 text-sm">
                   {formatISODate(item.updatedAt || item.updated_at)}
                 </td>

@@ -40,6 +40,7 @@ const ManageToeicCollections = () => {
     { key: "id", label: "ID", sortField: "id" },
     { key: "name", label: "Collection Name", sortField: "name" },
     { key: "alias", label: "Alias", sortField: "alias" },
+    { key: "description", label: "Description" },
     { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
     { key: "enable", label: "Enable" },
     { key: "actions", label: "Actions" },

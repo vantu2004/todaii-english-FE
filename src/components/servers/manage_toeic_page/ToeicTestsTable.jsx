@@ -8,6 +8,7 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  Volume2,
 } from "lucide-react";
 import {
   deleteToeicTest,
@@ -24,6 +25,22 @@ const ToeicTestsTable = ({
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [playingIndex, setPlayingIndex] = useState(null);
+
+  const handlePlayAudio = async (index, audio_url) => {
+    if (audio_url) {
+      setPlayingIndex(index);
+      try {
+        const audio = new Audio(audio_url);
+        audio.onended = () => setPlayingIndex(null);
+        await audio.play();
+      } catch (err) {
+        console.error(err);
+        toast.error("Audio playback failed");
+        setPlayingIndex(null);
+      }
+    }
+  };
 
   const handleDeleteClick = (index) => {
     setSelectedIndex(index);
@@ -116,6 +133,20 @@ const ToeicTestsTable = ({
                 <td className="px-4 py-3 text-sm font-medium">{item.title}</td>
                 <td className="px-4 py-3 text-sm">{item.testType || item.test_type}</td>
                 <td className="px-4 py-3 text-sm">{item.duration}m</td>
+                <td className="px-4 py-3 text-sm">
+                  {item.audio_url || item.audioUrl ? (
+                    <button
+                      onClick={() => handlePlayAudio(i, item.audio_url || item.audioUrl)}
+                      disabled={playingIndex === i}
+                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
+                    >
+                      <Volume2 className="w-5 h-5" />
+                      {playingIndex === i ? "Playing..." : "Play"}
+                    </button>
+                  ) : (
+                    <span className="text-gray-400 italic text-xs">No audio</span>
+                  )}
+                </td>
                 <td className="px-4 py-3 text-sm">{item.collection?.name || "N/A"}</td>
                 <td className="px-4 py-3 text-sm">{getStatusBadge(item.status)}</td>
                 <td className="px-4 py-3 text-sm">

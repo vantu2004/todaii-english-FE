@@ -46,6 +46,8 @@ import UserDashboard from "../../modules/servers/pages/manage_users_page/UserDas
 import ManageToeicCollections from "../../modules/servers/pages/manage_toeic_page/ManageToeicCollections";
 import ManageToeicTags from "../../modules/servers/pages/manage_toeic_page/ManageToeicTags";
 import ManageToeicTests from "../../modules/servers/pages/manage_toeic_page/ManageToeicTests";
+import CreateToeicTest from "../../modules/servers/pages/manage_toeic_page/CreateToeicTest";
+import UpdateToeicTest from "../../modules/servers/pages/manage_toeic_page/UpdateToeicTest";
 
 export default function ServerRoutes() {
   return (
@@ -408,6 +410,28 @@ export default function ServerRoutes() {
                   rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
                 >
                   <ManageToeicTests />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/toeic-test/create"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <CreateToeicTest />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/toeic-test/:id/update"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <UpdateToeicTest />
                 </ServerProtectRoutes>
               }
             />

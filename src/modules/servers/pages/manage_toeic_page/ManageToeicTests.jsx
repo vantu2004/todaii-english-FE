@@ -4,22 +4,20 @@ import ToolBar from "../../../../components/servers/ToolBar";
 import Pagination from "../../../../components/servers/Pagination";
 import {
   fetchToeicTests,
-  createToeicTest,
-  updateToeicTest,
 } from "../../../../api/servers/toeicTestApi";
 import { motion } from "framer-motion";
 import { logError } from "../../../../utils/LogError";
 import ToeicTestsTable from "../../../../components/servers/manage_toeic_page/ToeicTestsTable";
-import ToeicTestFormModal from "../../../../components/servers/manage_toeic_page/ToeicTestFormModal";
 import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { useNavigate } from "react-router-dom";
 
 const ManageToeicTests = () => {
   const { setHeader } = useHeaderContext();
 
+  const navigate = useNavigate();
+
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTest, setEditingTest] = useState(null);
 
   const [query, setQuery] = useState({
     page: 1,
@@ -41,6 +39,7 @@ const ManageToeicTests = () => {
     { key: "title", label: "Title", sortField: "title" },
     { key: "type", label: "Type", sortField: "testType" },
     { key: "duration", label: "Duration" },
+    { key: "audio", label: "Audio" },
     { key: "collection", label: "Collection" },
     { key: "status", label: "Status", sortField: "status" },
     { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
@@ -90,30 +89,12 @@ const ManageToeicTests = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
-  const handleOpenModal = (test = null) => {
-    setEditingTest(test);
-    setIsModalOpen(true);
+  const handleOpenCreate = () => {
+    navigate("/server/toeic-test/create");
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingTest(null);
-  };
-
-  const handleSubmit = async (data) => {
-    try {
-      if (editingTest) {
-        await updateToeicTest(editingTest.id, data);
-        toast.success("Test updated successfully");
-      } else {
-        await createToeicTest(data);
-        toast.success("Test created successfully");
-      }
-      await reloadTests();
-      handleCloseModal();
-    } catch (error) {
-      logError(error);
-    }
+  const handleOpenUpdate = (test) => {
+    navigate(`/server/toeic-test/${test.id}/update`);
   };
 
   return (
@@ -121,7 +102,7 @@ const ManageToeicTests = () => {
       <div className="flex flex-col h-full">
         <ToolBar
           updateQuery={updateQuery}
-          setIsModalOpen={() => handleOpenModal()}
+          setIsModalOpen={handleOpenCreate}
         />
 
         <motion.div
@@ -137,7 +118,7 @@ const ManageToeicTests = () => {
             reloadTests={reloadTests}
             query={query}
             updateQuery={updateQuery}
-            onEdit={handleOpenModal}
+            onEdit={handleOpenUpdate}
           />
         </motion.div>
 
@@ -149,15 +130,6 @@ const ManageToeicTests = () => {
           />
         </div>
       </div>
-
-      {isModalOpen && (
-        <ToeicTestFormModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-          initialData={editingTest}
-        />
-      )}
     </>
   );
 };
