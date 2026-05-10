@@ -42,12 +42,27 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
       return newStates;
     });
 
-    try {
+    const togglePromise = (async () => {
       const userId = users[index].id;
       await toggleUser(userId);
       await reloadUsers();
+    })();
+
+    toast.promise(togglePromise, {
+      loading: "Updating status...",
+      success: "Status updated successfully",
+      error: "Failed to update status",
+    });
+
+    try {
+      await togglePromise;
     } catch (err) {
       logError(err);
+      setEnabledStates((prev) => {
+        const newStates = [...prev];
+        newStates[index] = !newStates[index];
+        return newStates;
+      });
     }
   };
 
@@ -74,17 +89,23 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const handleConfirmUpdate = async (data) => {
     if (selectedUserIndex === null) return;
 
-    try {
+    const updatePromise = (async () => {
       const userId = users[selectedUserIndex].id;
-
       await updateUser(userId, data);
       await reloadUsers();
+    })();
 
+    toast.promise(updatePromise, {
+      loading: "Updating user...",
+      success: "User updated successfully",
+      error: "Failed to update user",
+    });
+
+    try {
+      await updatePromise;
       setSelectedUserIndex(null);
       setSelectedUser(null);
       setIsUpdateModalOpen(false);
-
-      toast.success("User updated successfully");
     } catch (error) {
       logError(error);
     }
@@ -93,16 +114,22 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
   const handleConfirmDelete = async () => {
     if (selectedUserIndex === null) return;
 
-    try {
+    const deletePromise = (async () => {
       const userId = users[selectedUserIndex].id;
-
       await deleteUser(userId);
       await reloadUsers();
+    })();
 
+    toast.promise(deletePromise, {
+      loading: "Deleting user...",
+      success: "User deleted successfully",
+      error: "Failed to delete user",
+    });
+
+    try {
+      await deletePromise;
       setSelectedUserIndex(null);
       setIsDeleteModalOpen(false);
-
-      toast.success("User deleted");
     } catch (err) {
       logError(err);
     }

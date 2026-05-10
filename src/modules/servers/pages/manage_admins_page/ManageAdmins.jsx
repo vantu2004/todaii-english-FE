@@ -92,13 +92,20 @@ const ManageAdmins = () => {
   };
 
   const handleConfirmCreate = async (data) => {
-    try {
+    const createPromise = (async () => {
       await createAdmin(data);
       await reloadAdmins();
+    })();
 
+    toast.promise(createPromise, {
+      loading: "Creating admin...",
+      success: "Admin created successfully",
+      error: "Failed to create admin",
+    });
+
+    try {
+      await createPromise;
       setIsCreateModalOpen(false);
-
-      toast.success("Admin created successfully");
     } catch (error) {
       logError(error);
     }

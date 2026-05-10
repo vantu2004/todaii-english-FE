@@ -42,13 +42,27 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
       return newStates;
     });
 
-    try {
+    const togglePromise = (async () => {
       const adminId = admins[index].id;
-
       await toggleAdmin(adminId);
       await reloadAdmins();
+    })();
+
+    toast.promise(togglePromise, {
+      loading: "Updating status...",
+      success: "Status updated successfully",
+      error: "Failed to update status",
+    });
+
+    try {
+      await togglePromise;
     } catch (err) {
       logError(err);
+      setEnabledStates((prev) => {
+        const newStates = [...prev]; // get old states
+        newStates[index] = !newStates[index]; // toggle
+        return newStates;
+      });
     }
   };
 
@@ -76,17 +90,23 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const handleConfirmUpdate = async (data) => {
     if (selectedAdminIndex === null) return;
 
-    try {
+    const updatePromise = (async () => {
       const adminId = admins[selectedAdminIndex].id;
-
       await updateAdmin(adminId, data);
       await reloadAdmins();
+    })();
 
+    toast.promise(updatePromise, {
+      loading: "Updating admin...",
+      success: "Admin updated successfully",
+      error: "Failed to update admin",
+    });
+
+    try {
+      await updatePromise;
       setSelectedAdminIndex(null);
       setSelectedAdmin(null);
       setIsUpdateModalOpen(false);
-
-      toast.success("Admin updated successfully");
     } catch (error) {
       logError(error);
     }
@@ -95,16 +115,22 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
   const handleConfirmDelete = async () => {
     if (selectedAdminIndex === null) return;
 
-    try {
+    const deletePromise = (async () => {
       const adminId = admins[selectedAdminIndex].id;
-
       await deleteAdmin(adminId);
       await reloadAdmins();
+    })();
 
+    toast.promise(deletePromise, {
+      loading: "Deleting admin...",
+      success: "Admin deleted successfully",
+      error: "Failed to delete admin",
+    });
+
+    try {
+      await deletePromise;
       setSelectedAdminIndex(null);
       setIsDeleteModalOpen(false);
-
-      toast.success("Admin deleted");
     } catch (err) {
       logError(err);
     }
