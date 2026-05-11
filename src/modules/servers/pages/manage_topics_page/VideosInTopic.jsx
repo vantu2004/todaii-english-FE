@@ -12,7 +12,7 @@ const VideosInTopic = () => {
       query.size,
       query.sortBy,
       query.direction,
-      query.keyword
+      query.keyword,
     );
 
   return <GenericVideoList title="Videos in Topic" fetchApi={fetchApi} />;

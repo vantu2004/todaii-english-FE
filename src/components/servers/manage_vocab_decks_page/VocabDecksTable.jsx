@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatISODate } from "@/utils/FormatDate";
-import {
-  deleteVocabDeck,
-  toggleVocabDeck,
-} from "@/api/servers/vocabDeckApi";
+import { deleteVocabDeck, toggleVocabDeck } from "@/api/servers/vocabDeckApi";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
 import {

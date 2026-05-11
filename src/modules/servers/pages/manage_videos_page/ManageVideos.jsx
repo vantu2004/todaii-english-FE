@@ -8,7 +8,7 @@ const ManageVideos = () => {
       query.size,
       query.sortBy,
       query.direction,
-      query.keyword
+      query.keyword,
     );
 
   return <GenericVideoList title="Manage Videos" fetchApi={fetchApi} />;

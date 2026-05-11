@@ -1,8 +1,5 @@
 import toast from "react-hot-toast";
-import {
-  fetchVocabDeck,
-  updateVocabDeck,
-} from "@/api/servers/vocabDeckApi";
+import { fetchVocabDeck, updateVocabDeck } from "@/api/servers/vocabDeckApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";

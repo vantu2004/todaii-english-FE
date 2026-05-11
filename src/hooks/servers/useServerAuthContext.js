@@ -5,7 +5,7 @@ export function useServerAuthContext() {
   const context = useContext(ServerAuthContext);
   if (!context) {
     throw new Error(
-      "useServerAuthContext must be used inside ServerAuthProvider"
+      "useServerAuthContext must be used inside ServerAuthProvider",
     );
   }
   return context;

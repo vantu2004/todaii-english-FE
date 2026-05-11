@@ -131,7 +131,7 @@ const SearchByKeyword = ({ videos, onClickVideo }) => {
                       onClick={() =>
                         window.open(
                           PLAYLIST_BASE_URL + p.id.playlist_id,
-                          "_blank"
+                          "_blank",
                         )
                       }
                       className="group rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-cyan-400 transition-all duration-300 cursor-pointer hover:shadow-md hover:shadow-cyan-100"

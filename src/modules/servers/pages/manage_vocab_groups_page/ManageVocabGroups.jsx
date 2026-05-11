@@ -56,7 +56,7 @@ const ManageVocabGroups = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setGroups(data.content || []);

@@ -13,7 +13,9 @@ const GeneralInfoSection = ({
         <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <User size={20} />
         </div>
-        <h3 className="text-lg font-bold text-neutral-900 dark:text-white">Thông tin chung</h3>
+        <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
+          Thông tin chung
+        </h3>
       </div>
 
       <div className="space-y-6">

@@ -1,12 +1,23 @@
-  import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { fetchToeicCollections } from "@/api/servers/toeicCollectionApi";
-import { FileText, Type, Clock, Image as ImageIcon, FileAudio, LayoutList, Layers, ToggleLeft, Save, X } from "lucide-react";
+import {
+  FileText,
+  Type,
+  Clock,
+  Image as ImageIcon,
+  FileAudio,
+  LayoutList,
+  Layers,
+  ToggleLeft,
+  Save,
+  X,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     title: "",
     test_type: "TOEIC_LR",
@@ -21,9 +32,13 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
   const [collections, setCollections] = useState([]);
 
   useEffect(() => {
-    fetchToeicCollections(1, 1000).then((data) => {
-      setCollections(data.content || []);
-    }).catch(err => console.error("Error fetching collections for dropdown", err));
+    fetchToeicCollections(1, 1000)
+      .then((data) => {
+        setCollections(data.content || []);
+      })
+      .catch((err) =>
+        console.error("Error fetching collections for dropdown", err),
+      );
   }, []);
 
   useEffect(() => {
@@ -36,7 +51,8 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
         thumbnail: initialData.thumbnail || "",
         description: initialData.description || "",
         status: initialData.status || "DRAFT",
-        collection_id: initialData.collection?.id || initialData.collection_id || "",
+        collection_id:
+          initialData.collection?.id || initialData.collection_id || "",
       });
     }
   }, [initialData]);
@@ -50,7 +66,9 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
     e.preventDefault();
     const submitData = {
       ...formData,
-      collection_id: formData.collection_id ? Number(formData.collection_id) : null
+      collection_id: formData.collection_id
+        ? Number(formData.collection_id)
+        : null,
     };
     onSubmit(submitData);
   };
@@ -66,14 +84,14 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
             {mode === "create" ? "Create TOEIC Test" : "Update TOEIC Test"}
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Fill in the details below to {mode === "create" ? "create a new" : "update the"} test
+            Fill in the details below to{" "}
+            {mode === "create" ? "create a new" : "update the"} test
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 border border-blue-100 dark:border-gray-700 space-y-6">
-          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
@@ -93,7 +111,10 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <LayoutList size={16} className="text-blue-600 dark:text-blue-400" />
+                <LayoutList
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Test Type
               </label>
               <select
@@ -124,7 +145,10 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <Layers size={16} className="text-blue-600 dark:text-blue-400" />
+                <Layers
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Collection
               </label>
               <select
@@ -134,15 +158,20 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
                 className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none transition-all shadow-sm"
               >
                 <option value="">-- Select a Collection --</option>
-                {collections.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
+                {collections.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <ToggleLeft size={16} className="text-blue-600 dark:text-blue-400" />
+                <ToggleLeft
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Status
               </label>
               <select
@@ -156,10 +185,13 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
                 <option value="ARCHIVED">ARCHIVED</option>
               </select>
             </div>
-            
+
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <ImageIcon size={16} className="text-blue-600 dark:text-blue-400" />
+                <ImageIcon
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Thumbnail URL
               </label>
               <input
@@ -176,12 +208,12 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
                   animate={{ opacity: 1, height: "auto" }}
                   className="mt-4 rounded-lg overflow-hidden border border-slate-200 shadow-md bg-white p-2"
                 >
-                  <img 
-                    src={formData.thumbnail} 
-                    alt="Thumbnail preview" 
+                  <img
+                    src={formData.thumbnail}
+                    alt="Thumbnail preview"
                     className="w-full h-auto object-cover rounded max-h-64"
                     onError={(e) => {
-                      e.target.style.display = 'none';
+                      e.target.style.display = "none";
                     }}
                   />
                 </motion.div>
@@ -190,7 +222,10 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <FileAudio size={16} className="text-blue-600 dark:text-blue-400" />
+                <FileAudio
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Audio URL
               </label>
               <input
@@ -207,7 +242,9 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
                   animate={{ opacity: 1, height: "auto" }}
                   className="mt-4 rounded-lg overflow-hidden border border-slate-200 shadow-md bg-white p-4 flex flex-col gap-2"
                 >
-                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wide">Audio Preview</span>
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+                    Audio Preview
+                  </span>
                   <audio controls className="w-full" src={formData.audio_url}>
                     Your browser does not support the audio element.
                   </audio>
@@ -217,7 +254,10 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
-                <FileText size={16} className="text-blue-600 dark:text-blue-400" />
+                <FileText
+                  size={16}
+                  className="text-blue-600 dark:text-blue-400"
+                />
                 Description
               </label>
               <textarea

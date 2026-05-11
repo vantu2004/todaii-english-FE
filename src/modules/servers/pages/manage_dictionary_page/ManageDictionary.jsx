@@ -62,7 +62,7 @@ const ManageDictionary = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setDictionary(data.content || []);

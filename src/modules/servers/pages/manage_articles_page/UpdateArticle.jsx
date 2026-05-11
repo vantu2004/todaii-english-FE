@@ -1,8 +1,5 @@
 import toast from "react-hot-toast";
-import {
-  fetchArticle,
-  updateArticle,
-} from "@/api/servers/articleApi";
+import { fetchArticle, updateArticle } from "@/api/servers/articleApi";
 import ArticleForm from "@/components/servers/manage_articles_page/ArticleForm";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";

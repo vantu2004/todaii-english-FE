@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatISODate } from "@/utils/FormatDate";
-import {
-  deleteAdmin,
-  toggleAdmin,
-  updateAdmin,
-} from "@/api/servers/adminApi";
+import { deleteAdmin, toggleAdmin, updateAdmin } from "@/api/servers/adminApi";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
 import {
@@ -201,8 +197,8 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                 admin.status === "ACTIVE"
                   ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
                   : admin.status === "PENDING"
-                  ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
-                  : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
+                    ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
+                    : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
 
               return (
                 <tr

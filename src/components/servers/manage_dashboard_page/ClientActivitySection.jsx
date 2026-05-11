@@ -12,15 +12,15 @@ import { useMemo } from "react";
 const ClientActivitySection = ({ data, type }) => {
   const tokenChartData = useMemo(
     () => getTokenChartData(data?.ai_token_trends),
-    [data]
+    [data],
   );
   const eventDistributionData = useMemo(
     () => getEventDistributionData(data?.log_summary),
-    [data]
+    [data],
   );
   const eventCharts = useMemo(
     () => getEventChartsData(data?.log_trends, data?.log_summary),
-    [data]
+    [data],
   );
 
   return (

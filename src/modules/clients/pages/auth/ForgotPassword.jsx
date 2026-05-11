@@ -51,7 +51,7 @@ const ForgotPassword = () => {
   const handleChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-    
+
     const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
 
     if (!value) {
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
-      <motion.div 
+      <motion.div
         variants={fadeIn(0.1)}
         initial="hidden"
         animate="show"
@@ -77,7 +77,10 @@ const ForgotPassword = () => {
           <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-brand-400/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            <Link to="/" className="text-2xl font-extrabold tracking-tight select-none flex items-center">
+            <Link
+              to="/"
+              className="text-2xl font-extrabold tracking-tight select-none flex items-center"
+            >
               <span className="text-white">Todaii</span>
               <span className="ml-1 text-white/80">English</span>
             </Link>
@@ -88,7 +91,8 @@ const ForgotPassword = () => {
               Reset your password.
             </h2>
             <p className="text-white/80 text-lg leading-relaxed max-w-md">
-              Don't worry, we'll help you get back to your account. Enter your email to receive a password reset link.
+              Don't worry, we'll help you get back to your account. Enter your
+              email to receive a password reset link.
             </p>
           </div>
 

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, BookOpen, LayoutGrid, Loader2, Filter, X as CloseX } from "lucide-react";
+import {
+  ChevronDown,
+  BookOpen,
+  LayoutGrid,
+  Loader2,
+  Filter,
+  X as CloseX,
+} from "lucide-react";
 import { filterVocabDecks } from "@/api/clients/vocabDeckApi";
 import { logError } from "@/utils/LogError";
 import SearchBar from "@/components/clients/SearchBar";
@@ -83,7 +90,9 @@ const VocabularyFilter = () => {
                 <SearchBar
                   value={query.keyword}
                   placeholder="Tìm kiếm bộ từ vựng..."
-                  onChangeSearch={(val) => updateQuery({ keyword: val, page: 1 })}
+                  onChangeSearch={(val) =>
+                    updateQuery({ keyword: val, page: 1 })
+                  }
                 />
               </div>
             </div>
@@ -141,7 +150,9 @@ const VocabularyFilter = () => {
                   className="fixed right-0 top-0 bottom-0 z-[70] w-[280px] bg-white dark:bg-neutral-900 p-6 shadow-2xl lg:hidden overflow-y-auto"
                 >
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-bold text-neutral-900 dark:text-white">Bộ lọc</h3>
+                    <h3 className="font-bold text-neutral-900 dark:text-white">
+                      Bộ lọc
+                    </h3>
                     <button
                       onClick={() => setShowMobileFilter(false)}
                       className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg text-neutral-500 dark:text-neutral-400"
@@ -187,11 +198,14 @@ const VocabularyFilter = () => {
                       <DeckCard key={deck.id} deck={deck} />
                     ))}
                   </div>
-                ) : !loading && (
-                  <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-16 text-center border border-neutral-100 dark:border-neutral-800 shadow-sm"
-                  >
+                ) : (
+                  !loading && (
+                    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-16 text-center border border-neutral-100 dark:border-neutral-800 shadow-sm">
                       <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <LayoutGrid size={32} className="text-neutral-300 dark:text-neutral-600" />
+                        <LayoutGrid
+                          size={32}
+                          className="text-neutral-300 dark:text-neutral-600"
+                        />
                       </div>
                       <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
                         Không tìm thấy kết quả
@@ -212,7 +226,8 @@ const VocabularyFilter = () => {
                       >
                         Xóa bộ lọc
                       </button>
-                  </div>
+                    </div>
+                  )
                 )}
 
                 {/* Subtle Loading Overlay - Only shows when loading but doesn't hide content */}
@@ -223,7 +238,10 @@ const VocabularyFilter = () => {
                     className="absolute inset-0 z-10 bg-surface-primary/10 dark:bg-neutral-950/10 backdrop-blur-[1px] flex items-start justify-center pt-20 pointer-events-none"
                   >
                     <div className="bg-white dark:bg-neutral-900 p-3 rounded-full shadow-xl border border-neutral-100 dark:border-neutral-800">
-                      <Loader2 size={24} className="animate-spin text-brand-500" />
+                      <Loader2
+                        size={24}
+                        className="animate-spin text-brand-500"
+                      />
                     </div>
                   </motion.div>
                 )}

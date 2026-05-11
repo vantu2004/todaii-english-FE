@@ -91,7 +91,9 @@ const ArticleFilterSidebar = ({
     >
       {/* Header */}
       <div className="px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Bộ lọc</h2>
+        <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">
+          Bộ lọc
+        </h2>
         {hasActiveFilters && (
           <button
             onClick={resetFilters}
@@ -153,7 +155,9 @@ const ArticleFilterSidebar = ({
             onClick={() => toggleSection("topic")}
             className="w-full flex items-center justify-between py-2 text-left"
           >
-            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Chủ đề</span>
+            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              Chủ đề
+            </span>
             <ChevronDown
               size={16}
               className={`text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${

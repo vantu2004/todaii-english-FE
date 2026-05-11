@@ -17,7 +17,7 @@ export const updateSetting = async (key, value) => {
     await serverInstance.put(
       `/setting/${key}`,
       {},
-      { params: { value: value } }
+      { params: { value: value } },
     );
   } catch (err) {
     console.error("Error:", err);

@@ -4,7 +4,7 @@ export const fetchArticlesFromNewsApi = async (
   query = "technology",
   pageSize = 10,
   page = 1,
-  sortBy = "publishedAt"
+  sortBy = "publishedAt",
 ) => {
   try {
     const response = await serverInstance.post(
@@ -12,7 +12,7 @@ export const fetchArticlesFromNewsApi = async (
       {},
       {
         params: { query, pageSize, page, sortBy },
-      }
+      },
     );
     return response.data.articles;
   } catch (err) {
@@ -26,7 +26,7 @@ export const fetchArticles = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/article", {
@@ -45,7 +45,7 @@ export const fetchArticlesByTopic = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get(`/article/topic/${topicId}`, {

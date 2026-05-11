@@ -51,7 +51,9 @@ const SystemIntegrations = () => {
         <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <Blocks size={20} />
         </div>
-        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">Dịch vụ tích hợp</h3>
+        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">
+          Dịch vụ tích hợp
+        </h3>
       </div>
 
       {/* Grid Layout */}

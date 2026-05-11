@@ -66,7 +66,9 @@ const Login = () => {
             </div>
           </motion.div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">Admin Portal</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
+              Admin Portal
+            </h1>
             <p className="text-neutral-400 text-sm">
               Authorized personnel only
             </p>

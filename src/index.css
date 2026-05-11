@@ -7,24 +7,24 @@
 
 @theme {
   /* ── Brand Colors ── */
-  --color-brand-50:  oklch(0.97 0.02 250);
+  --color-brand-50: oklch(0.97 0.02 250);
   --color-brand-100: oklch(0.93 0.04 250);
-  --color-brand-500: oklch(0.60 0.15 250);   /* Primary accent */
+  --color-brand-500: oklch(0.6 0.15 250); /* Primary accent */
   --color-brand-600: oklch(0.52 0.15 250);
   --color-brand-700: oklch(0.44 0.14 250);
 
   /* ── Accent ── */
-  --color-accent-500: oklch(0.70 0.16 45);    /* Warm amber/coral */
+  --color-accent-500: oklch(0.7 0.16 45); /* Warm amber/coral */
 
   /* ── Surface (Light mode defaults) ── */
-  --color-surface-primary:   oklch(0.99 0.002 250);  /* Main bg */
-  --color-surface-secondary: oklch(0.97 0.004 250);  /* Cards, sidebar */
-  --color-surface-elevated:  oklch(1.00 0 0);        /* Elevated cards, modals */
+  --color-surface-primary: oklch(0.99 0.002 250); /* Main bg */
+  --color-surface-secondary: oklch(0.97 0.004 250); /* Cards, sidebar */
+  --color-surface-elevated: oklch(1 0 0); /* Elevated cards, modals */
 
   /* ── Text (Light mode defaults) ── */
-  --color-text-primary:   oklch(0.13 0.02 250);
+  --color-text-primary: oklch(0.13 0.02 250);
   --color-text-secondary: oklch(0.45 0.02 250);
-  --color-text-tertiary:  oklch(0.62 0.01 250);
+  --color-text-tertiary: oklch(0.62 0.01 250);
 
   /* ── Fonts ── */
   --font-jarkata-sans: "Plus Jakarta Sans", sans-serif;
@@ -68,5 +68,9 @@
 }
 
 .landing-gradient {
-  background: linear-gradient(135deg, oklch(0.70 0.16 45) 0%, oklch(0.60 0.15 320) 100%);
+  background: linear-gradient(
+    135deg,
+    oklch(0.7 0.16 45) 0%,
+    oklch(0.6 0.15 320) 100%
+  );
 }

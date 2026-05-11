@@ -85,7 +85,7 @@ const VerifyOtp = () => {
 
   return (
     <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
-      <motion.div 
+      <motion.div
         variants={fadeIn(0.1)}
         initial="hidden"
         animate="show"
@@ -97,7 +97,10 @@ const VerifyOtp = () => {
           <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-brand-400/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            <Link to="/" className="text-2xl font-extrabold tracking-tight select-none flex items-center">
+            <Link
+              to="/"
+              className="text-2xl font-extrabold tracking-tight select-none flex items-center"
+            >
               <span className="text-white">Todaii</span>
               <span className="ml-1 text-white/80">English</span>
             </Link>
@@ -108,7 +111,8 @@ const VerifyOtp = () => {
               Enter verification code.
             </h2>
             <p className="text-white/80 text-lg leading-relaxed max-w-md">
-              We've sent a 6-digit code to your email. Please enter it below to confirm your identity.
+              We've sent a 6-digit code to your email. Please enter it below to
+              confirm your identity.
             </p>
           </div>
 
@@ -125,7 +129,11 @@ const VerifyOtp = () => {
                 Verify OTP
               </h1>
               <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                Please enter the OTP sent to <span className="font-medium text-neutral-900 dark:text-neutral-200">{email}</span>.
+                Please enter the OTP sent to{" "}
+                <span className="font-medium text-neutral-900 dark:text-neutral-200">
+                  {email}
+                </span>
+                .
               </p>
             </div>
 
@@ -146,7 +154,7 @@ const VerifyOtp = () => {
             >
               {loading ? "Verifying..." : "Verify"}
             </button>
-            
+
             <p className="mt-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
               Didn't receive the code?{" "}
               <button

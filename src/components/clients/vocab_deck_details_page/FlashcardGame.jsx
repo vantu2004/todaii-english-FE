@@ -48,7 +48,9 @@ const FlashcardGame = ({ words, onClose }) => {
     <div className="fixed inset-0 z-[9999] flex flex-col bg-surface-primary dark:bg-neutral-950 animate-in fade-in duration-200">
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
-        <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Flashcard</h2>
+        <h2 className="text-lg font-bold text-neutral-900 dark:text-white">
+          Flashcard
+        </h2>
         <div className="px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-600 dark:text-neutral-400">
           {currentIndex + 1} / {words.length}
         </div>

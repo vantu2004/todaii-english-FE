@@ -22,7 +22,7 @@ const ListParagraphs = ({ articleId, paragraphs }) => {
 
       if (paragraph.id) {
         setLocalParagraphs((prev) =>
-          prev.map((p) => (p.id === paragraph.id ? savedParagraph : p))
+          prev.map((p) => (p.id === paragraph.id ? savedParagraph : p)),
         );
         toast.success("Updated successfully.");
       } else {

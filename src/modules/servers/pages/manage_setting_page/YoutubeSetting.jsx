@@ -1,9 +1,6 @@
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { useEffect, useState } from "react";
-import {
-  fetchSettings,
-  updateSetting,
-} from "@/api/servers/settingApi";
+import { fetchSettings, updateSetting } from "@/api/servers/settingApi";
 import { logError } from "@/utils/LogError";
 import { motion } from "framer-motion";
 import SettingsTable from "@/components/servers/SettingsTable";

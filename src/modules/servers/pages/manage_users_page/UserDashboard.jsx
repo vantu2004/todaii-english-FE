@@ -31,7 +31,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 const UserDashboard = () => {
@@ -53,7 +53,7 @@ const UserDashboard = () => {
       const myRes = await getUserChartById(
         id,
         dateRange.startDate,
-        dateRange.endDate
+        dateRange.endDate,
       );
 
       setUserData(myRes);

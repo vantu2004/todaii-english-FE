@@ -62,7 +62,7 @@ const DictionaryApi = () => {
           // Save to localStorage
           localStorage.setItem(
             "dictionarySearchHistory",
-            JSON.stringify(updated)
+            JSON.stringify(updated),
           );
           return updated;
         });

@@ -85,7 +85,9 @@ const ManageToeicTags = () => {
     }
   };
 
-  const filteredTags = tags.filter(t => t.name.toLowerCase().includes(query.keyword.toLowerCase()));
+  const filteredTags = tags.filter((t) =>
+    t.name.toLowerCase().includes(query.keyword.toLowerCase()),
+  );
 
   return (
     <>

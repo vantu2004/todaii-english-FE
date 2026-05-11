@@ -32,15 +32,15 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
 
         <ChevronDown
           size={14}
-          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-            }`}
+          className={`transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
         />
       </button>
 
       {/* Dropdown */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-96 max-h-72 overflow-y-auto bg-white border border-neutral-200 rounded-2xl shadow-xl z-[999]">
-
           <div className="px-4 py-2 text-xs font-semibold text-neutral-400 border-b">
             Select Voice
           </div>
@@ -65,10 +65,10 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
                     ${isActive ? "bg-neutral-100 font-medium" : ""}
                   `}
                 >
-                  <span className="break-words whitespace-normal text-left leading-tight">{voice.name}</span>
-                  <span className="text-xs text-neutral-400">
-                    {voice.lang}
+                  <span className="break-words whitespace-normal text-left leading-tight">
+                    {voice.name}
                   </span>
+                  <span className="text-xs text-neutral-400">{voice.lang}</span>
                 </button>
               );
             })

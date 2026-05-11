@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  getLastestArticles,
-  getTopArticles,
-} from "@/api/clients/articleApi";
+import { getLastestArticles, getTopArticles } from "@/api/clients/articleApi";
 
 const useArticle = (limit = 10) => {
   const [latestArticles, setLatestArticles] = useState([]);

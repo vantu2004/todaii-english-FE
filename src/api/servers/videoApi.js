@@ -27,7 +27,7 @@ export const fetchVideos = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/video", {
@@ -46,7 +46,7 @@ export const fetchVideosByTopic = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get(`/video/topic/${topicId}`, {

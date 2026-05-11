@@ -37,7 +37,10 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
       {/* 1. CEFR Level Filter */}
       <div className="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-100 dark:border-neutral-800 dark:shadow-none shadow-sm">
         <div className="flex items-center gap-2 mb-4 text-neutral-900 dark:text-white">
-          <BarChart3 size={18} className="text-neutral-400 dark:text-neutral-500" />
+          <BarChart3
+            size={18}
+            className="text-neutral-400 dark:text-neutral-500"
+          />
           <h3 className="font-bold">Trình độ</h3>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -68,7 +71,10 @@ const VideoFilterSidebar = ({ query, updateQuery, topics }) => {
       {/* 2. Topics Filter */}
       <div className="bg-white dark:bg-neutral-900/60 p-6 rounded-3xl border border-neutral-100 dark:border-neutral-800 dark:shadow-none shadow-sm">
         <div className="flex items-center gap-2 mb-4 text-neutral-900 dark:text-white">
-          <Layers size={18} className="text-neutral-400 dark:text-neutral-500" />
+          <Layers
+            size={18}
+            className="text-neutral-400 dark:text-neutral-500"
+          />
           <h3 className="font-bold">Chủ đề</h3>
         </div>
         <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">

@@ -32,7 +32,7 @@ export const renameNotebook = async (notebookId, newName) => {
       {},
       {
         params: { name: newName },
-      }
+      },
     );
     return response.data;
   } catch (err) {

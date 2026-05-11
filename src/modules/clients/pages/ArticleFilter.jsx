@@ -186,7 +186,10 @@ const ArticleFilter = () => {
               ) : results.length === 0 ? (
                 <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-12 text-center border border-neutral-100 dark:border-neutral-800">
                   <div className="w-16 h-16 mx-auto mb-4 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
-                    <Search size={24} className="text-neutral-400 dark:text-neutral-500" />
+                    <Search
+                      size={24}
+                      className="text-neutral-400 dark:text-neutral-500"
+                    />
                   </div>
                   <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
                     Không tìm thấy kết quả

@@ -21,7 +21,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
       const res = await fetchApi(id, pageNum, pageSize);
       if (res) {
         setWords((prev) =>
-          pageNum === 1 ? res.content : [...prev, ...res.content]
+          pageNum === 1 ? res.content : [...prev, ...res.content],
         );
         setHasMore(!res.last);
         setPage(pageNum);
@@ -46,14 +46,20 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
       return "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800";
     if (p.includes("adj"))
       return "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-800";
-    if (p.includes("adv")) return "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-800";
-    if (p.includes("pro")) return "bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-800";
+    if (p.includes("adv"))
+      return "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-800";
+    if (p.includes("pro"))
+      return "bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-800";
     if (p.includes("det"))
       return "bg-fuchsia-50 dark:bg-fuchsia-900/20 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-100 dark:border-fuchsia-800";
-    if (p.includes("prep")) return "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-100 dark:border-cyan-800";
-    if (p.includes("conj")) return "bg-lime-50 dark:bg-lime-900/20 text-lime-700 dark:text-lime-300 border-lime-100 dark:border-lime-800";
-    if (p.includes("interj")) return "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-100 dark:border-rose-800";
-    if (p.includes("phrase")) return "bg-gray-50 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-100 dark:border-neutral-700";
+    if (p.includes("prep"))
+      return "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-100 dark:border-cyan-800";
+    if (p.includes("conj"))
+      return "bg-lime-50 dark:bg-lime-900/20 text-lime-700 dark:text-lime-300 border-lime-100 dark:border-lime-800";
+    if (p.includes("interj"))
+      return "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-100 dark:border-rose-800";
+    if (p.includes("phrase"))
+      return "bg-gray-50 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-100 dark:border-neutral-700";
     return "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-800";
   };
 
@@ -66,7 +72,10 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
         </div>
         <div className="flex flex-col gap-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-gray-50 dark:bg-neutral-800 rounded-xl animate-pulse" />
+            <div
+              key={i}
+              className="h-24 bg-gray-50 dark:bg-neutral-800 rounded-xl animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -135,7 +144,9 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
                     <span className="font-bold text-slate-900 dark:text-slate-100 mr-1.5">
                       {sense.meaning}
                     </span>
-                    <span className="text-slate-500 dark:text-slate-400">— {sense.definition}</span>
+                    <span className="text-slate-500 dark:text-slate-400">
+                      — {sense.definition}
+                    </span>
                   </div>
 
                   {sense.example && (

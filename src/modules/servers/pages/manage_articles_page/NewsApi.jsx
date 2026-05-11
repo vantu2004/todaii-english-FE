@@ -38,7 +38,7 @@ const NewsApi = () => {
         query.keyword,
         query.pageSize,
         query.page,
-        query.sortBy
+        query.sortBy,
       );
 
       setArticles(data || []);

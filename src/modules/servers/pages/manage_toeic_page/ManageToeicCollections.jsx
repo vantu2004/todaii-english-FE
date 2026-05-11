@@ -54,7 +54,7 @@ const ManageToeicCollections = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setCollections(data.content || []);

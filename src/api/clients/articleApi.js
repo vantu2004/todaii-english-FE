@@ -37,7 +37,7 @@ export const getArticlesByDate = async (
   size = 10,
   sortBy = "id",
   direction = "asc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const formattedDate = typeof date === "string" ? date : formatDate(date);
@@ -45,7 +45,7 @@ export const getArticlesByDate = async (
       `/article/by-date/${formattedDate}`,
       {
         params: { page, size, sortBy, direction, keyword },
-      }
+      },
     );
     return response.data;
   } catch (err) {

@@ -26,7 +26,8 @@ const LongArticleCard = ({
       C2: "bg-purple-50 text-purple-700 ring-purple-600/10 dark:bg-purple-900/30 dark:text-purple-400 dark:ring-purple-500/20",
     };
     return (
-      styles[level] || "bg-neutral-100 text-neutral-600 ring-neutral-500/10 dark:bg-neutral-800 dark:text-neutral-400 dark:ring-neutral-700"
+      styles[level] ||
+      "bg-neutral-100 text-neutral-600 ring-neutral-500/10 dark:bg-neutral-800 dark:text-neutral-400 dark:ring-neutral-700"
     );
   };
 
@@ -57,7 +58,7 @@ const LongArticleCard = ({
           <div className="flex items-center gap-3 mb-3">
             <span
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold ring-1 ring-inset ${getLevelStyle(
-                cefr_level
+                cefr_level,
               )}`}
             >
               {cefr_level || "B1"}

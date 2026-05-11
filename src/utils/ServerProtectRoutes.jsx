@@ -14,7 +14,7 @@ export const ServerProtectRoutes = ({ children, rolesAllowed }) => {
   if (
     rolesAllowed &&
     !rolesAllowed.some((role) =>
-      authUser.roles.map((r) => r.code).includes(role)
+      authUser.roles.map((r) => r.code).includes(role),
     )
   ) {
     return <Navigate to="/server" replace />;

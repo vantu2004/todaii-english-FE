@@ -141,9 +141,9 @@ const ToeicCollectionsTable = ({
                 <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                 <td className="px-4 py-3 text-sm font-medium">{item.name}</td>
                 <td className="px-4 py-3 text-sm">{item.alias}</td>
-                
-                <td 
-                  className="px-4 py-3 text-sm max-w-xs truncate cursor-help" 
+
+                <td
+                  className="px-4 py-3 text-sm max-w-xs truncate cursor-help"
                   title={item.description || ""}
                 >
                   {truncateWords(item.description, 150)}
@@ -190,7 +190,10 @@ const ToeicCollectionsTable = ({
             ))}
             {collections.length === 0 && (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-6 text-center text-gray-500">
+                <td
+                  colSpan={columns.length}
+                  className="px-4 py-6 text-center text-gray-500"
+                >
                   No collections found.
                 </td>
               </tr>

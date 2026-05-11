@@ -15,7 +15,7 @@ export const fetchVocabGroups = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/vocab-group", {
@@ -35,7 +35,7 @@ export const createVocabGroup = async (data) => {
       {},
       {
         params: { name: data },
-      }
+      },
     );
   } catch (err) {
     console.error("Error:", err);
@@ -50,7 +50,7 @@ export const updateVocabGroup = async (vocabGroupId, data) => {
       {},
       {
         params: { name: data },
-      }
+      },
     );
   } catch (err) {
     console.error("Error:", err);

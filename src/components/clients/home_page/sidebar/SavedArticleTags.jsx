@@ -73,7 +73,9 @@ const SavedArticleTags = () => {
         <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <Bookmark size={20} />
         </div>
-        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">Đã lưu gần đây</h3>
+        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">
+          Đã lưu gần đây
+        </h3>
       </div>
 
       {/* List Container */}

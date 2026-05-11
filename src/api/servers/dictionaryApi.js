@@ -17,7 +17,7 @@ export const fetchDictionary = async (
   size = 20,
   sortBy = "headword",
   direction = "asc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/dictionary", {

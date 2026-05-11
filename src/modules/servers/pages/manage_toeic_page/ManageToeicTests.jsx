@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ToolBar from "@/components/servers/ToolBar";
 import Pagination from "@/components/servers/Pagination";
-import {
-  fetchToeicTests,
-} from "@/api/servers/toeicTestApi";
+import { fetchToeicTests } from "@/api/servers/toeicTestApi";
 import { motion } from "framer-motion";
 import { logError } from "@/utils/LogError";
 import ToeicTestsTable from "@/components/servers/manage_toeic_page/ToeicTestsTable";
@@ -54,7 +52,7 @@ const ManageToeicTests = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setTests(data.content || []);
@@ -100,10 +98,7 @@ const ManageToeicTests = () => {
   return (
     <>
       <div className="flex flex-col h-full">
-        <ToolBar
-          updateQuery={updateQuery}
-          setIsModalOpen={handleOpenCreate}
-        />
+        <ToolBar updateQuery={updateQuery} setIsModalOpen={handleOpenCreate} />
 
         <motion.div
           initial={{ opacity: 0, y: -10 }}

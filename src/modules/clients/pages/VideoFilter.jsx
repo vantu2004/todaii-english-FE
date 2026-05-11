@@ -208,7 +208,10 @@ const VideoFilter = () => {
                 /* Empty State */
                 <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-16 text-center border border-neutral-100 dark:border-neutral-800">
                   <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <LayoutGrid size={32} className="text-neutral-300 dark:text-neutral-600" />
+                    <LayoutGrid
+                      size={32}
+                      className="text-neutral-300 dark:text-neutral-600"
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
                     Không tìm thấy video

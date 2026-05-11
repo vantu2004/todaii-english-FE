@@ -40,7 +40,7 @@ const Sidebar = () => {
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 

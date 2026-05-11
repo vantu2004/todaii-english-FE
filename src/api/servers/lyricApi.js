@@ -11,7 +11,7 @@ export const uploadSrtFile = async (file) => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
     return response.data;
   } catch (err) {

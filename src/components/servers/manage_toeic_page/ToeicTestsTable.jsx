@@ -10,9 +10,7 @@ import {
   AlertTriangle,
   Volume2,
 } from "lucide-react";
-import {
-  deleteToeicTest,
-} from "@/api/servers/toeicTestApi";
+import { deleteToeicTest } from "@/api/servers/toeicTestApi";
 import { logError } from "@/utils/LogError";
 
 const ToeicTestsTable = ({
@@ -64,11 +62,23 @@ const ToeicTestsTable = ({
   const getStatusBadge = (status) => {
     switch (status) {
       case "PUBLISHED":
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">PUBLISHED</span>;
+        return (
+          <span className="px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs font-medium">
+            PUBLISHED
+          </span>
+        );
       case "ARCHIVED":
-        return <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">ARCHIVED</span>;
+        return (
+          <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">
+            ARCHIVED
+          </span>
+        );
       default:
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md text-xs font-medium">DRAFT</span>;
+        return (
+          <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-md text-xs font-medium">
+            DRAFT
+          </span>
+        );
     }
   };
 
@@ -131,12 +141,16 @@ const ToeicTestsTable = ({
               >
                 <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                 <td className="px-4 py-3 text-sm font-medium">{item.title}</td>
-                <td className="px-4 py-3 text-sm">{item.testType || item.test_type}</td>
+                <td className="px-4 py-3 text-sm">
+                  {item.testType || item.test_type}
+                </td>
                 <td className="px-4 py-3 text-sm">{item.duration}m</td>
                 <td className="px-4 py-3 text-sm">
                   {item.audio_url || item.audioUrl ? (
                     <button
-                      onClick={() => handlePlayAudio(i, item.audio_url || item.audioUrl)}
+                      onClick={() =>
+                        handlePlayAudio(i, item.audio_url || item.audioUrl)
+                      }
                       disabled={playingIndex === i}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
                     >
@@ -144,11 +158,17 @@ const ToeicTestsTable = ({
                       {playingIndex === i ? "Playing..." : "Play"}
                     </button>
                   ) : (
-                    <span className="text-gray-400 italic text-xs">No audio</span>
+                    <span className="text-gray-400 italic text-xs">
+                      No audio
+                    </span>
                   )}
                 </td>
-                <td className="px-4 py-3 text-sm">{item.collection?.name || "N/A"}</td>
-                <td className="px-4 py-3 text-sm">{getStatusBadge(item.status)}</td>
+                <td className="px-4 py-3 text-sm">
+                  {item.collection?.name || "N/A"}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  {getStatusBadge(item.status)}
+                </td>
                 <td className="px-4 py-3 text-sm">
                   {formatISODate(item.updatedAt || item.updated_at)}
                 </td>
@@ -173,7 +193,10 @@ const ToeicTestsTable = ({
             ))}
             {tests.length === 0 && (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-6 text-center text-gray-500">
+                <td
+                  colSpan={columns.length}
+                  className="px-4 py-6 text-center text-gray-500"
+                >
                   No tests found.
                 </td>
               </tr>

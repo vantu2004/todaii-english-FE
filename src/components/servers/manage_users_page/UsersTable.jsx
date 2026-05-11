@@ -12,11 +12,7 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import UserViewModal from "./UserViewModal";
-import {
-  updateUser,
-  toggleUser,
-  deleteUser,
-} from "@/api/servers/userApi";
+import { updateUser, toggleUser, deleteUser } from "@/api/servers/userApi";
 import UserFormModal from "./UserFormModal";
 import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
@@ -193,8 +189,8 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                 user.status === "ACTIVE"
                   ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
                   : user.status === "PENDING"
-                  ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
-                  : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
+                    ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
+                    : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
 
               return (
                 <tr

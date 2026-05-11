@@ -58,7 +58,7 @@ export const getVideosByDate = async (
   page = 1,
   size = 10,
   sortBy = "createdAt",
-  direction = "desc"
+  direction = "desc",
 ) => {
   try {
     const formattedDate = typeof date === "string" ? date : formatDate(date);
@@ -66,7 +66,7 @@ export const getVideosByDate = async (
       `/video/by-date/${formattedDate}`,
       {
         params: { page, size, sortBy, direction },
-      }
+      },
     );
     return response.data;
   } catch (err) {

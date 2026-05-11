@@ -70,7 +70,8 @@ const PopularCourses = () => {
               Check out our most popular courses!
             </h2>
             <p className="text-white/90 mt-4 text-sm z-10 leading-relaxed font-medium">
-              Join thousands of learners worldwide who have improved their English with our structured programs.
+              Join thousands of learners worldwide who have improved their
+              English with our structured programs.
             </p>
           </motion.div>
 

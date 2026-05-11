@@ -88,16 +88,12 @@ const Register = () => {
         } else {
           updated.email = "";
         }
-      }
-
-      else if (name === "displayName") {
-
+      } else if (name === "displayName") {
         const nameRegex = /\d/;
 
         if (!displayName) {
           updated.displayName = "Please enter your name";
-        }
-        else if (nameRegex.test(value)) {
+        } else if (nameRegex.test(value)) {
           updated.displayName = "Display name must not contain number";
         }
       }
@@ -132,7 +128,7 @@ const Register = () => {
 
   return (
     <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
-      <motion.div 
+      <motion.div
         variants={fadeIn(0.1)}
         initial="hidden"
         animate="show"
@@ -144,7 +140,10 @@ const Register = () => {
           <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-brand-400/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            <Link to="/" className="text-2xl font-extrabold tracking-tight select-none flex items-center">
+            <Link
+              to="/"
+              className="text-2xl font-extrabold tracking-tight select-none flex items-center"
+            >
               <span className="text-white">Todaii</span>
               <span className="ml-1 text-white/80">English</span>
             </Link>
@@ -155,7 +154,8 @@ const Register = () => {
               Start your English journey today.
             </h2>
             <p className="text-white/80 text-lg leading-relaxed max-w-md">
-              Create an account to unlock premium articles, personalized vocabulary lists, and immersive video lessons.
+              Create an account to unlock premium articles, personalized
+              vocabulary lists, and immersive video lessons.
             </p>
           </div>
 
@@ -210,7 +210,11 @@ const Register = () => {
                   className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                   onClick={() => handleTogglePassword("password")}
                 >
-                  {showPassword.password ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword.password ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
 
@@ -230,7 +234,11 @@ const Register = () => {
                   className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                   onClick={() => handleTogglePassword("confirmPassword")}
                 >
-                  {showPassword.confirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword.confirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
             </div>
@@ -245,15 +253,22 @@ const Register = () => {
 
             <div className="flex items-center my-6">
               <div className="flex-grow h-px bg-neutral-200 dark:bg-neutral-800" />
-              <span className="mx-4 text-xs font-medium text-neutral-400 uppercase tracking-widest">or</span>
+              <span className="mx-4 text-xs font-medium text-neutral-400 uppercase tracking-widest">
+                or
+              </span>
               <div className="flex-grow h-px bg-neutral-200 dark:bg-neutral-800" />
             </div>
 
-            <button 
+            <button
               type="button"
               className="flex items-center justify-center w-full px-5 py-3 text-sm font-medium transition-colors duration-200 bg-transparent border border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
             >
-              <svg className="w-5 h-5 mr-3" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+              <svg
+                className="w-5 h-5 mr-3"
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
                 <path d="M11.9996631,2.00067387 C14.4835037,1.9712793 16.8828349,2.90455669 18.6906006,4.60209273 L18.6906006,4.60209273 L15.8356536,7.45703971 C14.8031696,6.47232184 13.4252994,5.93587105 11.9996631,5.95791698 C9.39089556,5.95791698 7.17528033,7.71791646 6.38530144,10.0878531 C5.96642891,11.3297735 5.96642891,12.6745747 6.38530144,13.916495 L6.38530144,13.916495 C7.18262898,16.2827574 9.39456988,18.0427569 12.0033374,18.0427569 C13.351813,18.0427569 14.5092239,17.6973708 15.4057581,17.0874336 L15.402,17.089 C16.3863118,16.4358541 17.0792723,15.4353938 17.3495215,14.2951678 L17.4009141,14.0487706 L11.9996631,14.0487706 L11.9996631,10.1980828 L21.4316436,10.1980828 C21.5492219,10.8668091 21.6043367,11.5502327 21.6043367,12.229982 C21.6043367,15.2723193 20.5167378,17.8443436 18.6244628,19.5859715 L18.626,19.583 C17.0430672,21.0480315 14.8932217,21.9217835 12.349027,21.9949981 L11.9996631,22 C8.21878734,22 4.76125181,19.8688941 3.06371577,16.4921937 L3.06371577,16.4921937 L2.91718349,16.1875756 C1.64723712,13.4295023 1.69608121,10.2367943 3.06371577,7.51215452 L3.06371577,7.51215452 L3.20922038,7.23336735 C4.95358661,4.01502932 8.32381166,2.00067387 11.9996631,2.00067387 Z" />
               </svg>
               Continue with Google

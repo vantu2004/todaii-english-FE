@@ -32,8 +32,8 @@ const normalizeTreeData = (nodes) => {
       node.children?.length > 0
         ? normalizeTreeData(node.children)
         : node.type === "FOLDER"
-        ? []
-        : null,
+          ? []
+          : null,
   }));
 };
 

@@ -33,9 +33,7 @@ const Navbar = () => {
             className="text-2xl font-extrabold tracking-tight select-none flex items-center"
           >
             <span className="text-neutral-900 dark:text-white">Todaii</span>
-            <span className="ml-1 text-brand-500">
-              English
-            </span>
+            <span className="ml-1 text-brand-500">English</span>
           </a>
 
           {/* Desktop buttons */}

@@ -8,24 +8,27 @@ const testimonials = [
   {
     name: "Sarah Jenkins",
     role: "IELTS Student",
-    content: "Todaii English transformed my study routine. The personalized vocabulary builder helped me score an 8.0 in reading!",
+    content:
+      "Todaii English transformed my study routine. The personalized vocabulary builder helped me score an 8.0 in reading!",
     rating: 5,
-    avatar: "https://i.pravatar.cc/150?u=sarah"
+    avatar: "https://i.pravatar.cc/150?u=sarah",
   },
   {
     name: "Michael Chen",
     role: "Software Engineer",
-    content: "The listening exercises with synced transcripts are incredible. My pronunciation has improved dramatically in just 2 months.",
+    content:
+      "The listening exercises with synced transcripts are incredible. My pronunciation has improved dramatically in just 2 months.",
     rating: 5,
-    avatar: "https://i.pravatar.cc/150?u=michael"
+    avatar: "https://i.pravatar.cc/150?u=michael",
   },
   {
     name: "Elena Rodriguez",
     role: "Business Analyst",
-    content: "I love the editorial approach. Learning grammar through real-world news articles makes it so much easier to understand context.",
+    content:
+      "I love the editorial approach. Learning grammar through real-world news articles makes it so much easier to understand context.",
     rating: 5,
-    avatar: "https://i.pravatar.cc/150?u=elena"
-  }
+    avatar: "https://i.pravatar.cc/150?u=elena",
+  },
 ];
 
 const Testimonials = () => {
@@ -51,7 +54,7 @@ const Testimonials = () => {
           </h3>
         </div>
 
-        <motion.div 
+        <motion.div
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
@@ -63,16 +66,19 @@ const Testimonials = () => {
             >
               <div className="flex items-center gap-1 mb-6">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-accent-500 text-accent-500" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 fill-accent-500 text-accent-500"
+                  />
                 ))}
               </div>
               <p className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed italic">
                 "{testimonial.content}"
               </p>
               <div className="flex items-center gap-4 mt-auto">
-                <img 
-                  src={testimonial.avatar} 
-                  alt={testimonial.name} 
+                <img
+                  src={testimonial.avatar}
+                  alt={testimonial.name}
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-white dark:ring-neutral-800"
                   loading="lazy"
                 />

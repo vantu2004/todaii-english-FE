@@ -31,7 +31,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 const AdminDashboard = () => {
@@ -53,7 +53,7 @@ const AdminDashboard = () => {
       const myRes = await getAdminChartById(
         id,
         dateRange.startDate,
-        dateRange.endDate
+        dateRange.endDate,
       );
 
       setAdminData(myRes);

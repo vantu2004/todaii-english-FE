@@ -58,7 +58,7 @@ const ManageLyrics = () => {
         id,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setLyrics(data || []);

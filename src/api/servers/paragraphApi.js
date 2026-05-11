@@ -4,7 +4,7 @@ export const saveParagraph = async (articleId, paragraph) => {
   try {
     const response = await serverInstance.post(
       `/article/${articleId}/paragraph`,
-      paragraph
+      paragraph,
     );
     return response.data;
   } catch (err) {

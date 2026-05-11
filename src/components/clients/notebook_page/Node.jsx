@@ -31,8 +31,8 @@ const Node = ({ node, style, dragHandle, tree }) => {
                 ? "text-yellow-600"
                 : "text-yellow-500 fill-yellow-500/20"
               : node.isSelected
-              ? "text-neutral-700 dark:text-neutral-300"
-              : "text-neutral-400 dark:text-neutral-500"
+                ? "text-neutral-700 dark:text-neutral-300"
+                : "text-neutral-400 dark:text-neutral-500"
           }
         />
       </div>

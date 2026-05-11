@@ -52,7 +52,7 @@ const ManageUsers = () => {
         query.size,
         query.sortBy,
         query.direction,
-        query.keyword
+        query.keyword,
       );
 
       setUsers(data.content || []);

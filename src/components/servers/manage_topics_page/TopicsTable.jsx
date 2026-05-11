@@ -12,11 +12,7 @@ import {
   AlertTriangle,
   TextAlignStart,
 } from "lucide-react";
-import {
-  deleteTopic,
-  toggleTopic,
-  updateTopic,
-} from "@/api/servers/topicApi";
+import { deleteTopic, toggleTopic, updateTopic } from "@/api/servers/topicApi";
 import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
 

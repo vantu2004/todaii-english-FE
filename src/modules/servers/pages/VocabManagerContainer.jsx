@@ -36,7 +36,7 @@ const VocabManagerContainer = ({
       const response = await fetchApi(id); // <== dùng API truyền vào module
 
       const sortedWords = response.words?.sort((a, b) =>
-        a.headword.localeCompare(b.headword)
+        a.headword.localeCompare(b.headword),
       );
 
       setSelectedWords(sortedWords || []);
@@ -119,10 +119,10 @@ const VocabManagerContainer = ({
       ...(title === "ARTICLE"
         ? [{ label: "Manage Articles", to: "/server/article" }]
         : title === "VIDEO"
-        ? [{ label: "Manage Videos", to: "/server/video" }]
-        : title === "VOCABULARY DECK"
-        ? [{ label: "Manage Vocabulary Decks", to: "/server/vocab-deck" }]
-        : []),
+          ? [{ label: "Manage Videos", to: "/server/video" }]
+          : title === "VOCABULARY DECK"
+            ? [{ label: "Manage Vocabulary Decks", to: "/server/vocab-deck" }]
+            : []),
       { label: "Manage Vocabularies" },
     ];
 
@@ -131,10 +131,10 @@ const VocabManagerContainer = ({
         title === "ARTICLE"
           ? "Manage Articles"
           : title === "VIDEO"
-          ? "Manage Videos"
-          : title === "VOCABULARY DECK"
-          ? "Manage Vocabulary Decks"
-          : title,
+            ? "Manage Videos"
+            : title === "VOCABULARY DECK"
+              ? "Manage Vocabulary Decks"
+              : title,
       breadcrumb: breadcrumbs,
     });
   }, [title]);

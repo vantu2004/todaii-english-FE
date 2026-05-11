@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import Modal from "@/components/servers/Modal";
 import { FolderPlus, Tag, FileText, Link2 } from "lucide-react";
 
-const ToeicCollectionFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
+const ToeicCollectionFormModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  initialData = null,
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -69,7 +74,6 @@ const ToeicCollectionFormModal = ({ isOpen, onClose, onSubmit, initialData = nul
     >
       <div className="space-y-5">
         <div className="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50 hover:border-indigo-300 hover:shadow-md transition-all space-y-4">
-          
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
               <Tag size={16} className="text-indigo-600" />
@@ -99,7 +103,6 @@ const ToeicCollectionFormModal = ({ isOpen, onClose, onSubmit, initialData = nul
               className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all resize-none"
             />
           </div>
-
         </div>
       </div>
     </Modal>

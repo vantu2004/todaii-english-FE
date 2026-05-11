@@ -110,7 +110,7 @@ const ResetPassword = () => {
 
   return (
     <div className="font-jarkata-sans grid place-items-center min-h-screen p-4 sm:p-6 py-8 sm:py-12 bg-surface-primary dark:bg-neutral-950 transition-colors duration-300">
-      <motion.div 
+      <motion.div
         variants={fadeIn(0.1)}
         initial="hidden"
         animate="show"
@@ -144,7 +144,10 @@ const ResetPassword = () => {
 
         {/* Right Form Panel */}
         <div className="flex flex-col justify-center w-full lg:w-[55%] p-8 sm:p-12 md:p-16">
-          <form className="w-full max-w-sm mx-auto" onSubmit={handleResetPassword}>
+          <form
+            className="w-full max-w-sm mx-auto"
+            onSubmit={handleResetPassword}
+          >
             <div className="mb-8">
               <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-2">
                 Reset password
@@ -170,7 +173,11 @@ const ResetPassword = () => {
                   className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                   onClick={() => handleTogglePassword("password")}
                 >
-                  {showPassword.password ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword.password ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
 
@@ -190,7 +197,11 @@ const ResetPassword = () => {
                   className="absolute right-4 top-[38px] text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
                   onClick={() => handleTogglePassword("confirmPassword")}
                 >
-                  {showPassword.confirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword.confirmPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
             </div>

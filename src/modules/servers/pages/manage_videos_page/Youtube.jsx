@@ -2,10 +2,7 @@ import { ExternalLink, Search, Loader, X, History } from "lucide-react";
 import { useState, useEffect } from "react";
 import SearchByUrl from "@/components/servers/youtube_data_api_v3/SearchByUrl";
 import SearchByKeyword from "@/components/servers/youtube_data_api_v3/SearchByKeyword";
-import {
-  fetchVideoByUrl,
-  fetchVideoByKeyword,
-} from "@/api/servers/videoApi";
+import { fetchVideoByUrl, fetchVideoByKeyword } from "@/api/servers/videoApi";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const truncateText = (text, maxLength = 50) =>
@@ -49,7 +46,7 @@ const Youtube = () => {
     setSearchHistory((prev) => {
       const updated = [truncated, ...prev.filter((t) => t !== truncated)].slice(
         0,
-        10
+        10,
       );
       localStorage.setItem("youtubeSearchHistory", JSON.stringify(updated));
       return updated;

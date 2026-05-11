@@ -21,7 +21,9 @@ const ArticleContent = ({ paragraphs }) => {
 
   useEffect(() => {
     const loadVoices = () => {
-      const allVoices = window.speechSynthesis.getVoices().filter(v => v.localService);
+      const allVoices = window.speechSynthesis
+        .getVoices()
+        .filter((v) => v.localService);
       setVoices(allVoices);
 
       const enVoice = allVoices.find((v) => v.lang.startsWith("en"));
@@ -192,31 +194,33 @@ const ArticleContent = ({ paragraphs }) => {
               <p className="text-lg md:text-xl text-neutral-900 dark:text-neutral-100 leading-loose font-serif mb-3">
                 {isCurrent
                   ? // Active Paragraph Rendering (Highlight word)
-                  p.text_en.split(/\s+/).map((word, i) => (
-                    <span
-                      key={i}
-                      className={`
+                    p.text_en.split(/\s+/).map((word, i) => (
+                      <span
+                        key={i}
+                        className={`
                           transition-colors duration-150 rounded px-0.5
-                          ${i === currentWordIndexRef.current
-                          ? "bg-yellow-200 dark:bg-yellow-500/30 text-neutral-900 dark:text-white font-medium"
-                          : ""
-                        }
+                          ${
+                            i === currentWordIndexRef.current
+                              ? "bg-yellow-200 dark:bg-yellow-500/30 text-neutral-900 dark:text-white font-medium"
+                              : ""
+                          }
                         `}
-                    >
-                      {word}{" "}
-                    </span>
-                  ))
+                      >
+                        {word}{" "}
+                      </span>
+                    ))
                   : // Inactive Paragraph
-                  p.text_en}
+                    p.text_en}
               </p>
 
               {/* VIETNAMESE TRANSLATION (Collapsible) */}
               <div
                 className={`
                   overflow-hidden transition-all duration-300 ease-in-out
-                  ${isTranslated
-                    ? "max-h-[500px] opacity-100 mt-4"
-                    : "max-h-0 opacity-0 mt-0"
+                  ${
+                    isTranslated
+                      ? "max-h-[500px] opacity-100 mt-4"
+                      : "max-h-0 opacity-0 mt-0"
                   }
                 `}
               >
@@ -233,9 +237,10 @@ const ArticleContent = ({ paragraphs }) => {
                   onClick={() => toggleTranslation(index)}
                   className={`
                     flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all
-                    ${isTranslated
-                      ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
-                      : "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-200 dark:hover:border-brand-900 hover:bg-brand-50 dark:hover:bg-brand-900/20"
+                    ${
+                      isTranslated
+                        ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+                        : "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-200 dark:hover:border-brand-900 hover:bg-brand-50 dark:hover:bg-brand-900/20"
                     }
                   `}
                 >

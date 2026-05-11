@@ -26,7 +26,7 @@ const Dictionary = () => {
   const [error, setError] = useState(null);
 
   const [history, setHistory] = useState(
-    JSON.parse(localStorage.getItem("dict_history") || "[]")
+    JSON.parse(localStorage.getItem("dict_history") || "[]"),
   );
 
   const saveHistory = (term) => {
@@ -214,7 +214,9 @@ const Dictionary = () => {
                   <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
                     Không tìm thấy kết quả
                   </h3>
-                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">{error}</p>
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+                    {error}
+                  </p>
                 </div>
               ) : dbEntry.length > 0 ? (
                 <DictDetailWord data={dbEntry} />
@@ -228,7 +230,10 @@ const Dictionary = () => {
                 /* Empty State */
                 <div className="bg-white dark:bg-neutral-900/60 p-16 rounded-3xl border border-neutral-100 dark:border-neutral-800 text-center shadow-sm">
                   <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <BookA size={32} className="text-neutral-300 dark:text-neutral-600" />
+                    <BookA
+                      size={32}
+                      className="text-neutral-300 dark:text-neutral-600"
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
                     Từ điển trực tuyến

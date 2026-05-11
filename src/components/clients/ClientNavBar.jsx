@@ -75,9 +75,7 @@ const ClientNavBar = () => {
             className="text-2xl font-extrabold tracking-tight select-none flex items-center"
           >
             <span className="text-neutral-900 dark:text-white">Todaii</span>
-            <span className="ml-1 text-brand-500">
-              English
-            </span>
+            <span className="ml-1 text-brand-500">English</span>
           </a>
 
           {/* Desktop Navigation - Centered */}
@@ -200,7 +198,10 @@ const ClientNavBar = () => {
                       onClick={() => setIsProfileOpen(false)}
                     >
                       <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
-                        <User size={14} className="text-neutral-500 dark:text-neutral-400" />
+                        <User
+                          size={14}
+                          className="text-neutral-500 dark:text-neutral-400"
+                        />
                       </div>
                       <span className="font-medium">Hồ sơ của tôi</span>
                     </Link>
@@ -210,7 +211,10 @@ const ClientNavBar = () => {
                       onClick={() => setIsProfileOpen(false)}
                     >
                       <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
-                        <BookMarked size={14} className="text-neutral-500 dark:text-neutral-400" />
+                        <BookMarked
+                          size={14}
+                          className="text-neutral-500 dark:text-neutral-400"
+                        />
                       </div>
                       <span className="font-medium">Bài viết đã lưu</span>
                     </Link>
@@ -252,7 +256,9 @@ const ClientNavBar = () => {
       {/* Mobile Menu */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-500 ease-out border-t ${
-          isMenuOpen ? "max-h-[500px] opacity-100 border-neutral-200/50 dark:border-neutral-800/50" : "max-h-0 opacity-0 border-transparent"
+          isMenuOpen
+            ? "max-h-[500px] opacity-100 border-neutral-200/50 dark:border-neutral-800/50"
+            : "max-h-0 opacity-0 border-transparent"
         }`}
       >
         <div
@@ -283,13 +289,17 @@ const ClientNavBar = () => {
                     <>
                       <div
                         className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                          isActive ? "bg-neutral-100 dark:bg-neutral-700" : "bg-neutral-100/50 dark:bg-neutral-800/50"
+                          isActive
+                            ? "bg-neutral-100 dark:bg-neutral-700"
+                            : "bg-neutral-100/50 dark:bg-neutral-800/50"
                         }`}
                       >
                         <Icon
                           size={16}
                           className={
-                            isActive ? "text-neutral-700 dark:text-neutral-200" : "text-neutral-400 dark:text-neutral-500"
+                            isActive
+                              ? "text-neutral-700 dark:text-neutral-200"
+                              : "text-neutral-400 dark:text-neutral-500"
                           }
                         />
                       </div>

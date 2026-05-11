@@ -63,7 +63,7 @@ export const verifyOtp = async (email, otp) => {
 export const resendOtp = async (email) => {
   try {
     const response = await clientInstance.get(
-      `/auth/resend-otp?email=${email}`
+      `/auth/resend-otp?email=${email}`,
     );
     return response;
   } catch (err) {
@@ -78,7 +78,7 @@ export const resendOtp = async (email) => {
 export const forgotPassword = async (email) => {
   try {
     const response = await clientInstance.get(
-      `/auth/forgot-password?email=${email}`
+      `/auth/forgot-password?email=${email}`,
     );
     return response;
   } catch (err) {

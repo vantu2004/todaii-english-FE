@@ -35,8 +35,8 @@ const VideoCard = ({ video }) => {
               video.cefr_level === "A1" || video.cefr_level === "A2"
                 ? "bg-green-500"
                 : video.cefr_level === "B1" || video.cefr_level === "B2"
-                ? "bg-yellow-500"
-                : "bg-red-500"
+                  ? "bg-yellow-500"
+                  : "bg-red-500"
             }`}
           >
             {video.cefr_level}
@@ -55,7 +55,7 @@ const VideoCard = ({ video }) => {
         {/* Duration/Views Badge (Optional position) */}
         <div className="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-medium px-1.5 py-0.5 rounded backdrop-blur-[2px]">
           {new Intl.NumberFormat("en", { notation: "compact" }).format(
-            video.views
+            video.views,
           )}{" "}
           views
         </div>

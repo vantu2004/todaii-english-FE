@@ -23,7 +23,7 @@ export const getToeicTagById = async (id) => {
 export const createToeicTag = async (name) => {
   try {
     const response = await serverInstance.post("/toeic/tag", null, {
-      params: { name }
+      params: { name },
     });
     return response.data;
   } catch (err) {
@@ -35,7 +35,7 @@ export const createToeicTag = async (name) => {
 export const updateToeicTag = async (id, name) => {
   try {
     const response = await serverInstance.put(`/toeic/tag/${id}`, null, {
-      params: { name }
+      params: { name },
     });
     return response.data;
   } catch (err) {

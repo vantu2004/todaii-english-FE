@@ -5,7 +5,7 @@ export const fetchVocabDecks = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/vocab-deck", {
@@ -24,7 +24,7 @@ export const fetchVocabDecksByGroup = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get(`/vocab-deck/group/${groupId}`, {

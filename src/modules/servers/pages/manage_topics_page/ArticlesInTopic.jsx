@@ -12,7 +12,7 @@ const ArticlesInTopic = () => {
       query.size,
       query.sortBy,
       query.direction,
-      query.keyword
+      query.keyword,
     );
 
   return <GenericArticleList title="Articles in Topic" fetchApi={fetchApi} />;

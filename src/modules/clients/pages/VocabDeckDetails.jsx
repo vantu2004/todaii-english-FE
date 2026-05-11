@@ -76,7 +76,10 @@ const VocabDeckDetails = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
-        <Loader2 className="animate-spin text-neutral-400 dark:text-neutral-500" size={32} />
+        <Loader2
+          className="animate-spin text-neutral-400 dark:text-neutral-500"
+          size={32}
+        />
       </div>
     );
   }

@@ -14,7 +14,7 @@ const VideoInfo = ({ video }) => {
       navigate(`/client/video/filter?alias=${encodeURIComponent(alias)}`);
     } else if (cefrLevel) {
       navigate(
-        `/client/video/filter?cefr_level=${encodeURIComponent(cefrLevel)}`
+        `/client/video/filter?cefr_level=${encodeURIComponent(cefrLevel)}`,
       );
     } else {
       navigate(`/client/video/filter`);
@@ -69,7 +69,9 @@ const VideoInfo = ({ video }) => {
               {video.views} lượt xem
             </span>
 
-            <span className="text-neutral-400 dark:text-neutral-500 text-xs hidden sm:inline">•</span>
+            <span className="text-neutral-400 dark:text-neutral-500 text-xs hidden sm:inline">
+              •
+            </span>
 
             <span className="whitespace-nowrap">
               {formatISODate(video.created_at)}

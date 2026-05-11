@@ -5,7 +5,7 @@ export function useClientAuthContext() {
   const context = useContext(ClientAuthContext);
   if (!context) {
     throw new Error(
-      "useClientAuthContext must be used inside ClientAuthProvider"
+      "useClientAuthContext must be used inside ClientAuthProvider",
     );
   }
   return context;

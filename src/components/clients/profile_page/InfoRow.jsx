@@ -4,7 +4,9 @@ const InfoRow = ({ icon, label, value }) => (
       {icon}
       <span>{label}</span>
     </div>
-    <span className="font-medium text-neutral-900 dark:text-white">{value || "---"}</span>
+    <span className="font-medium text-neutral-900 dark:text-white">
+      {value || "---"}
+    </span>
   </div>
 );
 

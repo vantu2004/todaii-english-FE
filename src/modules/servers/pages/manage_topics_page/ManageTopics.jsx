@@ -57,7 +57,7 @@ const ManageTopics = ({ topicType }) => {
         query.sortBy,
         query.direction,
         query.keyword,
-        topicType
+        topicType,
       );
 
       setTopics(data.content || []);

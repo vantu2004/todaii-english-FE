@@ -1,22 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
-import {
-  Pencil,
-  Trash2,
-  AlertTriangle,
-} from "lucide-react";
-import {
-  deleteToeicTag,
-} from "@/api/servers/toeicTagApi";
+import { Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { deleteToeicTag } from "@/api/servers/toeicTagApi";
 import { logError } from "@/utils/LogError";
 
-const ToeicTagsTable = ({
-  columns,
-  tags,
-  reloadTags,
-  onEdit,
-}) => {
+const ToeicTagsTable = ({ columns, tags, reloadTags, onEdit }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -83,7 +72,10 @@ const ToeicTagsTable = ({
             ))}
             {tags.length === 0 && (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-6 text-center text-gray-500">
+                <td
+                  colSpan={columns.length}
+                  className="px-4 py-6 text-center text-gray-500"
+                >
                   No tags found.
                 </td>
               </tr>
@@ -102,9 +94,7 @@ const ToeicTagsTable = ({
                 <AlertTriangle className="text-red-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Delete Tag
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-800">Delete Tag</h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   This action cannot be undone
                 </p>

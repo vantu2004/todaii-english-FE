@@ -25,7 +25,7 @@ const QuizGame = ({ words, onClose }) => {
 
       // Trộn target với distractors
       const options = [targetWord, ...distractors].sort(
-        () => 0.5 - Math.random()
+        () => 0.5 - Math.random(),
       );
 
       return {

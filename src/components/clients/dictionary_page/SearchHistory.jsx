@@ -10,7 +10,9 @@ const SearchHistory = ({ history, onSelectWord, onDeleteHistoryItem }) => {
       </div>
 
       {history.length === 0 ? (
-        <p className="text-xs text-neutral-400 dark:text-neutral-500 italic">Chưa có lịch sử</p>
+        <p className="text-xs text-neutral-400 dark:text-neutral-500 italic">
+          Chưa có lịch sử
+        </p>
       ) : (
         <ul className="space-y-1">
           {history.slice(0, 10).map((word, idx) => (

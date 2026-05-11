@@ -25,7 +25,7 @@ export const fetchAdmins = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/admin", {

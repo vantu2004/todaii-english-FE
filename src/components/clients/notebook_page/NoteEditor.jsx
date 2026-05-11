@@ -121,7 +121,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       console.error(error);
 
       setSavedWords((prev) =>
-        prev.filter((w) => (w.headword || w.word) !== headword)
+        prev.filter((w) => (w.headword || w.word) !== headword),
       );
     }
   };
@@ -242,7 +242,9 @@ const EmptyNoteState = () => (
     <p className="text-lg font-medium text-neutral-400 dark:text-neutral-500">
       Chọn một bộ từ vựng để bắt đầu
     </p>
-    <p className="text-sm text-neutral-300 dark:text-neutral-600">Hoặc tạo mới từ thanh bên trái</p>
+    <p className="text-sm text-neutral-300 dark:text-neutral-600">
+      Hoặc tạo mới từ thanh bên trái
+    </p>
   </div>
 );
 
@@ -283,7 +285,9 @@ const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
                 <div className="flex items-baseline gap-2">
                   <h3
                     className={`text-base font-bold truncate ${
-                      isActive ? "text-neutral-900 dark:text-white" : "text-neutral-700 dark:text-neutral-300"
+                      isActive
+                        ? "text-neutral-900 dark:text-white"
+                        : "text-neutral-700 dark:text-neutral-300"
                     }`}
                   >
                     {word.headword || word.word}
@@ -320,7 +324,10 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
   if (state.isSearching)
     return (
       <div className="flex flex-col items-center justify-center h-64">
-        <Loader2 className="animate-spin text-neutral-400 mb-2 dark:text-neutral-500" size={32} />
+        <Loader2
+          className="animate-spin text-neutral-400 mb-2 dark:text-neutral-500"
+          size={32}
+        />
         <p className="text-sm text-neutral-400 animate-pulse dark:text-neutral-500">
           Đang tra cứu...
         </p>
@@ -330,7 +337,9 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
   if (state.error)
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-red-50 rounded-3xl border border-red-100 dark:bg-red-900/20 dark:border-red-800">
-        <p className="text-red-600 font-medium mb-1 dark:text-red-400">Không tìm thấy kết quả</p>
+        <p className="text-red-600 font-medium mb-1 dark:text-red-400">
+          Không tìm thấy kết quả
+        </p>
         <p className="text-xs text-red-400 dark:text-red-500">{state.error}</p>
       </div>
     );

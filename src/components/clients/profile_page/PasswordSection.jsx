@@ -7,7 +7,9 @@ const PasswordSection = ({ formData, handleChange }) => {
         <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
           <Lock size={20} />
         </div>
-        <h3 className="text-lg font-bold text-neutral-900 dark:text-white">Đổi mật khẩu</h3>
+        <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
+          Đổi mật khẩu
+        </h3>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

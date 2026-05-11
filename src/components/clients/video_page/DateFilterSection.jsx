@@ -156,7 +156,10 @@ const DateFilterSection = ({
       ) : (
         <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-neutral-900/50 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 shadow-sm">
           <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-full mb-4">
-            <Calendar size={40} className="text-neutral-300 dark:text-neutral-600" />
+            <Calendar
+              size={40}
+              className="text-neutral-300 dark:text-neutral-600"
+            />
           </div>
           <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
             Không có video nào

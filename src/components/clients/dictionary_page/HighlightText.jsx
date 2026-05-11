@@ -19,7 +19,7 @@ const HighlightText = ({ text, keyword }) => {
           </span>
         ) : (
           part
-        )
+        ),
       )}
     </span>
   );

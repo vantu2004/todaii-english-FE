@@ -1,18 +1,23 @@
 import React from "react";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
-const Pagination = ({ 
-  currentPage, 
-  totalPages, 
+const Pagination = ({
+  currentPage,
+  totalPages,
   onPageChange,
-  maxVisiblePages = 5 
+  maxVisiblePages = 5,
 }) => {
   const renderPageNumbers = () => {
     const pages = [];
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     if (endPage - startPage < maxVisiblePages - 1) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -26,11 +31,16 @@ const Pagination = ({
           className="min-w-[40px] h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition"
         >
           1
-        </button>
+        </button>,
       );
       if (startPage > 2) {
         pages.push(
-          <span key="dots-1" className="px-2 text-neutral-500 dark:text-neutral-500">•••</span>
+          <span
+            key="dots-1"
+            className="px-2 text-neutral-500 dark:text-neutral-500"
+          >
+            •••
+          </span>,
         );
       }
     }
@@ -48,7 +58,7 @@ const Pagination = ({
           }`}
         >
           {i}
-        </button>
+        </button>,
       );
     }
 
@@ -56,7 +66,12 @@ const Pagination = ({
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pages.push(
-          <span key="dots-2" className="px-2 text-neutral-500 dark:text-neutral-500">•••</span>
+          <span
+            key="dots-2"
+            className="px-2 text-neutral-500 dark:text-neutral-500"
+          >
+            •••
+          </span>,
         );
       }
       pages.push(
@@ -66,7 +81,7 @@ const Pagination = ({
           className="min-w-[40px] h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition"
         >
           {totalPages}
-        </button>
+        </button>,
       );
     }
 
@@ -84,7 +99,10 @@ const Pagination = ({
         className="h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
         title="First page"
       >
-        <ChevronsLeft size={18} className="text-neutral-700 dark:text-neutral-300" />
+        <ChevronsLeft
+          size={18}
+          className="text-neutral-700 dark:text-neutral-300"
+        />
       </button>
 
       {/* Previous Page Button */}
@@ -94,13 +112,14 @@ const Pagination = ({
         className="h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
         title="Previous page"
       >
-        <ChevronLeft size={18} className="text-neutral-700 dark:text-neutral-300" />
+        <ChevronLeft
+          size={18}
+          className="text-neutral-700 dark:text-neutral-300"
+        />
       </button>
 
       {/* Page Numbers */}
-      <div className="flex items-center gap-2">
-        {renderPageNumbers()}
-      </div>
+      <div className="flex items-center gap-2">{renderPageNumbers()}</div>
 
       {/* Next Page Button */}
       <button
@@ -109,7 +128,10 @@ const Pagination = ({
         className="h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
         title="Next page"
       >
-        <ChevronRight size={18} className="text-neutral-700 dark:text-neutral-300" />
+        <ChevronRight
+          size={18}
+          className="text-neutral-700 dark:text-neutral-300"
+        />
       </button>
 
       {/* Last Page Button */}
@@ -119,7 +141,10 @@ const Pagination = ({
         className="h-10 px-3 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
         title="Last page"
       >
-        <ChevronsRight size={18} className="text-neutral-700 dark:text-neutral-300" />
+        <ChevronsRight
+          size={18}
+          className="text-neutral-700 dark:text-neutral-300"
+        />
       </button>
     </div>
   );

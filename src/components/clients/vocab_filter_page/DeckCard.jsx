@@ -47,14 +47,16 @@ const DeckCard = ({ deck }) => {
       className="group flex flex-col bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer"
     >
       {/* Card Header / Abstract Pattern */}
-      <div className={`h-28 border-b border-neutral-100 dark:border-neutral-800 relative overflow-hidden transition-colors ${getHeaderStyle(deck.cefr_level)}`}>
+      <div
+        className={`h-28 border-b border-neutral-100 dark:border-neutral-800 relative overflow-hidden transition-colors ${getHeaderStyle(deck.cefr_level)}`}
+      >
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
         {/* CEFR Badge */}
         <div className="absolute top-4 left-4">
           <span
             className={`px-2.5 py-1 rounded-lg text-xs font-bold border shadow-sm ${getLevelStyle(
-              deck.cefr_level
+              deck.cefr_level,
             )}`}
           >
             {deck.cefr_level}

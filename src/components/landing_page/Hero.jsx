@@ -49,17 +49,19 @@ const Hero = () => {
               variants={slideUp(0.6)}
               className="mt-10 flex flex-wrap items-center gap-4"
             >
-              <button 
-                onClick={() => navigate('/client')}
+              <button
+                onClick={() => navigate("/client")}
                 className="text-white text-base font-semibold cursor-pointer landing-gradient px-8 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(255,111,72,0.25)] dark:shadow-[0_4px_14px_rgba(255,111,72,0.15)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 Get Started Free
               </button>
-              
-              <button 
+
+              <button
                 onClick={() => {
-                  const coursesSection = document.getElementById('popular-courses');
-                  if (coursesSection) coursesSection.scrollIntoView({ behavior: 'smooth' });
+                  const coursesSection =
+                    document.getElementById("popular-courses");
+                  if (coursesSection)
+                    coursesSection.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="text-neutral-700 dark:text-neutral-300 text-base font-medium cursor-pointer bg-transparent border border-neutral-200 dark:border-neutral-700 px-8 py-3.5 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all duration-300"
               >
@@ -73,14 +75,22 @@ const Hero = () => {
             variants={fadeIn(0.3)}
             className="-mr-132 -mt-40 max-[1400px]:hidden z-0"
           >
-            <img src={HeroDeskTop} className="max-w-none dark:brightness-90 transition-all" alt="hero desktop" />
+            <img
+              src={HeroDeskTop}
+              className="max-w-none dark:brightness-90 transition-all"
+              alt="hero desktop"
+            />
           </motion.div>
 
           <motion.div
             variants={fadeIn(0.3)}
             className="hidden max-[1400px]:block max-[1400px]:-mr-92 max-xl:-mr-80 max-[1400px]:-mt-24 max-[740px]:hidden z-0"
           >
-            <img src={HeroTablet} className="max-w-none dark:brightness-90 transition-all" alt="hero tablet" />
+            <img
+              src={HeroTablet}
+              className="max-w-none dark:brightness-90 transition-all"
+              alt="hero tablet"
+            />
           </motion.div>
 
           <motion.div

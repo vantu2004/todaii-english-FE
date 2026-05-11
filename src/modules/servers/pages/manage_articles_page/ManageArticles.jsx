@@ -8,7 +8,7 @@ const ManageArticles = () => {
       query.size,
       query.sortBy,
       query.direction,
-      query.keyword
+      query.keyword,
     );
 
   return <GenericArticleList title="Manage Articles" fetchApi={fetchApi} />;

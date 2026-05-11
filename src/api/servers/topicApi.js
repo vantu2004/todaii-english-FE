@@ -18,7 +18,7 @@ export const fetchTopics = async (
   sortBy = "id",
   direction = "desc",
   keyword = "",
-  topicType = "article"
+  topicType = "article",
 ) => {
   try {
     // get nhận tham số query ở tham số thứ 2
@@ -53,7 +53,7 @@ export const updateTopic = async (topicId, data) => {
       {
         // body = null
         params: { name: data.name }, // gửi qua query
-      }
+      },
     );
   } catch (err) {
     console.error("Error:", err);

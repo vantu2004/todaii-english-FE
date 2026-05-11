@@ -23,8 +23,8 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
   const handleEditLine = (line_order, key, value) => {
     setLines((prev) =>
       prev.map((l) =>
-        l.line_order === line_order ? { ...l, [key]: value } : l
-      )
+        l.line_order === line_order ? { ...l, [key]: value } : l,
+      ),
     );
   };
 
@@ -172,7 +172,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                           handleEditLine(
                             line.line_order,
                             "start_ms",
-                            Number(e.target.value)
+                            Number(e.target.value),
                           )
                         }
                         className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
@@ -187,7 +187,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                           handleEditLine(
                             line.line_order,
                             "end_ms",
-                            Number(e.target.value)
+                            Number(e.target.value),
                           )
                         }
                         className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
@@ -202,7 +202,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                           handleEditLine(
                             line.line_order,
                             "text_en",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
@@ -217,7 +217,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                           handleEditLine(
                             line.line_order,
                             "text_vi",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"

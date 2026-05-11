@@ -113,7 +113,7 @@ const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
               />
             </div>
           </>,
-          document.body // Render trực tiếp vào body
+          document.body, // Render trực tiếp vào body
         )}
     </div>
   );

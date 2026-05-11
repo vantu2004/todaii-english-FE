@@ -5,7 +5,7 @@ export const fetchToeicTests = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/toeic/test", {

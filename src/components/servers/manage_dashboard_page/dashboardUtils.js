@@ -16,7 +16,7 @@ export const getUniqueDates = (logTrends) => {
   const allDates = new Set();
 
   Object.values(logTrends).forEach((arr) =>
-    arr.forEach((item) => allDates.add(item.date))
+    arr.forEach((item) => allDates.add(item.date)),
   );
 
   return Array.from(allDates).sort();
@@ -54,7 +54,7 @@ export const getTokenChartData = (ai_token_trends) => {
 // Process Data cho Distribution Chart (Doughnut)
 export const getEventDistributionData = (
   log_summary,
-  exclude = ["YOUTUBE_SEARCH"]
+  exclude = ["YOUTUBE_SEARCH"],
 ) => {
   if (!log_summary) return null;
 
@@ -81,7 +81,7 @@ export const getEventChartsData = (log_trends, log_summary) => {
 
   return Object.keys(log_trends).map((key) => {
     const quantityData = dates.map(
-      (date) => log_trends[key].find((d) => d.date === date)?.quantity || 0
+      (date) => log_trends[key].find((d) => d.date === date)?.quantity || 0,
     );
 
     const total = log_summary?.[key] || 0;

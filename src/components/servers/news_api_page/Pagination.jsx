@@ -28,7 +28,7 @@ const Pagination = ({ query, updateQuery, pagination }) => {
 
     return Array.from(
       { length: endPage - startPage + 1 },
-      (_, i) => startPage + i
+      (_, i) => startPage + i,
     );
   };
 
