@@ -56,3 +56,34 @@ export const deleteToeicTest = async (id) => {
     throw err;
   }
 };
+
+export const uploadToeicTestFile = async (testId, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await serverInstance.post(
+      `/cloudinary/file/toeic/test/${testId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteToeicTestFile = async (fileUrl) => {
+  try {
+    await serverInstance.delete(`/cloudinary/file`, {
+      params: { fileUrl },
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
