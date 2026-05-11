@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -12,10 +12,10 @@ import {
   Loader2,
   MoreHorizontal,
 } from "lucide-react";
-import { getVocabDeckById } from "../../../api/clients/vocabDeckApi"; // Đường dẫn API của bạn
-import FlashcardGame from "../../../components/clients/vocab_deck_details_page/FlashcardGame";
-import QuizGame from "../../../components/clients/vocab_deck_details_page/QuizGame";
-import { formatISODate } from "../../../utils/FormatDate";
+import { getVocabDeckById } from "@/api/clients/vocabDeckApi"; // Đường dẫn API của bạn
+import FlashcardGame from "@/components/clients/vocab_deck_details_page/FlashcardGame";
+import QuizGame from "@/components/clients/vocab_deck_details_page/QuizGame";
+import { formatISODate } from "@/utils/FormatDate";
 
 const VocabDeckDetails = () => {
   const { id } = useParams();

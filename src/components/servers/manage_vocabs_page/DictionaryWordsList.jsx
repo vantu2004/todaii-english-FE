@@ -1,6 +1,6 @@
 import { Search, Volume2, CheckCircle, Eye } from "lucide-react";
 import toast from "react-hot-toast";
-import { playAudioWithEvent } from "../../../utils/playAudio";
+import { playAudioWithEvent } from "@/utils/playAudio";
 
 const DictionaryWordsList = ({
   words,

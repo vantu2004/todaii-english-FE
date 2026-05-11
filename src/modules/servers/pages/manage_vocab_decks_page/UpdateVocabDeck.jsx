@@ -2,13 +2,13 @@ import toast from "react-hot-toast";
 import {
   fetchVocabDeck,
   updateVocabDeck,
-} from "../../../../api/servers/vocabDeckApi";
+} from "@/api/servers/vocabDeckApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import VocabDeckForm from "../../../../components/servers/manage_vocab_decks_page/VocabDeckForm";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import VocabDeckForm from "@/components/servers/manage_vocab_decks_page/VocabDeckForm";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const UpdateVocabDeck = () => {
   const { setHeader } = useHeaderContext();

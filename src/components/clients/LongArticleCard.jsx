@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { Eye, Clock, ArrowUpRight } from "lucide-react";
-import { formatISODate } from "../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import ToggleBookmarkButton from "./ToggleBookmarkButton";
-import { isSavedArticle } from "../../api/clients/articleApi";
-import { toggleSavedArticle } from "../../api/clients/userApi";
+import { isSavedArticle } from "@/api/clients/articleApi";
+import { toggleSavedArticle } from "@/api/clients/userApi";
 
 const LongArticleCard = ({
   id,

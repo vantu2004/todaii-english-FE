@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Trash2, Upload, FileText, Clock } from "lucide-react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 
 const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
   const [lines, setLines] = useState([]);

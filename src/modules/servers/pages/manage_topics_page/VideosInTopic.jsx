@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { fetchVideosByTopic } from "../../../../api/servers/videoApi";
-import GenericVideoList from "../../../../components/servers/GenericVideoList";
+import { fetchVideosByTopic } from "@/api/servers/videoApi";
+import GenericVideoList from "@/components/servers/GenericVideoList";
 
 const VideosInTopic = () => {
   const { id } = useParams();

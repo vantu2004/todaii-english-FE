@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { FolderPlus, Tag, FileText, Video, Lightbulb } from "lucide-react";
 
 const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {

@@ -1,8 +1,8 @@
 import { Layers, Calendar, Eye, ImageOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getRelatedArticles } from "../../../api/clients/articleApi";
-import { formatISODate } from "../../../utils/FormatDate";
+import { getRelatedArticles } from "@/api/clients/articleApi";
+import { formatISODate } from "@/utils/FormatDate";
 
 const RelatedArticles = ({ articleId }) => {
   const navigate = useNavigate();

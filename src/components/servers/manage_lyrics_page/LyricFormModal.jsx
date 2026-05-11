@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { Music, Clock, Type } from "lucide-react";
 
 const LyricFormModal = ({

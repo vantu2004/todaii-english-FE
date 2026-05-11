@@ -1,11 +1,11 @@
 import { useState } from "react";
-import InputField from "../../../../components/clients/InputField";
-import { verifyOtp, resendOtp } from "../../../../api/clients/authApi";
+import InputField from "@/components/clients/InputField";
+import { verifyOtp, resendOtp } from "@/api/clients/authApi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../../animations/fadeIn";
+import { fadeIn } from "@/animations/fadeIn";
 
 const VerifyOtp = () => {
   const [searchParams] = useSearchParams();

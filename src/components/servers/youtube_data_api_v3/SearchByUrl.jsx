@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Download } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useYoutubeDataStore } from "../../../stores/useYoutubeDataStore";
+import { useYoutubeDataStore } from "@/stores/useYoutubeDataStore";
 
 const SearchByUrl = ({ video = {} }) => {
   const navigate = useNavigate();

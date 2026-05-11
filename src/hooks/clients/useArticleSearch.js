@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { filterArticles } from "../../api/clients/articleApi";
-import { logError } from "../../utils/LogError";
+import { filterArticles } from "@/api/clients/articleApi";
+import { logError } from "@/utils/LogError";
 
 export default function useArticleSearch(query) {
   const [results, setResults] = useState([]);

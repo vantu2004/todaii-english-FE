@@ -8,8 +8,8 @@ import {
   Shield,
   Eye,
 } from "lucide-react";
-import Modal from "../Modal";
-import { formatISODate } from "./../../../utils/FormatDate";
+import Modal from "@/components/servers/Modal";
+import { formatISODate } from "@/utils/FormatDate";
 
 const AdminViewModal = ({ isOpen, onClose, admin }) => {
   if (!admin) return null;

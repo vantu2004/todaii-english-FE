@@ -1,6 +1,6 @@
 import { Play, Clock, User, MonitorPlay, Eye, Tag, Link } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
-import SearchBar from "../SearchBar"; // Nhớ import
+import { formatISODate } from "@/utils/FormatDate";
+import SearchBar from "@/components/clients/SearchBar"; // Nhớ import
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 

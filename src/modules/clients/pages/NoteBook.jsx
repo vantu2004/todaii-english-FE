@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { FolderPlus, FilePlus, Loader2, Sidebar } from "lucide-react";
-import NotebookTree from "../../../components/clients/notebook_page/NotebookTree";
-import NoteEditor from "../../../components/clients/notebook_page/NoteEditor";
+import NotebookTree from "@/components/clients/notebook_page/NotebookTree";
+import NoteEditor from "@/components/clients/notebook_page/NoteEditor";
 import {
   getAllNotebooks,
   createNotebook,
   renameNotebook,
   deleteNotebook,
-} from "../../../api/clients/notebookApi";
-import { logError } from "../../../utils/LogError";
+} from "@/api/clients/notebookApi";
+import { logError } from "@/utils/LogError";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ActionButton = ({ icon: Icon, onClick, title }) => (

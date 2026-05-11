@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import { fetchProfile } from "../../api/clients/userApi";
-import { logout } from "../../api/clients/authApi";
+import { fetchProfile } from "@/api/clients/userApi";
+import { logout } from "@/api/clients/authApi";
 import toast from "react-hot-toast";
 
 export const ClientAuthContext = createContext();

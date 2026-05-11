@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import { Eye, ArrowRightFromLine } from "lucide-react";
 import ArticleViewModal from "./ArticleViewModal";
-import { useNewsApiStore } from "../../../stores/useNewsApiStore";
+import { useNewsApiStore } from "@/stores/useNewsApiStore";
 import { useNavigate } from "react-router-dom";
 
 const ArticlesTable = ({ columns, articles }) => {

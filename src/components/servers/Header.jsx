@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { ChevronRight } from "lucide-react";
 
 const Header = () => {

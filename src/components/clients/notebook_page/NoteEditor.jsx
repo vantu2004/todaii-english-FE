@@ -3,12 +3,12 @@ import {
   getWords,
   addWordToNotebook,
   removeWordFromNotebook,
-} from "../../../api/clients/noteDictApi";
+} from "@/api/clients/noteDictApi";
 import {
   getWordByHeadword,
   getRawWord,
   getWordByGemini,
-} from "../../../api/clients/dictionaryApi";
+} from "@/api/clients/dictionaryApi";
 import {
   Plus,
   Sparkles,
@@ -19,11 +19,11 @@ import {
   Sidebar,
   Search,
 } from "lucide-react";
-import SearchBar from "../../../components/clients/SearchBar";
-import DictDetailWord from "../../../components/clients/dictionary_page/DictDetailWord";
-import RawDetailWord from "../../../components/clients/dictionary_page/RawDetailWord";
-import RelatedWords from "../../../components/clients/dictionary_page/RelatedWords";
-import { logError } from "../../../utils/LogError";
+import SearchBar from "@/components/clients/SearchBar";
+import DictDetailWord from "@/components/clients/dictionary_page/DictDetailWord";
+import RawDetailWord from "@/components/clients/dictionary_page/RawDetailWord";
+import RelatedWords from "@/components/clients/dictionary_page/RelatedWords";
+import { logError } from "@/utils/LogError";
 
 const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const [savedWords, setSavedWords] = useState([]);

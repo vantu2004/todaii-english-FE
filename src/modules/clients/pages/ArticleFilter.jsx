@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, ArrowLeft } from "lucide-react";
-import LongArticleCard from "../../../components/clients/LongArticleCard";
-import Pagination from "../../../components/clients/Pagination";
-import ArticleFilterSidebar from "../../../components/clients/article_filter_page/ArticleFilterSidebar";
-import useArticleSearch from "../../../hooks/clients/useArticleSearch";
-import SearchBar from "../../../components/clients/SearchBar";
+import LongArticleCard from "@/components/clients/LongArticleCard";
+import Pagination from "@/components/clients/Pagination";
+import ArticleFilterSidebar from "@/components/clients/article_filter_page/ArticleFilterSidebar";
+import useArticleSearch from "@/hooks/clients/useArticleSearch";
+import SearchBar from "@/components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 
 const sortOptions = [

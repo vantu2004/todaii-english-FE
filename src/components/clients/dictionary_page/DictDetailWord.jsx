@@ -1,6 +1,6 @@
 import { Volume2, Bookmark } from "lucide-react";
 import HighlightText from "./HighLightText";
-import { playAudio } from "../../../utils/playAudio";
+import { playAudio } from "@/utils/playAudio";
 
 const DictDetailWord = ({ data }) => {
   if (!data) return null;

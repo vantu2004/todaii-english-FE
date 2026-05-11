@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { slideUp } from "../../animations/slideUp.js";
+import { slideUp } from "@/animations/slideUp.js";
 import { useNavigate } from "react-router-dom";
 
 const CTABanner = () => {

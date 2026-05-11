@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "./../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import {
   deleteAdmin,
   toggleAdmin,
   updateAdmin,
-} from "../../../api/servers/adminApi";
+} from "@/api/servers/adminApi";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Eye,
   Pencil,
@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import AdminFormModal from "./AdminFormModal";
 import AdminViewModal from "./AdminViewModal";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
 
 const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {

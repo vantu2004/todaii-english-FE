@@ -1,5 +1,5 @@
-import { logError } from "../../../../utils/LogError";
-import { getAllTopics } from "../../../../api/clients/topicApi";
+import { logError } from "@/utils/LogError";
+import { getAllTopics } from "@/api/clients/topicApi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hash, Tag, ChevronDown, ChevronUp } from "lucide-react";

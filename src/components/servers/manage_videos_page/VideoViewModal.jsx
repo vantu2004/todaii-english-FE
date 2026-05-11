@@ -1,5 +1,5 @@
 import { Eye } from "lucide-react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import VideoDetails from "./VideoDetails";
 
 const VideoViewModal = ({ isOpen, onClose, video }) => {

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Pagination from "../../components/servers/Pagination";
+import Pagination from "@/components/servers/Pagination";
 import { motion } from "framer-motion";
-import { logError } from "../../utils/LogError";
-import VocabDecksTable from "../../components/servers/manage_vocab_decks_page/VocabDecksTable";
+import { logError } from "@/utils/LogError";
+import VocabDecksTable from "@/components/servers/manage_vocab_decks_page/VocabDecksTable";
 import { useNavigate } from "react-router-dom";
-import RedirectToolbar from "../../components/servers/RedirectToolbar";
-import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
+import RedirectToolbar from "@/components/servers/RedirectToolbar";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const GenericVocabGroupList = ({ title, fetchApi }) => {
   const { setHeader } = useHeaderContext();

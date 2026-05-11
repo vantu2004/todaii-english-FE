@@ -1,28 +1,28 @@
-import { ClientAuthProvider } from "../../context/clients/ClientAuthContext";
+import { ClientAuthProvider } from "@/context/clients/ClientAuthContext";
 import { Routes, Route } from "react-router-dom";
-import Login from "../../modules/clients/pages/auth/Login";
-import Register from "../../modules/clients/pages/auth/Register";
-import VerifyOtp from "../../modules/clients/pages/auth/VerifyOtp";
-import VerifyEmail from "../../modules/clients/pages/auth/VerifyEmail";
-import ForgotPassword from "../../modules/clients/pages/auth/ForgotPassword";
-import ResetPassword from "../../modules/clients/pages/auth/ResetPassword";
-import ClientLayout from "../../modules/clients/layouts/ClientLayout";
-import Home from "../../modules/clients/pages/Home";
-import ArticleFilter from "../../modules/clients/pages/ArticleFilter";
+import Login from "@/modules/clients/pages/auth/Login";
+import Register from "@/modules/clients/pages/auth/Register";
+import VerifyOtp from "@/modules/clients/pages/auth/VerifyOtp";
+import VerifyEmail from "@/modules/clients/pages/auth/VerifyEmail";
+import ForgotPassword from "@/modules/clients/pages/auth/ForgotPassword";
+import ResetPassword from "@/modules/clients/pages/auth/ResetPassword";
+import ClientLayout from "@/modules/clients/layouts/ClientLayout";
+import Home from "@/modules/clients/pages/Home";
+import ArticleFilter from "@/modules/clients/pages/ArticleFilter";
 import {
   ClientProtectRoutes,
   RedirectAuthenticatedUser,
-} from "../../utils/ClientProtectRoutes";
-import ArticleDetails from "../../modules/clients/pages/ArticleDetails";
-import PageNotFound from "../../pages/PageNotFound";
-import Profile from "../../modules/clients/pages/Profile";
-import Video from "./../../modules/clients/pages/Video";
-import VideoFilter from "../../modules/clients/pages/VideoFilter";
-import VideoDetails from "../../modules/clients/pages/VideoDetails";
-import Dictionary from "../../modules/clients/pages/Dictionary";
-import Notebook from "../../modules/clients/pages/NoteBook";
-import VocabularyFilter from "../../modules/clients/pages/VocabularyFilter";
-import VocabDeckDetails from "../../modules/clients/pages/VocabDeckDetails";
+} from "@/utils/ClientProtectRoutes";
+import ArticleDetails from "@/modules/clients/pages/ArticleDetails";
+import PageNotFound from "@/pages/PageNotFound";
+import Profile from "@/modules/clients/pages/Profile";
+import Video from "@/modules/clients/pages/Video";
+import VideoFilter from "@/modules/clients/pages/VideoFilter";
+import VideoDetails from "@/modules/clients/pages/VideoDetails";
+import Dictionary from "@/modules/clients/pages/Dictionary";
+import Notebook from "@/modules/clients/pages/NoteBook";
+import VocabularyFilter from "@/modules/clients/pages/VocabularyFilter";
+import VocabDeckDetails from "@/modules/clients/pages/VocabDeckDetails";
 
 export default function ClientRoutes() {
   return (

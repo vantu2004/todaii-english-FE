@@ -14,11 +14,11 @@ import {
 } from "chart.js";
 import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
 
-import AdminSection from "../../../../components/servers/manage_dashboard_page/AdminSection";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
-import { formatDate } from "../../../../utils/FormatDate";
-import { getMyChart } from "../../../../api/servers/dashboardApi";
+import AdminSection from "@/components/servers/manage_dashboard_page/AdminSection";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { formatDate } from "@/utils/FormatDate";
+import { getMyChart } from "@/api/servers/dashboardApi";
 
 ChartJS.register(
   CategoryScale,

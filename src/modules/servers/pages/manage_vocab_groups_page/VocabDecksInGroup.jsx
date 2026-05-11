@@ -1,5 +1,5 @@
-import { fetchVocabDecksByGroup } from "../../../../api/servers/vocabDeckApi";
-import GenericVocabGroupList from "../../../../components/servers/GenericVocabGroupList";
+import { fetchVocabDecksByGroup } from "@/api/servers/vocabDeckApi";
+import GenericVocabGroupList from "@/components/servers/GenericVocabGroupList";
 import { useParams } from "react-router-dom";
 
 const VocabDecksInGroup = () => {

@@ -1,5 +1,5 @@
 import { BookOpen, Layers, Clock } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import { Link } from "react-router-dom";
 
 const DeckCard = ({ deck }) => {

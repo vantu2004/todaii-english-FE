@@ -10,7 +10,7 @@ import {
   Layers,
   Volume2,
 } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 
 // phải truyền riêng paragraphs cho component nây để khi update paragraph, component này render lại
 const ArticleDetails = ({ article }) => {

@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useServerAuthContext } from "../hooks/servers/useServerAuthContext.js";
+import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext.js";
 
 // Bảo vệ route theo login + role
 export const ServerProtectRoutes = ({ children, rolesAllowed }) => {

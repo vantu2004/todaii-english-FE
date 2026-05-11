@@ -1,10 +1,10 @@
-import { createToeicTest } from "../../../../api/servers/toeicTestApi";
+import { createToeicTest } from "@/api/servers/toeicTestApi";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { logError } from "../../../../utils/LogError";
-import ToeicTestForm from "../../../../components/servers/manage_toeic_page/ToeicTestForm";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import ToeicTestForm from "@/components/servers/manage_toeic_page/ToeicTestForm";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import toast from "react-hot-toast";
 
 const CreateToeicTest = () => {

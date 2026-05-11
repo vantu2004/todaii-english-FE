@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { Tag } from "lucide-react";
 
 const ToeicTagFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {

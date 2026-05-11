@@ -1,7 +1,7 @@
-import { formatISODate } from "../../../utils/FormatDate";
-import { isSavedVideo } from "../../../api/clients/videoApi";
-import { toggleSavedVideo } from "../../../api/clients/userApi";
-import ToggleBookmarkButton from "../ToggleBookmarkButton";
+import { formatISODate } from "@/utils/FormatDate";
+import { isSavedVideo } from "@/api/clients/videoApi";
+import { toggleSavedVideo } from "@/api/clients/userApi";
+import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
 import { useNavigate } from "react-router-dom";
 
 const VideoInfo = ({ video }) => {

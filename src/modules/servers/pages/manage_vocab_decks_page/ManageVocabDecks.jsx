@@ -1,5 +1,5 @@
-import { fetchVocabDecks } from "../../../../api/servers/vocabDeckApi";
-import GenericVocabGroupList from "../../../../components/servers/GenericVocabGroupList";
+import { fetchVocabDecks } from "@/api/servers/vocabDeckApi";
+import GenericVocabGroupList from "@/components/servers/GenericVocabGroupList";
 
 const ManageVocabDecks = () => {
   const fetchApi = (query) =>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BarChart3, Layers, Filter, X } from "lucide-react";
-import { getVocabGroups } from "../../../api/clients/vocabGroupApi"; // Import API của bạn
-import { logError } from "../../../utils/LogError";
+import { getVocabGroups } from "@/api/clients/vocabGroupApi"; // Import API của bạn
+import { logError } from "@/utils/LogError";
 
 export const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 

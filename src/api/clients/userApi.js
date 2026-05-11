@@ -1,4 +1,4 @@
-import { clientInstance } from "../../config/axios";
+import { clientInstance } from "@/config/axios";
 
 export const fetchProfile = async () => {
   try {

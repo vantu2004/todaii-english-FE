@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { FolderPlus, Tag, FileText, Link2 } from "lucide-react";
 
 const ToeicCollectionFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {

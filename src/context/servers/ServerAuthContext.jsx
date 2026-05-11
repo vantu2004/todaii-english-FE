@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { fetchProfile } from "../../api/servers/adminApi";
+import { fetchProfile } from "@/api/servers/adminApi";
 
 export const ServerAuthContext = createContext();
 

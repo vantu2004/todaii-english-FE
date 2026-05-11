@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "./../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import {
   deleteVocabDeck,
   toggleVocabDeck,
-} from "../../../api/servers/vocabDeckApi";
+} from "@/api/servers/vocabDeckApi";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Eye,
   Pencil,
@@ -15,7 +15,7 @@ import {
   AlertTriangle,
   BookA,
 } from "lucide-react";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
 import VocabDeckViewModal from "./VocabDeckViewModal";
 

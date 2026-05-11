@@ -1,6 +1,6 @@
 import { Eye, Volume2, CheckCircle, Lightbulb, Link2 } from "lucide-react";
-import Modal from "../Modal";
-import { formatISODate } from "../../../utils/FormatDate";
+import Modal from "@/components/servers/Modal";
+import { formatISODate } from "@/utils/FormatDate";
 import { useState } from "react";
 import toast from "react-hot-toast";
 

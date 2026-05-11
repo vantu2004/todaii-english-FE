@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, BookOpen, LayoutGrid, Loader2, Filter, X as CloseX } from "lucide-react";
-import { filterVocabDecks } from "../../../api/clients/vocabDeckApi";
-import { logError } from "../../../utils/LogError";
-import SearchBar from "../../../components/clients/SearchBar";
-import Pagination from "../../../components/clients/Pagination";
-import DeckCard from "../../../components/clients/vocab_filter_page/DeckCard";
-import VocabFilterSidebar from "../../../components/clients/vocab_filter_page/VocabFilterSidebar";
+import { filterVocabDecks } from "@/api/clients/vocabDeckApi";
+import { logError } from "@/utils/LogError";
+import SearchBar from "@/components/clients/SearchBar";
+import Pagination from "@/components/clients/Pagination";
+import DeckCard from "@/components/clients/vocab_filter_page/DeckCard";
+import VocabFilterSidebar from "@/components/clients/vocab_filter_page/VocabFilterSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const SORT_OPTIONS = [

@@ -14,7 +14,7 @@ import {
   GraduationCap,
   BookMarked,
 } from "lucide-react";
-import { useClientAuthContext } from "./../../hooks/clients/useClientAuthContext";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
 const navItems = [
   { label: "Trang chủ", path: "/client", icon: House, end: true },

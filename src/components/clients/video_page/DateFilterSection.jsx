@@ -6,9 +6,9 @@ import {
   Loader2,
   ChevronDown,
 } from "lucide-react";
-import { formatDate, formatISODate } from "../../../utils/FormatDate";
+import { formatDate, formatISODate } from "@/utils/FormatDate";
 import VideoCard from "./VideoCard";
-import BasicDatePicker from "../home_page/BasicDatePicker";
+import BasicDatePicker from "@/components/clients/home_page/BasicDatePicker";
 
 const DateFilterSection = ({
   videos,

@@ -6,8 +6,8 @@ import {
   ExternalLink,
   BookOpen,
 } from "lucide-react";
-import Modal from "../Modal";
-import { formatISODate } from "../../../utils/FormatDate";
+import Modal from "@/components/servers/Modal";
+import { formatISODate } from "@/utils/FormatDate";
 
 const ArticleViewModal = ({ isOpen, onClose, article }) => {
   if (!article) return null;

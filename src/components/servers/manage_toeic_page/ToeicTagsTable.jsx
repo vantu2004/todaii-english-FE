@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Pencil,
   Trash2,
@@ -8,8 +8,8 @@ import {
 } from "lucide-react";
 import {
   deleteToeicTag,
-} from "../../../api/servers/toeicTagApi";
-import { logError } from "../../../utils/LogError";
+} from "@/api/servers/toeicTagApi";
+import { logError } from "@/utils/LogError";
 
 const ToeicTagsTable = ({
   columns,

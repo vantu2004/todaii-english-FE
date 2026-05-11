@@ -1,5 +1,5 @@
-import { serverInstance } from "../../config/axios";
-import { formatDate } from "../../utils/FormatDate";
+import { serverInstance } from "@/config/axios";
+import { formatDate } from "@/utils/FormatDate";
 
 export const getSummary = async () => {
   try {

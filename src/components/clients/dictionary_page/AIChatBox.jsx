@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Bot, Send, Trash2, User, AlertCircle, Sparkles } from "lucide-react";
-import { askGemini } from "../../../api/clients/dictionaryApi";
+import { askGemini } from "@/api/clients/dictionaryApi";
 
 const AIChatBox = () => {
   const [input, setInput] = useState("");

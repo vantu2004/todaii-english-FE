@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { login } from "../../../api/servers/authApi";
-import { useServerAuthContext } from "../../../hooks/servers/useServerAuthContext";
-import { fetchProfile } from "../../../api/servers/adminApi";
-import { logError } from "../../../utils/LogError";
+import { login } from "@/api/servers/authApi";
+import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext";
+import { fetchProfile } from "@/api/servers/adminApi";
+import { logError } from "@/utils/LogError";
 
 const Login = () => {
   const { setAuthUser, setIsLoggedIn } = useServerAuthContext();

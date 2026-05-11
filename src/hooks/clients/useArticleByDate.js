@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getArticlesByDate } from "../../api/clients/articleApi";
+import { getArticlesByDate } from "@/api/clients/articleApi";
 
 const useArticleByDate = (initialDate = new Date()) => {
   const [articlesByDate, setArticlesByDate] = useState([]);

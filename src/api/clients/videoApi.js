@@ -1,5 +1,5 @@
-import { clientInstance } from "../../config/axios";
-import { formatDate } from "../../utils/FormatDate";
+import { clientInstance } from "@/config/axios";
+import { formatDate } from "@/utils/FormatDate";
 
 export const getLatestVideos = async (size = 10) => {
   try {

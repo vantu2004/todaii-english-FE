@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Volume2, Languages, ChevronDown, Loader2 } from "lucide-react";
-import { logError } from "../../utils/logError";
+import { logError } from "@/utils/logError";
 
 const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
   const [words, setWords] = useState([]);

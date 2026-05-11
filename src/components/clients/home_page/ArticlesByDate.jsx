@@ -1,12 +1,12 @@
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import BasicDatePicker from "./BasicDatePicker";
-import LongArticleCard from "../../../components/clients/LongArticleCard";
+import LongArticleCard from "@/components/clients/LongArticleCard";
 
 import {
   formatDate,
   formatDisplayDate,
   getLastNDays,
-} from "../../../utils/FormatDate";
+} from "@/utils/FormatDate";
 
 const ArticlesByDate = ({
   selectedDate,

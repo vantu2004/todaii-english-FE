@@ -1,11 +1,11 @@
 import toast from "react-hot-toast";
-import { fetchVideo, updateVideo } from "../../../../api/servers/videoApi";
+import { fetchVideo, updateVideo } from "@/api/servers/videoApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import VideoForm from "../../../../components/servers/manage_videos_page/VideoForm";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import VideoForm from "@/components/servers/manage_videos_page/VideoForm";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const UpdateVideo = () => {
   const { setHeader } = useHeaderContext();

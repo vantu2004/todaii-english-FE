@@ -6,19 +6,19 @@ import {
   createLyricBatch,
   createLyric,
   deleteAllLyrics,
-} from "../../../api/servers/lyricApi";
-import LyricToolBar from "../../../components/servers/manage_lyrics_page/LyricToolBar";
+} from "@/api/servers/lyricApi";
+import LyricToolBar from "@/components/servers/manage_lyrics_page/LyricToolBar";
 import { motion } from "framer-motion";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import { useParams } from "react-router-dom";
-import LyricsTable from "../../../components/servers/manage_lyrics_page/LyricsTable";
+import LyricsTable from "@/components/servers/manage_lyrics_page/LyricsTable";
 import { SearchX } from "lucide-react";
-import LyricFormModal from "../../../components/servers/manage_lyrics_page/LyricFormModal";
-import UploadSrtFileModal from "../../../components/servers/manage_lyrics_page/UploadSrtFileModal";
-import DeleteAllLyricsModal from "../../../components/servers/manage_lyrics_page/DeleteAllLyricsModal";
-import PreviewModal from "../../../components/servers/manage_lyrics_page/PreviewModal";
-import { fetchVideo } from "../../../api/servers/videoApi";
-import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import LyricFormModal from "@/components/servers/manage_lyrics_page/LyricFormModal";
+import UploadSrtFileModal from "@/components/servers/manage_lyrics_page/UploadSrtFileModal";
+import DeleteAllLyricsModal from "@/components/servers/manage_lyrics_page/DeleteAllLyricsModal";
+import PreviewModal from "@/components/servers/manage_lyrics_page/PreviewModal";
+import { fetchVideo } from "@/api/servers/videoApi";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const ManageLyrics = () => {
   const { setHeader } = useHeaderContext();

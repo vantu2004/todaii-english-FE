@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import DictionaryWordsList from "./DictionaryWordsList";
 import AddCustomWordForm from "./AddCustomWordForm";
-import { fetchDictionary } from "../../../api/servers/dictionaryApi";
-import { logError } from "../../../utils/LogError";
+import { fetchDictionary } from "@/api/servers/dictionaryApi";
+import { logError } from "@/utils/LogError";
 
 const DictionarySearchPanel = ({
   selectedWords,

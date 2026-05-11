@@ -1,11 +1,11 @@
 import { useState } from "react";
-import InputField from "../../../../components/clients/InputField";
-import { resetPassword } from "../../../../api/clients/authApi";
+import InputField from "@/components/clients/InputField";
+import { resetPassword } from "@/api/clients/authApi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../../animations/fadeIn";
+import { fadeIn } from "@/animations/fadeIn";
 
 const ResetPassword = () => {
   const [loading, setLoading] = useState(false);

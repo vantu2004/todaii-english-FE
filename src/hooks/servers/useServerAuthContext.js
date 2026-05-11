@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ServerAuthContext } from "../../context/servers/ServerAuthContext";
+import { ServerAuthContext } from "@/context/servers/ServerAuthContext";
 
 export function useServerAuthContext() {
   const context = useContext(ServerAuthContext);

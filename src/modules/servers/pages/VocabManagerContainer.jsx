@@ -3,13 +3,13 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
-import VocabHeader from "../../../components/servers/manage_vocabs_page/VocabHeader";
-import DictionarySearchPanel from "../../../components/servers/manage_vocabs_page/DictionarySearchPanel";
-import SelectedWordsPanel from "../../../components/servers/manage_vocabs_page/SelectedWordsPanel";
-import { logError } from "../../../utils/LogError";
-import { createDictionaryEntryByGemini } from "../../../api/servers/dictionaryApi";
-import DictionaryViewModal from "../../../components/servers/manage_dictionary_page/DictionaryViewModal";
-import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
+import VocabHeader from "@/components/servers/manage_vocabs_page/VocabHeader";
+import DictionarySearchPanel from "@/components/servers/manage_vocabs_page/DictionarySearchPanel";
+import SelectedWordsPanel from "@/components/servers/manage_vocabs_page/SelectedWordsPanel";
+import { logError } from "@/utils/LogError";
+import { createDictionaryEntryByGemini } from "@/api/servers/dictionaryApi";
+import DictionaryViewModal from "@/components/servers/manage_dictionary_page/DictionaryViewModal";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const VocabManagerContainer = ({
   fetchApi, // (id) => fetch data

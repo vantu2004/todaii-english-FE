@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserRound, Loader2, Upload, X, Edit2, Save } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 
 const ProfileForm = ({ userData, onUpdate }) => {
   const [formData, setFormData] = useState({

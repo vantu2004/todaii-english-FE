@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from "../../../components/servers/Sidebar";
-import Header from "../../../components/servers/Header";
+import Sidebar from "@/components/servers/Sidebar";
+import Header from "@/components/servers/Header";
 import { Outlet } from "react-router-dom";
 
 const ServerLayout = () => {

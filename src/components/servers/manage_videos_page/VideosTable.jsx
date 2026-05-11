@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Eye,
   Pencil,
@@ -12,9 +12,9 @@ import {
   BookA,
   FileText,
 } from "lucide-react";
-import { toggleVideo, deleteVideo } from "../../../api/servers/videoApi";
+import { toggleVideo, deleteVideo } from "@/api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import VideoViewModal from "./VideoViewModal";
 
 const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Check, X, Pencil } from "lucide-react";
-import { formatISODate } from "../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 
 const SettingsTable = ({ settings, onUpdate }) => {
   const columns = [

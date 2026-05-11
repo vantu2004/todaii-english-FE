@@ -1,6 +1,6 @@
 import { Outlet, Link } from "react-router-dom";
-import Footer from "../../../components/landing_page/Footer";
-import ClientNavBar from "../../../components/clients/ClientNavBar";
+import Footer from "@/components/landing_page/Footer";
+import ClientNavBar from "@/components/clients/ClientNavBar";
 
 const ClientLayout = () => {
   return (

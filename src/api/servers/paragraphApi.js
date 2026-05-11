@@ -1,4 +1,4 @@
-import { serverInstance } from "../../config/axios";
+import { serverInstance } from "@/config/axios";
 
 export const saveParagraph = async (articleId, paragraph) => {
   try {

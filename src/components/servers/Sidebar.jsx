@@ -27,9 +27,9 @@ import {
   Tag,
 } from "lucide-react";
 import { useState } from "react";
-import { logout } from "../../api/servers/authApi";
+import { logout } from "@/api/servers/authApi";
 import { useNavigate } from "react-router-dom";
-import { useServerAuthContext } from "../../hooks/servers/useServerAuthContext";
+import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext";
 
 const Sidebar = () => {
   const { authUser } = useServerAuthContext();

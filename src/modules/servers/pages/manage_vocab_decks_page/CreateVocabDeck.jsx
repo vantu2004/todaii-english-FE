@@ -1,10 +1,10 @@
-import { createVocabDeck } from "../../../../api/servers/vocabDeckApi";
+import { createVocabDeck } from "@/api/servers/vocabDeckApi";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { logError } from "../../../../utils/LogError";
-import VocabDeckForm from "../../../../components/servers/manage_vocab_decks_page/VocabDeckForm";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import VocabDeckForm from "@/components/servers/manage_vocab_decks_page/VocabDeckForm";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { useEffect } from "react";
 
 const CreateVocabDeck = () => {

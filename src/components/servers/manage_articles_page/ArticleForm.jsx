@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { fetchTopicsNoPaged } from "../../../api/servers/topicApi";
+import { fetchTopicsNoPaged } from "@/api/servers/topicApi";
 import { ChevronDown } from "lucide-react";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 

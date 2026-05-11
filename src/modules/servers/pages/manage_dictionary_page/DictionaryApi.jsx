@@ -6,11 +6,11 @@ import {
   X,
   History,
 } from "lucide-react";
-import { fetchRawWord } from "../../../../api/servers/dictionaryApi";
+import { fetchRawWord } from "@/api/servers/dictionaryApi";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const DictionaryApi = () => {
   const { setHeader } = useHeaderContext();

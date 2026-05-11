@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Pencil,
   Trash2,
@@ -16,8 +16,8 @@ import {
   deleteTopic,
   toggleTopic,
   updateTopic,
-} from "../../../api/servers/topicApi";
-import { logError } from "../../../utils/LogError";
+} from "@/api/servers/topicApi";
+import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
 
 const TopicsTable = ({

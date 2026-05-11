@@ -4,13 +4,13 @@ import {
   getLatestVideos,
   getTopVideos,
   getVideosByDate,
-} from "../../../api/clients/videoApi";
-import HeroSection from "../../../components/clients/video_page/HeroSection";
-import TopicSection from "../../../components/clients/video_page/TopicSection";
-import VideoSlider from "../../../components/clients/video_page/VideoSlider";
-import DateFilterSection from "../../../components/clients/video_page/DateFilterSection";
-import { getAllTopics } from "../../../api/clients/topicApi";
-import { logError } from "../../../utils/LogError";
+} from "@/api/clients/videoApi";
+import HeroSection from "@/components/clients/video_page/HeroSection";
+import TopicSection from "@/components/clients/video_page/TopicSection";
+import VideoSlider from "@/components/clients/video_page/VideoSlider";
+import DateFilterSection from "@/components/clients/video_page/DateFilterSection";
+import { getAllTopics } from "@/api/clients/topicApi";
+import { logError } from "@/utils/LogError";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Video = () => {

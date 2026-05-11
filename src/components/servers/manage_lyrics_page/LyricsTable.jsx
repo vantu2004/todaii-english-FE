@@ -7,9 +7,9 @@ import {
   Trash2,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
-import { logError } from "../../../utils/LogError";
-import { deleteLyric, updateLyric } from "../../../api/servers/lyricApi";
+import Modal from "@/components/servers/Modal";
+import { logError } from "@/utils/LogError";
+import { deleteLyric, updateLyric } from "@/api/servers/lyricApi";
 import LyricFormModal from "./LyricFormModal";
 
 const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {

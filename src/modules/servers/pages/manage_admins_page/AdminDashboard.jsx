@@ -13,11 +13,11 @@ import {
   Filler,
 } from "chart.js";
 import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
-import AdminSection from "../../../../components/servers/manage_dashboard_page/AdminSection";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
-import { formatDate } from "../../../../utils/FormatDate";
-import { getAdminChartById } from "../../../../api/servers/dashboardApi";
+import AdminSection from "@/components/servers/manage_dashboard_page/AdminSection";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { formatDate } from "@/utils/FormatDate";
+import { getAdminChartById } from "@/api/servers/dashboardApi";
 import { useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 

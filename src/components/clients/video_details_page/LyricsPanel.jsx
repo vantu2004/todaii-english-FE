@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader2, ListMusic, Clock } from "lucide-react";
-import { getVideoLyrics } from "../../../api/clients/videoLyricApi";
-import { logError } from "../../../utils/LogError";
+import { getVideoLyrics } from "@/api/clients/videoLyricApi";
+import { logError } from "@/utils/LogError";
 
 const LyricsPanel = ({ videoId }) => {
   const [lyrics, setLyrics] = useState([]);

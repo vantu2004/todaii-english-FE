@@ -1,9 +1,9 @@
 import { Play } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import { Link } from "react-router-dom";
-import { isSavedVideo } from "../../../api/clients/videoApi";
-import { toggleSavedVideo } from "../../../api/clients/userApi";
-import ToggleBookmarkButton from "../ToggleBookmarkButton";
+import { isSavedVideo } from "@/api/clients/videoApi";
+import { toggleSavedVideo } from "@/api/clients/userApi";
+import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
 
 const VideoCard = ({ video }) => {
   return (

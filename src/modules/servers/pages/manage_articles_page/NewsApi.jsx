@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchArticlesFromNewsApi } from "../../../../api/servers/articleApi";
+import { fetchArticlesFromNewsApi } from "@/api/servers/articleApi";
 import { ExternalLink, Loader2 } from "lucide-react";
-import ToolBar from "../../../../components/servers/ToolBar";
-import Pagination from "../../../../components/servers/news_api_page/Pagination";
-import ArticlesTable from "../../../../components/servers/news_api_page/ArticlesTable";
+import ToolBar from "@/components/servers/ToolBar";
+import Pagination from "@/components/servers/news_api_page/Pagination";
+import ArticlesTable from "@/components/servers/news_api_page/ArticlesTable";
 import { motion } from "framer-motion";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const NewsApi = () => {
   const { setHeader } = useHeaderContext();

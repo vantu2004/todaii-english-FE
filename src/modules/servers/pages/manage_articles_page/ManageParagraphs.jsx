@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchArticle } from "../../../../api/servers/articleApi";
+import { fetchArticle } from "@/api/servers/articleApi";
 import { motion } from "framer-motion";
-import ArticleDetails from "../../../../components/servers/manage_articles_page/ArticleDetails";
-import ListParagraphs from "../../../../components/servers/manage_articles_page/ListParagraphs";
+import ArticleDetails from "@/components/servers/manage_articles_page/ArticleDetails";
+import ListParagraphs from "@/components/servers/manage_articles_page/ListParagraphs";
 import { ArrowLeft, RefreshCw } from "lucide-react";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const ManageParagraphs = () => {
   const { setHeader } = useHeaderContext();

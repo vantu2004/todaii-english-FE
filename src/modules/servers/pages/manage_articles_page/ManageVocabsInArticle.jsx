@@ -1,10 +1,10 @@
-import VocabManagerContainer from "../VocabManagerContainer";
+import VocabManagerContainer from "@/modules/servers/pages/VocabManagerContainer";
 import {
   fetchArticle,
   addWordToArticle,
   deleteWordFromArticle,
   deleteAllWordsFromArticle,
-} from "../../../../api/servers/articleApi";
+} from "@/api/servers/articleApi";
 
 const ManageVocabsInArticle = () => {
   return (

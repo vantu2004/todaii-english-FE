@@ -1,11 +1,11 @@
-import { createArticle } from "../../../../api/servers/articleApi";
-import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
+import { createArticle } from "@/api/servers/articleApi";
+import ArticleForm from "@/components/servers/manage_articles_page/ArticleForm";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useNewsApiStore } from "../../../../stores/useNewsApiStore";
+import { useNewsApiStore } from "@/stores/useNewsApiStore";
 import { useEffect, useState } from "react";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const CreateArticle = () => {
   const { setHeader } = useHeaderContext();

@@ -1,5 +1,5 @@
-import { fetchVideos } from "../../../../api/servers/videoApi";
-import GenericVideoList from "../../../../components/servers/GenericVideoList";
+import { fetchVideos } from "@/api/servers/videoApi";
+import GenericVideoList from "@/components/servers/GenericVideoList";
 
 const ManageVideos = () => {
   const fetchApi = (query) =>

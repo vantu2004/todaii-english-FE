@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Save, Calendar, Clock } from "lucide-react";
 import toast from "react-hot-toast";
-import { formatISODate } from "../../../utils/FormatDate";
-import { logError } from "../../../utils/LogError";
-import { useClientAuthContext } from "../../../hooks/clients/useClientAuthContext";
-import { updateProfile } from "../../../api/clients/userApi";
-import InfoRow from "../../../components/clients/profile_page/InfoRow";
-import AvatarSection from "../../../components/clients/profile_page/AvatarSection";
-import GeneralInfoSection from "../../../components/clients/profile_page/GeneralInfoSection";
-import PasswordSection from "../../../components/clients/profile_page/PasswordSection";
+import { formatISODate } from "@/utils/FormatDate";
+import { logError } from "@/utils/LogError";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { updateProfile } from "@/api/clients/userApi";
+import InfoRow from "@/components/clients/profile_page/InfoRow";
+import AvatarSection from "@/components/clients/profile_page/AvatarSection";
+import GeneralInfoSection from "@/components/clients/profile_page/GeneralInfoSection";
+import PasswordSection from "@/components/clients/profile_page/PasswordSection";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Profile = () => {

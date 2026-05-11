@@ -1,10 +1,10 @@
-import VocabManagerContainer from "../VocabManagerContainer";
+import VocabManagerContainer from "@/modules/servers/pages/VocabManagerContainer";
 import {
   fetchVideo,
   addWordToVideo,
   deleteWordFromVideo,
   deleteAllWordsFromVideo,
-} from "../../../../api/servers/videoApi";
+} from "@/api/servers/videoApi";
 
 const ManageVocabsInVideo = () => {
   return (

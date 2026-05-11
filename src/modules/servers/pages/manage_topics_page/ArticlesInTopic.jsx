@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { fetchArticlesByTopic } from "../../../../api/servers/articleApi";
-import GenericArticleList from "../../../../components/servers/GenericArticleList";
+import { fetchArticlesByTopic } from "@/api/servers/articleApi";
+import GenericArticleList from "@/components/servers/GenericArticleList";
 
 const ArticlesInTopic = () => {
   const { id } = useParams();

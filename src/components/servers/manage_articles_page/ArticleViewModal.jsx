@@ -1,5 +1,5 @@
 import { Eye } from "lucide-react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import ArticleDetails from "./ArticleDetails";
 
 const ArticleViewModal = ({ isOpen, onClose, article }) => {

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { login } from "../../../../api/clients/authApi";
+import { login } from "@/api/clients/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import InputField from "../../../../components/clients/InputField";
-import { useClientAuthContext } from "../../../../hooks/clients/useClientAuthContext";
-import { fetchProfile } from "../../../../api/clients/userApi";
+import InputField from "@/components/clients/InputField";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { fetchProfile } from "@/api/clients/userApi";
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../../animations/fadeIn";
+import { fadeIn } from "@/animations/fadeIn";
 
 const LoginPage = () => {
   const { setAuthUser, setIsLoggedIn } = useClientAuthContext();

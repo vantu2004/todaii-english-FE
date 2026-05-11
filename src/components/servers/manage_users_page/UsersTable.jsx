@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Eye,
   Pencil,
@@ -16,9 +16,9 @@ import {
   updateUser,
   toggleUser,
   deleteUser,
-} from "../../../api/servers/userApi";
+} from "@/api/servers/userApi";
 import UserFormModal from "./UserFormModal";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import { useNavigate } from "react-router-dom";
 
 const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {

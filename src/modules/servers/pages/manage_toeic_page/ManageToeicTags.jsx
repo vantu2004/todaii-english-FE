@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../../components/servers/ToolBar";
+import ToolBar from "@/components/servers/ToolBar";
 import {
   fetchAllToeicTags,
   createToeicTag,
   updateToeicTag,
-} from "../../../../api/servers/toeicTagApi";
+} from "@/api/servers/toeicTagApi";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import ToeicTagsTable from "../../../../components/servers/manage_toeic_page/ToeicTagsTable";
-import ToeicTagFormModal from "../../../../components/servers/manage_toeic_page/ToeicTagFormModal";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import ToeicTagsTable from "@/components/servers/manage_toeic_page/ToeicTagsTable";
+import ToeicTagFormModal from "@/components/servers/manage_toeic_page/ToeicTagFormModal";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const ManageToeicTags = () => {
   const { setHeader } = useHeaderContext();

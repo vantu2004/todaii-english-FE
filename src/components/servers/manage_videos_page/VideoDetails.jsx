@@ -9,7 +9,7 @@ import {
   User,
   Hash,
 } from "lucide-react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 
 const VideoDetails = ({ video }) => {
   return (

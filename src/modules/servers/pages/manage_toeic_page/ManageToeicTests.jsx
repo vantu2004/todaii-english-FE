@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../../components/servers/ToolBar";
-import Pagination from "../../../../components/servers/Pagination";
+import ToolBar from "@/components/servers/ToolBar";
+import Pagination from "@/components/servers/Pagination";
 import {
   fetchToeicTests,
-} from "../../../../api/servers/toeicTestApi";
+} from "@/api/servers/toeicTestApi";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import ToeicTestsTable from "../../../../components/servers/manage_toeic_page/ToeicTestsTable";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import ToeicTestsTable from "@/components/servers/manage_toeic_page/ToeicTestsTable";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { useNavigate } from "react-router-dom";
 
 const ManageToeicTests = () => {

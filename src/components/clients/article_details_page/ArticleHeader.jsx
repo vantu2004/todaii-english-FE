@@ -1,9 +1,9 @@
 import { Clock, Eye, Globe, User } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ToggleBookmarkButton from "../ToggleBookmarkButton";
-import { isSavedArticle } from "../../../api/clients/articleApi";
-import { toggleSavedArticle } from "../../../api/clients/userApi";
+import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
+import { isSavedArticle } from "@/api/clients/articleApi";
+import { toggleSavedArticle } from "@/api/clients/userApi";
 
 const ArticleHeader = ({ data, formatDate }) => {
   const navigate = useNavigate();

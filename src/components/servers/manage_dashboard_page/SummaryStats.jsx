@@ -1,4 +1,4 @@
-import SummaryCard from "../../../components/servers/manage_dashboard_page/SummaryCard";
+import SummaryCard from "@/components/servers/manage_dashboard_page/SummaryCard";
 import { BookOpen, Video, Layers, Database, User, Shield } from "lucide-react";
 
 const SummaryStats = ({ data }) => {

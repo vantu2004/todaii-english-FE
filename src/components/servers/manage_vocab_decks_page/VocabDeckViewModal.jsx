@@ -8,8 +8,8 @@ import {
   User,
   Sparkles,
 } from "lucide-react";
-import Modal from "../Modal";
-import { formatISODate } from "../../../utils/FormatDate";
+import Modal from "@/components/servers/Modal";
+import { formatISODate } from "@/utils/FormatDate";
 
 const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
   if (!deck) return null;

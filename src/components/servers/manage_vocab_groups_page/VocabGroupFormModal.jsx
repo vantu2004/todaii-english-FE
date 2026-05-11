@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { FolderPlus, Tag, Lightbulb } from "lucide-react";
 
 const VocabGroupFormModal = ({ isOpen, onClose, onSubmit }) => {

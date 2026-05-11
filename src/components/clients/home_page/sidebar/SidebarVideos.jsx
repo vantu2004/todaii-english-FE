@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Play } from "lucide-react";
-import { getLatestVideos } from "../../../../api/clients/videoApi";
+import { getLatestVideos } from "@/api/clients/videoApi";
 
 const SidebarVideos = () => {
   const [videos, setVideos] = useState([]);

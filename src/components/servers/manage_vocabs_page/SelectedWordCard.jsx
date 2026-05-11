@@ -1,5 +1,5 @@
 import { Volume2, Trash2, GripVertical, Sparkles, Eye } from "lucide-react";
-import { playAudioWithEvent } from "../../../utils/playAudio";
+import { playAudioWithEvent } from "@/utils/playAudio";
 
 const SelectedWordCard = ({ word, index, onViewWord, onRemove }) => {
   return (

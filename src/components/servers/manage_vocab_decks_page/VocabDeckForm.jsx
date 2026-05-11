@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { fetchVocabGroupsNoPaged } from "../../../api/servers/vocabGroupApi"; // API groups
-import { logError } from "../../../utils/LogError";
+import { fetchVocabGroupsNoPaged } from "@/api/servers/vocabGroupApi"; // API groups
+import { logError } from "@/utils/LogError";
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 

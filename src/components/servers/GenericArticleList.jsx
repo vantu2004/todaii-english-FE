@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Pagination from "../../components/servers/Pagination";
-import ArticlesTable from "../../components/servers/manage_articles_page/ArticlesTable";
+import Pagination from "@/components/servers/Pagination";
+import ArticlesTable from "@/components/servers/manage_articles_page/ArticlesTable";
 import { useNavigate } from "react-router-dom";
-import RedirectToolbar from "../../components/servers/RedirectToolbar";
+import RedirectToolbar from "@/components/servers/RedirectToolbar";
 import { motion } from "framer-motion";
-import { logError } from "../../utils/LogError";
-import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const GenericArticleList = ({ title, fetchApi }) => {
   const { setHeader } = useHeaderContext();

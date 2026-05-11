@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from "react";
 import ReactPlayer from "react-player";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { Music } from "lucide-react";
 
 const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {

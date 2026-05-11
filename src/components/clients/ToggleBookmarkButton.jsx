@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
 import toast from "react-hot-toast";
-import { useClientAuthContext } from "../../hooks/clients/useClientAuthContext";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
 const ToggleBookmarkButton = ({
   itemId,

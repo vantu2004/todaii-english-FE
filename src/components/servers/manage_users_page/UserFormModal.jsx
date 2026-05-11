@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { Mail, Lock, User, Edit3 } from "lucide-react";
 
 const UserFormModal = ({ isOpen, onClose, initialData = {}, onSubmit }) => {

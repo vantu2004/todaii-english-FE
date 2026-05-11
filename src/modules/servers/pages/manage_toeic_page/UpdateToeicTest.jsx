@@ -1,11 +1,11 @@
 import toast from "react-hot-toast";
-import { getToeicTestById, updateToeicTest } from "../../../../api/servers/toeicTestApi";
+import { getToeicTestById, updateToeicTest } from "@/api/servers/toeicTestApi";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import ToeicTestForm from "../../../../components/servers/manage_toeic_page/ToeicTestForm";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import ToeicTestForm from "@/components/servers/manage_toeic_page/ToeicTestForm";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const UpdateToeicTest = () => {
   const { setHeader } = useHeaderContext();

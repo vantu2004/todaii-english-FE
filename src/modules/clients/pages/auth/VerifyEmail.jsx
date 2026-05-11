@@ -1,10 +1,10 @@
 import { useState } from "react";
-import InputField from "../../../../components/clients/InputField";
-import { resendOtp } from "../../../../api/clients/authApi";
+import InputField from "@/components/clients/InputField";
+import { resendOtp } from "@/api/clients/authApi";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { fadeIn } from "../../../../animations/fadeIn";
+import { fadeIn } from "@/animations/fadeIn";
 
 const VerifyEmail = () => {
   const [email, setEmail] = useState("");

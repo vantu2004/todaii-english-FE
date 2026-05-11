@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import RedirectToolbar from "../../components/servers/RedirectToolbar";
-import Pagination from "../../components/servers/Pagination";
+import RedirectToolbar from "@/components/servers/RedirectToolbar";
+import Pagination from "@/components/servers/Pagination";
 import { motion } from "framer-motion";
-import { logError } from "../../utils/LogError";
-import VideosTable from "../../components/servers/manage_videos_page/VideosTable";
+import { logError } from "@/utils/LogError";
+import VideosTable from "@/components/servers/manage_videos_page/VideosTable";
 import { useNavigate } from "react-router-dom";
-import { useHeaderContext } from "../../hooks/servers/useHeaderContext";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const GenericVideoList = ({ title, fetchApi }) => {
   const { setHeader } = useHeaderContext();

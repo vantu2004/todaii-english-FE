@@ -13,11 +13,11 @@ import {
   Filler,
 } from "chart.js";
 import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
-import ClientActivitySection from "../../../../components/servers/manage_dashboard_page/ClientActivitySection";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
-import { formatDate } from "../../../../utils/FormatDate";
-import { getUserChartById } from "../../../../api/servers/dashboardApi";
+import ClientActivitySection from "@/components/servers/manage_dashboard_page/ClientActivitySection";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { formatDate } from "@/utils/FormatDate";
+import { getUserChartById } from "@/api/servers/dashboardApi";
 import { useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 

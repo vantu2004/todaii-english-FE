@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../../components/servers/ToolBar";
-import Pagination from "../../../../components/servers/Pagination";
-import { fetchTopics, createTopic } from "../../../../api/servers/topicApi";
-import TopicsTable from "../../../../components/servers/manage_topics_page/TopicsTable";
-import TopicFormModal from "../../../../components/servers/manage_topics_page/TopicFormModal";
+import ToolBar from "@/components/servers/ToolBar";
+import Pagination from "@/components/servers/Pagination";
+import { fetchTopics, createTopic } from "@/api/servers/topicApi";
+import TopicsTable from "@/components/servers/manage_topics_page/TopicsTable";
+import TopicFormModal from "@/components/servers/manage_topics_page/TopicFormModal";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const ManageTopics = ({ topicType }) => {
   const { setHeader } = useHeaderContext();

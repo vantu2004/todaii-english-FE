@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import useArticleDetails from "../../../hooks/clients/useArticleDetails";
-import ArticleHeader from "./../../../components/clients/article_details_page/ArticleHeader";
-import ArticleImage from "./../../../components/clients/article_details_page/ArticleImage";
-import ArticleContent from "./../../../components/clients/article_details_page/ArticleContent";
+import useArticleDetails from "@/hooks/clients/useArticleDetails";
+import ArticleHeader from "@/components/clients/article_details_page/ArticleHeader";
+import ArticleImage from "@/components/clients/article_details_page/ArticleImage";
+import ArticleContent from "@/components/clients/article_details_page/ArticleContent";
 import { AnimatePresence, motion } from "framer-motion";
-import SavedArticleTags from "../../../components/clients/home_page/sidebar/SavedArticleTags";
-import RelatedArticles from "../../../components/clients/article_details_page/RelatedArticles";
-import { getEntriesByArticleId } from "../../../api/clients/articleApi";
-import EntryWordList from "../../../components/clients/EntryWordList";
-import PageNotFound from "../../../pages/PageNotFound";
+import SavedArticleTags from "@/components/clients/home_page/sidebar/SavedArticleTags";
+import RelatedArticles from "@/components/clients/article_details_page/RelatedArticles";
+import { getEntriesByArticleId } from "@/api/clients/articleApi";
+import EntryWordList from "@/components/clients/EntryWordList";
+import PageNotFound from "@/pages/PageNotFound";
 
 const ArticleDetails = () => {
   const { id } = useParams();

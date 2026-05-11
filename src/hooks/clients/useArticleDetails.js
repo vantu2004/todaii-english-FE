@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getArticleById } from "../../api/clients/articleApi";
+import { getArticleById } from "@/api/clients/articleApi";
 
 const useArticleDetails = (articleId) => {
   const [article, setArticle] = useState(null);

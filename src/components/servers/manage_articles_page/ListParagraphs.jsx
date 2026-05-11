@@ -4,9 +4,9 @@ import {
   saveParagraph,
   translateByGemini,
   deleteParagraph,
-} from "../../../api/servers/paragraphApi";
+} from "@/api/servers/paragraphApi";
 import ParagraphForm from "./ParagraphForm";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 import { Plus, FileText, AlertCircle } from "lucide-react";
 
 const ListParagraphs = ({ articleId, paragraphs }) => {

@@ -1,5 +1,5 @@
-import { logError } from "../../../../utils/LogError";
-import { getSavedArticlesByUser } from "../../../../api/clients/articleApi";
+import { logError } from "@/utils/LogError";
+import { getSavedArticlesByUser } from "@/api/clients/articleApi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +9,7 @@ import {
   FileText,
   ArrowRight,
 } from "lucide-react";
-import { useClientAuthContext } from "../../../../hooks/clients/useClientAuthContext";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
 const SavedArticleTags = () => {
   const [articles, setArticles] = useState([]);

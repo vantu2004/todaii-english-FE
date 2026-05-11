@@ -1,6 +1,6 @@
 import { Hash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getRelatedWords } from "../../../api/clients/dictionaryApi";
+import { getRelatedWords } from "@/api/clients/dictionaryApi";
 
 const RelatedWords = ({ word, onSelectWord }) => {
   const [relatedWords, setRelatedWords] = useState([]);

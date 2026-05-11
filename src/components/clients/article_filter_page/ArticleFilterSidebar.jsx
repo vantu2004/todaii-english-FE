@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, RotateCcw, Check } from "lucide-react";
-import { getAllSources } from "../../../api/clients/articleApi";
-import { getAllTopics } from "../../../api/clients/topicApi";
-import { logError } from "../../../utils/LogError";
+import { getAllSources } from "@/api/clients/articleApi";
+import { getAllTopics } from "@/api/clients/topicApi";
+import { logError } from "@/utils/LogError";
 
 const ArticleFilterSidebar = ({
   query,

@@ -1,5 +1,5 @@
   import { useState, useEffect } from "react";
-import { fetchToeicCollections } from "../../../api/servers/toeicCollectionApi";
+import { fetchToeicCollections } from "@/api/servers/toeicCollectionApi";
 import { FileText, Type, Clock, Image as ImageIcon, FileAudio, LayoutList, Layers, ToggleLeft, Save, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";

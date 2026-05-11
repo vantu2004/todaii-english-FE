@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { Plus, Trash2, BookOpen } from "lucide-react";
 
 const POS_OPTIONS = [

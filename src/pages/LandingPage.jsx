@@ -1,9 +1,9 @@
-import Navbar from "../components/landing_page/Navbar";
-import Hero from "../components/landing_page/Hero";
-import PopularCourses from "../components/landing_page/PopularCourses";
-import Testimonials from "../components/landing_page/Testimonials";
-import CTABanner from "../components/landing_page/CTABanner";
-import Footer from "../components/landing_page/Footer";
+import Navbar from "@/components/landing_page/Navbar";
+import Hero from "@/components/landing_page/Hero";
+import PopularCourses from "@/components/landing_page/PopularCourses";
+import Testimonials from "@/components/landing_page/Testimonials";
+import CTABanner from "@/components/landing_page/CTABanner";
+import Footer from "@/components/landing_page/Footer";
 
 function LandingPage() {
   return (

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ToolBar from "../../../../components/servers/ToolBar";
-import Pagination from "../../../../components/servers/Pagination";
+import ToolBar from "@/components/servers/ToolBar";
+import Pagination from "@/components/servers/Pagination";
 import {
   fetchVocabGroups,
   createVocabGroup,
-} from "../../../../api/servers/vocabGroupApi";
+} from "@/api/servers/vocabGroupApi";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import VocabGroupsTable from "../../../../components/servers/manage_vocab_groups_page/VocabGroupsTable";
-import VocabGroupFormModal from "../../../../components/servers/manage_vocab_groups_page/VocabGroupFormModal";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import VocabGroupsTable from "@/components/servers/manage_vocab_groups_page/VocabGroupsTable";
+import VocabGroupFormModal from "@/components/servers/manage_vocab_groups_page/VocabGroupFormModal";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const ManageVocabGroups = () => {
   const { setHeader } = useHeaderContext();

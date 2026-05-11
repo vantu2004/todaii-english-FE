@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
 import {
   Eye,
@@ -10,14 +10,14 @@ import {
   Volume2,
   AlertTriangle,
 } from "lucide-react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import DictionaryFormModal from "./DictionaryFormModal";
 import {
   deleteDictionaryEntry,
   updateDictionaryEntry,
-} from "../../../api/servers/dictionaryApi";
+} from "@/api/servers/dictionaryApi";
 import DictionaryViewModal from "./DictionaryViewModal";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 
 const DictionaryTable = ({
   columns,

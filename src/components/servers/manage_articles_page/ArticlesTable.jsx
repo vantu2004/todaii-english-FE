@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Eye,
   Pencil,
@@ -12,10 +12,10 @@ import {
   Pilcrow,
   BookA,
 } from "lucide-react";
-import { toggleArticle, deleteArticle } from "../../../api/servers/articleApi";
+import { toggleArticle, deleteArticle } from "@/api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
 import { useNavigate } from "react-router-dom";
-import { logError } from "../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 
 const ArticlesTable = ({
   columns,

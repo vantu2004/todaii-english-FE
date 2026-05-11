@@ -2,13 +2,13 @@ import toast from "react-hot-toast";
 import {
   fetchArticle,
   updateArticle,
-} from "../../../../api/servers/articleApi";
-import ArticleForm from "../../../../components/servers/manage_articles_page/ArticleForm";
+} from "@/api/servers/articleApi";
+import ArticleForm from "@/components/servers/manage_articles_page/ArticleForm";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { logError } from "../../../../utils/LogError";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const UpdateArticle = () => {
   const { setHeader } = useHeaderContext();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import {
   Pencil,
   Trash2,
@@ -12,8 +12,8 @@ import {
 import {
   deleteToeicCollection,
   toggleToeicCollectionEnabled,
-} from "../../../api/servers/toeicCollectionApi";
-import { logError } from "../../../utils/LogError";
+} from "@/api/servers/toeicCollectionApi";
+import { logError } from "@/utils/LogError";
 
 const truncateWords = (str, maxWords = 150) => {
   if (!str) return "";

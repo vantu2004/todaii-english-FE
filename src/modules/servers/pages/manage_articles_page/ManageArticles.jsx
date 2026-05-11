@@ -1,5 +1,5 @@
-import GenericArticleList from "../../../../components/servers/GenericArticleList";
-import { fetchArticles } from "../../../../api/servers/articleApi";
+import GenericArticleList from "@/components/servers/GenericArticleList";
+import { fetchArticles } from "@/api/servers/articleApi";
 
 const ManageArticles = () => {
   const fetchApi = (query) =>

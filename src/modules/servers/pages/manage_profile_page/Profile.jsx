@@ -1,9 +1,9 @@
-import { updateProfile } from "../../../../api/servers/adminApi";
-import ProfileForm from "../../../../components/servers/manage_profile_page/ProfileForm";
-import { useServerAuthContext } from "../../../../hooks/servers/useServerAuthContext";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { updateProfile } from "@/api/servers/adminApi";
+import ProfileForm from "@/components/servers/manage_profile_page/ProfileForm";
+import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { useEffect } from "react";
-import { logError } from "../../../../utils/LogError";
+import { logError } from "@/utils/LogError";
 
 const Profile = () => {
   const { setHeader } = useHeaderContext();

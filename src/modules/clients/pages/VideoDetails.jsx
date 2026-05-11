@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import VideoInfo from "../../../components/clients/video_details_page/VideoInfo";
-import RelatedVideos from "../../../components/clients/video_details_page/RelatedVideos";
+import VideoInfo from "@/components/clients/video_details_page/VideoInfo";
+import RelatedVideos from "@/components/clients/video_details_page/RelatedVideos";
 import {
   getVideoById,
   getRelatedVideos,
   getEntriesByVideoId,
-} from "../../../api/clients/videoApi";
-import { logError } from "../../../utils/LogError";
-import EntryWordList from "../../../components/clients/EntryWordList";
+} from "@/api/clients/videoApi";
+import { logError } from "@/utils/LogError";
+import EntryWordList from "@/components/clients/EntryWordList";
 import { motion, AnimatePresence } from "framer-motion";
-import PageNotFound from "../../../pages/PageNotFound";
-import { getVideoLyrics } from "../../../api/clients/videoLyricApi";
-import useVideoPlayer from "../../../hooks/useVideoPlayer";
-import VideoPlayer from "../../../components/video/VideoPlayer";
-import LyricsPanel from "../../../components/video/LyricsPanel";
+import PageNotFound from "@/pages/PageNotFound";
+import { getVideoLyrics } from "@/api/clients/videoLyricApi";
+import useVideoPlayer from "@/hooks/useVideoPlayer";
+import VideoPlayer from "@/components/video/VideoPlayer";
+import LyricsPanel from "@/components/video/LyricsPanel";
 
 const VideoDetails = () => {
   const { id } = useParams();

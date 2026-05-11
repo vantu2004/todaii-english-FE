@@ -1,12 +1,12 @@
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { useEffect, useState } from "react";
 import {
   fetchSettings,
   updateSetting,
-} from "../../../../api/servers/settingApi";
-import { logError } from "../../../../utils/LogError";
+} from "@/api/servers/settingApi";
+import { logError } from "@/utils/LogError";
 import { motion } from "framer-motion";
-import SettingsTable from "../../../../components/servers/SettingsTable";
+import SettingsTable from "@/components/servers/SettingsTable";
 import { toast } from "react-hot-toast";
 import { set } from "date-fns";
 

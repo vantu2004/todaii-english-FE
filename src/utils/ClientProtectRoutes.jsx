@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useClientAuthContext } from "../hooks/clients/useClientAuthContext";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
 export const ClientProtectRoutes = ({ children }) => {
   const { authUser, isLoggedIn, loading } = useClientAuthContext();

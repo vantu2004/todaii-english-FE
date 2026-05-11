@@ -1,11 +1,11 @@
-import { createVideo } from "../../../../api/servers/videoApi";
+import { createVideo } from "@/api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { logError } from "../../../../utils/LogError";
-import VideoForm from "../../../../components/servers/manage_videos_page/VideoForm";
-import { useYoutubeDataStore } from "../../../../stores/useYoutubeDataStore";
-import { useHeaderContext } from "../../../../hooks/servers/useHeaderContext";
+import { logError } from "@/utils/LogError";
+import VideoForm from "@/components/servers/manage_videos_page/VideoForm";
+import { useYoutubeDataStore } from "@/stores/useYoutubeDataStore";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const CreateVideo = () => {
   const { setHeader } = useHeaderContext();

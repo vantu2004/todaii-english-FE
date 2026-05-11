@@ -1,6 +1,6 @@
 // src/components/dictionary/RawDetailWord.jsx
 import { Volume2, Sparkles } from "lucide-react";
-import { playAudio } from "../../../utils/playAudio";
+import { playAudio } from "@/utils/playAudio";
 
 const RawDetailWord = ({ data, onRequestAI, showAIButton }) => {
   if (!data || data.length === 0) return null;

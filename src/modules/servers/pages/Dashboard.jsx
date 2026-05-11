@@ -25,13 +25,13 @@ import {
   getAdminDashboard,
   getUserChart,
   getGuestChart,
-} from "../../../api/servers/dashboardApi";
-import AdminSection from "../../../components/servers/manage_dashboard_page/AdminSection";
-import ClientActivitySection from "../../../components/servers/manage_dashboard_page/ClientActivitySection";
-import SummaryStats from "../../../components/servers/manage_dashboard_page/SummaryStats";
-import { logError } from "../../../utils/LogError";
-import { useHeaderContext } from "../../../hooks/servers/useHeaderContext";
-import { formatDate } from "../../../utils/FormatDate";
+} from "@/api/servers/dashboardApi";
+import AdminSection from "@/components/servers/manage_dashboard_page/AdminSection";
+import ClientActivitySection from "@/components/servers/manage_dashboard_page/ClientActivitySection";
+import SummaryStats from "@/components/servers/manage_dashboard_page/SummaryStats";
+import { logError } from "@/utils/LogError";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { formatDate } from "@/utils/FormatDate";
 import { set } from "date-fns";
 
 ChartJS.register(

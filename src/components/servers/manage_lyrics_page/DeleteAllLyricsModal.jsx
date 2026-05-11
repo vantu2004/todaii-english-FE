@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "../Modal";
+import Modal from "@/components/servers/Modal";
 import { AlertTriangle, Trash2 } from "lucide-react";
 
 const DeleteAllLyricsModal = ({ isOpen, onClose, onConfirm }) => {

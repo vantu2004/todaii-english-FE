@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { fadeIn } from "../../animations/fadeIn.js";
-import { slideUp } from "../../animations/slideUp.js";
-import { staggerContainer } from "../../animations/staggerContainer.js";
+import { fadeIn } from "@/animations/fadeIn.js";
+import { slideUp } from "@/animations/slideUp.js";
+import { staggerContainer } from "@/animations/staggerContainer.js";
 import { Star } from "lucide-react";
 
 const testimonials = [

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatISODate } from "../../../utils/FormatDate";
+import { formatISODate } from "@/utils/FormatDate";
 import { PlayCircle, Clapperboard, Eye, Calendar } from "lucide-react";
 
 const RelatedVideos = ({ videos }) => {

@@ -4,14 +4,14 @@ import {
   getWordByHeadword,
   getRawWord,
   getWordByGemini,
-} from "../../../api/clients/dictionaryApi";
+} from "@/api/clients/dictionaryApi";
 
-import SearchHistory from "../../../components/clients/dictionary_page/SearchHistory";
-import DictDetailWord from "../../../components/clients/dictionary_page/DictDetailWord";
-import RawDetailWord from "../../../components/clients/dictionary_page/RawDetailWord";
-import AIChatBox from "../../../components/clients/dictionary_page/AIChatBox";
-import SearchBar from "../../../components/clients/SearchBar";
-import RelatedWords from "../../../components/clients/dictionary_page/RelatedWords";
+import SearchHistory from "@/components/clients/dictionary_page/SearchHistory";
+import DictDetailWord from "@/components/clients/dictionary_page/DictDetailWord";
+import RawDetailWord from "@/components/clients/dictionary_page/RawDetailWord";
+import AIChatBox from "@/components/clients/dictionary_page/AIChatBox";
+import SearchBar from "@/components/clients/SearchBar";
+import RelatedWords from "@/components/clients/dictionary_page/RelatedWords";
 
 import { motion, AnimatePresence } from "framer-motion";
 
