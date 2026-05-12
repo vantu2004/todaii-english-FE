@@ -11,6 +11,7 @@ import {
   Volume2,
   Eye,
   Info,
+  List,
 } from "lucide-react";
 import { deleteToeicTest } from "@/api/servers/toeicTestApi";
 import { logError } from "@/utils/LogError";
@@ -23,6 +24,7 @@ const ToeicTestsTable = ({
   query,
   updateQuery,
   onEdit,
+  onManageContent,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -199,6 +201,13 @@ const ToeicTestsTable = ({
                       title="Edit Test"
                     >
                       <Pencil className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => onManageContent(item)}
+                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                      title="Manage Content"
+                    >
+                      <List className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(i)}
