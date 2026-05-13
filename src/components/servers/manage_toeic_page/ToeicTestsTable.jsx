@@ -31,8 +31,17 @@ const ToeicTestsTable = ({
   const [playingIndex, setPlayingIndex] = useState(null);
   const [metadataIndex, setMetadataIndex] = useState(null);
 
-  const getAudioUrl = (item) => item.audio_request?.uploaded_audio || item.audio_request?.audio_url || item.audio_url || item.audioUrl;
-  const getImageUrl = (item) => item.image_request?.uploaded_image || item.image_request?.image_url || item.image_url || item.imageUrl || item.thumbnail;
+  const getAudioUrl = (item) =>
+    item.audio_request?.uploaded_audio ||
+    item.audio_request?.audio_url ||
+    item.audio_url ||
+    item.audioUrl;
+  const getImageUrl = (item) =>
+    item.image_request?.uploaded_image ||
+    item.image_request?.image_url ||
+    item.image_url ||
+    item.imageUrl ||
+    item.thumbnail;
 
   const handleMetadataClick = (index) => {
     setMetadataIndex(index);
@@ -161,9 +170,7 @@ const ToeicTestsTable = ({
                 <td className="px-4 py-3 text-sm">
                   {getAudioUrl(item) ? (
                     <button
-                      onClick={() =>
-                        handlePlayAudio(i, getAudioUrl(item))
-                      }
+                      onClick={() => handlePlayAudio(i, getAudioUrl(item))}
                       disabled={playingIndex === i}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
                     >

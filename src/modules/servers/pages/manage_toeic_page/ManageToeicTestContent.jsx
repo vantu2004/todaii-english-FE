@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { getToeicTestById } from "@/api/servers/toeicTestApi";
-import { getQuestionsByPartNumber, deleteQuestion } from "@/api/servers/toeicQuestionApi";
-import { getPassagesByPartNumber, deletePassage } from "@/api/servers/toeicPassageApi";
+import {
+  getQuestionsByPartNumber,
+  deleteQuestion,
+} from "@/api/servers/toeicQuestionApi";
+import {
+  getPassagesByPartNumber,
+  deletePassage,
+} from "@/api/servers/toeicPassageApi";
 import { logError } from "@/utils/LogError";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -105,7 +111,11 @@ const ManageToeicTestContent = () => {
   };
 
   const handleDeletePassage = async (passageId) => {
-    if (window.confirm("Are you sure you want to delete this passage? It may delete associated questions.")) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this passage? It may delete associated questions.",
+      )
+    ) {
       try {
         await deletePassage(passageId);
         toast.success("Passage deleted");

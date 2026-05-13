@@ -2,7 +2,9 @@ import { serverInstance } from "@/config/axios";
 
 export const getPassagesByPartNumber = async (testId, partNumber) => {
   try {
-    const response = await serverInstance.get(`/toeic/test/${testId}/part/${partNumber}/passage`);
+    const response = await serverInstance.get(
+      `/toeic/test/${testId}/part/${partNumber}/passage`,
+    );
     return response.data;
   } catch (err) {
     console.error("Error:", err);
@@ -22,7 +24,10 @@ export const getPassageById = async (passageId) => {
 
 export const createPassage = async (testId, partNumber, data) => {
   try {
-    const response = await serverInstance.post(`/toeic/test/${testId}/part/${partNumber}/passage`, data);
+    const response = await serverInstance.post(
+      `/toeic/test/${testId}/part/${partNumber}/passage`,
+      data,
+    );
     return response.data;
   } catch (err) {
     console.error("Error:", err);
@@ -32,7 +37,10 @@ export const createPassage = async (testId, partNumber, data) => {
 
 export const updatePassage = async (passageId, data) => {
   try {
-    const response = await serverInstance.put(`/toeic/passage/${passageId}`, data);
+    const response = await serverInstance.put(
+      `/toeic/passage/${passageId}`,
+      data,
+    );
     return response.data;
   } catch (err) {
     console.error("Error:", err);

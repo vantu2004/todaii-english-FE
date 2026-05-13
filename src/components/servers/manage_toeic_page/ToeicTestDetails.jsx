@@ -79,7 +79,10 @@ const ToeicTestDetails = ({ test }) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-            <Activity size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+            <Activity
+              size={18}
+              className="text-indigo-600 flex-shrink-0 mt-0.5"
+            />
             <div>
               <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
                 Test Type
@@ -103,7 +106,10 @@ const ToeicTestDetails = ({ test }) => {
           </div>
 
           <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-            <Layers size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+            <Layers
+              size={18}
+              className="text-indigo-600 flex-shrink-0 mt-0.5"
+            />
             <div>
               <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
                 Collection
@@ -115,7 +121,10 @@ const ToeicTestDetails = ({ test }) => {
           </div>
 
           <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-            <FileText size={18} className="text-indigo-600 flex-shrink-0 mt-0.5" />
+            <FileText
+              size={18}
+              className="text-indigo-600 flex-shrink-0 mt-0.5"
+            />
             <div>
               <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
                 Status
@@ -125,8 +134,8 @@ const ToeicTestDetails = ({ test }) => {
                   test.status === "PUBLISHED"
                     ? "bg-green-100 text-green-700"
                     : test.status === "ARCHIVED"
-                    ? "bg-gray-200 text-gray-700"
-                    : "bg-yellow-100 text-yellow-700"
+                      ? "bg-gray-200 text-gray-700"
+                      : "bg-yellow-100 text-yellow-700"
                 }`}
               >
                 {test.status}

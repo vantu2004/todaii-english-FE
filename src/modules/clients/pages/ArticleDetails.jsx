@@ -14,9 +14,12 @@ const ArticleDetails = () => {
   const { id } = useParams();
   const { article, loading } = useArticleDetails(id);
 
-  if (loading) return (<div className="min-h-screen bg-surface-primary dark:bg-neutral-950 flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
-  </div>);
+  if (loading)
+    return (
+      <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
+      </div>
+    );
   if (!article) return <PageNotFound />;
 
   const data = {
