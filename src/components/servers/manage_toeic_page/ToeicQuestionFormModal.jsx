@@ -1,37 +1,12 @@
 import { useState, useEffect } from "react";
 import Modal from "@/components/servers/Modal";
-import {
-  Save,
-  Image as ImageIcon,
-  FileAudio,
-  FileText,
-  CheckSquare,
-  AlignLeft,
-  Tags,
-} from "lucide-react";
-import {
-  uploadToeicTestFile,
-  deleteToeicTestFile,
-} from "@/api/servers/toeicTestApi";
-import {
-  createPart12Question,
-  updatePart12Question,
-  createPart34567Question,
-  updatePart34567Question,
-} from "@/api/servers/toeicQuestionApi";
+import { Save, Image as ImageIcon, FileAudio, FileText, CheckSquare, AlignLeft, Tags } from "lucide-react";
+import { uploadToeicTestFile, deleteToeicTestFile } from "@/api/servers/toeicTestApi";
+import { createPart12Question, updatePart12Question, createPart34567Question, updatePart34567Question } from "@/api/servers/toeicQuestionApi";
 import { logError } from "@/utils/LogError";
 import toast from "react-hot-toast";
 
-const ToeicQuestionFormModal = ({
-  isOpen,
-  onClose,
-  initialData,
-  partNumber,
-  testId,
-  passages,
-  tags,
-  onSuccess,
-}) => {
+const ToeicQuestionFormModal = ({ isOpen, onClose, initialData, partNumber, testId, passages, tags, onSuccess }) => {
   const isUpdate = !!initialData;
   const isPart12 = partNumber === 1 || partNumber === 2;
   const isPart5 = partNumber === 5;
@@ -71,14 +46,8 @@ const ToeicQuestionFormModal = ({
         explanation: initialData.explanation || "",
         passageId: initialData.passage_id || "",
         tagIds: initialData.tags?.map((t) => t.id) || initialData.tag_ids || [],
-        imageUrl:
-          initialData.image_request?.uploaded_image ||
-          initialData.image_request?.image_url ||
-          "",
-        audioUrl:
-          initialData.audio_request?.uploaded_audio ||
-          initialData.audio_request?.audio_url ||
-          "",
+        imageUrl: initialData.image_request?.uploaded_image || initialData.image_request?.image_url || "",
+        audioUrl: initialData.audio_request?.uploaded_audio || initialData.audio_request?.audio_url || "",
       });
     } else {
       setFormData({
@@ -111,9 +80,7 @@ const ToeicQuestionFormModal = ({
         ...prev,
         [type === "image" ? "imageUrl" : "audioUrl"]: url,
       }));
-      toast.success(
-        `${type === "image" ? "Image" : "Audio"} uploaded successfully!`,
-      );
+      toast.success(`${type === "image" ? "Image" : "Audio"} uploaded successfully!`);
     } catch (err) {
       logError(err);
       toast.error(`Failed to upload ${type}`);
@@ -156,15 +123,15 @@ const ToeicQuestionFormModal = ({
 
   const toggleTag = (tagId) => {
     setFormData((prev) => {
-      const isSelected = prev.tag_ids.includes(tagId);
+      const isSelected = prev.tagIds.includes(tagId);
       if (isSelected) {
-        return { ...prev, tag_ids: prev.tag_ids.filter((id) => id !== tagId) };
+        return { ...prev, tagIds: prev.tagIds.filter((id) => id !== tagId) };
       } else {
-        if (prev.tag_ids.length >= 5) {
+        if (prev.tagIds.length >= 5) {
           toast.error("Maximum 5 tags allowed");
           return prev;
         }
-        return { ...prev, tag_ids: [...prev.tag_ids, tagId] };
+        return { ...prev, tagIds: [...prev.tagIds, tagId] };
       }
     });
   };
@@ -172,7 +139,7 @@ const ToeicQuestionFormModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.tag_ids.length === 0) {
+    if (formData.tagIds.length === 0) {
       toast.error("At least one tag must be selected");
       return;
     }
@@ -187,20 +154,12 @@ const ToeicQuestionFormModal = ({
           explanation: formData.explanation,
           tag_ids: formData.tagIds,
           image_request: {
-            uploaded_image: formData.imageUrl?.includes("cloudinary")
-              ? formData.imageUrl
-              : "",
-            image_url: !formData.imageUrl?.includes("cloudinary")
-              ? formData.imageUrl
-              : "",
+            uploaded_image: formData.imageUrl?.includes("cloudinary") ? formData.imageUrl : "",
+            image_url: !formData.imageUrl?.includes("cloudinary") ? formData.imageUrl : "",
           },
           audio_request: {
-            uploaded_audio: formData.audioUrl?.includes("cloudinary")
-              ? formData.audioUrl
-              : "",
-            audio_url: !formData.audioUrl?.includes("cloudinary")
-              ? formData.audioUrl
-              : "",
+            uploaded_audio: formData.audioUrl?.includes("cloudinary") ? formData.audioUrl : "",
+            audio_url: !formData.audioUrl?.includes("cloudinary") ? formData.audioUrl : "",
           },
         };
 
@@ -235,7 +194,6 @@ const ToeicQuestionFormModal = ({
       onSuccess();
     } catch (err) {
       logError(err);
-      toast.error(err.response?.data?.message || "Failed to save question");
     } finally {
       setIsSubmitting(false);
     }
@@ -245,11 +203,7 @@ const ToeicQuestionFormModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={
-        isUpdate
-          ? `Update Question (Part ${partNumber})`
-          : `Create Question (Part ${partNumber})`
-      }
+      title={isUpdate ? `Update Question (Part ${partNumber})` : `Create Question (Part ${partNumber})`}
       width="sm:max-w-4xl"
       footer={
         <div className="flex justify-end gap-3 w-full">
@@ -272,6 +226,7 @@ const ToeicQuestionFormModal = ({
     >
       <form className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           {/* PASSAGE SELECTION (Part 3, 4, 6, 7) */}
           {!isPart12 && !isPart5 && (
             <div className="md:col-span-2">
@@ -301,8 +256,7 @@ const ToeicQuestionFormModal = ({
             <div className="md:col-span-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 <FileText size={16} className="text-blue-600" />
-                Question Text{" "}
-                {!isPart6 && <span className="text-red-500">*</span>}
+                Question Text {!isPart6 && <span className="text-red-500">*</span>}
               </label>
               <textarea
                 name="question"
@@ -337,56 +291,20 @@ const ToeicQuestionFormModal = ({
           {!isPart12 && (
             <>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Option A <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="optionA"
-                  value={formData.optionA}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
-                />
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Option A <span className="text-red-500">*</span></label>
+                <input type="text" name="optionA" value={formData.optionA} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Option B <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="optionB"
-                  value={formData.optionB}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
-                />
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Option B <span className="text-red-500">*</span></label>
+                <input type="text" name="optionB" value={formData.optionB} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Option C <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="optionC"
-                  value={formData.optionC}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
-                />
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Option C <span className="text-red-500">*</span></label>
+                <input type="text" name="optionC" value={formData.optionC} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Option D <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  name="optionD"
-                  value={formData.optionD}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
-                />
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Option D <span className="text-red-500">*</span></label>
+                <input type="text" name="optionD" value={formData.optionD} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none" />
               </div>
             </>
           )}
@@ -418,27 +336,18 @@ const ToeicQuestionFormModal = ({
             </label>
             <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-750">
               {tags.map((tag) => (
-                <label
-                  key={tag.id}
-                  className="flex items-center gap-2 cursor-pointer bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600 hover:border-blue-400 transition"
-                >
+                <label key={tag.id} className="flex items-center gap-2 cursor-pointer bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600 hover:border-blue-400 transition">
                   <input
                     type="checkbox"
                     checked={formData.tagIds.includes(tag.id)}
                     onChange={() => toggleTag(tag.id)}
                     className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    {tag.name}
-                  </span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{tag.name}</span>
                 </label>
               ))}
             </div>
-            {formData.tag_ids.length === 0 && (
-              <p className="text-xs text-red-500 mt-1">
-                Please select at least one tag
-              </p>
-            )}
+            {formData.tagIds.length === 0 && <p className="text-xs text-red-500 mt-1">Please select at least one tag</p>}
           </div>
 
           {/* EXPLANATION */}
@@ -464,30 +373,15 @@ const ToeicQuestionFormModal = ({
                 <div className="flex items-center justify-between mb-2">
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                     <ImageIcon size={16} className="text-blue-600" />
-                    Image URL{" "}
-                    {partNumber === 1 && (
-                      <span className="text-red-500">*</span>
-                    )}
+                    Image URL {partNumber === 1 && <span className="text-red-500">*</span>}
                   </label>
                   <div className="flex gap-2 items-center">
-                    <label
-                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
-                    >
+                    <label className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
                       {isUploadingImage ? "Uploading..." : "Upload Image"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleUploadFile(e, "image")}
-                      />
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => handleUploadFile(e, 'image')} />
                     </label>
-                    {formData.imageUrl?.includes("cloudinary") && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteFile("image")}
-                        disabled={isDeletingImage}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
-                      >
+                    {formData.imageUrl?.includes('cloudinary') && (
+                      <button type="button" onClick={() => handleDeleteFile('image')} disabled={isDeletingImage} className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors">
                         {isDeletingImage ? "Removing..." : "Remove Uploaded"}
                       </button>
                     )}
@@ -500,7 +394,7 @@ const ToeicQuestionFormModal = ({
                   onChange={handleChange}
                   placeholder="https://example.com/image.jpg"
                   className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
-                  disabled={formData.imageUrl?.includes("cloudinary")}
+                  disabled={formData.imageUrl?.includes('cloudinary')}
                   required={partNumber === 1}
                 />
                 {formData.imageUrl && (
@@ -508,9 +402,7 @@ const ToeicQuestionFormModal = ({
                     src={formData.imageUrl}
                     alt="Preview"
                     className="w-full h-auto object-cover rounded max-h-48 border border-gray-200"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
+                    onError={(e) => { e.target.style.display = "none"; }}
                   />
                 )}
               </div>
@@ -522,24 +414,12 @@ const ToeicQuestionFormModal = ({
                     Audio URL <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-2 items-center">
-                    <label
-                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
-                    >
+                    <label className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? 'opacity-50 pointer-events-none' : ''}`}>
                       {isUploadingAudio ? "Uploading..." : "Upload Audio"}
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="hidden"
-                        onChange={(e) => handleUploadFile(e, "audio")}
-                      />
+                      <input type="file" accept="audio/*" className="hidden" onChange={(e) => handleUploadFile(e, 'audio')} />
                     </label>
-                    {formData.audioUrl?.includes("cloudinary") && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteFile("audio")}
-                        disabled={isDeletingAudio}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
-                      >
+                    {formData.audioUrl?.includes('cloudinary') && (
+                      <button type="button" onClick={() => handleDeleteFile('audio')} disabled={isDeletingAudio} className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors">
                         {isDeletingAudio ? "Removing..." : "Remove Uploaded"}
                       </button>
                     )}
@@ -552,7 +432,7 @@ const ToeicQuestionFormModal = ({
                   onChange={handleChange}
                   placeholder="https://example.com/audio.mp3"
                   className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
-                  disabled={formData.audioUrl?.includes("cloudinary")}
+                  disabled={formData.audioUrl?.includes('cloudinary')}
                   required
                 />
                 {formData.audioUrl && (
@@ -563,6 +443,7 @@ const ToeicQuestionFormModal = ({
               </div>
             </>
           )}
+
         </div>
       </form>
     </Modal>
