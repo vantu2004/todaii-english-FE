@@ -4,15 +4,14 @@ import {
   House,
   User,
   LogOut,
-  BookOpen,
   TvMinimalPlay,
-  FileText,
   BookA,
   ChevronDown,
   ArrowRight,
   NotebookPen,
   GraduationCap,
   BookMarked,
+  Languages,
 } from "lucide-react";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
@@ -20,8 +19,10 @@ const navItems = [
   { label: "Trang chủ", path: "/client", icon: House, end: true },
   { label: "Video", path: "/client/video", icon: TvMinimalPlay },
   { label: "Từ điển", path: "/client/dictionary", icon: BookA },
+  { label: "Google dịch", path: "/client/gg-translate", icon: Languages },
   { label: "Học từ vựng", path: "/client/vocabulary", icon: GraduationCap },
   { label: "Sổ tay", path: "/client/notebook", icon: NotebookPen },
+  { label: "TOEIC", path: "/client/toeic", icon: GraduationCap },
 ];
 
 const ClientNavBar = () => {

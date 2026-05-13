@@ -20,6 +20,7 @@ import Video from "@/modules/clients/pages/Video";
 import VideoFilter from "@/modules/clients/pages/VideoFilter";
 import VideoDetails from "@/modules/clients/pages/VideoDetails";
 import Dictionary from "@/modules/clients/pages/Dictionary";
+import GGTranslate from "@/modules/clients/pages/GGTranslate";
 import Notebook from "@/modules/clients/pages/NoteBook";
 import VocabularyFilter from "@/modules/clients/pages/VocabularyFilter";
 import VocabDeckDetails from "@/modules/clients/pages/VocabDeckDetails";
@@ -86,6 +87,7 @@ export default function ClientRoutes() {
           <Route path="/video/filter" element={<VideoFilter />}></Route>
           <Route path="/video/:id" element={<VideoDetails />}></Route>
           <Route path="/dictionary" element={<Dictionary />}></Route>
+          <Route path="/gg-translate" element={<GGTranslate />}></Route>
           <Route path="/vocabulary" element={<VocabularyFilter />}></Route>
           <Route path="/vocabulary/:id" element={<VocabDeckDetails />}></Route>
 
