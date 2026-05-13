@@ -67,8 +67,6 @@ const VideoDetails = () => {
         setLyrics(data || []);
       } catch (err) {
         logError(err);
-      } finally {
-        setLoading(false);
       }
     };
 

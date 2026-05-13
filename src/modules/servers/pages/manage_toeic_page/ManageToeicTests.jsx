@@ -95,6 +95,10 @@ const ManageToeicTests = () => {
     navigate(`/server/toeic-test/${test.id}/update`);
   };
 
+  const handleOpenContent = (test) => {
+    navigate(`/server/toeic-test/${test.id}/content`);
+  };
+
   return (
     <>
       <div className="flex flex-col h-full">
@@ -114,6 +118,7 @@ const ManageToeicTests = () => {
             query={query}
             updateQuery={updateQuery}
             onEdit={handleOpenUpdate}
+            onManageContent={handleOpenContent}
           />
         </motion.div>
 

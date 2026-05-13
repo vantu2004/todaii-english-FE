@@ -48,6 +48,7 @@ import ManageToeicTags from "@/modules/servers/pages/manage_toeic_page/ManageToe
 import ManageToeicTests from "@/modules/servers/pages/manage_toeic_page/ManageToeicTests";
 import CreateToeicTest from "@/modules/servers/pages/manage_toeic_page/CreateToeicTest";
 import UpdateToeicTest from "@/modules/servers/pages/manage_toeic_page/UpdateToeicTest";
+import ManageToeicTestContent from "@/modules/servers/pages/manage_toeic_page/ManageToeicTestContent";
 
 export default function ServerRoutes() {
   return (
@@ -432,6 +433,17 @@ export default function ServerRoutes() {
                   rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
                 >
                   <UpdateToeicTest />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/toeic-test/:id/content"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageToeicTestContent />
                 </ServerProtectRoutes>
               }
             />

@@ -9,9 +9,13 @@ import {
   ArrowDown,
   AlertTriangle,
   Volume2,
+  Eye,
+  Info,
+  List,
 } from "lucide-react";
 import { deleteToeicTest } from "@/api/servers/toeicTestApi";
 import { logError } from "@/utils/LogError";
+import ToeicTestDetails from "./ToeicTestDetails";
 
 const ToeicTestsTable = ({
   columns,
@@ -20,10 +24,19 @@ const ToeicTestsTable = ({
   query,
   updateQuery,
   onEdit,
+  onManageContent,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [playingIndex, setPlayingIndex] = useState(null);
+  const [metadataIndex, setMetadataIndex] = useState(null);
+
+  const getAudioUrl = (item) => item.audio_request?.uploaded_audio || item.audio_request?.audio_url || item.audio_url || item.audioUrl;
+  const getImageUrl = (item) => item.image_request?.uploaded_image || item.image_request?.image_url || item.image_url || item.imageUrl || item.thumbnail;
+
+  const handleMetadataClick = (index) => {
+    setMetadataIndex(index);
+  };
 
   const handlePlayAudio = async (index, audio_url) => {
     if (audio_url) {
@@ -146,10 +159,10 @@ const ToeicTestsTable = ({
                 </td>
                 <td className="px-4 py-3 text-sm">{item.duration}m</td>
                 <td className="px-4 py-3 text-sm">
-                  {item.audio_url || item.audioUrl ? (
+                  {getAudioUrl(item) ? (
                     <button
                       onClick={() =>
-                        handlePlayAudio(i, item.audio_url || item.audioUrl)
+                        handlePlayAudio(i, getAudioUrl(item))
                       }
                       disabled={playingIndex === i}
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
@@ -176,10 +189,25 @@ const ToeicTestsTable = ({
                 <td className="px-4 py-3">
                   <div className="flex items-center space-x-3 text-sm">
                     <button
+                      onClick={() => handleMetadataClick(i)}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="View Metadata"
+                    >
+                      <Eye className="w-5 h-5" />
+                    </button>
+                    <button
                       onClick={() => onEdit(item)}
                       className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      title="Edit Test"
                     >
                       <Pencil className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => onManageContent(item)}
+                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                      title="Manage Content"
+                    >
+                      <List className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(i)}
@@ -252,6 +280,41 @@ const ToeicTestsTable = ({
               </p>
             </div>
           </div>
+        </Modal>
+      )}
+
+      {metadataIndex !== null && (
+        <Modal
+          isOpen={true}
+          onClose={() => setMetadataIndex(null)}
+          width="sm:max-w-5xl"
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
+                <Info className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Test Details
+                </h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Detailed information about the test
+                </p>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setMetadataIndex(null)}
+                className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <ToeicTestDetails test={tests[metadataIndex]} />
         </Modal>
       )}
     </>
