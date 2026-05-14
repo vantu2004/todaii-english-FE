@@ -75,7 +75,7 @@ const ManageAdmins = () => {
 
   useEffect(() => {
     setHeader({
-      title: "Manage Users",
+      title: "Manage Admins",
       breadcrumb: [
         { label: "Home", to: "/server" },
         { label: "Manage Admins" },
@@ -124,7 +124,7 @@ const ManageAdmins = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden ring-1 ring-neutral-200 dark:ring-neutral-800 rounded-xl"
+        className="flex-1 overflow-hidden border border-gray-200 dark:border-gray-800 rounded-lg"
       >
         <AdminsTable
           columns={columns}

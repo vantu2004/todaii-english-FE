@@ -24,27 +24,27 @@ const Modal = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.15 }}
           onClick={onClose} // bấm ra ngoài để đóng
         >
           {/* Modal Box */}
           <motion.div
-            className={`relative w-full mx-4 ${width} bg-white dark:bg-neutral-900 rounded-2xl shadow-xl overflow-hidden`}
-            initial={{ y: 60, opacity: 0 }}
+            className={`relative w-full mx-4 ${width} bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800 overflow-hidden`}
+            initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            exit={{ y: 20, opacity: 0 }}
+            transition={{ duration: 0.15 }}
             onClick={(e) => e.stopPropagation()} // ngăn đóng khi click bên trong
           >
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
-                <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-800">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {title}
                 </h3>
                 <button
                   onClick={onClose}
-                  className="text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                 >
                   ✕
                 </button>
@@ -58,7 +58,7 @@ const Modal = ({
 
             {/* Footer */}
             {footer && (
-              <div className="flex justify-end items-center gap-3 px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
+              <div className="flex justify-end items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
                 {footer}
               </div>
             )}

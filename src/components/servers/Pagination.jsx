@@ -30,21 +30,21 @@ const Pagination = ({ query, updateQuery, pagination }) => {
   const endItem = Math.min(query.page * query.size, pagination.totalElements);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 rounded-b-xl">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-gray-200 dark:border-gray-800">
       {/* Showing Info */}
-      <div className="text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="text-sm text-gray-500 dark:text-gray-400">
         {pagination.totalElements > 0 ? (
           <span>
             Showing{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">{startItem}</span> to{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">{endItem}</span> of{" "}
-            <span className="font-semibold text-neutral-900 dark:text-white">
+            <span className="font-semibold text-gray-900 dark:text-white">{startItem}</span> to{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">{endItem}</span> of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
               {pagination.totalElements}
             </span>{" "}
             results
           </span>
         ) : (
-          <span className="text-neutral-400 dark:text-neutral-500">No records found</span>
+          <span className="text-gray-400 dark:text-gray-500">No records found</span>
         )}
       </div>
 
@@ -54,20 +54,20 @@ const Pagination = ({ query, updateQuery, pagination }) => {
         <button
           onClick={() => updateQuery({ ...query, page: 1 })}
           disabled={pagination.first}
-          className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-neutral-900 transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="First page"
         >
-          <ChevronsLeft className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+          <ChevronsLeft className="w-4 h-4 text-gray-500 dark:text-gray-400" />
         </button>
 
         {/* Previous */}
         <button
           onClick={() => updateQuery({ ...query, page: query.page - 1 })}
           disabled={pagination.first}
-          className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-neutral-900 transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Previous page"
         >
-          <ChevronLeft className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+          <ChevronLeft className="w-4 h-4 text-gray-500 dark:text-gray-400" />
         </button>
 
         {/* Page Numbers */}
@@ -76,10 +76,10 @@ const Pagination = ({ query, updateQuery, pagination }) => {
             <button
               key={pageNum}
               onClick={() => updateQuery({ ...query, page: pageNum })}
-              className={`min-w-[2.5rem] px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+              className={`min-w-[2.25rem] px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
                 query.page === pageNum
-                  ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-sm"
-                  : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-700"
+                  ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700"
               }`}
             >
               {pageNum}
@@ -91,20 +91,20 @@ const Pagination = ({ query, updateQuery, pagination }) => {
         <button
           onClick={() => updateQuery({ ...query, page: query.page + 1 })}
           disabled={pagination.last}
-          className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-neutral-900 transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Next page"
         >
-          <ChevronRight className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+          <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
         </button>
 
         {/* Last Page */}
         <button
           onClick={() => updateQuery({ ...query, page: pagination.totalPages })}
           disabled={pagination.last}
-          className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-neutral-900 transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Last page"
         >
-          <ChevronsRight className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+          <ChevronsRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
         </button>
       </nav>
     </div>
