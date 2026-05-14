@@ -66,8 +66,8 @@ const DictionarySearchPanel = ({
   };
 
   return (
-    <div className="lg:col-span-2 flex flex-col overflow-y-auto">
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-5 flex flex-col h-full ">
+    <div className="flex-1 flex flex-col min-h-0 lg:border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <div className="p-4 sm:p-5 flex-shrink-0 border-b border-gray-100 dark:border-gray-800">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -83,7 +83,7 @@ const DictionarySearchPanel = ({
         </div>
 
         {/* Search Input */}
-        <div className="relative mb-6">
+        <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
@@ -93,16 +93,19 @@ const DictionarySearchPanel = ({
             className="w-full pl-12 pr-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 text-sm"
           />
         </div>
+      </div>
 
+      <div className="flex-1 min-h-0 flex flex-col">
         {/* Custom Word Form */}
         {showAddCustom && (
-          <AddCustomWordForm
-            onAdd={onAddCustomWord}
-            onClose={() => setShowAddCustom(false)}
-          />
+          <div className="px-4 sm:px-5 pt-4 border-b border-gray-100 dark:border-gray-800">
+            <AddCustomWordForm
+              onAdd={onAddCustomWord}
+              onClose={() => setShowAddCustom(false)}
+            />
+          </div>
         )}
 
-        {/* Words List */}
         <DictionaryWordsList
           words={dictionaryWords}
           isWordSelected={isWordSelected}

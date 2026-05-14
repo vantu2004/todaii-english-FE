@@ -22,59 +22,57 @@ const DictionaryWordsList = ({
   }
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
+    <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800">
       {words.map((word) => {
         const isSelected = isWordSelected(word.id);
         return (
           <div
             key={word.id}
             onClick={() => onSelectWord(word.id)}
-            className={`p-3 sm:p-3.5 md:p-4 rounded-lg border cursor-pointer transition-all ${
+            className={`p-3 sm:p-4 flex items-center justify-between gap-4 cursor-pointer transition-colors group ${
               isSelected
-                ? "bg-gray-50 dark:bg-gray-800 border-gray-900 dark:border-gray-100 shadow-sm ring-1 ring-gray-900 dark:ring-gray-100"
-                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-sm"
+                ? "bg-gray-50 dark:bg-gray-800/80"
+                : "bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50"
             }`}
           >
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex items-start gap-2 sm:gap-2.5 md:gap-3 flex-1 min-w-0">
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-1">
-                    ID: {word.id}
-                  </p>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 md:gap-3 mb-1">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 break-words">
-                      {word.headword}
-                    </h3>
-                    {word.ipa && (
-                      <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-mono">
-                        {word.ipa}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-                  {word.audio_url && (
-                    <button
-                      onClick={(e) => playAudioWithEvent(e, word.audio_url)}
-                      className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                    >
-                      <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
-                    </button>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex-shrink-0 w-8 text-xs text-gray-400">
+                #{word.id}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                    {word.headword}
+                  </h3>
+                  {word.ipa && (
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">
+                      {word.ipa}
+                    </span>
                   )}
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onViewWord(word);
-                    }}
-                    className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                  >
-                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
-                  </button>
                 </div>
               </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-1 flex-shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+              {word.audio_url && (
+                <button
+                  onClick={(e) => playAudioWithEvent(e, word.audio_url)}
+                  className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
+                >
+                  <Volume2 className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
+                </button>
+              )}
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onViewWord(word);
+                }}
+                className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors"
+              >
+                <Eye className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
+              </button>
             </div>
           </div>
         );

@@ -8,8 +8,8 @@ const SelectedWordsPanel = ({
   onViewWord,
 }) => {
   return (
-    <div className="lg:col-span-1 h-full flex flex-col min-h-0">
-      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 sm:p-5 flex flex-col h-full lg:max-h-[calc(100vh-200px)]">
+    <div className="w-full lg:w-[360px] xl:w-[400px] h-full flex flex-col min-h-0 bg-gray-50 dark:bg-gray-900/50 flex-shrink-0">
+      <div className="p-4 sm:p-5 flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">

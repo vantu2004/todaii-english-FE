@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { fetchTopicsNoPaged } from "@/api/servers/topicApi";
-import { ChevronDown } from "lucide-react";
+import {
+  ChevronDown,
+  Clock4,
+  Image,
+  Newspaper,
+  SquareCode,
+  User,
+} from "lucide-react";
 import { logError } from "@/utils/LogError";
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
@@ -85,13 +92,13 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
     {
       id: "title",
       title: "Article Title",
-      icon: "📝",
+      icon: <Newspaper />,
       fields: [{ label: "Title", name: "title", required: true, type: "text" }],
     },
     {
       id: "source",
       title: "Source Information",
-      icon: "🔗",
+      icon: <SquareCode />,
       fields: [
         {
           label: "Source Name",
@@ -111,7 +118,7 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
     {
       id: "author",
       title: "Author Information",
-      icon: "✍️",
+      icon: <User />,
       fields: [
         { label: "Author Name", name: "author", required: true, type: "text" },
       ],
@@ -119,7 +126,7 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
     {
       id: "media",
       title: "Media & Description",
-      icon: "🖼️",
+      icon: <Image />,
       fields: [
         { label: "Image URL", name: "image_url", type: "text" },
         {
@@ -133,7 +140,7 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
     {
       id: "meta",
       title: "Metadata",
-      icon: "⚙️",
+      icon: <Clock4 />,
       fields: [
         {
           label: "Published At",
