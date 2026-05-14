@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 const ServerLayout = () => {
   return (
-    <div className="font-inter flex h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
+    <div className="font-inter flex h-screen bg-neutral-50 dark:bg-neutral-950 overflow-hidden">
       <Sidebar />
 
       <div className="flex flex-col flex-1 overflow-hidden">

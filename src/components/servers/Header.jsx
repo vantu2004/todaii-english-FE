@@ -6,10 +6,10 @@ const Header = () => {
   const { header } = useHeaderContext();
 
   return (
-    <header className="z-10 px-6 py-5 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <header className="z-10 px-6 py-5 bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800">
       <div className="container">
         {/* Title */}
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-white mb-2">
           {header.title}
         </h1>
 
@@ -20,18 +20,18 @@ const Header = () => {
               {item.to ? (
                 <Link
                   to={item.to}
-                  className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                  className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className="text-gray-900 dark:text-white font-medium">
+                <span className="text-neutral-900 dark:text-white font-medium">
                   {item.label}
                 </span>
               )}
 
               {index < header.breadcrumb.length - 1 && (
-                <ChevronRight className="w-3.5 h-3.5 text-gray-400 dark:text-gray-600" />
+                <ChevronRight className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-600" />
               )}
             </div>
           ))}

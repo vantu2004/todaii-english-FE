@@ -26,6 +26,7 @@ package-lock.json
 
 .env
 
-GEMINI.md
+GEMINI_CLIENT.md
+GEMINI_SERVER.md
 
 .agents/

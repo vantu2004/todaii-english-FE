@@ -1,12 +1,16 @@
 const ChartContainer = ({ title, subtitle, children, className = "" }) => (
   <div
-    className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700 h-full ${className}`}
+    className={`bg-white dark:bg-neutral-900 rounded-xl p-5 ring-1 ring-neutral-200 dark:ring-neutral-800 h-full flex flex-col ${className}`}
   >
-    <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-1">
+    <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">
       {title}
     </h3>
-    {subtitle && <p className="text-xs text-gray-500 mb-6">{subtitle}</p>}
-    <div className="relative w-full h-64 md:h-80 flex items-center justify-center">
+    {subtitle && (
+      <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-6">
+        {subtitle}
+      </p>
+    )}
+    <div className="relative w-full h-64 md:h-80 flex items-center justify-center flex-1">
       {children}
     </div>
   </div>

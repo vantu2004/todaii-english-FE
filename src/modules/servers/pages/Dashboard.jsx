@@ -99,32 +99,33 @@ const Dashboard = () => {
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-            <LayoutDashboard className="text-blue-500" /> Dashboard Overview
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
+            <LayoutDashboard className="text-neutral-500 dark:text-neutral-400" />{" "}
+            Dashboard Overview
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
             Real-time Insights for Todaii Ecosystem
           </p>
         </div>
 
         {/* Date Filter */}
-        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
-            <CalendarIcon size={16} className="text-gray-400 mr-2" />
+        <div className="flex flex-col sm:flex-row gap-2 bg-white dark:bg-neutral-900 p-1.5 rounded-lg ring-1 ring-neutral-200 dark:ring-neutral-800">
+          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md">
+            <CalendarIcon size={16} className="text-neutral-400 mr-2" />
             <input
               type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
+              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white py-2 outline-none"
               value={dateRange.startDate}
               onChange={(e) =>
                 setDateRange({ ...dateRange, startDate: e.target.value })
               }
             />
           </div>
-          <span className="self-center text-gray-400">-</span>
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
+          <span className="self-center text-neutral-400">-</span>
+          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md">
             <input
               type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
+              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white py-2 outline-none"
               value={dateRange.endDate}
               onChange={(e) =>
                 setDateRange({ ...dateRange, endDate: e.target.value })
@@ -133,7 +134,7 @@ const Dashboard = () => {
           </div>
           <button
             onClick={fetchData}
-            className="p-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+            className="p-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-md transition-colors"
             title="Refresh Data"
           >
             <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
@@ -144,7 +145,7 @@ const Dashboard = () => {
       {/* Content Sections */}
       {loading && !summary ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-neutral-900 dark:border-white"></div>
         </div>
       ) : (
         <>
@@ -154,18 +155,18 @@ const Dashboard = () => {
           {/* (User / Guest Switcher) */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
                 <Users size={20} /> Client Activities
               </h2>
 
               {/* Toggle Switch */}
-              <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+              <div className="flex bg-neutral-100 dark:bg-neutral-800/50 p-1 rounded-lg ring-1 ring-neutral-200 dark:ring-neutral-800/50">
                 <button
                   onClick={() => setClientViewMode("user")}
                   className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
                     clientViewMode === "user"
-                      ? "bg-white dark:bg-gray-700 text-blue-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                      ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                      : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
                   }`}
                 >
                   <UserCircle size={16} /> Registered Users
@@ -174,8 +175,8 @@ const Dashboard = () => {
                   onClick={() => setClientViewMode("guest")}
                   className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
                     clientViewMode === "guest"
-                      ? "bg-white dark:bg-gray-700 text-indigo-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                      ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                      : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
                   }`}
                 >
                   <User size={16} /> Guests
@@ -193,7 +194,7 @@ const Dashboard = () => {
         </>
       )}
 
-      <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center text-sm text-gray-500">
+      <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-center text-sm text-neutral-500">
         TODAII - Team • {formatDate(new Date())}
       </div>
     </>

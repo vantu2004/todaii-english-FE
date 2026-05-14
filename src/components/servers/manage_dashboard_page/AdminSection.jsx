@@ -25,7 +25,7 @@ const AdminSection = ({ data }) => {
 
   return (
     <div className="mb-8">
-      <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
         <Cpu size={20} /> System & 3rd Party Integrations (Server-Side)
       </h2>
 
@@ -42,7 +42,9 @@ const AdminSection = ({ data }) => {
               }}
             />
           ) : (
-            <p>No Data</p>
+            <p className="text-sm text-neutral-400 dark:text-neutral-500">
+              No Data
+            </p>
           )}
         </ChartContainer>
 
@@ -67,7 +69,9 @@ const AdminSection = ({ data }) => {
                 }}
               />
             ) : (
-              <p>No Data</p>
+              <p className="text-sm text-neutral-400 dark:text-neutral-500">
+                No Data
+              </p>
             )}
           </div>
         </ChartContainer>
@@ -78,14 +82,14 @@ const AdminSection = ({ data }) => {
         {eventCharts.map((chart) => (
           <div
             key={chart.key}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border border-gray-100 dark:border-gray-700 flex flex-col"
+            className="bg-white dark:bg-neutral-900 rounded-xl p-5 ring-1 ring-neutral-200 dark:ring-neutral-800 flex flex-col"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <h4 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                   {chart.title}
                 </h4>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">
+                <p className="text-xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-white mt-1">
                   {chart.total.toLocaleString()}
                 </p>
               </div>

@@ -41,7 +41,9 @@ const ClientActivitySection = ({ data, type }) => {
               }}
             />
           ) : (
-            <p className="text-gray-400">No AI Usage Data</p>
+            <p className="text-neutral-500 dark:text-neutral-400">
+              No AI Usage Data
+            </p>
           )}
         </ChartContainer>
 
@@ -65,7 +67,9 @@ const ClientActivitySection = ({ data, type }) => {
                 }}
               />
             ) : (
-              <p className="text-gray-400">No Activity Data</p>
+              <p className="text-neutral-500 dark:text-neutral-400">
+                No Activity Data
+              </p>
             )}
           </div>
         </ChartContainer>
@@ -76,14 +80,14 @@ const ClientActivitySection = ({ data, type }) => {
         {eventCharts.map((chart) => (
           <div
             key={chart.key}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border border-gray-100 dark:border-gray-700 flex flex-col hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-neutral-900 rounded-xl p-5 ring-1 ring-neutral-200 dark:ring-neutral-800 flex flex-col hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
-                <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <h4 className="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                   {chart.title}
                 </h4>
-                <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">
+                <p className="text-xl font-semibold tabular-nums tracking-tight text-neutral-900 dark:text-white mt-1">
                   {chart.total.toLocaleString()}
                 </p>
               </div>

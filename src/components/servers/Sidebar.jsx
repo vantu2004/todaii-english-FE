@@ -209,14 +209,14 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="hidden w-64 bg-white md:flex md:flex-col border-r border-gray-200">
+    <div className="hidden w-64 bg-white dark:bg-neutral-900 md:flex md:flex-col border-r border-neutral-200 dark:border-neutral-800 transition-colors">
       <div className="flex-1 py-6 px-3 overflow-y-auto">
         <a
           href="/server"
           className="flex items-center px-3 mb-6 text-2xl font-extrabold tracking-tight select-none"
         >
-          <span className="text-[#13183f]">Todaii</span>
-          <span className="ml-1 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-pink-500">
+          <span className="text-neutral-900 dark:text-white">Todaii</span>
+          <span className="ml-1 text-brand-500 dark:text-brand-400">
             English
           </span>
         </a>
@@ -239,8 +239,8 @@ const Sidebar = () => {
                     <div
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
                         isChildActive
-                          ? "bg-blue-50 text-blue-600"
-                          : "text-gray-700 hover:bg-gray-50"
+                          ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                       }`}
                     >
                       <Icon size={18} />
@@ -260,8 +260,8 @@ const Sidebar = () => {
                     <div
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
                         isActive
-                          ? "bg-blue-50 text-blue-600"
-                          : "text-gray-700 hover:bg-gray-50"
+                          ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                       }`}
                     >
                       <Icon size={18} />
@@ -281,8 +281,8 @@ const Sidebar = () => {
                           <div
                             className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
                               isChildItemActive
-                                ? "bg-blue-50 text-blue-600"
-                                : "text-gray-600 hover:bg-gray-50"
+                                ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white"
+                                : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                             }`}
                           >
                             <ChildIcon size={16} />
@@ -299,9 +299,9 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="p-3 border-t border-gray-200">
+      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center gap-3 py-2 mb-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
             {authUser?.avatar_url ? (
               <img
                 src={authUser.avatar_url}
@@ -309,14 +309,17 @@ const Sidebar = () => {
                 className="w-8 h-8 rounded-lg"
               />
             ) : (
-              <User className="text-blue-600" size={18} />
+              <User
+                className="text-neutral-700 dark:text-neutral-300"
+                size={18}
+              />
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-gray-900 truncate">
+            <div className="text-sm font-medium text-neutral-900 dark:text-white truncate">
               {authUser?.display_name}
             </div>
-            <div className="text-xs text-gray-500 truncate">
+            <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
               {authUser?.email}
             </div>
           </div>
@@ -326,14 +329,14 @@ const Sidebar = () => {
           <div className="flex gap-2">
             <Link
               to="/server/profile"
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300"
             >
               <Settings size={14} />
               Profile
             </Link>
             <Link
               to="/server/my-dashboard"
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-medium text-gray-700"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300"
             >
               <BarChart3 size={14} /> Dashboard
             </Link>
@@ -341,7 +344,7 @@ const Sidebar = () => {
           <button
             onClick={() => handleLogout(authUser?.email)}
             disabled={loading} // Thêm w-full để chiếm hết chiều rộng và đổi màu nền
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-100 hover:bg-red-200 rounded-lg text-xs font-medium text-red-700"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg text-xs font-medium text-red-600 dark:text-red-400"
           >
             {loading ? (
               "Logging out..."
