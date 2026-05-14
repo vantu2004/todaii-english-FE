@@ -6,15 +6,19 @@ export const ServerAuthContext = createContext();
 export const ServerAuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const autoFetchProfile = async () => {
       try {
         const myProfile = await fetchProfile();
+        
         setAuthUser(myProfile);
         setIsLoggedIn(true);
       } catch (error) {
         console.error("Error fetching profile:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -26,6 +30,7 @@ export const ServerAuthProvider = ({ children }) => {
     setAuthUser,
     isLoggedIn,
     setIsLoggedIn,
+    isLoading,
   };
 
   return (
