@@ -29,10 +29,10 @@ const DictionaryWordsList = ({
           <div
             key={word.id}
             onClick={() => onSelectWord(word.id)}
-            className={`p-3 sm:p-3.5 md:p-4 rounded-lg md:rounded-xl border-2 cursor-pointer transition-all ${
+            className={`p-3 sm:p-3.5 md:p-4 rounded-lg border cursor-pointer transition-all ${
               isSelected
-                ? "bg-blue-50 dark:bg-blue-900/20 border-blue-500 dark:border-blue-600 shadow-sm"
-                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm"
+                ? "bg-gray-50 dark:bg-gray-800 border-gray-900 dark:border-gray-100 shadow-sm ring-1 ring-gray-900 dark:ring-gray-100"
+                : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-sm"
             }`}
           >
             <div className="flex items-start justify-between gap-2">
@@ -42,7 +42,7 @@ const DictionaryWordsList = ({
                     ID: {word.id}
                   </p>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 md:gap-3 mb-1">
-                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 break-words">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 break-words">
                       {word.headword}
                     </h3>
                     {word.ipa && (
@@ -58,9 +58,9 @@ const DictionaryWordsList = ({
                   {word.audio_url && (
                     <button
                       onClick={(e) => playAudioWithEvent(e, word.audio_url)}
-                      className="p-1.5 sm:p-2 hover:bg-blue-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                      className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                     >
-                      <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
+                      <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
                     </button>
                   )}
 
@@ -69,9 +69,9 @@ const DictionaryWordsList = ({
                       e.stopPropagation();
                       onViewWord(word);
                     }}
-                    className="p-1.5 sm:p-2 hover:bg-green-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   >
-                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600 dark:text-green-400" />
+                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400" />
                   </button>
                 </div>
               </div>

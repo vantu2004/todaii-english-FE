@@ -11,12 +11,10 @@ const ArticleViewModal = ({ isOpen, onClose, article }) => {
       onClose={onClose}
       title={
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
-            <Eye className="text-blue-600" size={20} />
-          </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Article Details</h2>
-            <p className="text-sm text-gray-500">View article information</p>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Article Details
+            </h2>
           </div>
         </div>
       }

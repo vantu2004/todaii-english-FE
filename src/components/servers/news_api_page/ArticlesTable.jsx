@@ -31,7 +31,7 @@ const ArticlesTable = ({ columns, articles }) => {
         <table className="w-full table-auto">
           {/* === Table Header === */}
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+            <tr className="text-xs font-medium tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
               {columns.map((col) => (
                 <th key={col.key} className="px-4 py-3">
                   {col.label}
@@ -41,12 +41,9 @@ const ArticlesTable = ({ columns, articles }) => {
           </thead>
 
           {/* === Table Body === */}
-          <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
+          <tbody className="bg-white divide-y divide-gray-100 dark:divide-gray-800 dark:bg-gray-900">
             {articles.map((article, i) => (
-              <tr
-                key={i}
-                className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
-              >
+              <tr key={i} className="text-gray-700 dark:text-gray-400">
                 {/* # */}
                 <td className="px-4 py-3 text-sm">{i + 1}</td>
 
@@ -62,7 +59,7 @@ const ArticlesTable = ({ columns, articles }) => {
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline-offset-2 hover:underline transition-colors"
+                      className="text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-400 underline-offset-2 hover:underline transition-colors"
                     >
                       {article.title}
                     </a>
@@ -83,21 +80,21 @@ const ArticlesTable = ({ columns, articles }) => {
 
                 {/* Actions */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
+                  <div className="flex items-center space-x-2 text-sm">
                     <button
                       onClick={() => handleViewClick(article)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg"
                       aria-label="View"
                     >
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     </button>
 
                     <button
                       onClick={() => handleExportClick(article)}
-                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg"
                       aria-label="Export"
                     >
-                      <ArrowRightFromLine className="w-5 h-5" />
+                      <ArrowRightFromLine className="w-4 h-4" />
                     </button>
                   </div>
                 </td>

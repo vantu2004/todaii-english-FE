@@ -102,7 +102,7 @@ const ArticlesTable = ({
         <table className="w-full table-auto">
           {/* Header */}
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 bg-gray-50">
+            <tr className="text-xs font-medium tracking-wide text-left text-gray-500 border-b border-gray-200 bg-gray-50">
               {columns.map((col) => {
                 const isSortable = !!col.sortField;
                 const isActiveSort = query.sortBy === col.sortField;
@@ -111,7 +111,7 @@ const ArticlesTable = ({
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 transition-colors"
+                        ? "cursor-pointer select-none hover:text-gray-700 transition-colors"
                         : ""
                     }`}
                     onClick={() => {
@@ -133,9 +133,9 @@ const ArticlesTable = ({
                       {isSortable && isActiveSort && (
                         <>
                           {query.direction === "asc" ? (
-                            <ArrowUp className="w-3 h-3 text-blue-600" />
+                            <ArrowUp className="w-3 h-3 text-gray-900" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-600" />
+                            <ArrowDown className="w-3 h-3 text-gray-900" />
                           )}
                         </>
                       )}
@@ -158,7 +158,7 @@ const ArticlesTable = ({
                     href={a.source_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 hover:underline line-clamp-2"
+                    className="text-gray-600 hover:text-gray-900 hover:underline line-clamp-2"
                     title={a.title}
                   >
                     {a.title}
@@ -172,10 +172,10 @@ const ArticlesTable = ({
                   <div className="flex items-center text-sm">
                     <button
                       onClick={() => handleParagraphClick(i)}
-                      className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
                       aria-label="Paragraph"
                     >
-                      <Pilcrow className="w-5 h-5" />
+                      <Pilcrow className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -183,13 +183,15 @@ const ArticlesTable = ({
                   <div className="flex items-center text-sm">
                     <button
                       onClick={() => handleVocabClick(i)}
-                      className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
                       aria-label="Vocabulary"
                     >
-                      <BookA className="w-5 h-5" />
+                      <BookA className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
+
+                {/* Enable toggle */}
                 <td className="px-4 py-3 text-sm">
                   <button
                     onClick={() => handleToggle(i)}
@@ -206,29 +208,30 @@ const ArticlesTable = ({
                     ></div>
                   </button>
                 </td>
+
                 <td className="px-4 py-3">
-                  <div className="flex items-center text-sm space-x-4">
+                  <div className="flex items-center text-sm space-x-2">
                     <button
                       onClick={() => handleViewClick(i)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
                       aria-label="View"
                     >
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     </button>
 
                     <button
                       onClick={() => handleUpdateClick(i)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
                       aria-label="Update"
                     >
-                      <Pencil className="w-5 h-5" />
+                      <Pencil className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
                       aria-label="Delete"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -254,16 +257,10 @@ const ArticlesTable = ({
           onClose={() => setIsDeleteModalOpen(false)}
           title={
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
-                <AlertTriangle className="text-red-600" size={24} />
-              </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Delete Article
                 </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  This action cannot be undone
-                </p>
               </div>
             </div>
           }
@@ -271,7 +268,7 @@ const ArticlesTable = ({
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
@@ -280,30 +277,27 @@ const ArticlesTable = ({
                   handleConfirmDelete();
                   setIsDeleteModalOpen(false);
                 }}
-                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-all flex items-center gap-2"
               >
                 <Trash2 size={16} />
-                Delete Article
+                Delete
               </button>
             </div>
           }
         >
-          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
-            <h3 className="font-bold text-gray-900 mb-2 text-lg">
+          <div className="space-y-4">
+            <h3 className="text-sm text-gray-900">
               Are you sure you want to delete this article?
             </h3>
-            <p className="text-gray-700 mb-4">
-              You are about to permanently delete:
-            </p>
-            <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
-              <p className="text-sm font-semibold text-red-700">
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <p className="text-sm font-semibold text-gray-900">
                 {selectedIndex !== null ? articles[selectedIndex].title : ""}
               </p>
               <p className="text-xs text-gray-500 mt-1">
                 {selectedIndex !== null ? articles[selectedIndex].author : ""}
               </p>
             </div>
-            <p className="text-xs text-red-600 leading-relaxed">
+            <p className="text-xs text-gray-500 leading-relaxed">
               ⚠️ This action is permanent and cannot be reversed.
             </p>
           </div>

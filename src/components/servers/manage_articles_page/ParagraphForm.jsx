@@ -54,7 +54,7 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
   };
 
   return (
-    <div className="bg-white/50 backdrop-blur-sm border border-white/20 rounded-2xl p-6 space-y-5 shadow-lg">
+    <div className="bg-white p-5 space-y-4">
       {/* Header với Delete button */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800">
@@ -63,7 +63,7 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
         {onDelete && (
           <button
             onClick={() => onDelete(form.id)}
-            className="p-2 hover:bg-red-100/50 text-red-600 hover:text-red-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-red-50 text-red-500 hover:text-red-600 rounded-lg transition-colors"
             title="Delete"
           >
             <Trash2 size={20} />
@@ -73,7 +73,7 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
 
       {/* Order */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           Order
         </label>
         <input
@@ -81,13 +81,13 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
           name="para_order"
           value={form.para_order}
           onChange={handleChange}
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all text-sm"
+          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all text-sm"
         />
       </div>
 
       {/* English Text */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           English Text
         </label>
         <textarea
@@ -96,14 +96,14 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
           value={form.text_en}
           onChange={handleChange}
           rows={3}
-          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all resize-none text-sm leading-relaxed"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all resize-none text-sm leading-relaxed"
           onInput={adjustHeight}
         ></textarea>
       </div>
 
       {/* Vietnamese (System) */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 uppercase tracking-wide mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
           Vietnamese (System)
         </label>
         <textarea
@@ -112,17 +112,17 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
           value={form.text_vi_system}
           onChange={handleChange}
           rows={3}
-          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-transparent transition-all resize-none text-sm leading-relaxed"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all resize-none text-sm leading-relaxed"
           onInput={adjustHeight}
         ></textarea>
       </div>
 
       {/* Buttons */}
-      <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200/50">
+      <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200">
         <button
           onClick={handleTranslate}
           disabled={translateLoading}
-          className="p-2.5 hover:bg-emerald-100/50 text-emerald-600 hover:text-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+          className="p-2.5 hover:bg-gray-100 text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
           title={translateLoading ? "Translating..." : "Translate"}
         >
           <Languages size={20} />
@@ -130,7 +130,7 @@ const ParagraphForm = ({ paragraph, onSave, onTranslate, onDelete }) => {
 
         <button
           onClick={() => onSave(form)}
-          className="p-2.5 hover:bg-blue-100/50 text-blue-600 hover:text-blue-700 rounded-lg transition-colors"
+          className="p-2.5 hover:bg-gray-100 text-gray-500 hover:text-gray-700 rounded-lg transition-colors"
           title="Save"
         >
           <Save size={20} />

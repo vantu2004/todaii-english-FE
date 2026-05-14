@@ -73,14 +73,14 @@ const NewsApi = () => {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           News API
           <a
             href="https://newsapi.org/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center p-1 rounded-lg text-gray-600 dark:text-gray-400 
-              hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+            className="inline-flex items-center justify-center p-1 rounded-lg text-gray-500 dark:text-gray-400 
+              hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             title="Visit News API"
           >
             <ExternalLink className="w-4 h-4" />
@@ -96,7 +96,7 @@ const NewsApi = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden border border-gray-200 dark:border-gray-800 rounded-lg"
       >
         {loading ? (
           <div className="flex items-center justify-center h-full">

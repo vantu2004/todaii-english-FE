@@ -9,13 +9,13 @@ const SelectedWordsPanel = ({
 }) => {
   return (
     <div className="lg:col-span-1 h-full flex flex-col min-h-0">
-      <div className="bg-white dark:bg-gray-800 rounded-xl md:rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-5 md:p-6 flex flex-col h-full lg:max-h-[calc(100vh-200px)]">
+      <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 sm:p-5 flex flex-col h-full lg:max-h-[calc(100vh-200px)]">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 sm:mb-5 md:mb-6 flex-shrink-0">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Selected Words
           </h2>
-          <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full font-semibold text-xs sm:text-sm whitespace-nowrap">
+          <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md font-medium text-xs sm:text-sm whitespace-nowrap">
             {selectedWords.length} words
           </span>
         </div>
@@ -54,7 +54,7 @@ const SelectedWordsPanel = ({
             <div className="pt-4 sm:pt-5 md:pt-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
               <button
                 onClick={onClearAll}
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg md:rounded-xl font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-200 dark:border-gray-700 text-red-600 dark:text-red-400 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Clear All</span>
