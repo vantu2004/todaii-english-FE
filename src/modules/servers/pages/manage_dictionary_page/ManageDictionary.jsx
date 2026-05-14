@@ -154,11 +154,10 @@ const ManageDictionary = () => {
             <button
               onClick={() => setShowInput(true)}
               disabled={isCreating || showInput}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl 
-          bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium
-          hover:from-blue-600 hover:to-blue-700 disabled:from-blue-400 disabled:to-blue-400
-          transition-all duration-200 transform hover:scale-105 active:scale-95 
-          shadow-md hover:shadow-lg disabled:shadow-none flex-shrink-0"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg 
+          bg-gray-900 text-white font-medium
+          hover:bg-gray-800 disabled:bg-gray-400
+          transition-all duration-200 flex-shrink-0"
             >
               <Sparkles className="w-5 h-5" />
               <span className="hidden sm:inline text-sm">AI Create</span>
@@ -177,15 +176,13 @@ const ManageDictionary = () => {
                       onKeyDown={handleKeyPress}
                       placeholder="Enter new word..."
                       disabled={isCreating}
-                      className="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-700 
-                  rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 
+                  rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
                   placeholder:text-gray-400 dark:placeholder:text-gray-500
-                  focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
-                  dark:focus:border-blue-400 dark:focus:ring-blue-900/30
+                  focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10
                   transition-all duration-200"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                      Press{" "}
                       <kbd className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-mono">
                         Enter
                       </kbd>
@@ -198,7 +195,7 @@ const ManageDictionary = () => {
                 )
               ) : (
                 <div className="flex items-center gap-3 px-4 py-2.5">
-                  <Loader className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin" />
+                  <Loader className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
                   <span className="text-gray-600 dark:text-gray-300 font-medium">
                     Creating entry...
                   </span>
@@ -213,8 +210,8 @@ const ManageDictionary = () => {
                   setShowInput(false);
                   setNewWord("");
                 }}
-                className="px-4 py-2.5 rounded-xl text-gray-700 dark:text-gray-300 
-            border-2 border-gray-300 dark:border-gray-600
+                className="px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 
+            border border-gray-200 dark:border-gray-700
             hover:bg-gray-50 dark:hover:bg-gray-800/50
             transition-all duration-200"
               >
@@ -226,7 +223,6 @@ const ManageDictionary = () => {
           {/* Helper Text */}
           {showInput && !isCreating && (
             <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-500"></span>
               Type a word and press Enter to create a new dictionary entry
             </p>
           )}
@@ -239,7 +235,7 @@ const ManageDictionary = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
       >
         <DictionaryTable
           columns={columns}

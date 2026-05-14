@@ -1,15 +1,7 @@
 import { useState, useRef } from "react";
 import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
-import {
-  Eye,
-  Pencil,
-  Trash2,
-  ArrowUp,
-  ArrowDown,
-  Volume2,
-  AlertTriangle,
-} from "lucide-react";
+import { Eye, Pencil, Trash2, ArrowUp, ArrowDown, Volume2 } from "lucide-react";
 import Modal from "@/components/servers/Modal";
 import DictionaryFormModal from "./DictionaryFormModal";
 import {
@@ -106,7 +98,7 @@ const DictionaryTable = ({
         <table className="w-full whitespace-nowrap">
           {/* === Table Header === */}
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
               {columns.map((col) => {
                 const isSortable = !!col.sortField;
                 const isActiveSort = query.sortBy === col.sortField;
@@ -116,7 +108,7 @@ const DictionaryTable = ({
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                         : ""
                     }`}
                     onClick={() => {
@@ -138,9 +130,9 @@ const DictionaryTable = ({
                       {isSortable && isActiveSort && (
                         <span className="inline-flex items-center">
                           {query.direction === "asc" ? (
-                            <ArrowUp className="w-3 h-3 text-blue-600" />
+                            <ArrowUp className="w-3 h-3 text-gray-900 dark:text-gray-300" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-600" />
+                            <ArrowDown className="w-3 h-3 text-gray-900 dark:text-gray-300" />
                           )}
                         </span>
                       )}
@@ -152,11 +144,11 @@ const DictionaryTable = ({
           </thead>
 
           {/* === Table Body === */}
-          <tbody className="bg-white divide-y divide-gray-300 dark:divide-gray-700 dark:bg-gray-800">
+          <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
             {dictionary.map((entry, i) => (
               <tr
                 key={i}
-                className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
+                className="border-t border-gray-100 text-gray-700 dark:text-gray-400"
               >
                 {/* ID */}
                 <td className="px-4 py-3 text-xs font-semibold">{entry.id}</td>
@@ -177,7 +169,7 @@ const DictionaryTable = ({
                     <button
                       onClick={() => handlePlayAudio(i, entry.audio_url)}
                       disabled={playingIndex === i}
-                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
+                      className="flex items-center gap-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition"
                     >
                       <Volume2 className="w-5 h-5" />
                       {playingIndex === i ? "Playing..." : "Play"}
@@ -198,25 +190,25 @@ const DictionaryTable = ({
                     {/* View */}
                     <button
                       onClick={() => handleViewClick(i)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                     >
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     </button>
 
                     {/* Edit */}
                     <button
                       onClick={() => handleUpdateClick(i)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                     >
-                      <Pencil className="w-5 h-5" />
+                      <Pencil className="w-4 h-4" />
                     </button>
 
                     {/* Delete */}
                     <button
                       onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -252,31 +244,26 @@ const DictionaryTable = ({
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           title={
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-amber-100 to-amber-50 rounded-lg">
-                <AlertTriangle className="text-amber-600" size={24} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Delete Dictionary Entry
-                </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  This action cannot be undone
-                </p>
-              </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Delete Dictionary Entry
+              </h2>
+              <p className="text-sm text-gray-500 mt-0.5">
+                This action cannot be undone
+              </p>
             </div>
           }
           footer={
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-all flex items-center gap-2"
               >
                 <Trash2 size={16} />
                 Delete Entry
@@ -284,17 +271,17 @@ const DictionaryTable = ({
             </div>
           }
         >
-          <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl p-6 border-2 border-amber-200/50">
+          <div className="space-y-4">
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">
+                <h3 className="text-sm text-gray-900 mb-2">
                   Are you sure you want to delete this dictionary entry?
                 </h3>
                 <p className="text-gray-700 mb-4">
                   You are about to permanently delete the entry:
                 </p>
-                <div className="bg-white rounded-lg p-3 border border-amber-300 mb-4">
-                  <p className="text-sm font-semibold text-amber-700">
+                <div className="bg-white rounded-lg p-3 border border-gray-200 mb-4">
+                  <p className="text-sm font-semibold text-gray-900">
                     {dictionary[selectedDictionaryIndex]?.headword}
                   </p>
                   {dictionary[selectedDictionaryIndex]?.ipa && (
@@ -303,7 +290,7 @@ const DictionaryTable = ({
                     </p>
                   )}
                 </div>
-                <p className="text-xs text-amber-600 leading-relaxed">
+                <p className="text-xs text-gray-500 leading-relaxed">
                   ⚠️ This action is permanent and cannot be reversed. The word
                   and all its definitions will be deleted.
                 </p>

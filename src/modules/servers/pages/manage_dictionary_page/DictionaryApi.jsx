@@ -121,7 +121,7 @@ const DictionaryApi = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center p-1 rounded-lg text-gray-600 dark:text-gray-400 
-           hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+           hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
           title="Visit Dictionary API"
         >
           <ExternalLink className="w-4 h-4" />
@@ -139,16 +139,15 @@ const DictionaryApi = () => {
           value={searchTerm}
           placeholder="Search any word..."
           onChange={handleInputChange}
-          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 
-                rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
+          className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-700 
+                rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
                 placeholder:text-gray-400 dark:placeholder:text-gray-600
-                focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
-                dark:focus:border-blue-400 dark:focus:ring-blue-900/20
+                focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10
                 transition-all duration-200 text-base"
         />
         {isLoading && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            <Loader className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin" />
+            <Loader className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
           </div>
         )}
       </div>
@@ -202,7 +201,7 @@ const DictionaryApi = () => {
       <div className="mt-8 space-y-8">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <Loader className="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin mb-3" />
+            <Loader className="w-8 h-8 text-gray-500 dark:text-gray-400 animate-spin mb-3" />
             <p className="text-gray-600 dark:text-gray-400">Searching...</p>
           </div>
         ) : rawWord && rawWord.length > 0 ? (
@@ -213,17 +212,16 @@ const DictionaryApi = () => {
               exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 0.5 }}
               key={idx}
-              className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50
-                  hover:shadow-md dark:hover:shadow-lg dark:shadow-blue-900/10 transition-all"
+              className="bg-white dark:bg-gray-800/50 rounded-lg p-6 border border-gray-200 dark:border-gray-700/50 transition-all"
             >
               {/* Word Header */}
               <div className="flex items-start justify-between gap-4 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex-1">
-                  <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-2">
+                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-50 mb-2">
                     {entry.word}
                   </h3>
                   {entry.phonetic && (
-                    <p className="text-lg text-blue-600 dark:text-blue-400 font-mono">
+                    <p className="text-lg text-gray-500 dark:text-gray-400 font-mono">
                       {entry.phonetic}
                     </p>
                   )}
@@ -237,7 +235,7 @@ const DictionaryApi = () => {
                     <div
                       key={i}
                       className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50
-                          border border-gray-200/50 dark:border-gray-700/50"
+                          border border-gray-100 dark:border-gray-700/50"
                     >
                       <div className="flex-1">
                         {p.text && (
@@ -249,8 +247,8 @@ const DictionaryApi = () => {
                       {p.audio && (
                         <button
                           onClick={() => new Audio(p.audio).play()}
-                          className="flex-shrink-0 p-2 rounded-lg text-blue-600 dark:text-blue-400
-                              hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                          className="flex-shrink-0 p-2 rounded-lg text-gray-500 dark:text-gray-400
+                              hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
                           title="Play audio"
                         >
                           <Volume2 className="w-5 h-5" />
@@ -279,7 +277,7 @@ const DictionaryApi = () => {
                       {meaning.definitions &&
                         meaning.definitions.length > 0 && (
                           <div className="mb-4">
-                            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
+                            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                               Definitions
                             </p>
                             <ul className="space-y-2 ml-4">
@@ -288,10 +286,10 @@ const DictionaryApi = () => {
                                   key={dIdx}
                                   className="text-gray-700 dark:text-gray-300 text-sm relative"
                                 >
-                                  <span className="absolute -left-4 w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-blue-400 mt-1.5" />
+                                  <span className="absolute -left-4 w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 mt-1.5" />
                                   <span>{def.definition}</span>
                                   {def.example && (
-                                    <div className="mt-2 p-2.5 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-2 border-blue-500 dark:border-blue-400">
+                                    <div className="mt-2 p-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-lg border-l-2 border-gray-300 dark:border-gray-600">
                                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                         Example:
                                       </p>
@@ -305,7 +303,7 @@ const DictionaryApi = () => {
                                       {def.synonyms.map((syn, sIdx) => (
                                         <span
                                           key={sIdx}
-                                          className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300
+                                          className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400
                                             rounded text-xs font-medium"
                                         >
                                           {syn}
@@ -322,15 +320,15 @@ const DictionaryApi = () => {
                       {/* Synonyms */}
                       {meaning.synonyms && meaning.synonyms.length > 0 && (
                         <div className="mt-4">
-                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
+                          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                             Synonyms
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {meaning.synonyms.map((syn, sIdx) => (
                               <span
                                 key={sIdx}
-                                className="px-3 py-1.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300
-                                    rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-900/50
+                                className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
+                                    rounded-md text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700
                                     transition-colors cursor-pointer"
                                 onClick={() => {
                                   setSearchTerm(syn);

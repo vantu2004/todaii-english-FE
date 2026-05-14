@@ -98,43 +98,23 @@ const DictionaryFormModal = ({
       isOpen={isOpen}
       onClose={onClose}
       title={
-        <div className="flex items-center gap-3">
-          <div
-            className={`p-2 bg-gradient-to-br ${
-              isCreate
-                ? "from-green-500 to-emerald-600"
-                : "from-blue-500 to-indigo-600"
-            } rounded-lg`}
-          >
-            <BookOpen className="text-white" size={24} />
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              {isCreate ? "Create Dictionary Entry" : "Update Dictionary Entry"}
-            </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {isCreate
-                ? "Add a new word to the dictionary"
-                : "Modify word details and meanings"}
-            </p>
-          </div>
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">
+            {isCreate ? "Create Dictionary Entry" : "Update Dictionary Entry"}
+          </h2>
         </div>
       }
       footer={
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={() => onSubmit(formData)}
-            className={`px-5 py-2.5 bg-gradient-to-r ${
-              isCreate
-                ? "from-green-600 to-emerald-600"
-                : "from-blue-600 to-indigo-600"
-            } text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105`}
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all"
           >
             {isCreate ? "Create Entry" : "Save Changes"}
           </button>
@@ -144,9 +124,8 @@ const DictionaryFormModal = ({
     >
       <div className="space-y-5">
         {/* Headword */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-blue-200/50 hover:border-blue-300 hover:shadow-md transition-all">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <BookOpen size={16} className="text-blue-600" />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Headword
           </label>
           <input
@@ -154,14 +133,13 @@ const DictionaryFormModal = ({
             value={formData.headword}
             onChange={(e) => updateField("headword", e.target.value)}
             placeholder="Enter word"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
           />
         </div>
 
         {/* IPA */}
-        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-6 border border-purple-200/50 hover:border-purple-300 hover:shadow-md transition-all">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <BookOpen size={16} className="text-purple-600" />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             IPA
           </label>
           <input
@@ -169,14 +147,13 @@ const DictionaryFormModal = ({
             value={formData.ipa}
             onChange={(e) => updateField("ipa", e.target.value)}
             placeholder="/ˈhæpi/"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
           />
         </div>
 
         {/* Audio URL */}
-        <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-2xl p-6 border border-green-200/50 hover:border-green-300 hover:shadow-md transition-all">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-            <BookOpen size={16} className="text-green-600" />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Audio URL
           </label>
           <input
@@ -184,20 +161,17 @@ const DictionaryFormModal = ({
             value={formData.audio_url}
             onChange={(e) => updateField("audio_url", e.target.value)}
             placeholder="https://example.com/audio.mp3"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
           />
         </div>
 
         {/* Senses */}
         <div className="space-y-5">
           <div className="flex items-center justify-between">
-            <h4 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-              <BookOpen size={18} className="text-blue-600" />
-              Senses
-            </h4>
+            <h4 className="text-lg font-semibold text-gray-900">Senses</h4>
             <button
               onClick={handleAddSense}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-100 text-blue-700 hover:bg-blue-200 font-medium transition-all transform hover:scale-105"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium transition-all"
             >
               <Plus className="w-4 h-4" /> Add Sense
             </button>
@@ -206,13 +180,10 @@ const DictionaryFormModal = ({
           {formData.senses.map((sense, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl shadow-sm p-6 border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all space-y-4"
+              className="bg-white rounded-lg p-5 border border-gray-200 space-y-4"
             >
-              <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-200">
-                <h5 className="font-semibold text-gray-800 flex items-center gap-2">
-                  <BookOpen size={16} className="text-blue-600" />
-                  Sense #{i + 1}
-                </h5>
+              <div className="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
+                <h5 className="font-semibold text-gray-900">Sense #{i + 1}</h5>
                 {formData.senses.length > 1 && (
                   <button
                     onClick={() => handleRemoveSense(i)}
@@ -225,8 +196,8 @@ const DictionaryFormModal = ({
 
               {/* POS & Meaning */}
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl p-4 border border-blue-200/50">
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Part of Speech
                   </label>
                   <select
@@ -234,7 +205,7 @@ const DictionaryFormModal = ({
                     onChange={(e) =>
                       handleSenseChange(i, "pos", e.target.value)
                     }
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
                   >
                     {POS_OPTIONS.map((opt) => (
                       <option key={opt}>{opt}</option>
@@ -242,8 +213,8 @@ const DictionaryFormModal = ({
                   </select>
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-xl p-4 border border-green-200/50">
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Meaning (VN)
                   </label>
                   <input
@@ -253,14 +224,14 @@ const DictionaryFormModal = ({
                       handleSenseChange(i, "meaning", e.target.value)
                     }
                     placeholder="Nghĩa tiếng Việt..."
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Definition */}
-              <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-xl p-4 border border-purple-200/50">
-                <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Definition (EN)
                 </label>
                 <textarea
@@ -269,13 +240,13 @@ const DictionaryFormModal = ({
                     handleSenseChange(i, "definition", e.target.value)
                   }
                   placeholder="English definition..."
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all h-20 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all h-20 resize-none"
                 />
               </div>
 
               {/* Example */}
-              <div className="bg-gradient-to-br from-slate-50 to-amber-50 rounded-xl p-4 border border-amber-200/50">
-                <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Example
                 </label>
                 <textarea
@@ -284,14 +255,14 @@ const DictionaryFormModal = ({
                     handleSenseChange(i, "example", e.target.value)
                   }
                   placeholder="Example sentence..."
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none transition-all h-20 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all h-20 resize-none"
                 />
               </div>
 
               {/* Synonyms & Collocations */}
               <div className="grid sm:grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-slate-50 to-green-50 rounded-xl p-4 border border-green-200/50">
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Synonyms (comma separated)
                   </label>
                   <input
@@ -302,12 +273,12 @@ const DictionaryFormModal = ({
                       handleArrayChange(i, "synonyms", e.target.value);
                     }}
                     placeholder="e.g. joyful, glad"
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
                   />
                 </div>
 
-                <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl p-4 border border-blue-200/50">
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block uppercase tracking-wide">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Collocations (comma separated)
                   </label>
                   <input
@@ -320,7 +291,7 @@ const DictionaryFormModal = ({
                       handleArrayChange(i, "collocations", e.target.value);
                     }}
                     placeholder="e.g. make progress, take place"
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
                   />
                 </div>
               </div>

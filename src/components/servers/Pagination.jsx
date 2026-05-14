@@ -36,15 +36,23 @@ const Pagination = ({ query, updateQuery, pagination }) => {
         {pagination.totalElements > 0 ? (
           <span>
             Showing{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">{startItem}</span> to{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">{endItem}</span> of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {startItem}
+            </span>{" "}
+            to{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {endItem}
+            </span>{" "}
+            of{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
               {pagination.totalElements}
             </span>{" "}
             results
           </span>
         ) : (
-          <span className="text-gray-400 dark:text-gray-500">No records found</span>
+          <span className="text-gray-400 dark:text-gray-500">
+            No records found
+          </span>
         )}
       </div>
 
