@@ -15,13 +15,13 @@ const ToolBar = ({ updateQuery, setIsModalOpen }) => {
     <div className="flex items-center justify-between gap-4 mb-6">
       {/* Search Input */}
       <div className="relative flex-1 max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
         <input
           type="text"
           placeholder="Search by keyword..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow shadow-sm hover:shadow-md"
+          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900/20 dark:focus:ring-white/20 focus:border-neutral-400 dark:text-white transition-shadow"
         />
       </div>
 
@@ -29,7 +29,7 @@ const ToolBar = ({ updateQuery, setIsModalOpen }) => {
       {setIsModalOpen && (
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white dark:text-neutral-900 bg-neutral-900 dark:bg-white rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
         >
           <Plus className="w-5 h-5" />
           Create New

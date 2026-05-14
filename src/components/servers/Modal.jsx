@@ -29,7 +29,7 @@ const Modal = ({
         >
           {/* Modal Box */}
           <motion.div
-            className={`relative w-full mx-4 ${width} bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden`}
+            className={`relative w-full mx-4 ${width} bg-white dark:bg-neutral-900 rounded-2xl shadow-xl overflow-hidden`}
             initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
@@ -38,13 +38,13 @@ const Modal = ({
           >
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-blue-900/20">
-                <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
+                <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
                   {title}
                 </h3>
                 <button
                   onClick={onClose}
-                  className="text-gray-500 hover:text-blue-600 transition"
+                  className="text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition"
                 >
                   ✕
                 </button>
@@ -58,7 +58,7 @@ const Modal = ({
 
             {/* Footer */}
             {footer && (
-              <div className="flex justify-end items-center gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+              <div className="flex justify-end items-center gap-3 px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
                 {footer}
               </div>
             )}

@@ -85,29 +85,29 @@ const UserDashboard = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-1.5 sm:gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-3 sm:mb-4 transition-colors"
+          className="flex items-center gap-1.5 sm:gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white mb-3 sm:mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           <span className="text-sm sm:text-base">Back to previous page</span>
         </button>
 
-        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
-            <CalendarIcon size={16} className="text-gray-400 mr-2" />
+        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-neutral-900 p-2 rounded-xl ring-1 ring-neutral-200 dark:ring-neutral-800">
+          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-900">
+            <CalendarIcon size={16} className="text-neutral-400 mr-2" />
             <input
               type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
+              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-700 dark:text-neutral-200 py-2 outline-none"
               value={dateRange.startDate}
               onChange={(e) =>
                 setDateRange({ ...dateRange, startDate: e.target.value })
               }
             />
           </div>
-          <span className="self-center text-gray-400">-</span>
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
+          <span className="self-center text-neutral-400">-</span>
+          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-900">
             <input
               type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
+              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-700 dark:text-neutral-200 py-2 outline-none"
               value={dateRange.endDate}
               onChange={(e) =>
                 setDateRange({ ...dateRange, endDate: e.target.value })
@@ -116,7 +116,7 @@ const UserDashboard = () => {
           </div>
           <button
             onClick={fetchData}
-            className="p-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+            className="p-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-md transition-colors"
             title="Refresh Data"
           >
             <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
@@ -127,7 +127,7 @@ const UserDashboard = () => {
       {/* Content Sections */}
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-neutral-900 dark:border-white"></div>
         </div>
       ) : (
         <>

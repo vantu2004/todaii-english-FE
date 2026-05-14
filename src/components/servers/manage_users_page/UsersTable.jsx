@@ -136,7 +136,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
       <div className="h-full rounded-lg overflow-y-auto">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+            <tr className="text-xs font-semibold tracking-wide text-left text-neutral-500 uppercase border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50">
               {columns.map((col) => {
                 const isSortable = !!col.sortField;
                 const isActiveSort = query.sortBy === col.sortField;
@@ -146,7 +146,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        ? "cursor-pointer select-none hover:text-neutral-900 dark:hover:text-white transition-colors"
                         : ""
                     }`}
                     onClick={() => {
@@ -170,10 +170,15 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                       {isSortable && isActiveSort && (
                         <span className="inline-flex items-center">
                           {query.direction === "asc" ? (
-                            <ArrowUp className="w-3 h-3 text-blue-600" />
+                            <ArrowUp className="w-3 h-3 text-neutral-900 dark:text-white" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-600" />
+                            <ArrowDown className="w-3 h-3 text-neutral-900 dark:text-white" />
                           )}
+                        </span>
+                      )}
+                      {isSortable && !isActiveSort && (
+                        <span className="inline-flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ArrowUp className="w-3 h-3 text-neutral-400" />
                         </span>
                       )}
                     </div>
@@ -183,19 +188,19 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
             </tr>
           </thead>
 
-          <tbody className="bg-white divide-y devide-gray-300 dark:divide-gray-700 dark:bg-gray-800">
+          <tbody className="bg-white divide-y devide-neutral-100 dark:divide-neutral-800/50 dark:bg-neutral-900">
             {users.map((user, i) => {
               const statusPill =
                 user.status === "ACTIVE"
-                  ? "bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100"
+                  ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20"
                   : user.status === "PENDING"
-                    ? "text-orange-700 bg-orange-100 dark:text-orange:100 dark:bg-orange-700"
-                    : "text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700";
+                    ? "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-400 dark:ring-amber-500/20"
+                    : "bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/20";
 
               return (
                 <tr
                   key={i}
-                  className="border-t border-gray-300 text-gray-700 dark:text-gray-400"
+                  className="border-t border-neutral-100 dark:border-neutral-800/50 text-neutral-900 dark:text-neutral-200 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/50 transition-colors"
                 >
                   <td className="px-4 py-3 text-xs">
                     <span className={"font-semibold"}>{user.id}</span>
@@ -220,7 +225,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                       </div>
                       <div>
                         <p className="font-semibold">{user.display_name}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
                           {user.email}
                         </p>
                       </div>
@@ -229,7 +234,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
                   <td className="px-4 py-3 text-xs">
                     <div className="flex flex-wrap gap-1">
-                      <span className="px-2 py-1 font-semibold leading-tight rounded-full bg-blue-100 text-blue-700">
+                      <span className="px-2 py-1 font-semibold leading-tight rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 ring-1 ring-neutral-200 dark:ring-neutral-700">
                         User
                       </span>
                     </div>
@@ -272,7 +277,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                     <div className="flex items-center text-sm">
                       <button
                         onClick={() => handleDashboardClick(i)}
-                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                         aria-label="Vocabulary"
                       >
                         <LayoutDashboard className="w-5 h-5" />
@@ -281,10 +286,10 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
                   </td>
 
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-1 text-sm">
                       <button
                         onClick={() => handleViewClick(i)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                         aria-label="View"
                       >
                         <Eye className="w-5 h-5" />
@@ -292,7 +297,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
                       <button
                         onClick={() => handleUpdateClick(i)}
-                        className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                        className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                         aria-label="Update"
                       >
                         <Pencil className="w-5 h-5" />
@@ -300,7 +305,7 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
 
                       <button
                         onClick={() => handleDeleteClick(i)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1 text-neutral-400 hover:text-red-600 dark:hover:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         aria-label="Delete"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -341,14 +346,14 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
           onClose={() => setIsDeleteModalOpen(false)}
           title={
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
-                <AlertTriangle className="text-red-600" size={24} />
+              <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+                <AlertTriangle className="text-red-600 dark:text-red-400" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
                   Delete User
                 </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
                   This action cannot be undone
                 </p>
               </div>
@@ -358,13 +363,13 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className="px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg font-medium hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
               >
                 <Trash2 size={16} />
                 Delete User
@@ -372,28 +377,28 @@ const UsersTable = ({ columns, users, reloadUsers, query, updateQuery }) => {
             </div>
           }
         >
-          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 ring-1 ring-neutral-200 dark:ring-neutral-800">
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">
+                <h3 className="font-semibold text-neutral-900 dark:text-white mb-2 text-base">
                   Are you sure you want to delete this user?
                 </h3>
-                <p className="text-gray-700 mb-4">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
                   You are about to permanently delete the user account:
                 </p>
-                <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
-                  <p className="text-sm font-semibold text-red-700">
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 ring-1 ring-neutral-200 dark:ring-neutral-800 mb-4">
+                  <p className="text-sm font-semibold text-neutral-900 dark:text-white">
                     {selectedUserIndex !== null
                       ? users[selectedUserIndex].display_name
                       : ""}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                     {selectedUserIndex !== null
                       ? users[selectedUserIndex].email
                       : ""}
                   </p>
                 </div>
-                <p className="text-xs text-red-600 leading-relaxed">
+                <p className="text-xs text-red-600 dark:text-red-400 leading-relaxed">
                   ⚠️ This action is permanent and cannot be reversed. All data
                   associated with this account will be deleted.
                 </p>

@@ -124,7 +124,7 @@ const ManageAdmins = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden ring-1 ring-neutral-200 dark:ring-neutral-800 rounded-xl"
       >
         <AdminsTable
           columns={columns}
