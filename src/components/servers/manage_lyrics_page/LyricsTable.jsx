@@ -70,7 +70,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
         <table className="w-full whitespace-nowrap">
           {/* === HEADER === */}
           <thead>
-            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 bg-gray-50">
+            <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
               {columns.map((col) => {
                 const isSortable = !!col.sortField;
                 const isActiveSort = query.sortBy === col.sortField;
@@ -81,7 +81,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 transition"
+                        ? "cursor-pointer select-none hover:text-gray-700 transition"
                         : ""
                     }`}
                     onClick={() => {
@@ -102,9 +102,9 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
                       {isSortable && isActiveSort && (
                         <>
                           {direction === "asc" ? (
-                            <ArrowUp className="w-3 h-3 text-blue-600" />
+                            <ArrowUp className="w-3 h-3 text-gray-900" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-600" />
+                            <ArrowDown className="w-3 h-3 text-gray-900" />
                           )}
                         </>
                       )}
@@ -116,7 +116,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
           </thead>
 
           {/* === BODY === */}
-          <tbody className="bg-white divide-y divide-gray-300">
+          <tbody className="bg-white divide-y divide-gray-200">
             {lyrics.map((lyric, i) => (
               <tr key={i} className="text-gray-700">
                 <td className="px-4 py-3 text-sm">{lyric.id}</td>
@@ -135,16 +135,16 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={() => handleUpdateClick(i)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition"
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition"
                     >
-                      <Pencil className="w-5 h-5" />
+                      <Pencil className="w-4 h-4" />
                     </button>
 
                     <button
                       onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -171,31 +171,21 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           title={
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
-                <AlertTriangle className="text-red-600" size={24} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Delete Lyric Line
-                </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  This action cannot be undone
-                </p>
-              </div>
-            </div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Delete Lyric Line
+            </h2>
           }
           footer={
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-all flex items-center gap-2"
               >
                 <Trash2 size={16} />
                 Delete Lyric Line
@@ -203,16 +193,16 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
             </div>
           }
         >
-          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
-            <h3 className="font-bold text-gray-900 mb-2 text-lg">
+          <div className="space-y-4">
+            <h3 className="text-sm text-gray-900">
               Are you sure you want to delete this lyric line?
             </h3>
-            <p className="text-gray-700 mb-4">
+            <p className="text-sm text-gray-700">
               You are about to permanently delete:
             </p>
 
-            <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
-              <p className="text-sm font-semibold text-red-700">
+            <div className="bg-white rounded-lg p-3 border border-gray-200 mb-4">
+              <p className="text-sm font-semibold text-gray-900">
                 {selectedIndex !== null ? lyrics[selectedIndex].text_en : ""}
               </p>
 
@@ -221,7 +211,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
               </p>
             </div>
 
-            <p className="text-xs text-red-600 leading-relaxed">
+            <p className="text-xs text-gray-500 leading-relaxed">
               ⚠️ This action is permanent and cannot be reversed.
             </p>
           </div>

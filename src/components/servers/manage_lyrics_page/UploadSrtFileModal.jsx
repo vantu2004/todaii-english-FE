@@ -53,11 +53,8 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
       title={
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
-              <FileText className="text-white" size={20} />
-            </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900">
                 Upload SRT File
               </h2>
               <p className="text-sm text-gray-500">
@@ -77,7 +74,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
           <button
             onClick={handleClearAll}
             disabled={lines.length === 0}
-            className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="px-4 py-2 border border-gray-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             Clear All
           </button>
@@ -85,7 +82,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="px-5 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               Cancel
             </button>
@@ -93,7 +90,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
             <button
               onClick={handleSave}
               disabled={lines.length === 0}
-              className="px-5 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className="px-5 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               Save Changes
             </button>
@@ -112,7 +109,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
             type="file"
             accept=".srt,.txt"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400"
           />
         </div>
 
@@ -123,33 +120,33 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
 
       {/* Table */}
       {lines.length > 0 && (
-        <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+        <div className="border border-gray-200 rounded-lg overflow-hidden">
           <div className="overflow-x-auto max-h-[55vh]">
             <table className="w-full">
-              <thead className="bg-gray-100 sticky top-0 z-10">
+              <thead className="bg-gray-50 sticky top-0 z-10">
                 <tr className="border-b border-gray-200">
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-16">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 w-16">
                     #
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 w-32">
                     <div className="flex items-center gap-1.5">
                       <Clock size={14} />
                       <span>Start (ms)</span>
                     </div>
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 w-32">
                     <div className="flex items-center gap-1.5">
                       <Clock size={14} />
                       <span>End (ms)</span>
                     </div>
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">
                     English Text
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500">
                     Vietnamese Text
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider w-20">
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 w-20">
                     Actions
                   </th>
                 </tr>
@@ -175,7 +172,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             Number(e.target.value),
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 outline-none"
                       />
                     </td>
 
@@ -190,7 +187,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             Number(e.target.value),
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 outline-none"
                       />
                     </td>
 
@@ -205,7 +202,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             e.target.value,
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 outline-none"
                       />
                     </td>
 
@@ -220,14 +217,14 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
                             e.target.value,
                           )
                         }
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
+                        className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 outline-none"
                       />
                     </td>
 
                     <td className="px-4 py-3 text-center">
                       <button
                         onClick={() => handleDeleteLine(line.line_order)}
-                        className="inline-flex items-center justify-center w-8 h-8 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                        className="inline-flex items-center justify-center text-gray-400 hover:text-red-600 transition-colors"
                         title="Delete line"
                       >
                         <Trash2 size={16} />

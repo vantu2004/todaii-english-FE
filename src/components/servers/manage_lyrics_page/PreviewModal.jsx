@@ -126,11 +126,8 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
       width="max-w-7xl"
       title={
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-600 rounded-lg">
-            <Music className="text-white" size={20} />
-          </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900">
               Video Preview
             </h2>
             <p className="text-xs text-gray-500">
@@ -142,7 +139,7 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
       footer={
         <button
           onClick={handleClose}
-          className="px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+          className="px-5 py-2 border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 rounded-lg font-medium transition-colors"
         >
           Close
         </button>
@@ -183,12 +180,12 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
 
         {/* Lyrics Panel */}
         <div className="lg:w-1/3 w-full">
-          <div className="bg-white rounded-lg border border-gray-200 shadow-lg p-4 h-[450px] overflow-hidden flex flex-col">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 h-[450px] overflow-hidden flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
               <div className="flex items-center gap-2">
-                <Music size={18} className="text-green-600" />
-                <h3 className="font-semibold text-gray-800">Lyrics</h3>
+                <Music size={18} className="text-gray-500" />
+                <h3 className="font-semibold text-gray-900">Lyrics</h3>
               </div>
               <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                 {lyrics.length} lines
@@ -205,16 +202,16 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
                     onClick={() => handleLyricClick(lyric.start_ms)}
                     className={`p-3 rounded-lg border transition-all duration-200 cursor-pointer ${
                       activeLyricIndex === index
-                        ? "bg-green-50 border-green-500 shadow-md"
-                        : "bg-white border-gray-200 hover:border-green-300 hover:bg-gray-50"
+                        ? "bg-gray-100 border-gray-400"
+                        : "bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50"
                     }`}
                   >
                     <div className="flex items-start gap-2">
                       <span
                         className={`text-xs font-semibold px-2 py-1 rounded flex-shrink-0 ${
                           activeLyricIndex === index
-                            ? "bg-green-600 text-white"
-                            : "bg-gray-200 text-gray-600"
+                            ? "bg-gray-900 text-white"
+                            : "bg-gray-100 text-gray-600"
                         }`}
                       >
                         {lyric.line_order}
@@ -223,7 +220,7 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
                         <p
                           className={`text-sm font-medium mb-1 ${
                             activeLyricIndex === index
-                              ? "text-green-700"
+                              ? "text-gray-900"
                               : "text-gray-800"
                           }`}
                         >
@@ -232,7 +229,7 @@ const PreviewModal = ({ isOpen, onClose, videoUrl, lyrics = [] }) => {
                         <p
                           className={`text-xs mb-1 ${
                             activeLyricIndex === index
-                              ? "text-green-600"
+                              ? "text-gray-700"
                               : "text-gray-600"
                           }`}
                         >

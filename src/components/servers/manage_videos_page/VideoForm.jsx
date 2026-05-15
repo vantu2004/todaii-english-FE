@@ -72,12 +72,12 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-white to-slate-50"
+      className="flex flex-col h-full bg-white"
     >
       {/* HEADER */}
-      <div className="flex items-center justify-between bg-white shadow-md rounded-b-lg px-8 py-3 border-b border-gray-200">
+      <div className="flex items-center justify-between bg-white px-8 py-4 border-b border-gray-100">
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="text-lg font-semibold text-gray-900">
             {mode === "create" ? "Add New Video" : "Update Video"}
           </h1>
           <p className="mt-1 text-gray-500 text-sm">
@@ -88,7 +88,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
         </div>
         <div className="flex items-center gap-3">
           {/* optional icon or status badge */}
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+          <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700">
             {mode === "create" ? "New" : "Updating"}
           </span>
         </div>
@@ -103,7 +103,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Video Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -113,7 +113,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 required
                 onChange={handleChange}
                 placeholder="Enter video title"
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
               />
             </motion.div>
 
@@ -123,7 +123,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Author Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -132,7 +132,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 value={formData.author_name}
                 onChange={handleChange}
                 placeholder="Enter author name"
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
               />
             </motion.div>
 
@@ -144,7 +144,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Provider Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -153,12 +153,12 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                   value={formData.provider_name}
                   onChange={handleChange}
                   placeholder="e.g., YouTube, Vimeo"
-                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Provider URL <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -167,7 +167,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                   value={formData.provider_url}
                   onChange={handleChange}
                   placeholder="https://example.com"
-                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
                 />
               </div>
             </motion.div>
@@ -178,7 +178,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Video URL <span className="text-red-500">*</span>
               </label>
               <input
@@ -188,7 +188,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 required
                 onChange={handleChange}
                 placeholder="https://example.com/video"
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
               />
             </motion.div>
 
@@ -198,7 +198,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Embed HTML <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -207,7 +207,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 rows={4}
                 onChange={handleChange}
                 placeholder="Paste embed code here..."
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all resize-none"
               />
             </motion.div>
 
@@ -217,7 +217,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Thumbnail URL <span className="text-red-500">*</span>
               </label>
               <input
@@ -226,14 +226,14 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 value={formData.thumbnail_url}
                 onChange={handleChange}
                 placeholder="https://example.com/thumbnail.jpg"
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
               />
 
               {formData.thumbnail_url && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 rounded-lg overflow-hidden border border-slate-200 shadow-md bg-white p-2"
+                  className="mt-4 rounded-lg overflow-hidden border border-gray-200 bg-white p-2"
                 >
                   <img
                     src={formData.thumbnail_url}
@@ -251,14 +251,14 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <label className="block text-sm font-semibold text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 CEFR Level <span className="text-red-500">*</span>
               </label>
               <select
                 name="cefr_level"
                 value={formData.cefr_level}
                 onChange={handleChange}
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-all"
               >
                 {CEFR_LEVELS.map((lvl) => (
                   <option key={lvl} value={lvl}>
@@ -275,22 +275,21 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
-              className="bg-white border border-slate-200 rounded-xl p-6 sticky top-8 shadow-md"
+              className="bg-white border border-gray-200 rounded-lg p-6 sticky top-8"
             >
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                <h3 className="font-bold text-slate-900">
+                <h3 className="font-semibold text-gray-900">
                   Topics <span className="text-red-500">*</span>
                 </h3>
               </div>
 
-              <p className="text-xs text-slate-500 mb-4 font-medium">
+              <p className="text-xs text-gray-500 mb-4 font-medium">
                 {formData.topic_ids.length} of {topics.length} selected
               </p>
 
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {topics.length === 0 ? (
-                  <p className="text-sm text-slate-500 text-center py-4">
+                  <p className="text-sm text-gray-500 text-center py-4">
                     Loading...
                   </p>
                 ) : (
@@ -298,26 +297,26 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                     <motion.label
                       key={topic.id}
                       whileHover={{ x: 4 }}
-                      className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
+                      className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
                     >
                       <input
                         type="checkbox"
                         checked={formData.topic_ids.includes(topic.id)}
                         onChange={() => toggleTopic(topic.id)}
-                        className="w-5 h-5 rounded border-slate-300 cursor-pointer appearance-none bg-white border transition-all"
+                        className="w-5 h-5 rounded border-gray-300 cursor-pointer appearance-none bg-white border transition-all"
                         style={{
                           backgroundImage: formData.topic_ids.includes(topic.id)
                             ? `url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.207 5.207L6.5 11.914 2.793 8.207'/%3E%3C/svg%3E")`
                             : "none",
                           backgroundColor: formData.topic_ids.includes(topic.id)
-                            ? "#2563eb"
+                            ? "#111827"
                             : "white",
                           borderColor: formData.topic_ids.includes(topic.id)
-                            ? "#2563eb"
-                            : "#cbd5e1",
+                            ? "#111827"
+                            : "#d1d5db",
                         }}
                       />
-                      <span className="text-sm font-medium text-slate-700">
+                      <span className="text-sm font-medium text-gray-700">
                         {topic.name}
                       </span>
                     </motion.label>
@@ -330,9 +329,9 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="mt-4 pt-4 border-t border-slate-200"
+                  className="mt-4 pt-4 border-t border-gray-200"
                 >
-                  <p className="text-xs font-bold text-slate-700 mb-3 uppercase tracking-wide">
+                  <p className="text-sm font-medium text-gray-700 mb-3">
                     Selected Tags
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -343,7 +342,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
                           key={topic.id}
                           initial={{ scale: 0.8, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
-                          className="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 rounded-full border border-blue-200"
+                          className="px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-md border border-gray-200"
                         >
                           {topic.name}
                         </motion.span>
@@ -357,18 +356,18 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
       </div>
 
       {/* FOOTER */}
-      <div className="flex-shrink-0 border-t border-slate-200 bg-white px-8 py-4 flex justify-end gap-3 shadow-lg">
+      <div className="flex-shrink-0 border-t border-gray-200 bg-gray-50 px-8 py-4 flex justify-end gap-3">
         <button
           type="button"
           onClick={() => window.history.back()}
-          className="px-6 py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-all active:scale-95 shadow-sm"
+          className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
 
         <button
           type="submit"
-          className="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:shadow-lg hover:scale-105 transition-all active:scale-95 shadow-md"
+          className="px-6 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors"
         >
           {mode === "create" ? "Create Video" : "Update Video"}
         </button>

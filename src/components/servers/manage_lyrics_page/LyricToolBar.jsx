@@ -27,7 +27,7 @@ const ToolBar = ({
           placeholder="Search by keyword..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow shadow-sm hover:shadow-md"
+          className="w-full pl-10 pr-4 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 transition-shadow"
         />
       </div>
 
@@ -35,7 +35,7 @@ const ToolBar = ({
       <div className="flex flex-wrap items-center gap-3 ml-auto">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-orange-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
         >
           <MoveLeft className="w-5 h-5" />
           <span className="hidden sm:inline">Back</span>
@@ -43,7 +43,7 @@ const ToolBar = ({
 
         <button
           onClick={() => setIsPreviewModalOpen(true)}
-          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-green-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
         >
           <Eye className="w-5 h-5" />
           <span className="hidden sm:inline">Preview</span>
@@ -51,7 +51,7 @@ const ToolBar = ({
 
         <button
           onClick={() => setIsUploadModalOpen(true)}
-          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-yellow-500 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
         >
           <Upload className="w-5 h-5" />
           <span className="hidden sm:inline">Upload</span>
@@ -59,7 +59,7 @@ const ToolBar = ({
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-blue-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
         >
           <Plus className="w-5 h-5" />
           <span className="hidden sm:inline">Create New</span>
@@ -67,7 +67,7 @@ const ToolBar = ({
 
         <button
           onClick={() => setIsDeleteAllModalOpen(true)}
-          className="flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-gray-700 bg-transparent rounded-xl border border-gray-300 hover:bg-red-600 hover:text-white active:scale-95 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-4 sm:px-5 py-2 text-sm font-semibold text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-all"
         >
           <Trash2 className="w-5 h-5" />
           <span className="hidden sm:inline">Delete All</span>
