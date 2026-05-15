@@ -39,14 +39,10 @@ const ToeicPassageFormModal = ({
         passageTrans:
           initialData.passageTrans || initialData.passage_trans || "",
         imageUrl:
-          initialData.imageUrl ||
-          initialData.image_url ||
           initialData.image_request?.uploaded_image ||
           initialData.image_request?.image_url ||
           "",
         audioUrl:
-          initialData.audioUrl ||
-          initialData.audio_url ||
           initialData.audio_request?.uploaded_audio ||
           initialData.audio_request?.audio_url ||
           "",
@@ -122,9 +118,9 @@ const ToeicPassageFormModal = ({
     setIsSubmitting(true);
 
     const payload = {
-      passageText: formData.passageText,
-      passageTrans: formData.passageTrans,
-      imageRequest: {
+      passage_text: formData.passageText,
+      passage_trans: formData.passageTrans,
+      image_request: {
         uploaded_image: formData.imageUrl?.includes("cloudinary")
           ? formData.imageUrl
           : "",
@@ -132,7 +128,7 @@ const ToeicPassageFormModal = ({
           ? formData.imageUrl
           : "",
       },
-      audioRequest: {
+      audio_request: {
         uploaded_audio: formData.audioUrl?.includes("cloudinary")
           ? formData.audioUrl
           : "",

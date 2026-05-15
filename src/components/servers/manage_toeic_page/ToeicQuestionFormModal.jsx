@@ -46,8 +46,8 @@ const ToeicQuestionFormModal = ({ isOpen, onClose, initialData, partNumber, test
         explanation: initialData.explanation || "",
         passageId: initialData.passage_id || "",
         tagIds: initialData.tags?.map((t) => t.id) || initialData.tag_ids || [],
-        imageUrl: initialData.image_request?.uploaded_image || initialData.image_request?.image_url || "",
-        audioUrl: initialData.audio_request?.uploaded_audio || initialData.audio_request?.audio_url || "",
+        imageUrl: initialData.uploaded_image || initialData.image_url || "",
+        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
       });
     } else {
       setFormData({
@@ -148,6 +148,7 @@ const ToeicQuestionFormModal = ({ isOpen, onClose, initialData, partNumber, test
 
     try {
       if (isPart12) {
+        console.log("part 12 hereeee!!");
         const payload = {
           correct_ans: formData.correctAns,
           transcript: formData.transcript,
@@ -163,6 +164,8 @@ const ToeicQuestionFormModal = ({ isOpen, onClose, initialData, partNumber, test
           },
         };
 
+        console.log("payload: ", payload);
+
         if (isUpdate) {
           await updatePart12Question(initialData.id, payload);
           toast.success("Question updated successfully");
@@ -176,7 +179,7 @@ const ToeicQuestionFormModal = ({ isOpen, onClose, initialData, partNumber, test
           option_a: formData.optionA,
           option_b: formData.optionB,
           option_c: formData.optionC,
-          optionD_d: formData.optionD,
+          option_d: formData.optionD,
           correct_ans: formData.correctAns,
           explanation: formData.explanation,
           tag_ids: formData.tagIds,
