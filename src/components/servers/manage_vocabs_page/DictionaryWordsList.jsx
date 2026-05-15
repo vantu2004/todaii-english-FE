@@ -31,7 +31,7 @@ const DictionaryWordsList = ({
             onClick={() => onSelectWord(word.id)}
             className={`p-3 sm:p-4 flex items-center justify-between gap-4 cursor-pointer transition-colors group ${
               isSelected
-                ? "bg-gray-50 dark:bg-gray-800/80"
+                ? "bg-gray-200 dark:bg-gray-800/80"
                 : "bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/50"
             }`}
           >
