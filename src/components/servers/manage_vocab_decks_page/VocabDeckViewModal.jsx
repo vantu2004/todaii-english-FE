@@ -20,25 +20,15 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
       onClose={onClose}
       width="sm:max-w-6xl"
       title={
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-lg">
-            <Eye className="text-indigo-600" size={20} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">
-              Vocabulary Deck Details
-            </h2>
-            <p className="text-sm text-gray-500">
-              View deck information & words
-            </p>
-          </div>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-900">
+          Vocabulary Deck Details
+        </h2>
       }
     >
       <div className="space-y-8">
         {/* Deck Title */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
+          <h1 className="text-xl font-semibold text-gray-900 mb-2 leading-tight">
             {deck.name}
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">{deck.description}</p>
@@ -46,19 +36,19 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
 
         {/* Status + CEFR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl border border-green-200/60">
-            <p className="text-xs font-bold text-green-700 mb-1 uppercase tracking-wide">
+          <div className="p-4 border border-gray-200 rounded-lg">
+            <p className="text-xs font-medium text-gray-500 mb-1">
               CEFR Level
             </p>
-            <p className="text-lg font-bold text-gray-900">{deck.cefr_level}</p>
+            <p className="text-lg font-semibold text-gray-900">{deck.cefr_level}</p>
           </div>
 
-          <div className="p-4 bg-gradient-to-br from-red-50 to-red-100/50 rounded-xl border border-red-200/60">
-            <p className="text-xs font-bold text-red-700 mb-1 uppercase tracking-wide">
+          <div className="p-4 border border-gray-200 rounded-lg">
+            <p className="text-xs font-medium text-gray-500 mb-1">
               Status
             </p>
             <div
-              className="inline-flex items-center gap-2 px-3 py-1 text-sm font-bold rounded-full"
+              className="inline-flex items-center gap-2 px-3 py-1 text-sm font-semibold rounded-md"
               style={{
                 backgroundColor: deck.enabled ? "#d1fae5" : "#fee2e2",
                 color: deck.enabled ? "#065f46" : "#991b1b",
@@ -75,10 +65,10 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
         </div>
 
         {/* Groups */}
-        <div className="bg-gradient-to-br from-yellow-50 to-yellow-100/50 rounded-2xl p-6 border border-yellow-200/60 shadow">
+        <div className="border border-gray-200 rounded-lg p-5">
           <div className="flex items-center gap-2 mb-4">
-            <Layers size={18} className="text-yellow-700" />
-            <h3 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
+            <Layers size={18} className="text-gray-500" />
+            <h3 className="text-lg font-semibold text-gray-900">
               Groups ({deck.groups?.length})
             </h3>
           </div>
@@ -92,7 +82,7 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
               {deck.groups.map((g) => (
                 <div
                   key={g.id}
-                  className="px-4 py-2 bg-white rounded-full text-sm border shadow-sm hover:shadow-md transition-all flex gap-2 items-center"
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-sm flex gap-2 items-center"
                 >
                   <span>{g.name}</span>
                   {!g.enabled && (
@@ -108,10 +98,10 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
         </div>
 
         {/* Words */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-6 border border-blue-200/60 shadow">
+        <div className="border border-gray-200 rounded-lg p-5">
           <div className="flex items-center gap-2 mb-4">
-            <BookOpen size={18} className="text-blue-700" />
-            <h3 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
+            <BookOpen size={18} className="text-gray-500" />
+            <h3 className="text-lg font-semibold text-gray-900">
               Words ({deck.words?.length})
             </h3>
           </div>
@@ -123,11 +113,11 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
               {deck.words.map((word) => (
                 <div
                   key={word.id}
-                  className="bg-white rounded-xl border border-gray-200 shadow p-4 hover:shadow-lg transition-all"
+                  className="bg-white rounded-lg border border-gray-200 p-4"
                 >
                   {/* Headword */}
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xl font-bold text-gray-900">
+                    <h4 className="text-lg font-semibold text-gray-900">
                       {word.headword}
                     </h4>
                     {word.ipa && (
@@ -149,9 +139,9 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
                     {word.senses.map((s) => (
                       <div
                         key={s.id}
-                        className="p-4 rounded-xl bg-gray-50 shadow-sm"
+                        className="p-4 rounded-lg bg-gray-50"
                       >
-                        <p className="text-xs uppercase font-bold text-gray-600 mb-1">
+                        <p className="text-xs font-medium text-gray-500 mb-1">
                           {s.pos}
                         </p>
                         <p className="font-semibold text-gray-800">
@@ -170,14 +160,14 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
                         {/* synonyms */}
                         {s.synonyms?.length > 0 && (
                           <div className="mt-3">
-                            <p className="text-xs font-bold uppercase text-purple-700">
+                            <p className="text-xs font-medium text-gray-500">
                               Synonyms
                             </p>
                             <div className="flex flex-wrap gap-2 mt-1">
                               {s.synonyms.map((syn, i) => (
                                 <span
                                   key={i}
-                                  className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-semibold"
+                                  className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium"
                                 >
                                   {syn}
                                 </span>
@@ -189,14 +179,14 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
                         {/* Collocations */}
                         {s.collocations?.length > 0 && (
                           <div className="mt-3">
-                            <p className="text-xs font-bold uppercase text-green-700">
+                            <p className="text-xs font-medium text-gray-500">
                               Collocations
                             </p>
                             <div className="flex flex-wrap gap-2 mt-1">
                               {s.collocations.map((col, i) => (
                                 <span
                                   key={i}
-                                  className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold"
+                                  className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium"
                                 >
                                   {col}
                                 </span>
@@ -215,29 +205,29 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
 
         {/* Metadata */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gradient-to-br from-indigo-50 to-indigo-100/50 rounded-xl p-4 border border-indigo-200/60">
-            <p className="text-xs font-bold text-indigo-700 mb-1 uppercase">
+          <div className="border border-gray-200 rounded-lg p-4">
+            <p className="text-xs font-medium text-gray-500 mb-1">
               Created At
             </p>
-            <p className="font-semibold text-gray-900">
+            <p className="font-medium text-gray-900">
               {formatISODate(deck.created_at)}
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-200/60">
-            <p className="text-xs font-bold text-purple-700 mb-1 uppercase">
+          <div className="border border-gray-200 rounded-lg p-4">
+            <p className="text-xs font-medium text-gray-500 mb-1">
               Updated At
             </p>
-            <p className="font-semibold text-gray-900">
+            <p className="font-medium text-gray-900">
               {formatISODate(deck.updated_at)}
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60">
-            <p className="text-xs font-bold text-gray-700 mb-1 uppercase">
+          <div className="border border-gray-200 rounded-lg p-4">
+            <p className="text-xs font-medium text-gray-500 mb-1">
               Deck ID
             </p>
-            <p className="font-mono font-bold text-gray-900">#{deck.id}</p>
+            <p className="font-mono font-medium text-gray-900">#{deck.id}</p>
           </div>
         </div>
       </div>
