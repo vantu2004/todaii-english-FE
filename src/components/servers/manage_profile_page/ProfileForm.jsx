@@ -90,22 +90,11 @@ const ProfileForm = ({ userData, onUpdate }) => {
                   <Loader2 className="w-6 h-6 md:w-8 md:h-8 animate-spin text-gray-400" />
                 </div>
               ) : formData.avatar_url ? (
-                <div className="relative group">
                   <img
                     src={formData.avatar_url}
                     alt="Avatar"
                     className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border border-gray-200"
                   />
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={handleRemoveAvatar}
-                      className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center transition-colors"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
               ) : (
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200">
                   <UserRound className="w-10 h-10 md:w-12 md:h-12 text-gray-400" />
