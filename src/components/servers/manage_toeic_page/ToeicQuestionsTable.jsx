@@ -47,7 +47,6 @@ const ToeicQuestionsTable = ({
       };
 
       await audio.play();
-
     } catch (err) {
       console.error(err);
 
@@ -56,10 +55,9 @@ const ToeicQuestionsTable = ({
     }
   };
 
-  const getAudioUrl = (question) => question.audio_url
+  const getAudioUrl = (question) => question.audio_url;
 
-  const getImageUrl = (question) => question.image_url
-
+  const getImageUrl = (question) => question.image_url;
 
   const isPart12 = partNumber === 1 || partNumber === 2;
 
@@ -126,12 +124,17 @@ const ToeicQuestionsTable = ({
                   <div className="flex flex-wrap gap-1">
                     {question.tags?.length > 0 ? (
                       question.tags.map((tag) => (
-                        <span key={tag.id} className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs whitespace-nowrap">
+                        <span
+                          key={tag.id}
+                          className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs whitespace-nowrap"
+                        >
                           {tag.alias}
                         </span>
                       ))
                     ) : (
-                      <span className="text-gray-400 italic text-xs">No tags</span>
+                      <span className="text-gray-400 italic text-xs">
+                        No tags
+                      </span>
                     )}
                   </div>
                 </td>

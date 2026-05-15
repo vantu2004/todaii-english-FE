@@ -43,10 +43,12 @@ const ManageToeicTestContent = () => {
   const [isPassageModalOpen, setIsPassageModalOpen] = useState(false);
   const [editingPassage, setEditingPassage] = useState(null);
 
-  const [isDeletePassageModalOpen, setIsDeletePassageModalOpen] = useState(false);
+  const [isDeletePassageModalOpen, setIsDeletePassageModalOpen] =
+    useState(false);
   const [passageToDelete, setPassageToDelete] = useState(null);
 
-  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] = useState(false);
+  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
+    useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
 
   const loadTestData = async () => {

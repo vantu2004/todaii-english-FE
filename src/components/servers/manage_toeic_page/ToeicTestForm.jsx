@@ -193,10 +193,7 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
               isDeletingAudio={isDeletingAudio}
             />
 
-            <TestDescription
-              formData={formData}
-              handleChange={handleChange}
-            />
+            <TestDescription formData={formData} handleChange={handleChange} />
           </div>
         </div>
 
