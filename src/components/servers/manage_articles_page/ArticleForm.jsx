@@ -105,7 +105,10 @@ const ArticleForm = ({ mode = "create", initialData = {}, onSubmit }) => {
           {/* LEFT FORM AREA */}
           <div className="lg:col-span-2 space-y-6">
             {/* TITLE */}
-            <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Article Title <span className="text-red-500">*</span>
               </label>

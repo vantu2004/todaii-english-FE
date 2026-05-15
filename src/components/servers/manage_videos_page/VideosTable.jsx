@@ -256,7 +256,11 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
         <Modal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          title={<h2 className="text-lg font-semibold text-gray-900">Delete Video</h2>}
+          title={
+            <h2 className="text-lg font-semibold text-gray-900">
+              Delete Video
+            </h2>
+          }
           footer={
             <div className="flex justify-end gap-3">
               <button
@@ -289,7 +293,9 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
               </p>
 
               <p className="text-xs text-gray-500 mt-1">
-                {selectedIndex !== null ? videos[selectedIndex].author_name : ""}
+                {selectedIndex !== null
+                  ? videos[selectedIndex].author_name
+                  : ""}
               </p>
             </div>
 

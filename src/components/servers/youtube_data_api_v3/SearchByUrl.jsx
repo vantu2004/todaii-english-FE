@@ -65,9 +65,7 @@ const SearchByUrl = ({ video = {} }) => {
 
           {/* Channel Info */}
           <div className="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-            <p className="text-xs text-gray-500 font-semibold mb-3">
-              Channel
-            </p>
+            <p className="text-xs text-gray-500 font-semibold mb-3">Channel</p>
             <div className="flex items-center gap-3">
               <img
                 src={video.thumbnail_url}
@@ -85,9 +83,7 @@ const SearchByUrl = ({ video = {} }) => {
 
           {/* Provider Info */}
           <div className="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-            <p className="text-xs text-gray-500 font-semibold mb-2">
-              Provider
-            </p>
+            <p className="text-xs text-gray-500 font-semibold mb-2">Provider</p>
             <p className="text-sm text-gray-900 font-medium">
               {video.provider_name}
             </p>

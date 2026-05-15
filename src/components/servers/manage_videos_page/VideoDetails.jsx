@@ -113,9 +113,7 @@ const VideoDetails = ({ video }) => {
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-1">
-                  Author
-                </p>
+                <p className="text-xs font-medium text-gray-500 mb-1">Author</p>
                 <p className="text-sm font-semibold text-gray-900">
                   {video.author_name || "Unknown Author"}
                 </p>
@@ -146,9 +144,7 @@ const VideoDetails = ({ video }) => {
 
             <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-1">
-                  Views
-                </p>
+                <p className="text-xs font-medium text-gray-500 mb-1">Views</p>
                 <p className="text-sm font-semibold text-gray-900">
                   {video.views.toLocaleString()} views
                 </p>
@@ -157,9 +153,7 @@ const VideoDetails = ({ video }) => {
 
             <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-1">
-                  Status
-                </p>
+                <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold rounded-full"
                   style={{
@@ -178,25 +172,19 @@ const VideoDetails = ({ video }) => {
       {/* === Meta Information === */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-2">
-            Created At
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-2">Created At</p>
           <p className="text-sm text-gray-900 font-semibold">
             {formatISODate(video.created_at)}
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-2">
-            Last Updated
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-2">Last Updated</p>
           <p className="text-sm text-gray-900 font-semibold">
             {formatISODate(video.updated_at)}
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-2">
-            Video ID
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-2">Video ID</p>
           <p className="text-sm text-gray-900 font-mono font-semibold">
             #{video.id}
           </p>

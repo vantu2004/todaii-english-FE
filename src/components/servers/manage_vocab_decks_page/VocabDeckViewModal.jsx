@@ -37,16 +37,14 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
         {/* Status + CEFR */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 border border-gray-200 rounded-lg">
-            <p className="text-xs font-medium text-gray-500 mb-1">
-              CEFR Level
+            <p className="text-xs font-medium text-gray-500 mb-1">CEFR Level</p>
+            <p className="text-lg font-semibold text-gray-900">
+              {deck.cefr_level}
             </p>
-            <p className="text-lg font-semibold text-gray-900">{deck.cefr_level}</p>
           </div>
 
           <div className="p-4 border border-gray-200 rounded-lg">
-            <p className="text-xs font-medium text-gray-500 mb-1">
-              Status
-            </p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
             <div
               className="inline-flex items-center gap-2 px-3 py-1 text-sm font-semibold rounded-md"
               style={{
@@ -137,10 +135,7 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
                   {/* Senses */}
                   <div className="mt-4 space-y-4">
                     {word.senses.map((s) => (
-                      <div
-                        key={s.id}
-                        className="p-4 rounded-lg bg-gray-50"
-                      >
+                      <div key={s.id} className="p-4 rounded-lg bg-gray-50">
                         <p className="text-xs font-medium text-gray-500 mb-1">
                           {s.pos}
                         </p>
@@ -206,27 +201,21 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
         {/* Metadata */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="border border-gray-200 rounded-lg p-4">
-            <p className="text-xs font-medium text-gray-500 mb-1">
-              Created At
-            </p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Created At</p>
             <p className="font-medium text-gray-900">
               {formatISODate(deck.created_at)}
             </p>
           </div>
 
           <div className="border border-gray-200 rounded-lg p-4">
-            <p className="text-xs font-medium text-gray-500 mb-1">
-              Updated At
-            </p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Updated At</p>
             <p className="font-medium text-gray-900">
               {formatISODate(deck.updated_at)}
             </p>
           </div>
 
           <div className="border border-gray-200 rounded-lg p-4">
-            <p className="text-xs font-medium text-gray-500 mb-1">
-              Deck ID
-            </p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Deck ID</p>
             <p className="font-mono font-medium text-gray-900">#{deck.id}</p>
           </div>
         </div>

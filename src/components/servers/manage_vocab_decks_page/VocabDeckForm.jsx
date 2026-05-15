@@ -60,10 +60,7 @@ const VocabDeckForm = ({ mode = "create", initialData = {}, onSubmit }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col h-full bg-white"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col h-full bg-white">
       {/* HEADER */}
       <div className="flex items-center justify-between bg-white border-b border-gray-100 px-8 py-3">
         <div>

@@ -8,7 +8,9 @@ const VideoViewModal = ({ isOpen, onClose, video }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={<h2 className="text-lg font-semibold text-gray-900">Video Details</h2>}
+      title={
+        <h2 className="text-lg font-semibold text-gray-900">Video Details</h2>
+      }
       width="sm:max-w-7xl"
     >
       <VideoDetails video={video} />

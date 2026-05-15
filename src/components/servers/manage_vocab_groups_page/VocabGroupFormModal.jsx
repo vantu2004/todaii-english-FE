@@ -58,7 +58,10 @@ const VocabGroupFormModal = ({ isOpen, onClose, onSubmit }) => {
         {/* Info Notice */}
         <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
           <div className="flex items-start gap-3">
-            <Lightbulb size={20} className="text-gray-500 flex-shrink-0 mt-0.5" />
+            <Lightbulb
+              size={20}
+              className="text-gray-500 flex-shrink-0 mt-0.5"
+            />
             <div className="flex-1">
               <h4 className="text-sm font-medium text-gray-900 mb-1">
                 Vocabulary Organization

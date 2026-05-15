@@ -30,19 +30,37 @@ import { useState } from "react";
 import { logout } from "@/api/servers/authApi";
 import { useNavigate } from "react-router-dom";
 import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const { authUser } = useServerAuthContext();
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
-  const [expandedMenus, setExpandedMenus] = useState(["content"]);
+  const [expandedMenus, setExpandedMenus] = useState([]);
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
+
+  useEffect(() => {
+    // Tìm xem có menu cha nào chứa đường dẫn hiện tại không
+    const activeParent = menuItems.find((item) =>
+      item.children?.some((child) => location.pathname === child.to),
+    );
+
+    if (activeParent) {
+      setExpandedMenus((prev) => {
+        // Nếu ID cha chưa có trong mảng thì mới thêm vào để tránh trùng lặp
+        if (!prev.includes(activeParent.id)) {
+          return [...prev, activeParent.id];
+        }
+        return prev;
+      });
+    }
+  }, [location.pathname]);
 
   // Lấy role code list
   const userRoles = authUser?.roles?.map((r) => r.code) || [];

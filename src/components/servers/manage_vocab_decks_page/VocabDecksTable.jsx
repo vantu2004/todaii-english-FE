@@ -231,9 +231,7 @@ const VocabDecksTable = ({
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           title={
-            <h2 className="text-lg font-semibold text-gray-900">
-              Delete Deck
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900">Delete Deck</h2>
           }
           footer={
             <div className="flex justify-end gap-3">

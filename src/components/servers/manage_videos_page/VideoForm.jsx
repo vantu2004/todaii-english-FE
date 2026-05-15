@@ -70,10 +70,7 @@ const VideoForm = ({ mode = "create", initialData = {}, onSubmit }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col h-full bg-white"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col h-full bg-white">
       {/* HEADER */}
       <div className="flex items-center justify-between bg-white px-8 py-4 border-b border-gray-100">
         <div>
