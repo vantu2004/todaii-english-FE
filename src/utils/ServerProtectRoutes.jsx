@@ -7,7 +7,7 @@ export const ServerProtectRoutes = ({ children, rolesAllowed }) => {
   const { authUser, isLoggedIn, isLoading } = useServerAuthContext();
 
   if (isLoading) {
-    return null
+    return null;
   }
 
   if (!isLoggedIn || !authUser) {

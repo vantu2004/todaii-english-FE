@@ -41,7 +41,7 @@ const SettingsTable = ({ settings, onUpdate }) => {
       <table className="w-full whitespace-nowrap">
         {/* Header */}
         <thead>
-          <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 bg-gray-50">
+          <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
             {columns.map((col) => (
               <th key={col.key} className="px-4 py-3">
                 {col.label}
@@ -59,7 +59,7 @@ const SettingsTable = ({ settings, onUpdate }) => {
             const isVisible = visibleIndex === i;
 
             return (
-              <tr key={i} className="border-t border-gray-300 text-gray-700">
+              <tr key={i} className="border-t border-gray-100 text-gray-700">
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-3 text-sm">
                     {col.key === "updated_at"
@@ -78,7 +78,7 @@ const SettingsTable = ({ settings, onUpdate }) => {
                       type="text"
                       value={editedValue}
                       onChange={(e) => setEditedValue(e.target.value)}
-                      className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400"
+                      className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400"
                     />
                   ) : isVisible ? (
                     <span className="font-medium">{item.value}</span>
@@ -94,24 +94,24 @@ const SettingsTable = ({ settings, onUpdate }) => {
                       <>
                         <button
                           onClick={() => handleUpdate(i)}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                          className="p-2 text-gray-400 hover:text-gray-700 rounded-lg"
                         >
-                          <Check className="w-5 h-5" />
+                          <Check className="w-4 h-4" />
                         </button>
 
                         <button
                           onClick={handleCancelEdit}
-                          className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                          className="p-2 text-gray-400 hover:text-gray-700 rounded-lg"
                         >
-                          <X className="w-5 h-5" />
+                          <X className="w-4 h-4" />
                         </button>
                       </>
                     ) : (
                       <button
                         onClick={() => handleEditClick(i)}
-                        className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg"
+                        className="p-2 text-gray-400 hover:text-gray-700 rounded-lg"
                       >
-                        <Pencil className="w-5 h-5" />
+                        <Pencil className="w-4 h-4" />
                       </button>
                     )}
                   </div>

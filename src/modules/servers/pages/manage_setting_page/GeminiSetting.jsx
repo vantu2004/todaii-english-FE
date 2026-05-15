@@ -52,7 +52,7 @@ const GeminiSetting = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
       >
         <SettingsTable
           settings={geminiSettings}

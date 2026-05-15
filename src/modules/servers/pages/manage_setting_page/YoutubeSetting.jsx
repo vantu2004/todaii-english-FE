@@ -5,7 +5,6 @@ import { logError } from "@/utils/LogError";
 import { motion } from "framer-motion";
 import SettingsTable from "@/components/servers/SettingsTable";
 import { toast } from "react-hot-toast";
-import { set } from "date-fns";
 
 const YoutubeSetting = () => {
   const { setHeader } = useHeaderContext();
@@ -53,7 +52,7 @@ const YoutubeSetting = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
       >
         <SettingsTable
           settings={youtubeSettings}

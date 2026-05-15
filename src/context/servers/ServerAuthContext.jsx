@@ -12,7 +12,7 @@ export const ServerAuthProvider = ({ children }) => {
     const autoFetchProfile = async () => {
       try {
         const myProfile = await fetchProfile();
-        
+
         setAuthUser(myProfile);
         setIsLoggedIn(true);
       } catch (error) {
