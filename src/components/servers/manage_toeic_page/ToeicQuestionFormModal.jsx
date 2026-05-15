@@ -181,6 +181,7 @@ const ToeicQuestionFormModal = ({
 
     try {
       if (isPart12) {
+        console.log("part 12 hereeee!!");
         const payload = {
           correct_ans: formData.correctAns,
           transcript: formData.transcript,
@@ -204,6 +205,8 @@ const ToeicQuestionFormModal = ({
           },
         };
 
+        console.log("payload: ", payload);
+
         if (isUpdate) {
           await updatePart12Question(initialData.id, payload);
           toast.success("Question updated successfully");
@@ -217,7 +220,7 @@ const ToeicQuestionFormModal = ({
           option_a: formData.optionA,
           option_b: formData.optionB,
           option_c: formData.optionC,
-          optionD_d: formData.optionD,
+          option_d: formData.optionD,
           correct_ans: formData.correctAns,
           explanation: formData.explanation,
           tag_ids: formData.tagIds,

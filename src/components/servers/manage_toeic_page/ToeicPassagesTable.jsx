@@ -23,16 +23,10 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
     }
   };
 
-  const getAudioUrl = (passage) =>
-    passage.audioUrl ||
-    passage.audio_url ||
-    passage.audio_request?.uploaded_audio ||
-    passage.audio_request?.audio_url;
-  const getImageUrl = (passage) =>
-    passage.imageUrl ||
-    passage.image_url ||
-    passage.image_request?.uploaded_image ||
-    passage.image_request?.image_url;
+  const getAudioUrl = (passage) => passage.audio_url
+
+  const getImageUrl = (passage) => passage.image_url
+
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
@@ -43,6 +37,9 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
               <th className="px-6 py-4 w-16">ID</th>
               <th className="px-6 py-4 min-w-[200px]">
                 Passage Text (Preview)
+              </th>
+              <th className="px-6 py-4 min-w-[200px]">
+                Passage Translation
               </th>
               <th className="px-6 py-4">Media</th>
               <th className="px-6 py-4 w-24">Actions</th>
@@ -59,6 +56,9 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
                   {passage.passageText || passage.passage_text || "No text"}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
+                  {passage.passageTrans || passage.passage_trans || "No translation"}
                 </td>
                 <td className="px-6 py-4 text-sm">
                   <div className="flex gap-2 items-center">
@@ -112,7 +112,7 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
             {passages.length === 0 && (
               <tr>
                 <td
-                  colSpan="4"
+                  colSpan="5"
                   className="px-6 py-8 text-center text-gray-500 text-sm italic"
                 >
                   No passages found for this part.
