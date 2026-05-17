@@ -27,9 +27,12 @@ export const fetchTestsByCollectionId = async (
   keyword = "",
 ) => {
   try {
-    const response = await serverInstance.get(`/toeic/test/collection/${collectionId}`, {
-      params: { page, size, sortBy, direction, keyword },
-    });
+    const response = await serverInstance.get(
+      `/toeic/test/collection/${collectionId}`,
+      {
+        params: { page, size, sortBy, direction, keyword },
+      },
+    );
     return response.data;
   } catch (err) {
     console.error("Error:", err);

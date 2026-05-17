@@ -40,7 +40,9 @@ const ToeicQuestionFormModal = ({
   const isPart6 = partNumber === 6;
 
   const filteredTags = useMemo(() => {
-    return tags.filter((tag) => tag.part_number === partNumber || tag.partNumber === partNumber);
+    return tags.filter(
+      (tag) => tag.part_number === partNumber || tag.partNumber === partNumber,
+    );
   }, [tags, partNumber]);
 
   const [formData, setFormData] = useState({
@@ -77,14 +79,8 @@ const ToeicQuestionFormModal = ({
         explanation: initialData.explanation || "",
         passageId: initialData.passage_id || "",
         tagIds: initialData.tags?.map((t) => t.id) || initialData.tag_ids || [],
-        imageUrl:
-          initialData.uploaded_image ||
-          initialData.image_url ||
-          "",
-        audioUrl:
-          initialData.uploaded_audio ||
-          initialData.audio_url ||
-          "",
+        imageUrl: initialData.uploaded_image || initialData.image_url || "",
+        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
       });
     } else {
       setFormData({
@@ -330,15 +326,15 @@ const ToeicQuestionFormModal = ({
                 <FileText size={16} className="text-blue-600" />
                 Transcript <span className="text-red-500">*</span>
               </label>
-            <ReactQuill
-              theme="snow"
-              value={formData.transcript}
-              onChange={(val) =>
-                setFormData((prev) => ({ ...prev, transcript: val }))
-              }
-              className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
-            />
-          </div>
+              <ReactQuill
+                theme="snow"
+                value={formData.transcript}
+                onChange={(val) =>
+                  setFormData((prev) => ({ ...prev, transcript: val }))
+                }
+                className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
+              />
+            </div>
           )}
 
           {/* OPTIONS (Part 3-7) */}
@@ -442,7 +438,9 @@ const ToeicQuestionFormModal = ({
                 </label>
               ))}
               {filteredTags.length === 0 && (
-                <p className="text-sm text-gray-500">No tags available for Part {partNumber}</p>
+                <p className="text-sm text-gray-500">
+                  No tags available for Part {partNumber}
+                </p>
               )}
             </div>
             {formData.tagIds.length === 0 && (

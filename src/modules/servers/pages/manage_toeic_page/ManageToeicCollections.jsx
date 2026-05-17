@@ -118,7 +118,10 @@ const ManageToeicCollections = () => {
 
   const handleSaveEdit = async (id, newName, newDescription) => {
     try {
-      await updateToeicCollection(id, { name: newName, description: newDescription });
+      await updateToeicCollection(id, {
+        name: newName,
+        description: newDescription,
+      });
       toast.success("Collection updated successfully");
       await reloadCollections();
     } catch (error) {

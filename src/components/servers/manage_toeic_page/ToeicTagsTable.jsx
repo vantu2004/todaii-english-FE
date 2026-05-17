@@ -1,11 +1,26 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
-import { Pencil, Trash2, AlertTriangle, Check, X, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  AlertTriangle,
+  Check,
+  X,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import { deleteToeicTag } from "@/api/servers/toeicTagApi";
 import { logError } from "@/utils/LogError";
 
-const ToeicTagsTable = ({ columns, tags, reloadTags, query, updateQuery, onSaveEdit }) => {
+const ToeicTagsTable = ({
+  columns,
+  tags,
+  reloadTags,
+  query,
+  updateQuery,
+  onSaveEdit,
+}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -15,7 +30,11 @@ const ToeicTagsTable = ({ columns, tags, reloadTags, query, updateQuery, onSaveE
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditedName(tags[index].name);
-    setEditedPartNumber(tags[index].part_number !== null && tags[index].part_number !== undefined ? tags[index].part_number : "");
+    setEditedPartNumber(
+      tags[index].part_number !== null && tags[index].part_number !== undefined
+        ? tags[index].part_number
+        : "",
+    );
   };
 
   const handleCancelEdit = () => {
@@ -136,8 +155,11 @@ const ToeicTagsTable = ({ columns, tags, reloadTags, query, updateQuery, onSaveE
                         onChange={(e) => setEditedPartNumber(e.target.value)}
                         className="w-20 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:bg-gray-700 dark:text-white"
                       />
+                    ) : item.part_number !== undefined &&
+                      item.part_number !== null ? (
+                      item.part_number
                     ) : (
-                      item.part_number !== undefined && item.part_number !== null ? item.part_number : "-"
+                      "-"
                     )}
                   </td>
 
