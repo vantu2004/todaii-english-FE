@@ -41,12 +41,12 @@ const ToeicPassageFormModal = ({
         passageTrans:
           initialData.passageTrans || initialData.passage_trans || "",
         imageUrl:
-          initialData.image_request?.uploaded_image ||
-          initialData.image_request?.image_url ||
+          initialData.uploaded_image ||
+          initialData.image_url ||
           "",
         audioUrl:
-          initialData.audio_request?.uploaded_audio ||
-          initialData.audio_request?.audio_url ||
+          initialData.uploaded_audio ||
+          initialData.audio_url ||
           "",
       });
     } else {
