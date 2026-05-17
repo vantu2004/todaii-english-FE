@@ -41,6 +41,7 @@ const ManageToeicCollections = () => {
     { key: "name", label: "Collection Name", sortField: "name" },
     { key: "alias", label: "Alias", sortField: "alias" },
     { key: "description", label: "Description" },
+    { key: "tests", label: "Tests" },
     { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
     { key: "enable", label: "Enable" },
     { key: "actions", label: "Actions" },
@@ -115,6 +116,16 @@ const ManageToeicCollections = () => {
     }
   };
 
+  const handleSaveEdit = async (id, newName, newDescription) => {
+    try {
+      await updateToeicCollection(id, { name: newName, description: newDescription });
+      toast.success("Collection updated successfully");
+      await reloadCollections();
+    } catch (error) {
+      logError(error);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col h-full">
@@ -137,6 +148,7 @@ const ManageToeicCollections = () => {
             query={query}
             updateQuery={updateQuery}
             onEdit={handleOpenModal}
+            onSaveEdit={handleSaveEdit}
           />
         </motion.div>
 

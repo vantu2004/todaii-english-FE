@@ -196,6 +196,17 @@ const ToeicTestsTable = ({
                 <td className="px-4 py-3">
                   <div className="flex items-center space-x-3 text-sm">
                     <button
+                      onClick={() => onManageContent(item)}
+                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                      title="Manage Content"
+                    >
+                      <List className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center space-x-3 text-sm">
+                    <button
                       onClick={() => handleMetadataClick(i)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="View Metadata"
@@ -208,13 +219,6 @@ const ToeicTestsTable = ({
                       title="Edit Test"
                     >
                       <Pencil className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => onManageContent(item)}
-                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                      title="Manage Content"
-                    >
-                      <List className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(i)}

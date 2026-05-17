@@ -23,12 +23,15 @@ const ManageToeicTags = () => {
   // For tags without pagination, we can still use query for search/filter locally
   const [query, setQuery] = useState({
     keyword: "",
+    sortBy: "id",
+    direction: "desc",
   });
 
   const columns = [
-    { key: "id", label: "ID" },
-    { key: "name", label: "Tag Name" },
-    { key: "alias", label: "Alias" },
+    { key: "id", label: "ID", sortField: "id" },
+    { key: "name", label: "Tag Name", sortField: "name" },
+    { key: "alias", label: "Alias", sortField: "alias" },
+    { key: "part_number", label: "Part Number", sortField: "part_number" },
     { key: "actions", label: "Actions" },
   ];
 
@@ -59,8 +62,7 @@ const ManageToeicTags = () => {
     setQuery((prev) => ({ ...prev, ...newValues }));
   };
 
-  const handleOpenModal = (tag = null) => {
-    setEditingTag(tag);
+  const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
@@ -71,13 +73,8 @@ const ManageToeicTags = () => {
 
   const handleSubmit = async (name) => {
     try {
-      if (editingTag) {
-        await updateToeicTag(editingTag.id, name);
-        toast.success("Tag updated successfully");
-      } else {
-        await createToeicTag(name);
-        toast.success("Tag created successfully");
-      }
+      await createToeicTag(name);
+      toast.success("Tag created successfully");
       await reloadTags();
       handleCloseModal();
     } catch (error) {
@@ -85,9 +82,33 @@ const ManageToeicTags = () => {
     }
   };
 
-  const filteredTags = tags.filter((t) =>
+  const handleSaveEdit = async (id, newName, newPartNumber) => {
+    try {
+      await updateToeicTag(id, newName, newPartNumber);
+      toast.success("Tag updated successfully");
+      await reloadTags();
+    } catch (error) {
+      logError(error);
+    }
+  };
+
+  let filteredTags = tags.filter((t) =>
     t.name.toLowerCase().includes(query.keyword.toLowerCase()),
   );
+
+  if (query.sortBy) {
+    filteredTags.sort((a, b) => {
+      let valA = a[query.sortBy];
+      let valB = b[query.sortBy];
+
+      if (valA === null || valA === undefined) valA = "";
+      if (valB === null || valB === undefined) valB = "";
+
+      if (valA < valB) return query.direction === "asc" ? -1 : 1;
+      if (valA > valB) return query.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
 
   return (
     <>
@@ -108,7 +129,9 @@ const ManageToeicTags = () => {
             columns={columns}
             tags={filteredTags}
             reloadTags={reloadTags}
-            onEdit={handleOpenModal}
+            query={query}
+            updateQuery={updateQuery}
+            onSaveEdit={handleSaveEdit}
           />
         </motion.div>
       </div>
@@ -118,7 +141,6 @@ const ManageToeicTags = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSubmit={handleSubmit}
-          initialData={editingTag}
         />
       )}
     </>

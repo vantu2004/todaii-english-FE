@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Modal from "@/components/servers/Modal";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   Save,
   Image as ImageIcon,
@@ -36,6 +38,10 @@ const ToeicQuestionFormModal = ({
   const isPart12 = partNumber === 1 || partNumber === 2;
   const isPart5 = partNumber === 5;
   const isPart6 = partNumber === 6;
+
+  const filteredTags = useMemo(() => {
+    return tags.filter((tag) => tag.part_number === partNumber || tag.partNumber === partNumber);
+  }, [tags, partNumber]);
 
   const [formData, setFormData] = useState({
     transcript: "",
@@ -324,15 +330,15 @@ const ToeicQuestionFormModal = ({
                 <FileText size={16} className="text-blue-600" />
                 Transcript <span className="text-red-500">*</span>
               </label>
-              <textarea
-                name="transcript"
-                value={formData.transcript}
-                onChange={handleChange}
-                rows={4}
-                required
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
-              />
-            </div>
+            <ReactQuill
+              theme="snow"
+              value={formData.transcript}
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, transcript: val }))
+              }
+              className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
+            />
+          </div>
           )}
 
           {/* OPTIONS (Part 3-7) */}
@@ -419,7 +425,7 @@ const ToeicQuestionFormModal = ({
               Tags (Select up to 5) <span className="text-red-500">*</span>
             </label>
             <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-750">
-              {tags.map((tag) => (
+              {filteredTags.map((tag) => (
                 <label
                   key={tag.id}
                   className="flex items-center gap-2 cursor-pointer bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600 hover:border-blue-400 transition"
@@ -435,6 +441,9 @@ const ToeicQuestionFormModal = ({
                   </span>
                 </label>
               ))}
+              {filteredTags.length === 0 && (
+                <p className="text-sm text-gray-500">No tags available for Part {partNumber}</p>
+              )}
             </div>
             {formData.tagIds.length === 0 && (
               <p className="text-xs text-red-500 mt-1">
@@ -449,13 +458,13 @@ const ToeicQuestionFormModal = ({
               <FileText size={16} className="text-gray-600" />
               Explanation <span className="text-red-500">*</span>
             </label>
-            <textarea
-              name="explanation"
+            <ReactQuill
+              theme="snow"
               value={formData.explanation}
-              onChange={handleChange}
-              rows={3}
-              required
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, explanation: val }))
+              }
+              className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
             />
           </div>
 

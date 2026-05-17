@@ -1,5 +1,6 @@
 import { Pencil, Trash2, Volume2, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
+import DOMPurify from "dompurify";
 
 const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
   const [playingId, setPlayingId] = useState(null);
@@ -54,11 +55,25 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
                 <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-200">
                   {passage.id}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
-                  {passage.passageText || passage.passage_text || "No text"}
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div
+                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        passage.passageText || passage.passage_text || "No text"
+                      ),
+                    }}
+                  />
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
-                  {passage.passageTrans || passage.passage_trans || "No translation"}
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div
+                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        passage.passageTrans || passage.passage_trans || "No translation"
+                      ),
+                    }}
+                  />
                 </td>
                 <td className="px-6 py-4 text-sm">
                   <div className="flex gap-2 items-center">

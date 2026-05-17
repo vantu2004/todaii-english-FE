@@ -32,10 +32,10 @@ export const createToeicTag = async (name) => {
   }
 };
 
-export const updateToeicTag = async (id, name) => {
+export const updateToeicTag = async (id, name, partNumber) => {
   try {
     const response = await serverInstance.put(`/toeic/tag/${id}`, null, {
-      params: { name },
+      params: { name, partNumber },
     });
     return response.data;
   } catch (err) {

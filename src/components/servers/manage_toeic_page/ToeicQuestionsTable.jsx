@@ -1,5 +1,6 @@
 import { Pencil, Trash2, Volume2, Image as ImageIcon } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import DOMPurify from "dompurify";
 
 const ToeicQuestionsTable = ({
   questions,
@@ -81,8 +82,16 @@ const ToeicQuestionsTable = ({
               <th className="px-6 py-4 min-w-[200px]">
                 {isPart12 ? "Transcript (Preview)" : "Question"}
               </th>
+              {!isPart12 && (
+                <>
+                  <th className="px-6 py-4">Option A</th>
+                  <th className="px-6 py-4">Option B</th>
+                  <th className="px-6 py-4">Option C</th>
+                  <th className="px-6 py-4">Option D</th>
+                </>
+              )}
               <th className="px-6 py-4">Correct Answer</th>
-              <th className="px-6 py-4">Explanation</th>
+              <th className="px-6 py-4 min-w-[200px]">Explanation</th>
               <th className="px-6 py-4 w-32">Tags</th>
               {isPart12 && <th className="px-6 py-4">Media</th>}
               <th className="px-6 py-4 w-24">Actions</th>
@@ -106,11 +115,35 @@ const ToeicQuestionsTable = ({
                   </td>
                 )}
 
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
-                  {isPart12
-                    ? question.transcript || "No transcript"
-                    : question.question || "No question"}
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div
+                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        isPart12
+                          ? question.transcript || "No transcript"
+                          : question.question || "No question"
+                      ),
+                    }}
+                  />
                 </td>
+
+                {!isPart12 && (
+                  <>
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate" title={question.option_a}>
+                      {question.option_a}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate" title={question.option_b}>
+                      {question.option_b}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate" title={question.option_c}>
+                      {question.option_c}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate" title={question.option_d}>
+                      {question.option_d}
+                    </td>
+                  </>
+                )}
 
                 <td className="px-6 py-4 text-sm">
                   <span className="font-bold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200">
@@ -118,8 +151,13 @@ const ToeicQuestionsTable = ({
                   </span>
                 </td>
 
-                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 truncate max-w-xs">
-                  {question.explanation || "No explanation"}
+                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div
+                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(question.explanation || "No explanation"),
+                    }}
+                  />
                 </td>
 
                 <td className="px-6 py-4 text-sm">
@@ -192,7 +230,7 @@ const ToeicQuestionsTable = ({
             {questions.length === 0 && (
               <tr>
                 <td
-                  colSpan={isPart12 ? 7 : partNumber === 5 ? 6 : 7}
+                  colSpan={isPart12 ? 7 : partNumber === 5 ? 10 : 11}
                   className="px-6 py-8 text-center text-gray-500 text-sm italic"
                 >
                   No questions found for this part.
