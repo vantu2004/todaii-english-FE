@@ -71,9 +71,9 @@ const ManageToeicTags = () => {
     setEditingTag(null);
   };
 
-  const handleSubmit = async (name) => {
+  const handleSubmit = async (name, partNumber) => {
     try {
-      await createToeicTag(name);
+      await createToeicTag(name, partNumber);
       toast.success("Tag created successfully");
       await reloadTags();
       handleCloseModal();

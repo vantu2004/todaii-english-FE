@@ -20,10 +20,10 @@ export const getToeicTagById = async (id) => {
   }
 };
 
-export const createToeicTag = async (name) => {
+export const createToeicTag = async (name, partNumber) => {
   try {
     const response = await serverInstance.post("/toeic/tag", null, {
-      params: { name },
+      params: { name, partNumber },
     });
     return response.data;
   } catch (err) {

@@ -38,7 +38,7 @@ const ManageToeicTests = () => {
     { key: "type", label: "Type", sortField: "testType" },
     { key: "duration", label: "Duration", sortField: "duration" },
     { key: "audio", label: "Audio" },
-    { key: "collection", label: "Collection", sortField: "collectionId" },
+    { key: "collection", label: "Collection", sortField: "collection" },
     { key: "status", label: "Status", sortField: "status" },
     { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
     { key: "content", label: "Content" },

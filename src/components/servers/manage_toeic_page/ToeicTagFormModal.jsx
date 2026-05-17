@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "@/components/servers/Modal";
 import { Tag } from "lucide-react";
+import toast from "react-hot-toast";
 
 const ToeicTagFormModal = ({
   isOpen,
@@ -9,18 +10,29 @@ const ToeicTagFormModal = ({
   initialData = null,
 }) => {
   const [name, setName] = useState("");
+  const [partNumber, setPartNumber] = useState("");
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name || "");
+      setPartNumber(initialData.partNumber || initialData.part_number || "");
     } else {
       setName("");
+      setPartNumber("");
     }
   }, [initialData, isOpen]);
 
   const handleSubmit = () => {
-    if (!name.trim()) return;
-    onSubmit(name);
+    if (!name.trim()) {
+      toast.error("Tag name is required");
+      return;
+    }
+    const pNum = parseInt(partNumber, 10);
+    if (isNaN(pNum) || pNum < 1 || pNum > 7) {
+      toast.error("Part number must be between 1 and 7");
+      return;
+    }
+    onSubmit(name, pNum);
   };
 
   return (
@@ -73,6 +85,20 @@ const ToeicTagFormModal = ({
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Grammar"
               className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+              <Tag size={16} className="text-pink-600" />
+              Part Number <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              name="partNumber"
+              value={partNumber}
+              onChange={(e) => setPartNumber(e.target.value)}
+              placeholder="e.g., 1"
+              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition-all  "
             />
           </div>
         </div>
