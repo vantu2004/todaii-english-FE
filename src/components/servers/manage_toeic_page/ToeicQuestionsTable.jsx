@@ -7,7 +7,6 @@ const ToeicQuestionsTable = ({
   partNumber,
   onEdit,
   onDelete,
-  passages,
 }) => {
   const [playingId, setPlayingId] = useState(null);
 
@@ -64,11 +63,6 @@ const ToeicQuestionsTable = ({
 
   const isPart12 = partNumber === 1 || partNumber === 2;
 
-  const getPassageInfo = (passageId) => {
-    const passage = passages?.find((p) => p.id === passageId);
-    return passage ? `Passage #${passage.id}` : "N/A";
-  };
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
@@ -77,7 +71,7 @@ const ToeicQuestionsTable = ({
             <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <th className="px-6 py-4 w-16">ID</th>
               {!isPart12 && partNumber !== 5 && (
-                <th className="px-6 py-4 w-32">Passage</th>
+                <th className="px-6 py-4 w-32">Passage ID</th>
               )}
               <th className="px-6 py-4 min-w-[200px]">
                 {isPart12 ? "Transcript (Preview)" : "Question"}
@@ -109,9 +103,9 @@ const ToeicQuestionsTable = ({
 
                 {!isPart12 && partNumber !== 5 && (
                   <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                    <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded text-xs font-medium">
-                      {getPassageInfo(question.passage_id)}
-                    </span>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-200">
+                      {question.passage_id}
+                    </td>
                   </td>
                 )}
 
