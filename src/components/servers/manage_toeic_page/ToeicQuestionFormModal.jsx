@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Modal from "@/components/servers/Modal";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import {
   Save,
   Image as ImageIcon,
@@ -78,12 +78,12 @@ const ToeicQuestionFormModal = ({
         passageId: initialData.passage_id || "",
         tagIds: initialData.tags?.map((t) => t.id) || initialData.tag_ids || [],
         imageUrl:
-          initialData.image_request?.uploaded_image ||
-          initialData.image_request?.image_url ||
+          initialData.uploaded_image ||
+          initialData.image_url ||
           "",
         audioUrl:
-          initialData.audio_request?.uploaded_audio ||
-          initialData.audio_request?.audio_url ||
+          initialData.uploaded_audio ||
+          initialData.audio_url ||
           "",
       });
     } else {

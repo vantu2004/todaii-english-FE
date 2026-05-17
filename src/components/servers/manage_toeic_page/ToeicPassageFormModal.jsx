@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "@/components/servers/Modal";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { Save, X, Image as ImageIcon, FileAudio, FileText } from "lucide-react";
 import {
   uploadToeicTestFile,

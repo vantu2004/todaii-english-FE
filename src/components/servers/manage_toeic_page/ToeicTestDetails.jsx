@@ -53,7 +53,7 @@ const ToeicTestDetails = ({ test }) => {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
           {test.title}
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-gray-600 max-w-2xl mx-auto whitespace-pre-wrap">
           {test.description || "No description provided."}
         </p>
       </div>
