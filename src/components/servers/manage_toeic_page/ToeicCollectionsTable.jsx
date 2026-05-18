@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { formatISODate } from "@/utils/FormatDate";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
@@ -8,18 +9,21 @@ import {
   ArrowUp,
   ArrowDown,
   AlertTriangle,
+  TextAlignStart,
+  Check,
+  X,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   deleteToeicCollection,
   toggleToeicCollectionEnabled,
 } from "@/api/servers/toeicCollectionApi";
 import { logError } from "@/utils/LogError";
 
-const truncateWords = (str, maxWords = 150) => {
+const truncateChars = (str, maxChars = 50) => {
   if (!str) return "";
-  const words = str.split(/\s+/);
-  if (words.length > maxWords) {
-    return words.slice(0, maxWords).join(" ") + "...";
+  if (str.length > maxChars) {
+    return str.substring(0, maxChars) + "...";
   }
   return str;
 };
@@ -31,10 +35,39 @@ const ToeicCollectionsTable = ({
   query,
   updateQuery,
   onEdit,
+  onSaveEdit,
 }) => {
   const [enabledStates, setEnabledStates] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const navigate = useNavigate();
+
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedName, setEditedName] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
+
+  const handleTestsClick = (id) => {
+    navigate(`/server/toeic-collection/${id}/tests`);
+  };
+
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditedName(collections[index].name || "");
+    setEditedDescription(collections[index].description || "");
+  };
+
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    setEditedName("");
+    setEditedDescription("");
+  };
+
+  const handleSaveEdit = async (index) => {
+    const item = collections[index];
+    if (editedName.trim() === "") return;
+    await onSaveEdit(item.id, editedName, editedDescription);
+    setEditingIndex(null);
+  };
 
   useEffect(() => {
     setEnabledStates(collections.map((c) => c.enabled));
@@ -133,61 +166,119 @@ const ToeicCollectionsTable = ({
           </thead>
 
           <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-            {collections.map((item, i) => (
-              <tr
-                key={i}
-                className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
-              >
-                <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
-                <td className="px-4 py-3 text-sm font-medium">{item.name}</td>
-                <td className="px-4 py-3 text-sm">{item.alias}</td>
+            {collections.map((item, i) => {
+              const isEditing = editingIndex === i;
 
-                <td
-                  className="px-4 py-3 text-sm max-w-xs truncate cursor-help"
-                  title={item.description || ""}
+              return (
+                <tr
+                  key={i}
+                  className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
                 >
-                  {truncateWords(item.description, 150)}
-                </td>
+                  <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
+                  <td className="px-4 py-3 text-sm font-medium whitespace-normal">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-900/10 focus:border-indigo-400 dark:bg-gray-700 dark:text-white"
+                        autoFocus
+                      />
+                    ) : (
+                      item.name
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-sm">{item.alias}</td>
 
-                <td className="px-4 py-3 text-sm">
-                  {formatISODate(item.updatedAt || item.updated_at)}
-                </td>
-
-                <td className="px-4 py-3 text-sm">
-                  <button
-                    onClick={() => handleToggle(i)}
-                    className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
-                      enabledStates[i]
-                        ? "bg-green-400 border-green-400"
-                        : "bg-neutral-300 border-neutral-200"
-                    }`}
+                  <td
+                    className="px-4 py-3 text-sm max-w-xs cursor-help whitespace-normal"
+                    title={item.description || ""}
                   >
-                    <div
-                      className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
-                        enabledStates[i] ? "translate-x-5" : "translate-x-0"
-                      }`}
-                    ></div>
-                  </button>
-                </td>
+                    {isEditing ? (
+                      <TextareaAutosize
+                        minRows={1}
+                        maxRows={5}
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-900/10 focus:border-indigo-400 dark:bg-gray-700 dark:text-white resize-none"
+                      />
+                    ) : (
+                      truncateChars(item.description, 50)
+                    )}
+                  </td>
 
-                <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
+                  <td className="px-4 py-3">
                     <button
-                      onClick={() => onEdit(item)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      onClick={() => handleTestsClick(item.id)}
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
                     >
-                      <Pencil className="w-5 h-5" />
+                      <TextAlignStart className="w-5 h-5" />
                     </button>
+                  </td>
+
+                  <td className="px-4 py-3 text-sm">
+                    {formatISODate(item.updatedAt || item.updated_at)}
+                  </td>
+
+                  <td className="px-4 py-3 text-sm">
                     <button
-                      onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => handleToggle(i)}
+                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
+                        enabledStates[i]
+                          ? "bg-green-400 border-green-400"
+                          : "bg-neutral-300 border-neutral-200"
+                      }`}
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <div
+                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
+                          enabledStates[i] ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      ></div>
                     </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <div className="flex items-center space-x-3 text-sm">
+                      {isEditing ? (
+                        <>
+                          <button
+                            onClick={() => handleSaveEdit(i)}
+                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            title="Save"
+                          >
+                            <Check className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={handleCancelEdit}
+                            className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                            title="Cancel"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleEditClick(i)}
+                            className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                            title="Edit directly"
+                          >
+                            <Pencil className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(i)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
             {collections.length === 0 && (
               <tr>
                 <td
