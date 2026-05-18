@@ -82,8 +82,6 @@ const Sidebar = () => {
       case "learning":
       case "toeic":
         return hasRole("CONTENT_MANAGER");
-      case "settings":
-        return false;
       default:
         return false;
     }
@@ -167,22 +165,6 @@ const Sidebar = () => {
         },
         { name: "Tests", to: "/server/toeic-test", icon: FileText },
         { name: "Tags", to: "/server/toeic-tag", icon: Tag },
-      ],
-    },
-    {
-      id: "settings",
-      name: "System Settings",
-      icon: Settings,
-      children: [
-        { name: "Gemini", to: "/server/setting/gemini", icon: Sparkles },
-        { name: "SMTP", to: "/server/setting/smtp", icon: Mails },
-        { name: "Youtube", to: "/server/setting/youtube", icon: TvMinimalPlay },
-        { name: "News API", to: "/server/setting/news-api", icon: BookMarked },
-        {
-          name: "Cloudinary",
-          to: "/server/setting/cloudinary",
-          icon: CloudUpload,
-        },
       ],
     },
   ];

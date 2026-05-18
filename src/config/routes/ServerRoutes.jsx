@@ -34,11 +34,6 @@ import ManageVocabsInVideo from "@/modules/servers/pages/manage_videos_page/Mana
 import ManageVocabsInVocabDeck from "@/modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
 import { HeaderProvider } from "@/context/servers/HeaderContext";
 import Profile from "@/modules/servers/pages/manage_profile_page/Profile";
-import GeminiSetting from "@/modules/servers/pages/manage_setting_page/GeminiSetting";
-import SmtpSetting from "@/modules/servers/pages/manage_setting_page/SmtpSetting";
-import YoutubeSetting from "@/modules/servers/pages/manage_setting_page/YoutubeSetting";
-import NewsApiSetting from "@/modules/servers/pages/manage_setting_page/NewsApiSetting";
-import CloudinarySetting from "@/modules/servers/pages/manage_setting_page/CloudinarySetting";
 import PageNotFound from "@/pages/PageNotFound";
 import MyDashboard from "@/modules/servers/pages/manage_profile_page/MyDashboard";
 import AdminDashboard from "@/modules/servers/pages/manage_admins_page/AdminDashboard";
@@ -498,52 +493,6 @@ export default function ServerRoutes() {
                   ]}
                 >
                   <MyDashboard />
-                </ServerProtectRoutes>
-              }
-            />
-
-            {/* Settings: chỉ SUPER_ADMIN */}
-            <Route
-              path="/setting/gemini"
-              element={
-                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
-                  <GeminiSetting />
-                </ServerProtectRoutes>
-              }
-            />
-
-            <Route
-              path="/setting/smtp"
-              element={
-                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
-                  <SmtpSetting />
-                </ServerProtectRoutes>
-              }
-            />
-
-            <Route
-              path="/setting/youtube"
-              element={
-                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
-                  <YoutubeSetting />
-                </ServerProtectRoutes>
-              }
-            />
-
-            <Route
-              path="/setting/news-api"
-              element={
-                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
-                  <NewsApiSetting />
-                </ServerProtectRoutes>
-              }
-            />
-
-            <Route
-              path="/setting/cloudinary"
-              element={
-                <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
-                  <CloudinarySetting />
                 </ServerProtectRoutes>
               }
             />
