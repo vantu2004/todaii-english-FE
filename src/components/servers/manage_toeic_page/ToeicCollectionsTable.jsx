@@ -6,6 +6,7 @@ import Modal from "@/components/servers/Modal";
 import {
   Pencil,
   Trash2,
+  ArrowUp,
   ArrowDown,
   AlertTriangle,
   TextAlignStart,
