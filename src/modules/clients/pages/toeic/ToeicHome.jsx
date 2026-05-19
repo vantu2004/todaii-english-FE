@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { fetchToeicCollections, fetchTestsByCollectionId, fetchToeicTests } from "@/api/clients/toeicApi";
+import {
+  fetchToeicCollections,
+  fetchTestsByCollectionId,
+  fetchToeicTests,
+} from "@/api/clients/toeicApi";
 import { BookOpen, GraduationCap, Clock, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -66,7 +70,8 @@ const ToeicHome = () => {
           Luyện Thi TOEIC
         </h1>
         <p className="text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto text-lg">
-          Cải thiện điểm số của bạn với hàng trăm đề thi TOEIC được cập nhật mới nhất.
+          Cải thiện điểm số của bạn với hàng trăm đề thi TOEIC được cập nhật mới
+          nhất.
         </p>
       </div>
 
@@ -78,16 +83,19 @@ const ToeicHome = () => {
               <BookOpen className="text-brand-500" size={20} />
               Bộ Đề Thi
             </h2>
-            
+
             {loadingCollections ? (
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-10 bg-neutral-100 dark:bg-neutral-800 rounded-xl animate-pulse" />
+                  <div
+                    key={i}
+                    className="h-10 bg-neutral-100 dark:bg-neutral-800 rounded-xl animate-pulse"
+                  />
                 ))}
               </div>
             ) : (
               <div className="space-y-1">
-                {collections.map(collection => (
+                {collections.map((collection) => (
                   <button
                     key={collection.id}
                     onClick={() => handleSelectCollection(collection)}
@@ -119,7 +127,10 @@ const ToeicHome = () => {
           {loadingTests ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-white dark:bg-neutral-900 h-48 rounded-2xl border border-neutral-100 dark:border-neutral-800 p-5 animate-pulse flex flex-col justify-between">
+                <div
+                  key={i}
+                  className="bg-white dark:bg-neutral-900 h-48 rounded-2xl border border-neutral-100 dark:border-neutral-800 p-5 animate-pulse flex flex-col justify-between"
+                >
                   <div className="space-y-3">
                     <div className="h-6 w-3/4 bg-neutral-100 dark:bg-neutral-800 rounded-lg"></div>
                     <div className="h-4 w-1/2 bg-neutral-100 dark:bg-neutral-800 rounded-lg"></div>
@@ -131,8 +142,11 @@ const ToeicHome = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {tests.length > 0 ? (
-                tests.map(test => (
-                  <div key={test.id} className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 p-5 flex flex-col hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-300 group">
+                tests.map((test) => (
+                  <div
+                    key={test.id}
+                    className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 p-5 flex flex-col hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-300 group"
+                  >
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-3">
                         <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-500/10 flex items-center justify-center">

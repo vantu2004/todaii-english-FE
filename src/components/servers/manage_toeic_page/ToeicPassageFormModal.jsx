@@ -40,14 +40,8 @@ const ToeicPassageFormModal = ({
         passageText: initialData.passageText || initialData.passage_text || "",
         passageTrans:
           initialData.passageTrans || initialData.passage_trans || "",
-        imageUrl:
-          initialData.uploaded_image ||
-          initialData.image_url ||
-          "",
-        audioUrl:
-          initialData.uploaded_audio ||
-          initialData.audio_url ||
-          "",
+        imageUrl: initialData.uploaded_image || initialData.image_url || "",
+        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
       });
     } else {
       setFormData({

@@ -6,7 +6,7 @@ export const fetchToeicCollections = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/toeic/collection", {
@@ -20,7 +20,9 @@ export const fetchToeicCollections = async (
 
 export const getToeicCollectionById = async (id) => {
   try {
-    const response = await serverInstanceInstance.get(`/toeic/collection/${id}`);
+    const response = await serverInstanceInstance.get(
+      `/toeic/collection/${id}`,
+    );
     return response.data;
   } catch (err) {
     throw err;
@@ -34,14 +36,14 @@ export const fetchTestsByCollectionId = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get(
       `/toeic/test/collection/${collectionId}`,
       {
         params: { page, size, sortBy, direction, keyword },
-      }
+      },
     );
     return response.data;
   } catch (err) {
@@ -54,7 +56,7 @@ export const fetchToeicTests = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await serverInstance.get("/toeic/test", {
@@ -79,7 +81,7 @@ export const getToeicTestById = async (id) => {
 export const getQuestionsByPartNumber = async (testId, partNumber) => {
   try {
     const response = await serverInstance.get(
-      `/toeic/test/${testId}/part/${partNumber}/question`
+      `/toeic/test/${testId}/part/${partNumber}/question`,
     );
     return response.data;
   } catch (err) {
@@ -90,7 +92,7 @@ export const getQuestionsByPartNumber = async (testId, partNumber) => {
 export const getPassagesByPartNumber = async (testId, partNumber) => {
   try {
     const response = await serverInstance.get(
-      `/toeic/test/${testId}/part/${partNumber}/passage`
+      `/toeic/test/${testId}/part/${partNumber}/passage`,
     );
     return response.data;
   } catch (err) {

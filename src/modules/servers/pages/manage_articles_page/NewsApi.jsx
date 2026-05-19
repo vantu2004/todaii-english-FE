@@ -13,6 +13,9 @@ const NewsApi = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // chỉ fetch data lần đầu tiên khi component mount, sau đó sẽ fetch lại khi query thay đổi
+  const firstRender = useRef(true);
+
   // Query filter state
   const [query, setQuery] = useState({
     keyword: "technology",
@@ -57,6 +60,10 @@ const NewsApi = () => {
   }, []);
 
   useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    }
+
     reloadArticles();
   }, [query]);
 
