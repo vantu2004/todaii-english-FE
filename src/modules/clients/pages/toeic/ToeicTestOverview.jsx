@@ -51,7 +51,7 @@ const ToeicTestOverview = () => {
         <div className="flex flex-col md:flex-row gap-8 items-start">
           <div className="flex-1">
             <h1 className="text-3xl md:text-4xl font-extrabold text-neutral-900 dark:text-white mb-4">
-              {test.name}
+              {test.title}
             </h1>
             
             <div className="flex flex-wrap items-center gap-4 text-neutral-600 dark:text-neutral-300 mb-8">

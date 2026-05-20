@@ -227,7 +227,7 @@ const ToeicTakingTest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col pt-[68px]">
+    <div className="h-[calc(100vh-68px)] bg-neutral-50 dark:bg-neutral-950 flex flex-col mt-[68px]">
       {/* Header */}
       <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3 px-4 sm:px-6 flex items-center justify-between sticky top-[68px] z-40">
         <div className="flex items-center gap-3">
