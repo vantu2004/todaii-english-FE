@@ -19,6 +19,7 @@ import ToeicPassagesTable from "@/components/servers/manage_toeic_page/ToeicPass
 import ToeicQuestionFormModal from "@/components/servers/manage_toeic_page/ToeicQuestionFormModal";
 import ToeicPassageFormModal from "@/components/servers/manage_toeic_page/ToeicPassageFormModal";
 import { fetchAllToeicTags } from "@/api/servers/toeicTagApi";
+import ConfirmDeleteModal from "@/components/servers/manage_toeic_page/ConfirmDeleteModal";
 
 const PARTS_WITH_PASSAGE = [3, 4, 6, 7];
 
@@ -41,6 +42,14 @@ const ManageToeicTestContent = () => {
 
   const [isPassageModalOpen, setIsPassageModalOpen] = useState(false);
   const [editingPassage, setEditingPassage] = useState(null);
+
+  const [isDeletePassageModalOpen, setIsDeletePassageModalOpen] =
+    useState(false);
+  const [passageToDelete, setPassageToDelete] = useState(null);
+
+  const [isDeleteQuestionModalOpen, setIsDeleteQuestionModalOpen] =
+    useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState(null);
 
   const loadTestData = async () => {
     try {
@@ -110,20 +119,23 @@ const ManageToeicTestContent = () => {
     setIsPassageModalOpen(true);
   };
 
-  const handleDeletePassage = async (passageId) => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete this passage? It may delete associated questions.",
-      )
-    ) {
-      try {
-        await deletePassage(passageId);
-        toast.success("Passage deleted");
-        loadContentForPart(activePart);
-      } catch (err) {
-        logError(err);
-        toast.error("Failed to delete passage");
-      }
+  const handleDeletePassageClick = (passageId) => {
+    setPassageToDelete(passageId);
+    setIsDeletePassageModalOpen(true);
+  };
+
+  const handleConfirmDeletePassage = async () => {
+    if (!passageToDelete) return;
+    try {
+      await deletePassage(passageToDelete);
+      toast.success("Passage deleted");
+      loadContentForPart(activePart);
+    } catch (err) {
+      logError(err);
+      toast.error("Failed to delete passage");
+    } finally {
+      setIsDeletePassageModalOpen(false);
+      setPassageToDelete(null);
     }
   };
 
@@ -137,16 +149,23 @@ const ManageToeicTestContent = () => {
     setIsQuestionModalOpen(true);
   };
 
-  const handleDeleteQuestion = async (questionId) => {
-    if (window.confirm("Are you sure you want to delete this question?")) {
-      try {
-        await deleteQuestion(questionId);
-        toast.success("Question deleted");
-        loadContentForPart(activePart);
-      } catch (err) {
-        logError(err);
-        toast.error("Failed to delete question");
-      }
+  const handleDeleteQuestionClick = (questionId) => {
+    setQuestionToDelete(questionId);
+    setIsDeleteQuestionModalOpen(true);
+  };
+
+  const handleConfirmDeleteQuestion = async () => {
+    if (!questionToDelete) return;
+    try {
+      await deleteQuestion(questionToDelete);
+      toast.success("Question deleted");
+      loadContentForPart(activePart);
+    } catch (err) {
+      logError(err);
+      toast.error("Failed to delete question");
+    } finally {
+      setIsDeleteQuestionModalOpen(false);
+      setQuestionToDelete(null);
     }
   };
 
@@ -198,7 +217,7 @@ const ManageToeicTestContent = () => {
               <ToeicPassagesTable
                 passages={passages}
                 onEdit={handleEditPassage}
-                onDelete={handleDeletePassage}
+                onDelete={handleDeletePassageClick}
               />
             </div>
           )}
@@ -220,7 +239,7 @@ const ManageToeicTestContent = () => {
               questions={questions}
               partNumber={activePart}
               onEdit={handleEditQuestion}
-              onDelete={handleDeleteQuestion}
+              onDelete={handleDeleteQuestionClick}
               passages={passages}
             />
           </div>
@@ -255,6 +274,29 @@ const ManageToeicTestContent = () => {
             setIsQuestionModalOpen(false);
             loadContentForPart(activePart);
           }}
+        />
+      )}
+
+      {/* Delete Passage Modal */}
+      {passageToDelete !== null && (
+        <ConfirmDeleteModal
+          isOpen={isDeletePassageModalOpen}
+          onClose={() => setIsDeletePassageModalOpen(false)}
+          onConfirm={handleConfirmDeletePassage}
+          itemName="Passage"
+          targetName={`Passage #${passageToDelete}`}
+          warningText="It may delete associated questions."
+        />
+      )}
+
+      {/* Delete Question Modal */}
+      {questionToDelete !== null && (
+        <ConfirmDeleteModal
+          isOpen={isDeleteQuestionModalOpen}
+          onClose={() => setIsDeleteQuestionModalOpen(false)}
+          onConfirm={handleConfirmDeleteQuestion}
+          itemName="Question"
+          targetName={`Question #${questionToDelete}`}
         />
       )}
     </div>

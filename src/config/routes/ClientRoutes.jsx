@@ -24,6 +24,10 @@ import GGTranslate from "@/modules/clients/pages/GGTranslate";
 import Notebook from "@/modules/clients/pages/NoteBook";
 import VocabularyFilter from "@/modules/clients/pages/VocabularyFilter";
 import VocabDeckDetails from "@/modules/clients/pages/VocabDeckDetails";
+import ToeicHome from "@/modules/clients/pages/toeic/ToeicHome";
+import ToeicTestOverview from "@/modules/clients/pages/toeic/ToeicTestOverview";
+import ToeicTakingTest from "@/modules/clients/pages/toeic/ToeicTakingTest";
+import ToeicResult from "@/modules/clients/pages/toeic/ToeicResult";
 
 export default function ClientRoutes() {
   return (
@@ -90,6 +94,15 @@ export default function ClientRoutes() {
           <Route path="/gg-translate" element={<GGTranslate />}></Route>
           <Route path="/vocabulary" element={<VocabularyFilter />}></Route>
           <Route path="/vocabulary/:id" element={<VocabDeckDetails />}></Route>
+
+          {/* TOEIC */}
+          <Route path="/toeic" element={<ToeicHome />}></Route>
+          <Route path="/toeic/:testId" element={<ToeicTestOverview />}></Route>
+          <Route
+            path="/toeic/:testId/take"
+            element={<ToeicTakingTest />}
+          ></Route>
+          <Route path="/toeic/:testId/result" element={<ToeicResult />}></Route>
 
           <Route
             path="/notebook"

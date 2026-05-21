@@ -38,16 +38,10 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
       onClose={onClose}
       title={
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg">
-            <FolderPlus className="text-white" size={24} />
-          </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900">
               Create New Topic
             </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              Add a new content topic to organize materials
-            </p>
           </div>
         </div>
       }
@@ -55,13 +49,13 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105"
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all"
           >
             Create Topic
           </button>
@@ -70,11 +64,10 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
     >
       <div className="space-y-5">
         {/* Topic Name */}
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-6 border border-blue-200/50 hover:border-blue-300 hover:shadow-md transition-all">
-          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-            <Tag size={16} className="text-blue-600" />
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-gray-700">
             Topic Name
-            <span className="text-red-500">*</span>
+            <span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -82,21 +75,20 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
             value={formData.name}
             onChange={(e) => updateField("name", e.target.value)}
             placeholder="e.g., World News, Technology, Science"
-            className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
           />
-          <p className="text-xs text-gray-600 mt-2.5">
+          <p className="text-xs text-gray-500 mt-1.5">
             Choose a clear, descriptive name for your topic
           </p>
         </div>
 
         {/* Topic Type Selection */}
-        <div className="bg-gradient-to-br from-slate-50 to-purple-50 rounded-2xl p-6 border border-purple-200/50 hover:border-purple-300 hover:shadow-md transition-all">
-          <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-4 uppercase tracking-wide">
-            <FolderPlus size={16} className="text-purple-600" />
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             Topic Type
-            <span className="text-red-500">*</span>
+            <span className="text-red-500 ml-1">*</span>
           </label>
-          <p className="text-xs text-gray-600 mb-4">
+          <p className="text-xs text-gray-500 mb-3">
             Select the content type for this topic
           </p>
 
@@ -108,10 +100,10 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
               return (
                 <label
                   key={type.value}
-                  className={`relative flex flex-col items-center p-5 border-2 rounded-xl cursor-pointer transition-all transform ${
+                  className={`relative flex flex-col items-center p-4 border rounded-lg cursor-pointer transition-all ${
                     isSelected
-                      ? `bg-gradient-to-br ${type.color} text-white border-transparent shadow-lg hover:shadow-xl scale-[1.02]`
-                      : "bg-white border-gray-200 hover:border-purple-300 hover:shadow-md"
+                      ? "bg-gray-50 border-gray-900 ring-1 ring-gray-900"
+                      : "bg-white border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <input
@@ -124,37 +116,29 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
                   />
 
                   <div
-                    className={`p-3 rounded-lg mb-2 ${
-                      isSelected ? "bg-white/20" : "bg-gray-100"
+                    className={`p-2 rounded-md mb-2 ${
+                      isSelected
+                        ? "bg-white border border-gray-200"
+                        : "bg-gray-50"
                     }`}
                   >
                     <Icon
-                      size={28}
-                      className={isSelected ? "text-white" : "text-gray-600"}
+                      size={20}
+                      className={isSelected ? "text-gray-900" : "text-gray-500"}
                     />
                   </div>
 
                   <div
-                    className={`font-bold text-sm mb-1 ${
-                      isSelected ? "text-white" : "text-gray-800"
+                    className={`font-medium text-sm mb-1 ${
+                      isSelected ? "text-gray-900" : "text-gray-700"
                     }`}
                   >
                     {type.label}
                   </div>
 
-                  <div
-                    className={`text-xs text-center ${
-                      isSelected ? "text-white/90" : "text-gray-500"
-                    }`}
-                  >
+                  <div className="text-xs text-center text-gray-500">
                     {type.description}
                   </div>
-
-                  {isSelected && (
-                    <div className="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                      <div className="w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full"></div>
-                    </div>
-                  )}
                 </label>
               );
             })}
@@ -162,16 +146,13 @@ const TopicFormModal = ({ isOpen, onClose, onSubmit }) => {
         </div>
 
         {/* Info Notice */}
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-l-4 border-amber-500 p-5 rounded-lg hover:shadow-md transition-all">
+        <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
           <div className="flex items-start gap-3">
-            <div className="p-2 bg-amber-100 rounded-lg flex-shrink-0 mt-0.5">
-              <Lightbulb size={16} className="text-amber-600" />
-            </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-amber-900 mb-1 uppercase tracking-wide">
+              <h4 className="text-sm font-semibold text-gray-900 mb-1">
                 Topic Organization
               </h4>
-              <p className="text-xs text-amber-700 leading-relaxed">
+              <p className="text-xs text-gray-600 leading-relaxed">
                 Topics help categorize and organize your content. Choose
                 meaningful names that reflect the subject matter for easy
                 navigation.

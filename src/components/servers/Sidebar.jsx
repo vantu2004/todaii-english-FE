@@ -30,19 +30,37 @@ import { useState } from "react";
 import { logout } from "@/api/servers/authApi";
 import { useNavigate } from "react-router-dom";
 import { useServerAuthContext } from "@/hooks/servers/useServerAuthContext";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const { authUser } = useServerAuthContext();
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
-  const [expandedMenus, setExpandedMenus] = useState(["content"]);
+  const [expandedMenus, setExpandedMenus] = useState([]);
 
   const toggleMenu = (id) => {
     setExpandedMenus((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
+
+  useEffect(() => {
+    // Tìm xem có menu cha nào chứa đường dẫn hiện tại không
+    const activeParent = menuItems.find((item) =>
+      item.children?.some((child) => location.pathname === child.to),
+    );
+
+    if (activeParent) {
+      setExpandedMenus((prev) => {
+        // Nếu ID cha chưa có trong mảng thì mới thêm vào để tránh trùng lặp
+        if (!prev.includes(activeParent.id)) {
+          return [...prev, activeParent.id];
+        }
+        return prev;
+      });
+    }
+  }, [location.pathname]);
 
   // Lấy role code list
   const userRoles = authUser?.roles?.map((r) => r.code) || [];
@@ -64,8 +82,6 @@ const Sidebar = () => {
       case "learning":
       case "toeic":
         return hasRole("CONTENT_MANAGER");
-      case "settings":
-        return false;
       default:
         return false;
     }
@@ -149,22 +165,6 @@ const Sidebar = () => {
         },
         { name: "Tests", to: "/server/toeic-test", icon: FileText },
         { name: "Tags", to: "/server/toeic-tag", icon: Tag },
-      ],
-    },
-    {
-      id: "settings",
-      name: "System Settings",
-      icon: Settings,
-      children: [
-        { name: "Gemini", to: "/server/setting/gemini", icon: Sparkles },
-        { name: "SMTP", to: "/server/setting/smtp", icon: Mails },
-        { name: "Youtube", to: "/server/setting/youtube", icon: TvMinimalPlay },
-        { name: "News API", to: "/server/setting/news-api", icon: BookMarked },
-        {
-          name: "Cloudinary",
-          to: "/server/setting/cloudinary",
-          icon: CloudUpload,
-        },
       ],
     },
   ];

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "@/components/servers/Modal";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { Save, X, Image as ImageIcon, FileAudio, FileText } from "lucide-react";
 import {
   uploadToeicTestFile,
@@ -38,18 +40,8 @@ const ToeicPassageFormModal = ({
         passageText: initialData.passageText || initialData.passage_text || "",
         passageTrans:
           initialData.passageTrans || initialData.passage_trans || "",
-        imageUrl:
-          initialData.imageUrl ||
-          initialData.image_url ||
-          initialData.image_request?.uploaded_image ||
-          initialData.image_request?.image_url ||
-          "",
-        audioUrl:
-          initialData.audioUrl ||
-          initialData.audio_url ||
-          initialData.audio_request?.uploaded_audio ||
-          initialData.audio_request?.audio_url ||
-          "",
+        imageUrl: initialData.uploaded_image || initialData.image_url || "",
+        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
       });
     } else {
       setFormData({
@@ -122,9 +114,9 @@ const ToeicPassageFormModal = ({
     setIsSubmitting(true);
 
     const payload = {
-      passageText: formData.passageText,
-      passageTrans: formData.passageTrans,
-      imageRequest: {
+      passage_text: formData.passageText,
+      passage_trans: formData.passageTrans,
+      image_request: {
         uploaded_image: formData.imageUrl?.includes("cloudinary")
           ? formData.imageUrl
           : "",
@@ -132,7 +124,7 @@ const ToeicPassageFormModal = ({
           ? formData.imageUrl
           : "",
       },
-      audioRequest: {
+      audio_request: {
         uploaded_audio: formData.audioUrl?.includes("cloudinary")
           ? formData.audioUrl
           : "",
@@ -191,13 +183,13 @@ const ToeicPassageFormModal = ({
               <FileText size={16} className="text-blue-600" />
               Passage Text <span className="text-red-500">*</span>
             </label>
-            <textarea
-              name="passageText"
+            <ReactQuill
+              theme="snow"
               value={formData.passageText}
-              onChange={handleChange}
-              rows={6}
-              required
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, passageText: val }))
+              }
+              className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
             />
           </div>
 
@@ -206,13 +198,13 @@ const ToeicPassageFormModal = ({
               <FileText size={16} className="text-green-600" />
               Passage Translation <span className="text-red-500">*</span>
             </label>
-            <textarea
-              name="passageTrans"
+            <ReactQuill
+              theme="snow"
               value={formData.passageTrans}
-              onChange={handleChange}
-              rows={6}
-              required
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:bg-gray-700 dark:text-white outline-none"
+              onChange={(val) =>
+                setFormData((prev) => ({ ...prev, passageTrans: val }))
+              }
+              className="bg-white dark:bg-gray-700 dark:text-white rounded-lg"
             />
           </div>
 

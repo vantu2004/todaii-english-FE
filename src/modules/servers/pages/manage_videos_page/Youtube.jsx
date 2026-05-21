@@ -104,7 +104,7 @@ const Youtube = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br">
+    <div className="flex flex-col h-full bg-transparent">
       {/* Header */}
       <h2 className="mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
         YouTube Search
@@ -131,11 +131,11 @@ const Youtube = () => {
           placeholder="Enter YouTube URL or keyword..."
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyPress}
-          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 dark:focus:border-red-400 dark:focus:ring-red-900/20 transition-all duration-200 text-base"
+          className="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:focus:ring-gray-100/10 dark:focus:border-gray-500 transition-colors text-base"
         />
         {isLoading && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            <Loader className="w-5 h-5 text-red-600 dark:text-red-400 animate-spin" />
+            <Loader className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
           </div>
         )}
       </div>
@@ -187,7 +187,7 @@ const Youtube = () => {
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
-              <Loader className="w-8 h-8 text-red-600 dark:text-red-400 animate-spin mb-3" />
+              <Loader className="w-8 h-8 text-gray-500 dark:text-gray-400 animate-spin mb-3" />
               <p className="text-gray-600 dark:text-gray-400">
                 Fetching video...
               </p>

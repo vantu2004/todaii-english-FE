@@ -189,7 +189,7 @@ const AIChatBox = () => {
                     : "bg-neutral-900 text-white rounded-tr-none"
                 }`}
               >
-                {msg.content}
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
               </div>
             </div>
           );

@@ -80,28 +80,18 @@ const ListParagraphs = ({ articleId, paragraphs }) => {
   return (
     <div className="w-full max-w-5xl mx-auto">
       {/* Header Section */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg">
-            <FileText className="text-white" size={24} />
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900">Paragraphs</h2>
-            <p className="text-sm text-gray-500 mt-1">
-              {localParagraphs.length}{" "}
-              {localParagraphs.length === 1 ? "item" : "items"}
-            </p>
-          </div>
-        </div>
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-gray-900">Paragraphs</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          {localParagraphs.length}{" "}
+          {localParagraphs.length === 1 ? "item" : "items"}
+        </p>
       </div>
 
       {/* Empty State */}
       {localParagraphs.length === 0 && (
-        <div className="mb-6 p-8 rounded-xl border-2 border-dashed border-gray-300 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="mb-6 p-8 rounded-lg border border-dashed border-gray-300 bg-gray-50">
           <div className="flex flex-col items-center justify-center text-center">
-            <div className="p-3 bg-gray-200 rounded-full mb-3">
-              <FileText className="text-gray-400" size={28} />
-            </div>
             <p className="text-gray-600 font-medium mb-1">No paragraphs yet</p>
             <p className="text-gray-500 text-sm">
               Start by adding your first paragraph
@@ -115,7 +105,7 @@ const ListParagraphs = ({ articleId, paragraphs }) => {
         {localParagraphs.map((p, idx) => (
           <div
             key={p.id ? p.id : p.tempId}
-            className="group bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300 overflow-hidden"
+            className="group bg-white rounded-lg border border-gray-200 overflow-hidden"
           >
             <ParagraphForm
               paragraph={p}
@@ -130,12 +120,9 @@ const ListParagraphs = ({ articleId, paragraphs }) => {
       {/* Add Button */}
       <button
         onClick={handleAddParagraph}
-        className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group"
+        className="w-full py-3 px-4 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
       >
-        <Plus
-          size={20}
-          className="group-hover:rotate-90 transition-transform duration-300"
-        />
+        <Plus size={18} />
         Add New Paragraph
       </button>
     </div>

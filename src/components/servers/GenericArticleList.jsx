@@ -35,8 +35,8 @@ const GenericArticleList = ({ title, fetchApi }) => {
   const columns = [
     { key: "id", label: "ID", sortField: "id" },
     { key: "source_name", label: "Source Name", sortField: "sourceName" },
-    { key: "title", label: "Title", sortField: "title" },
     { key: "author", label: "Author", sortField: "author" },
+    { key: "title", label: "Title", sortField: "title" },
     { key: "views", label: "Views", sortField: "views" },
     { key: "publishedAt", label: "Published At", sortField: "publishedAt" },
     { key: "paragraph", label: "Paragraphs" },
@@ -99,7 +99,7 @@ const GenericArticleList = ({ title, fetchApi }) => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+        className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
       >
         <ArticlesTable
           columns={columns}

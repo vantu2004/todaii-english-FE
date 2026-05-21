@@ -9,17 +9,8 @@ import {
 import { formatISODate } from "@/utils/FormatDate";
 
 const ToeicTestDetails = ({ test }) => {
-  const getAudioUrl = (item) =>
-    item.audio_request?.uploaded_audio ||
-    item.audio_request?.audio_url ||
-    item.audio_url ||
-    item.audioUrl;
-  const getImageUrl = (item) =>
-    item.image_request?.uploaded_image ||
-    item.image_request?.image_url ||
-    item.image_url ||
-    item.imageUrl ||
-    item.thumbnail;
+  const getAudioUrl = (item) => item.audio_url;
+  const getImageUrl = (item) => item.image_url;
 
   const imageUrl = getImageUrl(test);
   const audioUrl = getAudioUrl(test);
@@ -61,7 +52,7 @@ const ToeicTestDetails = ({ test }) => {
         <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
           {test.title}
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-gray-600 max-w-2xl mx-auto whitespace-pre-wrap">
           {test.description || "No description provided."}
         </p>
       </div>
@@ -88,7 +79,7 @@ const ToeicTestDetails = ({ test }) => {
                 Test Type
               </p>
               <p className="text-sm font-bold text-gray-900">
-                {test.testType || test.test_type || "N/A"}
+                {test.test_type || "N/A"}
               </p>
             </div>
           </div>
@@ -146,13 +137,13 @@ const ToeicTestDetails = ({ test }) => {
       </div>
 
       {/* === Meta Information === */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/60 hover:shadow-md transition-all">
           <p className="text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide">
             Created At
           </p>
           <p className="text-sm text-gray-900 font-semibold">
-            {formatISODate(test.createdAt || test.created_at)}
+            {formatISODate(test.created_at)}
           </p>
         </div>
         <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-200/60 hover:shadow-md transition-all">
@@ -160,7 +151,24 @@ const ToeicTestDetails = ({ test }) => {
             Last Updated
           </p>
           <p className="text-sm text-gray-900 font-semibold">
-            {formatISODate(test.updatedAt || test.updated_at)}
+            {formatISODate(test.updated_at)}
+          </p>
+        </div>
+        <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-4 border border-green-200/60 hover:shadow-md transition-all">
+          <p className="text-xs font-bold text-green-700 mb-2 uppercase tracking-wide">
+            Created By
+          </p>
+          <p
+            className="text-sm text-gray-900 font-semibold truncate"
+            title={
+              typeof test.created_by === "object"
+                ? test.created_by.display_name
+                : test.created_by || "System"
+            }
+          >
+            {typeof test.created_by === "object"
+              ? test.created_by.display_name || test.created_by.id
+              : test.created_by || "System"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
@@ -172,6 +180,33 @@ const ToeicTestDetails = ({ test }) => {
           </p>
         </div>
       </div>
+
+      {/* === Content Information === */}
+      {(test.questions_count !== undefined ||
+        test.passages_count !== undefined ||
+        test.questions?.length !== undefined ||
+        test.passages?.length !== undefined) && (
+        <div className="mt-6 flex justify-center gap-6">
+          <div className="flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-lg text-indigo-700">
+            <Layers size={20} />
+            <span className="font-semibold">
+              {test.passages_count !== undefined
+                ? test.passages_count
+                : test.passages?.length || 0}{" "}
+              Passages
+            </span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg text-blue-700">
+            <FileText size={20} />
+            <span className="font-semibold">
+              {test.questions_count !== undefined
+                ? test.questions_count
+                : test.questions?.length || 0}{" "}
+              Questions
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

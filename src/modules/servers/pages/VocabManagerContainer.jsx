@@ -157,7 +157,7 @@ const VocabManagerContainer = ({
           transition={{ duration: 0.5 }}
           className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-0"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 h-full min-h-0">
+          <div className="flex flex-col lg:flex-row h-full min-h-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
             <DictionarySearchPanel
               selectedWords={selectedWords}
               onSelectWord={handleAdd}

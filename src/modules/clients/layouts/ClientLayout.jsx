@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import Footer from "@/components/landing_page/Footer";
 import ClientNavBar from "@/components/clients/ClientNavBar";
+import FloatingChatbot from "@/components/clients/chatbot/FloatingChatbot";
 
 const ClientLayout = () => {
   return (
@@ -12,6 +13,9 @@ const ClientLayout = () => {
       </main>
 
       <Footer />
+
+      {/* Floating AI Assistant */}
+      <FloatingChatbot />
     </div>
   );
 };

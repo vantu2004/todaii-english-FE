@@ -1,13 +1,56 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "@/components/servers/Modal";
-import { Pencil, Trash2, AlertTriangle } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  AlertTriangle,
+  Check,
+  X,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import { deleteToeicTag } from "@/api/servers/toeicTagApi";
 import { logError } from "@/utils/LogError";
 
-const ToeicTagsTable = ({ columns, tags, reloadTags, onEdit }) => {
+const ToeicTagsTable = ({
+  columns,
+  tags,
+  reloadTags,
+  query,
+  updateQuery,
+  onSaveEdit,
+}) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedName, setEditedName] = useState("");
+  const [editedPartNumber, setEditedPartNumber] = useState("");
+
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditedName(tags[index].name);
+    setEditedPartNumber(
+      tags[index].part_number !== null && tags[index].part_number !== undefined
+        ? tags[index].part_number
+        : "",
+    );
+  };
+
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    setEditedName("");
+    setEditedPartNumber("");
+  };
+
+  const handleSave = async (index) => {
+    const tag = tags[index];
+    if (editedName.trim() === "") return;
+    await onSaveEdit(tag.id, editedName, editedPartNumber);
+    setEditingIndex(null);
+    setEditedName("");
+    setEditedPartNumber("");
+  };
 
   const handleDeleteClick = (index) => {
     setSelectedIndex(index);
@@ -34,42 +77,130 @@ const ToeicTagsTable = ({ columns, tags, reloadTags, onEdit }) => {
         <table className="w-full whitespace-nowrap">
           <thead>
             <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-              {columns.map((col) => (
-                <th key={col.key} className="px-4 py-3">
-                  {col.label}
-                </th>
-              ))}
+              {columns.map((col) => {
+                const isSortable = !!col.sortField;
+                const isActiveSort = query?.sortBy === col.sortField;
+
+                return (
+                  <th
+                    key={col.key}
+                    className={`px-4 py-3 ${
+                      isSortable
+                        ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      if (!isSortable) return;
+                      const newDirection = isActiveSort
+                        ? query.direction === "asc"
+                          ? "desc"
+                          : "asc"
+                        : "asc";
+
+                      updateQuery({
+                        sortBy: col.sortField,
+                        direction: newDirection,
+                      });
+                    }}
+                  >
+                    <div className="flex items-center gap-1">
+                      {col.label}
+                      {isSortable && isActiveSort && (
+                        <span className="inline-flex items-center">
+                          {query.direction === "asc" ? (
+                            <ArrowUp className="w-3 h-3 text-gray-900" />
+                          ) : (
+                            <ArrowDown className="w-3 h-3 text-gray-900" />
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </th>
+                );
+              })}
             </tr>
           </thead>
 
           <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-            {tags.map((item, i) => (
-              <tr
-                key={i}
-                className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
-              >
-                <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
-                <td className="px-4 py-3 text-sm font-medium">{item.name}</td>
-                <td className="px-4 py-3 text-sm">{item.alias}</td>
+            {tags.map((item, i) => {
+              const isEditing = editingIndex === i;
 
-                <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
-                    <button
-                      onClick={() => onEdit(item)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-                    >
-                      <Pencil className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr
+                  key={i}
+                  className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                >
+                  <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
+                  <td className="px-4 py-3 text-sm font-medium">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                        className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:bg-gray-700 dark:text-white"
+                        autoFocus
+                      />
+                    ) : (
+                      item.name
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-sm">{item.alias}</td>
+                  <td className="px-4 py-3 text-sm">
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        min={1}
+                        max={7}
+                        value={editedPartNumber}
+                        onChange={(e) => setEditedPartNumber(e.target.value)}
+                        className="w-20 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:bg-gray-700 dark:text-white"
+                      />
+                    ) : item.part_number !== undefined &&
+                      item.part_number !== null ? (
+                      item.part_number
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+
+                  <td className="px-4 py-3">
+                    <div className="flex items-center space-x-3 text-sm">
+                      {isEditing ? (
+                        <>
+                          <button
+                            onClick={() => handleSave(i)}
+                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          >
+                            <Check className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={handleCancelEdit}
+                            className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleEditClick(i)}
+                            className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                          >
+                            <Pencil className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(i)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
             {tags.length === 0 && (
               <tr>
                 <td

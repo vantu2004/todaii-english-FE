@@ -69,7 +69,7 @@ const ManageParagraphs = () => {
 
         <button
           onClick={handleFetchArticle}
-          className="p-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-sm hover:shadow-md active:scale-95 transition-all"
+          className="p-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all"
           aria-label="Reload"
         >
           <RefreshCw className="w-5 h-5" />
@@ -82,7 +82,7 @@ const ManageParagraphs = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm p-4"
+        className="flex-1 overflow-hidden border border-gray-200 rounded-lg p-4"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
           {/* Column 1: Article Details */}

@@ -59,7 +59,7 @@ const MyDashboard = () => {
 
   useEffect(() => {
     setHeader({
-      title: "Manange Profile",
+      title: "My Dashboard",
       breadcrumb: [{ label: "My Dashboard" }],
     });
   }, []);
@@ -72,7 +72,7 @@ const MyDashboard = () => {
     <>
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
           <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
             <CalendarIcon size={16} className="text-gray-400 mr-2" />
             <input
@@ -97,7 +97,7 @@ const MyDashboard = () => {
           </div>
           <button
             onClick={fetchData}
-            className="p-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+            className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
             title="Refresh Data"
           >
             <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
@@ -108,7 +108,7 @@ const MyDashboard = () => {
       {/* Content Sections */}
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-500"></div>
         </div>
       ) : (
         <>

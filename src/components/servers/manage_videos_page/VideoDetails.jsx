@@ -15,7 +15,7 @@ const VideoDetails = ({ video }) => {
   return (
     <div className="space-y-6">
       {/* === Video Player - Full Width === */}
-      <div className="rounded-2xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all aspect-video max-w-4xl mx-auto">
+      <div className="rounded-lg border border-gray-200 overflow-hidden aspect-video max-w-4xl mx-auto">
         {video.embed_html ? (
           <div
             className="w-full h-full"
@@ -46,19 +46,16 @@ const VideoDetails = ({ video }) => {
 
       {/* === Video Title === */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
+        <h1 className="text-xl font-semibold text-gray-900 mb-2 leading-tight">
           {video.title}
         </h1>
       </div>
 
       {/* === Topics === */}
       {video.topics?.length > 0 && (
-        <div className="bg-gradient-to-br from-green-50 to-green-100/30 rounded-2xl p-6 border border-green-200/60 hover:border-green-300/80 hover:shadow-md transition-all">
+        <div className="border border-gray-200 rounded-lg p-5">
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-green-100/50 rounded-lg">
-              <Layers size={18} className="text-green-600" />
-            </div>
-            <h4 className="text-base font-bold text-gray-900 uppercase tracking-wide">
+            <h4 className="text-sm font-medium text-gray-700">
               Topics ({video.topics.length})
             </h4>
           </div>
@@ -66,7 +63,7 @@ const VideoDetails = ({ video }) => {
             {video.topics.map((topic) => (
               <div
                 key={topic.id}
-                className="px-4 py-2 bg-white rounded-full text-sm font-semibold text-green-700 border border-green-200/50 shadow-sm hover:shadow-md transition-all"
+                className="px-3 py-1 bg-gray-100 rounded-md text-sm text-gray-700"
               >
                 <span className="inline-block">
                   {topic.name}
@@ -89,16 +86,13 @@ const VideoDetails = ({ video }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Thumbnail Preview */}
         {video.thumbnail_url && (
-          <div className="bg-white rounded-2xl p-6 border border-gray-200/60 hover:border-red-300/60 hover:shadow-lg transition-all">
+          <div className="border border-gray-200 rounded-lg p-5">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-red-100/50 rounded-lg">
-                <Camera size={18} className="text-red-600" />
-              </div>
-              <h4 className="text-base font-bold text-gray-900 uppercase tracking-wide">
+              <h4 className="text-sm font-medium text-gray-700">
                 Thumbnail Preview
               </h4>
             </div>
-            <div className="rounded-xl overflow-hidden border-2 border-gray-200 shadow-md hover:shadow-lg transition-all">
+            <div className="rounded-lg overflow-hidden border border-gray-200">
               <img
                 src={video.thumbnail_url}
                 alt={`${video.title} thumbnail`}
@@ -109,74 +103,57 @@ const VideoDetails = ({ video }) => {
         )}
 
         {/* Video Information */}
-        <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border border-red-200/50 hover:border-red-300/60 hover:shadow-lg transition-all">
+        <div className="border border-gray-200 rounded-lg p-5">
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-red-100/50 rounded-lg">
-              <Youtube size={18} className="text-red-600" />
-            </div>
-            <h4 className="text-base font-bold text-gray-900 uppercase tracking-wide">
+            <h4 className="text-sm font-medium text-gray-700">
               Video Information
             </h4>
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-              <User size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                  Author
-                </p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-xs font-medium text-gray-500 mb-1">Author</p>
+                <p className="text-sm font-semibold text-gray-900">
                   {video.author_name || "Unknown Author"}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-              <Youtube
-                size={18}
-                className="text-red-600 flex-shrink-0 mt-0.5"
-              />
+            <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                <p className="text-xs font-medium text-gray-500 mb-1">
                   Provider
                 </p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900">
                   {video.provider_name || "Unknown Provider"}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-              <Zap size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
+                <p className="text-xs font-medium text-gray-500 mb-1">
                   Cefr Level
                 </p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900">
                   {video.cefr_level}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-              <Eye size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                  Views
-                </p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-xs font-medium text-gray-500 mb-1">Views</p>
+                <p className="text-sm font-semibold text-gray-900">
                   {video.views.toLocaleString()} views
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-white/60 rounded-lg">
-              <Hash size={18} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3">
               <div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">
-                  Status
-                </p>
+                <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
                 <div
                   className="inline-flex items-center gap-2 px-3 py-1 text-xs font-bold rounded-full"
                   style={{
@@ -194,27 +171,21 @@ const VideoDetails = ({ video }) => {
 
       {/* === Meta Information === */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide">
-            Created At
-          </p>
+        <div className="border border-gray-200 rounded-lg p-4">
+          <p className="text-xs font-medium text-gray-500 mb-2">Created At</p>
           <p className="text-sm text-gray-900 font-semibold">
             {formatISODate(video.created_at)}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-xl p-4 border border-purple-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-purple-700 mb-2 uppercase tracking-wide">
-            Last Updated
-          </p>
+        <div className="border border-gray-200 rounded-lg p-4">
+          <p className="text-xs font-medium text-gray-500 mb-2">Last Updated</p>
           <p className="text-sm text-gray-900 font-semibold">
             {formatISODate(video.updated_at)}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
-            Video ID
-          </p>
-          <p className="text-sm text-gray-900 font-mono font-bold">
+        <div className="border border-gray-200 rounded-lg p-4">
+          <p className="text-xs font-medium text-gray-500 mb-2">Video ID</p>
+          <p className="text-sm text-gray-900 font-mono font-semibold">
             #{video.id}
           </p>
         </div>
@@ -225,17 +196,17 @@ const VideoDetails = ({ video }) => {
         href={video.video_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-between p-6 bg-gradient-to-r bg-red-600 rounded-2xl border border-red-600/50 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1 group cursor-pointer"
+        className="flex items-center justify-between p-4 bg-gray-900 rounded-lg text-white hover:bg-gray-800 transition-colors group cursor-pointer"
       >
-        <div className="flex items-center gap-3 text-white">
+        <div className="flex items-center gap-3">
           <Youtube size={20} />
-          <span className="text-lg font-bold">
+          <span className="text-sm font-semibold">
             Watch Full Video on {video.provider_name}
           </span>
         </div>
         <ExternalLink
           size={20}
-          className="text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+          className="text-white opacity-80 group-hover:opacity-100 transition-opacity"
         />
       </a>
     </div>

@@ -66,16 +66,16 @@ const DictionarySearchPanel = ({
   };
 
   return (
-    <div className="lg:col-span-2 flex flex-col overflow-y-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 flex flex-col h-full ">
+    <div className="flex-1 flex flex-col min-h-0 lg:border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <div className="p-4 sm:p-5 flex-shrink-0 border-b border-gray-100 dark:border-gray-800">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Dictionary Search
           </h2>
           <button
             onClick={() => setShowAddCustom(!showAddCustom)}
-            className="px-4 py-2 border-2 border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 rounded-xl font-medium hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-2"
+            className="px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-all flex items-center gap-2 text-sm"
           >
             <Plus className="w-4 h-4" />
             Add Custom Word
@@ -83,26 +83,29 @@ const DictionarySearchPanel = ({
         </div>
 
         {/* Search Input */}
-        <div className="relative mb-6">
+        <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search in dictionary..."
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-12 pr-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 text-sm"
           />
         </div>
+      </div>
 
+      <div className="flex-1 min-h-0 flex flex-col">
         {/* Custom Word Form */}
         {showAddCustom && (
-          <AddCustomWordForm
-            onAdd={onAddCustomWord}
-            onClose={() => setShowAddCustom(false)}
-          />
+          <div className="px-4 sm:px-5 pt-4 border-b border-gray-100 dark:border-gray-800">
+            <AddCustomWordForm
+              onAdd={onAddCustomWord}
+              onClose={() => setShowAddCustom(false)}
+            />
+          </div>
         )}
 
-        {/* Words List */}
         <DictionaryWordsList
           words={dictionaryWords}
           isWordSelected={isWordSelected}

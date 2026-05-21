@@ -38,27 +38,27 @@ const Pagination = ({ query, updateQuery, pagination }) => {
   const endItem = Math.min(page * pageSize, totalElements);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-6 py-4 bg-white border-t border-gray-200 rounded-lg">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 px-6 py-4 border-t border-gray-200 dark:border-gray-800">
       {/* Pagination Controls */}
       <nav className="flex items-center gap-1">
         {/* First Page */}
         <button
           onClick={() => updateQuery({ page: 1 })}
           disabled={isFirstPage}
-          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="First page"
         >
-          <ChevronsLeft className="w-4 h-4 text-gray-600" />
+          <ChevronsLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
 
         {/* Previous */}
         <button
           onClick={() => updateQuery({ page: page - 1 })}
           disabled={isFirstPage}
-          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Previous page"
         >
-          <ChevronLeft className="w-4 h-4 text-gray-600" />
+          <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
 
         {/* Page Numbers */}
@@ -69,8 +69,8 @@ const Pagination = ({ query, updateQuery, pagination }) => {
               onClick={() => updateQuery({ page: num })}
               className={`min-w-[2.5rem] px-3 py-2 text-sm font-medium rounded-lg transition-all ${
                 page === num
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-gray-700 hover:bg-gray-50 border border-gray-200"
+                  ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700"
               }`}
             >
               {num}
@@ -82,20 +82,20 @@ const Pagination = ({ query, updateQuery, pagination }) => {
         <button
           onClick={() => updateQuery({ page: page + 1 })}
           disabled={isLastPage}
-          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Next page"
         >
-          <ChevronRight className="w-4 h-4 text-gray-600" />
+          <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
 
         {/* Last Page */}
         <button
           onClick={() => updateQuery({ page: totalPages })}
           disabled={isLastPage}
-          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           title="Last page"
         >
-          <ChevronsRight className="w-4 h-4 text-gray-600" />
+          <ChevronsRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
       </nav>
     </div>
