@@ -79,7 +79,7 @@ const ToeicTestOverview = () => {
   if (!test) return null;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mt-[68px]">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mt-[68px]">
       <Link
         to="/client/toeic"
         className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors mb-8 font-medium"
@@ -106,7 +106,7 @@ const ToeicTestOverview = () => {
               </div>
             </div>
 
-            <div className="space-y-6 mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 p-4 rounded-2xl flex items-start gap-4">
                 <div className="mt-1 bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
                   <Headphones className="text-blue-600 dark:text-blue-400" size={20} />
@@ -181,7 +181,7 @@ const ToeicTestOverview = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {PARTS_METADATA.map((part) => (
                   <label 
                     key={part.id}
@@ -235,8 +235,8 @@ const ToeicTestOverview = () => {
             </div>
           </div>
           
-          <div className="w-full md:w-auto mt-6 md:mt-0 flex flex-col gap-4 sticky top-24">
-            <div className="w-full md:w-64 bg-white dark:bg-neutral-900 border border-neutral-150 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
+          <div className="w-full md:w-auto mt-6 md:mt-0 flex flex-col gap-4 sticky top-24 shrink-0">
+            <div className="w-full md:w-80 bg-white dark:bg-neutral-900 border border-neutral-150 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
               <h3 className="font-bold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">Thông tin bài làm</h3>
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
