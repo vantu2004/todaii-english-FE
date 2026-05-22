@@ -1,4 +1,4 @@
-import { serverInstance } from "@/config/axios";
+import { clientInstance, serverInstance } from "@/config/axios";
 
 // Collections
 export const fetchToeicCollections = async (
@@ -9,7 +9,7 @@ export const fetchToeicCollections = async (
   keyword = ""
 ) => {
   try {
-    const response = await serverInstance.get("/toeic/collection", {
+    const response = await clientInstance.get("/toeic/collection", {
       params: { page, size, sortBy, direction, keyword },
     });
     return response.data;
@@ -20,7 +20,7 @@ export const fetchToeicCollections = async (
 
 export const getToeicCollectionById = async (id) => {
   try {
-    const response = await serverInstanceInstance.get(`/toeic/collection/${id}`);
+    const response = await clientInstance.get(`/toeic/collection/${id}`);
     return response.data;
   } catch (err) {
     throw err;
@@ -78,7 +78,7 @@ export const getToeicTestById = async (id) => {
 // Questions and Passages
 export const getQuestionsByPartNumber = async (testId, partNumber) => {
   try {
-    const response = await serverInstance.get(
+    const response = await clientInstance.get(
       `/toeic/test/${testId}/part/${partNumber}/question`
     );
     return response.data;
@@ -89,9 +89,46 @@ export const getQuestionsByPartNumber = async (testId, partNumber) => {
 
 export const getPassagesByPartNumber = async (testId, partNumber) => {
   try {
-    const response = await serverInstance.get(
+    const response = await clientInstance.get(
       `/toeic/test/${testId}/part/${partNumber}/passage`
     );
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+// Detail Question, Passage, and Tags
+export const getToeicQuestionById = async (id) => {
+  try {
+    const response = await clientInstance.get(`/toeic/question/${id}`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getToeicPassageById = async (id) => {
+  try {
+    const response = await clientInstance.get(`/toeic/passage/${id}`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const fetchToeicTags = async () => {
+  try {
+    const response = await clientInstance.get("/toeic/tag");
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getToeicTagById = async (id) => {
+  try {
+    const response = await clientInstance.get(`/toeic/tag/${id}`);
     return response.data;
   } catch (err) {
     throw err;

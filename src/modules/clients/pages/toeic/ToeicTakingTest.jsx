@@ -134,7 +134,7 @@ const ToeicTakingTest = () => {
     // Store result in local storage or state to pass to result page
     const resultData = {
       testId,
-      testName: test?.name,
+      testName: test?.title,
       answers,
       testData,
       timeSpent: initialTime - timeLeft,
@@ -206,8 +206,8 @@ const ToeicTakingTest = () => {
             {index + 1}
           </div>
           <div className="flex-1">
-            {q.question_content && (
-              <p className="text-neutral-900 dark:text-white font-medium mb-3 text-lg" dangerouslySetInnerHTML={{ __html: q.question_content }} />
+            {q.question && (
+              <p className="text-neutral-900 dark:text-white font-medium mb-3 text-lg" dangerouslySetInnerHTML={{ __html: q.question }} />
             )}
             
             {q.image_url && (
@@ -282,8 +282,8 @@ const ToeicTakingTest = () => {
                 <audio controls className="w-full mb-4" src={passage.audio_url}></audio>
               )}
               
-              {passage.content && (
-                <div className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: passage.content }} />
+              {passage.passage_text && (
+                <div className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: passage.passage_text }} />
               )}
             </div>
             
@@ -323,7 +323,7 @@ const ToeicTakingTest = () => {
             <Menu size={20} />
           </button>
           <h1 className="text-lg font-bold text-neutral-900 dark:text-white truncate max-w-[200px] md:max-w-md">
-            {test?.name}
+            {test?.title}
           </h1>
         </div>
         
