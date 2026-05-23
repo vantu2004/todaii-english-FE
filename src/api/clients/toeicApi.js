@@ -37,7 +37,7 @@ export const fetchTestsByCollectionId = async (
   keyword = ""
 ) => {
   try {
-    const response = await serverInstance.get(
+    const response = await clientInstance.get(
       `/toeic/test/collection/${collectionId}`,
       {
         params: { page, size, sortBy, direction, keyword },
@@ -57,7 +57,7 @@ export const fetchToeicTests = async (
   keyword = ""
 ) => {
   try {
-    const response = await serverInstance.get("/toeic/test", {
+    const response = await clientInstance.get("/toeic/test", {
       params: { page, size, sortBy, direction, keyword },
     });
     return response.data;
@@ -68,7 +68,7 @@ export const fetchToeicTests = async (
 
 export const getToeicTestById = async (id) => {
   try {
-    const response = await serverInstance.get(`/toeic/test/${id}`);
+    const response = await clientInstance.get(`/toeic/test/${id}`);
     return response.data;
   } catch (err) {
     throw err;
