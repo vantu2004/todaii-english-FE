@@ -161,14 +161,14 @@ const ToeicPassageFormModal = ({
         <div className="flex justify-end gap-3 w-full">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <Save size={18} />
             {isSubmitting ? "Saving..." : "Save Passage"}
@@ -179,8 +179,7 @@ const ToeicPassageFormModal = ({
       <form className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              <FileText size={16} className="text-blue-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Passage Text <span className="text-red-500">*</span>
             </label>
             <ReactQuill
@@ -194,8 +193,7 @@ const ToeicPassageFormModal = ({
           </div>
 
           <div className="md:col-span-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              <FileText size={16} className="text-green-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Passage Translation <span className="text-red-500">*</span>
             </label>
             <ReactQuill
@@ -210,13 +208,12 @@ const ToeicPassageFormModal = ({
 
           <div className="md:col-span-2">
             <div className="flex items-center justify-between mb-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <ImageIcon size={16} className="text-blue-600" />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Image URL
               </label>
               <div className="flex gap-2 items-center">
                 <label
-                  className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
+                  className={`cursor-pointer px-3 py-1 bg-white text-gray-700 rounded text-xs font-medium border border-gray-200 hover:bg-gray-50 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
                 >
                   {isUploadingImage ? "Uploading..." : "Upload Image"}
                   <input
@@ -244,7 +241,7 @@ const ToeicPassageFormModal = ({
               value={formData.imageUrl}
               onChange={handleChange}
               placeholder="https://example.com/image.jpg"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
               disabled={formData.imageUrl?.includes("cloudinary")}
             />
             {formData.imageUrl && (
@@ -261,8 +258,7 @@ const ToeicPassageFormModal = ({
 
           <div className="md:col-span-2">
             <div className="flex items-center justify-between mb-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <FileAudio size={16} className="text-blue-600" />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Audio URL{" "}
                 {(partNumber === 3 || partNumber === 4) && (
                   <span className="text-red-500">*</span>
@@ -270,7 +266,7 @@ const ToeicPassageFormModal = ({
               </label>
               <div className="flex gap-2 items-center">
                 <label
-                  className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
+                  className={`cursor-pointer px-3 py-1 bg-white text-gray-700 rounded text-xs font-medium border border-gray-200 hover:bg-gray-50 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
                 >
                   {isUploadingAudio ? "Uploading..." : "Upload Audio"}
                   <input
@@ -298,7 +294,7 @@ const ToeicPassageFormModal = ({
               value={formData.audioUrl}
               onChange={handleChange}
               placeholder="https://example.com/audio.mp3"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
               disabled={formData.audioUrl?.includes("cloudinary")}
               required={partNumber === 3 || partNumber === 4}
             />

@@ -42,16 +42,10 @@ const ToeicCollectionFormModal = ({
       onClose={onClose}
       title={
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg">
-            <FolderPlus className="text-white" size={24} />
-          </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-lg font-semibold text-gray-900">
               {initialData ? "Edit Collection" : "Create Collection"}
             </h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              Manage your TOEIC test collections
-            </p>
           </div>
         </div>
       }
@@ -59,13 +53,13 @@ const ToeicCollectionFormModal = ({
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105"
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg font-medium transition-all"
           >
             {initialData ? "Update Collection" : "Create Collection"}
           </button>
@@ -73,10 +67,9 @@ const ToeicCollectionFormModal = ({
       }
     >
       <div className="space-y-5">
-        <div className="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50 hover:border-indigo-300 hover:shadow-md transition-all space-y-4">
+        <div className="space-y-4">
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-              <Tag size={16} className="text-indigo-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
               Collection Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -85,13 +78,12 @@ const ToeicCollectionFormModal = ({
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g., ETS 2024"
-              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-              <FileText size={16} className="text-indigo-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
             <textarea
@@ -100,7 +92,7 @@ const ToeicCollectionFormModal = ({
               onChange={handleChange}
               rows={3}
               placeholder="Describe this collection..."
-              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all resize-none"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all resize-none"
             />
           </div>
         </div>
