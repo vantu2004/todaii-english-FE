@@ -1,5 +1,41 @@
 import { serverInstance } from "@/config/axios";
 
+export const searchByFreeDictionaryApi = async (word) => {
+  try {
+    const response = await serverInstance.get("/dictionary/free-dict", {
+      params: { word },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const searchByTodaiiDictionary = async (word, page, size) => {
+  try {
+    const response = await serverInstance.get("/dictionary/todaii-dict", {
+      params: { word, page, size },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const getAiSuggestion = async (word) => {
+  try {
+    const response = await serverInstance.get("/dictionary/ai-suggestion", {
+      params: { word },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const fetchRawWord = async (word) => {
   try {
     const response = await serverInstance.get("/dictionary/raw-word", {
