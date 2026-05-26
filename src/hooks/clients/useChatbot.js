@@ -12,7 +12,7 @@ export const useChatbot = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // waiting for FIRST chunk
   const [isStreaming, setIsStreaming] = useState(false); // actively receiving chunks
-  const [aiProvider, setAiProvider] = useState("GEMINI");
+  const [aiProvider, setAiProvider] = useState("OPENAI");
   const [historyPage, setHistoryPage] = useState(1);
   const [hasMoreHistory, setHasMoreHistory] = useState(true);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
@@ -155,10 +155,10 @@ export const useChatbot = () => {
             prev.map((msg) =>
               msg.id === botMsgId
                 ? {
-                    ...msg,
-                    content: accumulatedText,
-                    isStreaming: true,
-                  }
+                  ...msg,
+                  content: accumulatedText,
+                  isStreaming: true,
+                }
                 : msg,
             ),
           );
@@ -169,10 +169,10 @@ export const useChatbot = () => {
           prev.map((msg) =>
             msg.id === botMsgId
               ? {
-                  ...msg,
-                  content: accumulatedText,
-                  isStreaming: false,
-                }
+                ...msg,
+                content: accumulatedText,
+                isStreaming: false,
+              }
               : msg,
           ),
         );
