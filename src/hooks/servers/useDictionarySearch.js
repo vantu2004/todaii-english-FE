@@ -28,7 +28,7 @@ export const useDictionarySearch = () => {
     const saveToHistory = useCallback((word) => {
         setSearchHistory((prev) => {
             const filtered = prev.filter((item) => item !== word);
-            const updated = [word, ...filtered].slice(0, 10);
+            const updated = [word, ...filtered].slice(0, 20);
             localStorage.setItem("dictionarySearchHistory", JSON.stringify(updated));
             return updated;
         });
@@ -62,7 +62,7 @@ export const useDictionarySearch = () => {
             if (source === "free") {
                 result = await searchByFreeDictionaryApi(word);
             } else {
-                result = await searchByTodaiiDictionary(word, 1, 50);
+                result = await searchByTodaiiDictionary(word, 1, 20);
             }
 
             setData(result);
@@ -90,7 +90,7 @@ export const useDictionarySearch = () => {
             if (searchTerm) {
                 executeSearch(searchTerm, apiSource);
             }
-        }, 500);
+        }, 1000);
 
         // Cleanup function: hủy timeout cũ nếu user tiếp tục gõ
         return () => clearTimeout(timer);
