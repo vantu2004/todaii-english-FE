@@ -18,6 +18,7 @@ const ArticleContent = ({ paragraphs }) => {
   const currentWordIndexRef = useRef(0);
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const loadVoices = () => {

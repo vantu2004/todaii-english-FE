@@ -197,23 +197,14 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 h-full overflow-y-auto p-6 rounded-lg">
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl shadow-sm">
-          <FileText className="text-white" size={28} />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-            {mode === "create" ? "Create TOEIC Test" : "Update TOEIC Test"}
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Fill in the details below to{" "}
-            {mode === "create" ? "create a new" : "update the"} test
-          </p>
-        </div>
+      <div className="mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          {mode === "create" ? "Create TOEIC Test" : "Update TOEIC Test"}
+        </h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 border border-blue-100 dark:border-gray-700 space-y-6">
+        <div className="bg-white dark:bg-gray-800 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <TestBasicDetails
               formData={formData}
@@ -236,20 +227,18 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
           </div>
         </div>
 
-        <div className="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
           <button
             type="button"
             onClick={() => navigate("/server/toeic-test")}
-            className="px-6 py-2.5 flex items-center gap-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+            className="px-5 py-2.5 flex items-center gap-2 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
           >
-            <X size={18} />
             Cancel
           </button>
           <button
             type="submit"
-            className="px-6 py-2.5 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
+            className="px-5 py-2.5 flex items-center gap-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all"
           >
-            <Save size={18} />
             {mode === "create" ? "Create Test" : "Update Test"}
           </button>
         </div>

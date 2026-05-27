@@ -1,6 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, XCircle, Clock, Trophy, BarChart3, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Trophy,
+  BarChart3,
+  AlertCircle,
+} from "lucide-react";
 
 // TOEIC Score Conversion Table (simplified approximation)
 // In a real app, this might be more complex or fetched from backend
@@ -34,12 +42,12 @@ const ToeicResult = () => {
 
   const scoreDetails = useMemo(() => {
     if (!resultData) return null;
-    
+
     let listeningCorrect = 0;
     let listeningTotal = 0;
     let readingCorrect = 0;
     let readingTotal = 0;
-    
+
     const { answers, testData } = resultData;
     const selectedPartIds = resultData.selectedPartIds || [1, 2, 3, 4, 5, 6, 7];
     
@@ -47,19 +55,19 @@ const ToeicResult = () => {
     for (let part = 1; part <= 4; part++) {
       if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
-      questions.forEach(q => {
+      questions.forEach((q) => {
         listeningTotal++;
         if (answers[q.id] === q.correct_ans) {
           listeningCorrect++;
         }
       });
     }
-    
+
     // Process Part 5-7 (Reading)
     for (let part = 5; part <= 7; part++) {
       if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
-      questions.forEach(q => {
+      questions.forEach((q) => {
         readingTotal++;
         if (answers[q.id] === q.correct_ans) {
           readingCorrect++;
@@ -95,7 +103,7 @@ const ToeicResult = () => {
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -124,7 +132,9 @@ const ToeicResult = () => {
         {/* Score Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 text-center border border-blue-100 dark:border-blue-800/30">
-            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-2">Điểm Nghe (Listening)</h3>
+            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-2">
+              Điểm Nghe (Listening)
+            </h3>
             <div className="text-4xl font-extrabold text-blue-700 dark:text-blue-300 mb-2">
               {scoreDetails.listening.total === 0 ? "Không làm" : scoreDetails.listening.score}
             </div>
@@ -132,9 +142,11 @@ const ToeicResult = () => {
               {scoreDetails.listening.total === 0 ? "—" : `${scoreDetails.listening.correct} / ${scoreDetails.listening.total} câu đúng`}
             </p>
           </div>
-          
+
           <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-6 text-center border border-emerald-100 dark:border-emerald-800/30">
-            <h3 className="text-emerald-600 dark:text-emerald-400 font-semibold mb-2">Điểm Đọc (Reading)</h3>
+            <h3 className="text-emerald-600 dark:text-emerald-400 font-semibold mb-2">
+              Điểm Đọc (Reading)
+            </h3>
             <div className="text-4xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-2">
               {scoreDetails.reading.total === 0 ? "Không làm" : scoreDetails.reading.score}
             </div>
@@ -144,8 +156,12 @@ const ToeicResult = () => {
           </div>
 
           <div className="bg-brand-50 dark:bg-brand-900/20 rounded-2xl p-6 text-center border border-brand-100 dark:border-brand-800/30 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-brand-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">TỔNG ĐIỂM</div>
-            <h3 className="text-brand-600 dark:text-brand-400 font-semibold mb-2">Total Score</h3>
+            <div className="absolute top-0 right-0 bg-brand-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+              TỔNG ĐIỂM
+            </div>
+            <h3 className="text-brand-600 dark:text-brand-400 font-semibold mb-2">
+              Total Score
+            </h3>
             <div className="text-5xl font-black text-brand-700 dark:text-brand-300 mb-2">
               {scoreDetails.maxScore === 0 ? "—" : scoreDetails.totalScore}
             </div>
@@ -160,23 +176,34 @@ const ToeicResult = () => {
           <div className="flex items-center gap-3">
             <Clock className="text-neutral-500" />
             <div>
-              <p className="text-xs text-neutral-500 font-medium">Thời gian làm bài</p>
-              <p className="font-bold text-neutral-900 dark:text-white">{formatTime(resultData.timeSpent)}</p>
+              <p className="text-xs text-neutral-500 font-medium">
+                Thời gian làm bài
+              </p>
+              <p className="font-bold text-neutral-900 dark:text-white">
+                {formatTime(resultData.timeSpent)}
+              </p>
             </div>
           </div>
           <div className="w-px h-10 bg-neutral-200 dark:bg-neutral-700 hidden sm:block"></div>
           <div className="flex items-center gap-3">
             <CheckCircle2 className="text-emerald-500" />
             <div>
-              <p className="text-xs text-neutral-500 font-medium">Số câu đúng</p>
-              <p className="font-bold text-neutral-900 dark:text-white">{scoreDetails.listening.correct + scoreDetails.reading.correct} / {scoreDetails.listening.total + scoreDetails.reading.total}</p>
+              <p className="text-xs text-neutral-500 font-medium">
+                Số câu đúng
+              </p>
+              <p className="font-bold text-neutral-900 dark:text-white">
+                {scoreDetails.listening.correct + scoreDetails.reading.correct}{" "}
+                / {scoreDetails.listening.total + scoreDetails.reading.total}
+              </p>
             </div>
           </div>
           <div className="w-px h-10 bg-neutral-200 dark:bg-neutral-700 hidden sm:block"></div>
           <div className="flex items-center gap-3">
             <BarChart3 className="text-blue-500" />
             <div>
-              <p className="text-xs text-neutral-500 font-medium">Độ chính xác</p>
+              <p className="text-xs text-neutral-500 font-medium">
+                Độ chính xác
+              </p>
               <p className="font-bold text-neutral-900 dark:text-white">
                 {scoreDetails.listening.total + scoreDetails.reading.total > 0 
                   ? `${Math.round(((scoreDetails.listening.correct + scoreDetails.reading.correct) / (scoreDetails.listening.total + scoreDetails.reading.total)) * 100)}%`
@@ -189,11 +216,12 @@ const ToeicResult = () => {
         <div className="p-4 border border-brand-100 dark:border-brand-900/30 bg-brand-50/50 dark:bg-brand-900/10 rounded-2xl flex items-start gap-3">
           <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={18} />
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            Đây là kết quả mang tính chất tham khảo. Kết quả thi thật có thể dao động tùy thuộc vào thang điểm chuẩn của EST tại từng thời điểm.
+            Đây là kết quả mang tính chất tham khảo. Kết quả thi thật có thể dao
+            động tùy thuộc vào thang điểm chuẩn của EST tại từng thời điểm.
           </p>
         </div>
       </div>
-      
+
       {/* Detailed answers could be added here in the future */}
       <div className="text-center">
         <Link

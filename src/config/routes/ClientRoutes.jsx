@@ -94,11 +94,14 @@ export default function ClientRoutes() {
           <Route path="/gg-translate" element={<GGTranslate />}></Route>
           <Route path="/vocabulary" element={<VocabularyFilter />}></Route>
           <Route path="/vocabulary/:id" element={<VocabDeckDetails />}></Route>
-          
+
           {/* TOEIC */}
           <Route path="/toeic" element={<ToeicHome />}></Route>
           <Route path="/toeic/:testId" element={<ToeicTestOverview />}></Route>
-          <Route path="/toeic/:testId/take" element={<ToeicTakingTest />}></Route>
+          <Route
+            path="/toeic/:testId/take"
+            element={<ToeicTakingTest />}
+          ></Route>
           <Route path="/toeic/:testId/result" element={<ToeicResult />}></Route>
 
           <Route

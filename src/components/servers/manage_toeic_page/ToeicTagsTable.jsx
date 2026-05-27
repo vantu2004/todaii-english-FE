@@ -139,7 +139,7 @@ const ToeicTagsTable = ({
               return (
                 <tr
                   key={i}
-                  className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                  className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
                 >
                   <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                   <td className="px-4 py-3 text-sm font-medium">
@@ -180,15 +180,15 @@ const ToeicTagsTable = ({
                         <>
                           <button
                             onClick={() => handleSave(i)}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
                           >
-                            <Check className="w-5 h-5" />
+                            <Check className="w-4 h-4" />
                           </button>
                           <button
                             onClick={handleCancelEdit}
-                            className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
                           >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4" />
                           </button>
                         </>
                       ) : (
@@ -202,15 +202,15 @@ const ToeicTagsTable = ({
                           </button>
                           <button
                             onClick={() => handleEditClick(i)}
-                            className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
                           >
-                            <Pencil className="w-5 h-5" />
+                            <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDeleteClick(i)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2 text-red-600 hover:text-red-700 rounded-lg transition-colors"
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </>
                       )}
@@ -239,14 +239,8 @@ const ToeicTagsTable = ({
           onClose={() => setIsDeleteModalOpen(false)}
           title={
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 rounded-lg">
-                <AlertTriangle className="text-red-600" size={24} />
-              </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Delete Tag</h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  This action cannot be undone
-                </p>
+                <h2 className="text-lg font-semibold text-gray-900">Delete Tag</h2>
               </div>
             </div>
           }
@@ -254,13 +248,13 @@ const ToeicTagsTable = ({
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-5 py-2.5 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-medium hover:shadow-lg transition-all hover:scale-105 flex items-center gap-2"
+                className="px-5 py-2.5 bg-red-600 text-white rounded-lg font-medium transition-all flex items-center gap-2"
               >
                 <Trash2 size={16} />
                 Delete Tag
@@ -268,12 +262,12 @@ const ToeicTagsTable = ({
             </div>
           }
         >
-          <div className="bg-gradient-to-br from-red-50 to-red-100/50 rounded-2xl p-6 border-2 border-red-200/50">
-            <h3 className="font-bold text-gray-900 mb-2 text-lg">
+          <div className="space-y-3 border border-gray-200 rounded-lg p-6">
+            <h3 className="text-sm text-gray-900 mb-2">
               Are you sure you want to delete this tag?
             </h3>
-            <div className="bg-white rounded-lg p-3 border border-red-300 mb-4">
-              <p className="text-sm font-semibold text-red-700">
+            <div className="bg-white rounded-lg p-3 border border-gray-200 mb-4">
+              <p className="text-sm font-semibold text-gray-900">
                 {tags[selectedIndex]?.name}
               </p>
             </div>

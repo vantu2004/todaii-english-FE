@@ -6,7 +6,7 @@ export const fetchToeicCollections = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await clientInstance.get("/toeic/collection", {
@@ -34,14 +34,14 @@ export const fetchTestsByCollectionId = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await clientInstance.get(
       `/toeic/test/collection/${collectionId}`,
       {
         params: { page, size, sortBy, direction, keyword },
-      }
+      },
     );
     return response.data;
   } catch (err) {
@@ -54,7 +54,7 @@ export const fetchToeicTests = async (
   size = 10,
   sortBy = "id",
   direction = "desc",
-  keyword = ""
+  keyword = "",
 ) => {
   try {
     const response = await clientInstance.get("/toeic/test", {

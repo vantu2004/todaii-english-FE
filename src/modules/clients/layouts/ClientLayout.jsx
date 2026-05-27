@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import Footer from "@/components/landing_page/Footer";
 import ClientNavBar from "@/components/clients/ClientNavBar";
+import FloatingChatbot from "@/components/clients/chatbot/FloatingChatbot";
 
 const ClientLayout = () => {
   const location = useLocation();
@@ -14,7 +15,10 @@ const ClientLayout = () => {
         <Outlet />
       </main>
 
-      {!isTakingTest && <Footer />}
+      <Footer />
+
+      {/* Floating AI Assistant */}
+      <FloatingChatbot />
     </div>
   );
 };

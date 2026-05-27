@@ -8,11 +8,11 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
   const [detailPassage, setDetailPassage] = useState(null);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
       <div className="overflow-x-auto">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500">
               <th className="px-6 py-4 w-16">ID</th>
               <th className="px-6 py-4 min-w-[250px]">
                 Passage Text (Preview)
@@ -37,8 +37,8 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageText ||
-                          passage.passage_text ||
-                          "No text",
+                        passage.passage_text ||
+                        "No text",
                       ),
                     }}
                   />
@@ -49,8 +49,8 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageTrans ||
-                          passage.passage_trans ||
-                          "No translation",
+                        passage.passage_trans ||
+                        "No translation",
                       ),
                     }}
                   />
@@ -76,17 +76,17 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                     </button>
                     <button
                       onClick={() => onEdit(passage)}
-                      className="text-yellow-600 hover:text-yellow-800 transition"
+                      className="text-gray-400 hover:text-gray-700 transition"
                       title="Edit"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => onDelete(passage.id)}
-                      className="text-red-600 hover:text-red-800 transition"
+                      className="text-red-500 hover:text-red-700 transition"
                       title="Delete"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>

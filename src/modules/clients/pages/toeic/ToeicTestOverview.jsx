@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getToeicTestById } from "@/api/clients/toeicApi";
-import { ArrowLeft, BookOpen, Clock, Play, Headphones, BookText, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Clock,
+  Play,
+  Headphones,
+  BookText,
+  AlertCircle,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 const PARTS_METADATA = [
@@ -94,7 +102,7 @@ const ToeicTestOverview = () => {
             <h1 className="text-3xl md:text-4xl font-extrabold text-neutral-900 dark:text-white mb-4">
               {test.title}
             </h1>
-            
+
             <div className="flex flex-wrap items-center gap-4 text-neutral-600 dark:text-neutral-300 mb-8">
               <div className="flex items-center gap-2 px-4 py-2 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
                 <Clock className="text-brand-500" size={18} />
@@ -109,24 +117,38 @@ const ToeicTestOverview = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10">
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 p-4 rounded-2xl flex items-start gap-4">
                 <div className="mt-1 bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg">
-                  <Headphones className="text-blue-600 dark:text-blue-400" size={20} />
+                  <Headphones
+                    className="text-blue-600 dark:text-blue-400"
+                    size={20}
+                  />
                 </div>
                 <div>
-                  <h3 className="font-bold text-neutral-900 dark:text-white mb-1">Phần Nghe (Listening)</h3>
+                  <h3 className="font-bold text-neutral-900 dark:text-white mb-1">
+                    Phần Nghe (Listening)
+                  </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                    Bao gồm Part 1 đến Part 4. Thời gian làm bài 45 phút. 100 câu hỏi đánh giá kỹ năng nghe hiểu tiếng Anh thông qua các đoạn hội thoại và bài nói ngắn.
+                    Bao gồm Part 1 đến Part 4. Thời gian làm bài 45 phút. 100
+                    câu hỏi đánh giá kỹ năng nghe hiểu tiếng Anh thông qua các
+                    đoạn hội thoại và bài nói ngắn.
                   </p>
                 </div>
               </div>
 
               <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/30 p-4 rounded-2xl flex items-start gap-4">
                 <div className="mt-1 bg-emerald-100 dark:bg-emerald-900/50 p-2 rounded-lg">
-                  <BookText className="text-emerald-600 dark:text-emerald-400" size={20} />
+                  <BookText
+                    className="text-emerald-600 dark:text-emerald-400"
+                    size={20}
+                  />
                 </div>
                 <div>
-                  <h3 className="font-bold text-neutral-900 dark:text-white mb-1">Phần Đọc (Reading)</h3>
+                  <h3 className="font-bold text-neutral-900 dark:text-white mb-1">
+                    Phần Đọc (Reading)
+                  </h3>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                    Bao gồm Part 5 đến Part 7. Thời gian làm bài 75 phút. 100 câu hỏi đánh giá vốn từ vựng, ngữ pháp và khả năng đọc hiểu văn bản tiếng Anh.
+                    Bao gồm Part 5 đến Part 7. Thời gian làm bài 75 phút. 100
+                    câu hỏi đánh giá vốn từ vựng, ngữ pháp và khả năng đọc hiểu
+                    văn bản tiếng Anh.
                   </p>
                 </div>
               </div>
@@ -230,7 +252,12 @@ const ToeicTestOverview = () => {
             <div className="p-4 border border-brand-100 dark:border-brand-900/30 bg-brand-50/50 dark:bg-brand-900/10 rounded-2xl flex items-start gap-3">
               <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={18} />
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                <strong className="text-brand-600 dark:text-brand-400">Lưu ý:</strong> Bài thi sẽ được chấm điểm ngay sau khi bạn nộp bài. Đảm bảo kết nối mạng ổn định trong suốt quá trình làm bài. Bạn có thể tự do chuyển đổi giữa các phần.
+                <strong className="text-brand-600 dark:text-brand-400">
+                  Lưu ý:
+                </strong>{" "}
+                Bài thi sẽ được chấm điểm ngay sau khi bạn nộp bài. Đảm bảo kết
+                nối mạng ổn định trong suốt quá trình làm bài. Bạn có thể tự do
+                chuyển đổi giữa các phần.
               </p>
             </div>
           </div>

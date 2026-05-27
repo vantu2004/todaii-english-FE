@@ -11,11 +11,11 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
   const isPart5 = partNumber === 5;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500">
               <th className="px-6 py-4 w-16">ID</th>
               {!isPart12 && !isPart5 && (
                 <th className="px-6 py-4 w-32">Passage ID</th>
@@ -142,17 +142,17 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                     </button>
                     <button
                       onClick={() => onEdit(question)}
-                      className="text-yellow-600 hover:text-yellow-800 transition"
+                      className="text-gray-400 hover:text-gray-700 transition"
                       title="Edit"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => onDelete(question.id)}
-                      className="text-red-600 hover:text-red-800 transition"
+                      className="text-red-500 hover:text-red-700 transition"
                       title="Delete"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>
