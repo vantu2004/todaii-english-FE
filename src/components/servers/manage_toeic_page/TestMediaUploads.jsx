@@ -20,20 +20,21 @@ const TestMediaUploads = ({
             Image URL
           </label>
           <div className="flex gap-2 items-center">
-            <label
-              className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
-                isUploadingImage ? "opacity-50 pointer-events-none" : ""
-              }`}
-            >
-              {isUploadingImage ? "Uploading..." : "Upload Image"}
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => handleUploadFile(e, "image")}
-              />
-            </label>
-            {formData.image_url?.includes("cloudinary") && (
+            {!formData.image_url?.includes("cloudinary") ? (
+              <label
+                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
+                  isUploadingImage ? "opacity-50 pointer-events-none" : ""
+                }`}
+              >
+                {isUploadingImage ? "Uploading..." : "Upload Image"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handleUploadFile(e, "image")}
+                />
+              </label>
+            ) : (
               <button
                 type="button"
                 onClick={() => handleDeleteFile("image")}
@@ -84,20 +85,21 @@ const TestMediaUploads = ({
             Audio URL
           </label>
           <div className="flex gap-2 items-center">
-            <label
-              className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
-                isUploadingAudio ? "opacity-50 pointer-events-none" : ""
-              }`}
-            >
-              {isUploadingAudio ? "Uploading..." : "Upload Audio"}
-              <input
-                type="file"
-                accept="audio/*"
-                className="hidden"
-                onChange={(e) => handleUploadFile(e, "audio")}
-              />
-            </label>
-            {formData.audio_url?.includes("cloudinary") && (
+            {!formData.audio_url?.includes("cloudinary") ? (
+              <label
+                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
+                  isUploadingAudio ? "opacity-50 pointer-events-none" : ""
+                }`}
+              >
+                {isUploadingAudio ? "Uploading..." : "Upload Audio"}
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className="hidden"
+                  onChange={(e) => handleUploadFile(e, "audio")}
+                />
+              </label>
+            ) : (
               <button
                 type="button"
                 onClick={() => handleDeleteFile("audio")}

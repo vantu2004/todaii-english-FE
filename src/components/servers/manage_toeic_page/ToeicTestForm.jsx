@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { fetchToeicCollections } from "@/api/servers/toeicCollectionApi";
 import {
   uploadToeicTestFile,
   deleteToeicTestFile,
+  updateToeicTest,
 } from "@/api/servers/toeicTestApi";
 import { toast } from "react-hot-toast";
 import { FileText, Save, X } from "lucide-react";
@@ -30,6 +31,24 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
   const [isDeletingImage, setIsDeletingImage] = useState(false);
   const [isDeletingAudio, setIsDeletingAudio] = useState(false);
 
+  const isSavedRef = useRef(false);
+  const uploadedUrlsRef = useRef({ image: "", audio: "" });
+  const initialUrlsRef = useRef({ image: "", audio: "" });
+
+  useEffect(() => {
+    return () => {
+      if (!isSavedRef.current) {
+        const { image, audio } = uploadedUrlsRef.current;
+        if (image && image.includes("cloudinary")) {
+          deleteToeicTestFile(image).catch((err) => console.error("Error cleaning up image:", err));
+        }
+        if (audio && audio.includes("cloudinary")) {
+          deleteToeicTestFile(audio).catch((err) => console.error("Error cleaning up audio:", err));
+        }
+      }
+    };
+  }, []);
+
   const [collections, setCollections] = useState([]);
 
   useEffect(() => {
@@ -44,28 +63,31 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
+      const img = initialData.image_request?.uploaded_image ||
+        initialData.image_request?.image_url ||
+        initialData.image_url ||
+        initialData.imageUrl ||
+        initialData.thumbnail ||
+        "";
+      const aud = initialData.audio_request?.uploaded_audio ||
+        initialData.audio_request?.audio_url ||
+        initialData.audio_url ||
+        initialData.audioUrl ||
+        "";
+      initialUrlsRef.current = { image: img, audio: aud };
       setFormData({
         title: initialData.title || "",
         test_type: initialData.test_type || initialData.testType || "TOEIC_LR",
         duration: initialData.duration || 120,
-        audio_url:
-          initialData.audio_request?.uploaded_audio ||
-          initialData.audio_request?.audio_url ||
-          initialData.audio_url ||
-          initialData.audioUrl ||
-          "",
-        image_url:
-          initialData.image_request?.uploaded_image ||
-          initialData.image_request?.image_url ||
-          initialData.image_url ||
-          initialData.imageUrl ||
-          initialData.thumbnail ||
-          "",
+        audio_url: aud,
+        image_url: img,
         description: initialData.description || "",
         status: initialData.status || "DRAFT",
         collection_id:
           initialData.collection?.id || initialData.collection_id || "",
       });
+    } else {
+      initialUrlsRef.current = { image: "", audio: "" };
     }
   }, [initialData]);
 
@@ -84,6 +106,7 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
         ...prev,
         [type === "image" ? "image_url" : "audio_url"]: url,
       }));
+      uploadedUrlsRef.current[type] = url;
       toast.success(
         `${type === "image" ? "Image" : "Audio"} uploaded successfully!`,
       );
@@ -104,8 +127,12 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
     else setIsDeletingAudio(true);
 
     try {
-      if (url.includes("cloudinary")) {
-        await deleteToeicTestFile(url);
+      // Only delete from Cloudinary immediately if it was newly uploaded in this session
+      if (url === uploadedUrlsRef.current[type]) {
+        if (url.includes("cloudinary")) {
+          await deleteToeicTestFile(url);
+        }
+        uploadedUrlsRef.current[type] = "";
       }
       setFormData((prev) => ({
         ...prev,
@@ -125,7 +152,7 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const submitData = {
       title: formData.title,
@@ -153,7 +180,19 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
           : "",
       },
     };
-    onSubmit(submitData);
+    try {
+      await onSubmit(submitData);
+      isSavedRef.current = true;
+      const { image: initialImage, audio: initialAudio } = initialUrlsRef.current;
+      if (initialImage && initialImage !== formData.image_url && initialImage.includes("cloudinary")) {
+        deleteToeicTestFile(initialImage).catch((err) => console.error("Error deleting old image:", err));
+      }
+      if (initialAudio && initialAudio !== formData.audio_url && initialAudio.includes("cloudinary")) {
+        deleteToeicTestFile(initialAudio).catch((err) => console.error("Error deleting old audio:", err));
+      }
+    } catch (err) {
+      console.error("Failed to save test", err);
+    }
   };
 
   return (

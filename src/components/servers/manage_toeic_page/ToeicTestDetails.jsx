@@ -137,7 +137,7 @@ const ToeicTestDetails = ({ test }) => {
       </div>
 
       {/* === Meta Information === */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/60 hover:shadow-md transition-all">
           <p className="text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide">
             Created At
@@ -169,6 +169,23 @@ const ToeicTestDetails = ({ test }) => {
             {typeof test.created_by === "object"
               ? test.created_by.display_name || test.created_by.id
               : test.created_by || "System"}
+          </p>
+        </div>
+        <div className="bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl p-4 border border-teal-200/60 hover:shadow-md transition-all">
+          <p className="text-xs font-bold text-teal-700 mb-2 uppercase tracking-wide">
+            Updated By
+          </p>
+          <p
+            className="text-sm text-gray-900 font-semibold truncate"
+            title={
+              typeof test.updated_by === "object"
+                ? test.updated_by.display_name
+                : test.updated_by || test.updatedBy?.display_name || test.updatedBy || "System"
+            }
+          >
+            {typeof test.updated_by === "object"
+              ? test.updated_by.display_name || test.updated_by.id
+              : test.updated_by || test.updatedBy?.display_name || test.updatedBy || "System"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
