@@ -27,7 +27,7 @@ const ToeicTestOverview = () => {
   const navigate = useNavigate();
   const [test, setTest] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   const [practiceMode, setPracticeMode] = useState("full"); // "full" or "parts"
   const [selectedParts, setSelectedParts] = useState([1, 2, 3, 4, 5, 6, 7]);
 
@@ -157,27 +157,25 @@ const ToeicTestOverview = () => {
             {/* Choosing parts section */}
             <div className="border-t border-neutral-100 dark:border-neutral-800 pt-8 mb-8">
               <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">Luyện tập theo phần</h2>
-              
+
               <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl max-w-sm mb-6">
                 <button
                   type="button"
                   onClick={() => { setPracticeMode("full"); setSelectedParts([1, 2, 3, 4, 5, 6, 7]); }}
-                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
-                    practiceMode === "full"
-                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
-                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
-                  }`}
+                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${practiceMode === "full"
+                    ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                    }`}
                 >
                   Toàn bộ đề thi
                 </button>
                 <button
                   type="button"
                   onClick={() => setPracticeMode("parts")}
-                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
-                    practiceMode === "parts"
-                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
-                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
-                  }`}
+                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${practiceMode === "parts"
+                    ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                    }`}
                 >
                   Tự chọn phần thi
                 </button>
@@ -205,13 +203,12 @@ const ToeicTestOverview = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {PARTS_METADATA.map((part) => (
-                  <label 
+                  <label
                     key={part.id}
-                    className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
-                      selectedParts.includes(part.id)
-                        ? 'border-brand-500 bg-brand-50/30 dark:bg-brand-500/5'
-                        : 'border-neutral-150 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/30'
-                    } ${practiceMode === "full" ? "opacity-75 cursor-default" : ""}`}
+                    className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedParts.includes(part.id)
+                      ? 'border-brand-500 bg-brand-50/30 dark:bg-brand-500/5'
+                      : 'border-neutral-150 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/30'
+                      } ${practiceMode === "full" ? "opacity-75 cursor-default" : ""}`}
                   >
                     <input
                       type="checkbox"
@@ -261,7 +258,7 @@ const ToeicTestOverview = () => {
               </p>
             </div>
           </div>
-          
+
           <div className="w-full md:w-auto mt-6 md:mt-0 flex flex-col gap-4 sticky top-24 shrink-0">
             <div className="w-full md:w-80 bg-white dark:bg-neutral-900 border border-neutral-150 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
               <h3 className="font-bold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">Thông tin bài làm</h3>
