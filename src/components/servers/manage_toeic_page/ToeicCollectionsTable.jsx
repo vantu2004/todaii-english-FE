@@ -12,6 +12,8 @@ import {
   TextAlignStart,
   Check,
   X,
+  Eye,
+  Info,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -45,6 +47,7 @@ const ToeicCollectionsTable = ({
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedName, setEditedName] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
+  const [detailIndex, setDetailIndex] = useState(null);
 
   const handleTestsClick = (id) => {
     navigate(`/server/toeic-collection/${id}/tests`);
@@ -259,6 +262,13 @@ const ToeicCollectionsTable = ({
                       ) : (
                         <>
                           <button
+                            onClick={() => setDetailIndex(i)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="View Detail"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                          <button
                             onClick={() => handleEditClick(i)}
                             className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
                             title="Edit directly"
@@ -332,6 +342,73 @@ const ToeicCollectionsTable = ({
               <p className="text-sm font-semibold text-gray-900">
                 {collections[selectedIndex]?.name}
               </p>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {detailIndex !== null && (
+        <Modal
+          isOpen={true}
+          onClose={() => setDetailIndex(null)}
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-lg">
+                <Info className="text-indigo-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">Collection Details</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Detailed information about the collection
+                </p>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDetailIndex(null)}
+                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Collection ID</span>
+                <p className="text-sm font-mono font-bold text-slate-900 mt-1">#{collections[detailIndex]?.id}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Status</span>
+                <p className="text-sm font-bold text-slate-900 mt-1">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {collections[detailIndex]?.enabled ? "Enabled" : "Disabled"}
+                  </span>
+                </p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Name</span>
+                <p className="text-sm font-bold text-slate-900 mt-1">{collections[detailIndex]?.name}</p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Alias</span>
+                <p className="text-sm font-medium text-slate-700 mt-1">{collections[detailIndex]?.alias}</p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Description</span>
+                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">{collections[detailIndex]?.description || "No description provided."}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Created At</span>
+                <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.created_at || collections[detailIndex]?.createdAt)}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Updated At</span>
+                <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.updated_at || collections[detailIndex]?.updatedAt)}</p>
+              </div>
             </div>
           </div>
         </Modal>

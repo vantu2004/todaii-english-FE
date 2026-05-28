@@ -9,6 +9,8 @@ import {
   X,
   ArrowUp,
   ArrowDown,
+  Eye,
+  Info,
 } from "lucide-react";
 import { deleteToeicTag } from "@/api/servers/toeicTagApi";
 import { logError } from "@/utils/LogError";
@@ -26,6 +28,7 @@ const ToeicTagsTable = ({
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedName, setEditedName] = useState("");
   const [editedPartNumber, setEditedPartNumber] = useState("");
+  const [detailIndex, setDetailIndex] = useState(null);
 
   const handleEditClick = (index) => {
     setEditingIndex(index);
@@ -46,7 +49,15 @@ const ToeicTagsTable = ({
   const handleSave = async (index) => {
     const tag = tags[index];
     if (editedName.trim() === "") return;
-    await onSaveEdit(tag.id, editedName, editedPartNumber);
+    let pNum = null;
+    if (editedPartNumber !== "" && editedPartNumber !== null && editedPartNumber !== undefined) {
+      pNum = parseInt(editedPartNumber, 10);
+      if (isNaN(pNum) || pNum < 1 || pNum > 7) {
+        toast.error("Part number must be between 1 and 7");
+        return;
+      }
+    }
+    await onSaveEdit(tag.id, editedName, pNum);
     setEditingIndex(null);
     setEditedName("");
     setEditedPartNumber("");
@@ -183,6 +194,13 @@ const ToeicTagsTable = ({
                       ) : (
                         <>
                           <button
+                            onClick={() => setDetailIndex(i)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="View Detail"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                          <button
                             onClick={() => handleEditClick(i)}
                             className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
                           >
@@ -252,6 +270,59 @@ const ToeicTagsTable = ({
               <p className="text-sm font-semibold text-gray-900">
                 {tags[selectedIndex]?.name}
               </p>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {detailIndex !== null && (
+        <Modal
+          isOpen={true}
+          onClose={() => setDetailIndex(null)}
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-pink-100 to-pink-50 rounded-lg">
+                <Info className="text-pink-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">Tag Details</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Detailed information about the tag
+                </p>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDetailIndex(null)}
+                className="px-5 py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4 bg-gradient-to-br from-slate-50 to-pink-50 rounded-2xl p-6 border border-pink-200/50">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Tag ID</span>
+                <p className="text-sm font-mono font-bold text-slate-900 mt-1">#{tags[detailIndex]?.id}</p>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Part Number</span>
+                <p className="text-sm font-bold text-slate-900 mt-1">
+                  {tags[detailIndex]?.part_number || tags[detailIndex]?.partNumber || "All Parts (Reusable)"}
+                </p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Name</span>
+                <p className="text-sm font-bold text-slate-900 mt-1">{tags[detailIndex]?.name}</p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Alias</span>
+                <p className="text-sm font-medium text-slate-700 mt-1">{tags[detailIndex]?.alias}</p>
+              </div>
             </div>
           </div>
         </Modal>

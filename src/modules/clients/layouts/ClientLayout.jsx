@@ -1,9 +1,12 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import Footer from "@/components/landing_page/Footer";
 import ClientNavBar from "@/components/clients/ClientNavBar";
 import FloatingChatbot from "@/components/clients/chatbot/FloatingChatbot";
 
 const ClientLayout = () => {
+  const location = useLocation();
+  const isTakingTest = location.pathname.endsWith("/take");
+
   return (
     <div className="font-inter min-h-screen bg-surface-primary dark:bg-neutral-950 flex flex-col">
       <ClientNavBar />

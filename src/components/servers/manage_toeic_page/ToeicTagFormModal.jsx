@@ -27,10 +27,13 @@ const ToeicTagFormModal = ({
       toast.error("Tag name is required");
       return;
     }
-    const pNum = parseInt(partNumber, 10);
-    if (isNaN(pNum) || pNum < 1 || pNum > 7) {
-      toast.error("Part number must be between 1 and 7");
-      return;
+    let pNum = null;
+    if (partNumber !== "") {
+      pNum = parseInt(partNumber, 10);
+      if (isNaN(pNum) || pNum < 1 || pNum > 7) {
+        toast.error("Part number must be between 1 and 7");
+        return;
+      }
     }
     onSubmit(name, pNum);
   };
@@ -81,8 +84,9 @@ const ToeicTagFormModal = ({
             />
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              Part Number <span className="text-red-500">*</span>
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+              <Tag size={16} className="text-pink-600" />
+              Part Number
             </label>
             <input
               type="number"
