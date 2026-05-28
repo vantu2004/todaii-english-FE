@@ -401,11 +401,7 @@ const ToeicCollectionsTable = ({
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Description</span>
                 <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">{collections[detailIndex]?.description || "No description provided."}</p>
               </div>
-              <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Created At</span>
-                <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.created_at || collections[detailIndex]?.createdAt)}</p>
-              </div>
-              <div>
+              <div className="col-span-2">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Updated At</span>
                 <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.updated_at || collections[detailIndex]?.updatedAt)}</p>
               </div>
