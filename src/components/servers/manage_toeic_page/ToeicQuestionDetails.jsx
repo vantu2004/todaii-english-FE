@@ -1,9 +1,23 @@
-import { Image as ImageIcon, FileAudio, FileText, CheckSquare, Tags } from "lucide-react";
+import {
+  Image as ImageIcon,
+  FileAudio,
+  FileText,
+  CheckSquare,
+  Tags,
+} from "lucide-react";
 import DOMPurify from "dompurify";
 
 const ToeicQuestionDetails = ({ question, partNumber }) => {
-  const imageUrl = question.imageUrl || question.image_url || question.image_request?.uploaded_image || question.image_request?.image_url;
-  const audioUrl = question.audioUrl || question.audio_url || question.audio_request?.uploaded_audio || question.audio_request?.audio_url;
+  const imageUrl =
+    question.imageUrl ||
+    question.image_url ||
+    question.image_request?.uploaded_image ||
+    question.image_request?.image_url;
+  const audioUrl =
+    question.audioUrl ||
+    question.audio_url ||
+    question.audio_request?.uploaded_audio ||
+    question.audio_request?.audio_url;
 
   const isPart12 = partNumber === 1 || partNumber === 2;
   const correctAns = question.correct_ans || question.correctAns;
@@ -35,7 +49,9 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
                 <div className="p-2 bg-purple-100/50 rounded-lg">
                   <FileAudio size={20} className="text-purple-600" />
                 </div>
-                <span className="text-sm font-bold text-purple-800 uppercase tracking-wide">Question Audio</span>
+                <span className="text-sm font-bold text-purple-800 uppercase tracking-wide">
+                  Question Audio
+                </span>
               </div>
               <audio controls className="w-full" src={audioUrl}>
                 Your browser does not support the audio element.
@@ -61,7 +77,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
             __html: DOMPurify.sanitize(
               isPart12
                 ? question.transcript || "No transcript provided."
-                : question.question || "No question provided."
+                : question.question || "No question provided.",
             ),
           }}
         />
@@ -70,21 +86,45 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       {/* Options Selection (Only for parts 3-7) */}
       {!isPart12 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("A")}`}>
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">Option A</span>
-            <p className="text-sm">{question.option_a || question.optionA || "N/A"}</p>
+          <div
+            className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("A")}`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
+              Option A
+            </span>
+            <p className="text-sm">
+              {question.option_a || question.optionA || "N/A"}
+            </p>
           </div>
-          <div className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("B")}`}>
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">Option B</span>
-            <p className="text-sm">{question.option_b || question.optionB || "N/A"}</p>
+          <div
+            className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("B")}`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
+              Option B
+            </span>
+            <p className="text-sm">
+              {question.option_b || question.optionB || "N/A"}
+            </p>
           </div>
-          <div className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("C")}`}>
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">Option C</span>
-            <p className="text-sm">{question.option_c || question.optionC || "N/A"}</p>
+          <div
+            className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("C")}`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
+              Option C
+            </span>
+            <p className="text-sm">
+              {question.option_c || question.optionC || "N/A"}
+            </p>
           </div>
-          <div className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("D")}`}>
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">Option D</span>
-            <p className="text-sm">{question.option_d || question.optionD || "N/A"}</p>
+          <div
+            className={`p-4 rounded-xl shadow-sm transition-all ${getOptionClass("D")}`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
+              Option D
+            </span>
+            <p className="text-sm">
+              {question.option_d || question.optionD || "N/A"}
+            </p>
           </div>
         </div>
       )}
@@ -93,8 +133,12 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       <div className="flex items-center gap-3 bg-green-50/50 dark:bg-green-900/10 p-4 rounded-xl border border-green-200/50">
         <CheckSquare className="text-green-600" size={20} />
         <div>
-          <span className="text-xs text-gray-500 font-medium block">Correct Answer</span>
-          <span className="text-lg font-bold text-green-700 dark:text-green-400">{correctAns}</span>
+          <span className="text-xs text-gray-500 font-medium block">
+            Correct Answer
+          </span>
+          <span className="text-lg font-bold text-green-700 dark:text-green-400">
+            {correctAns}
+          </span>
         </div>
       </div>
 
@@ -111,7 +155,9 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
         <div
           className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[50px] leading-relaxed"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(question.explanation || "No explanation provided."),
+            __html: DOMPurify.sanitize(
+              question.explanation || "No explanation provided.",
+            ),
           }}
         />
       </div>
@@ -130,7 +176,9 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
               </span>
             ))
           ) : (
-            <span className="text-xs text-gray-500 italic">No tags selected.</span>
+            <span className="text-xs text-gray-500 italic">
+              No tags selected.
+            </span>
           )}
         </div>
       </div>

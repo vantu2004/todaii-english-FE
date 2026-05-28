@@ -357,7 +357,9 @@ const ToeicCollectionsTable = ({
                 <Info className="text-indigo-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Collection Details</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Collection Details
+                </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   Detailed information about the collection
                 </p>
@@ -378,36 +380,71 @@ const ToeicCollectionsTable = ({
           <div className="space-y-4 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Collection ID</span>
-                <p className="text-sm font-mono font-bold text-slate-900 mt-1">#{collections[detailIndex]?.id}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Collection ID
+                </span>
+                <p className="text-sm font-mono font-bold text-slate-900 mt-1">
+                  #{collections[detailIndex]?.id}
+                </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Status</span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Status
+                </span>
                 <p className="text-sm font-bold text-slate-900 mt-1">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                  >
                     {collections[detailIndex]?.enabled ? "Enabled" : "Disabled"}
                   </span>
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Name</span>
-                <p className="text-sm font-bold text-slate-900 mt-1">{collections[detailIndex]?.name}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Name
+                </span>
+                <p className="text-sm font-bold text-slate-900 mt-1">
+                  {collections[detailIndex]?.name}
+                </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Alias</span>
-                <p className="text-sm font-medium text-slate-700 mt-1">{collections[detailIndex]?.alias}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Alias
+                </span>
+                <p className="text-sm font-medium text-slate-700 mt-1">
+                  {collections[detailIndex]?.alias}
+                </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Description</span>
-                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">{collections[detailIndex]?.description || "No description provided."}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Description
+                </span>
+                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">
+                  {collections[detailIndex]?.description ||
+                    "No description provided."}
+                </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Created At</span>
-                <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.created_at || collections[detailIndex]?.createdAt)}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Created At
+                </span>
+                <p className="text-sm text-slate-700 mt-1">
+                  {formatISODate(
+                    collections[detailIndex]?.created_at ||
+                      collections[detailIndex]?.createdAt,
+                  )}
+                </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Updated At</span>
-                <p className="text-sm text-slate-700 mt-1">{formatISODate(collections[detailIndex]?.updated_at || collections[detailIndex]?.updatedAt)}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Updated At
+                </span>
+                <p className="text-sm text-slate-700 mt-1">
+                  {formatISODate(
+                    collections[detailIndex]?.updated_at ||
+                      collections[detailIndex]?.updatedAt,
+                  )}
+                </p>
               </div>
             </div>
           </div>

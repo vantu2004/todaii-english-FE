@@ -21,8 +21,9 @@ const TestMediaUploads = ({
           <div className="flex gap-2 items-center">
             {!formData.image_url?.includes("cloudinary") ? (
               <label
-                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""
-                  }`}
+                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
+                  isUploadingImage ? "opacity-50 pointer-events-none" : ""
+                }`}
               >
                 {isUploadingImage ? "Uploading..." : "Upload Image"}
                 <input
@@ -84,8 +85,9 @@ const TestMediaUploads = ({
           <div className="flex gap-2 items-center">
             {!formData.audio_url?.includes("cloudinary") ? (
               <label
-                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""
-                  }`}
+                className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${
+                  isUploadingAudio ? "opacity-50 pointer-events-none" : ""
+                }`}
               >
                 {isUploadingAudio ? "Uploading..." : "Upload Audio"}
                 <input

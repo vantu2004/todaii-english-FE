@@ -55,7 +55,10 @@ const ToeicQuestionFormModal = ({
           setLocalTags(fetchedTags);
 
           if (!isPart12 && !isPart5) {
-            const fetchedPassages = await getPassagesByPartNumber(testId, partNumber);
+            const fetchedPassages = await getPassagesByPartNumber(
+              testId,
+              partNumber,
+            );
             setLocalPassages(fetchedPassages);
           }
         } catch (err) {
@@ -110,10 +113,14 @@ const ToeicQuestionFormModal = ({
       if (!isSavedRef.current) {
         const { image, audio } = uploadedUrlsRef.current;
         if (image && image.includes("cloudinary")) {
-          deleteToeicTestFile(image).catch((err) => console.error("Error cleaning up image:", err));
+          deleteToeicTestFile(image).catch((err) =>
+            console.error("Error cleaning up image:", err),
+          );
         }
         if (audio && audio.includes("cloudinary")) {
-          deleteToeicTestFile(audio).catch((err) => console.error("Error cleaning up audio:", err));
+          deleteToeicTestFile(audio).catch((err) =>
+            console.error("Error cleaning up audio:", err),
+          );
         }
       }
     };
@@ -149,7 +156,9 @@ const ToeicQuestionFormModal = ({
         optionD: "",
         correctAns: "A",
         explanation: "",
-        passageId: defaultPassageId || (localPassages?.length > 0 ? localPassages[0].id : ""),
+        passageId:
+          defaultPassageId ||
+          (localPassages?.length > 0 ? localPassages[0].id : ""),
         tagIds: [],
         imageUrl: "",
         audioUrl: "",
@@ -300,12 +309,25 @@ const ToeicQuestionFormModal = ({
         }
       }
       isSavedRef.current = true;
-      const { image: initialImage, audio: initialAudio } = initialUrlsRef.current;
-      if (initialImage && initialImage !== formData.imageUrl && initialImage.includes("cloudinary")) {
-        deleteToeicTestFile(initialImage).catch((err) => console.error("Error deleting old image:", err));
+      const { image: initialImage, audio: initialAudio } =
+        initialUrlsRef.current;
+      if (
+        initialImage &&
+        initialImage !== formData.imageUrl &&
+        initialImage.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialImage).catch((err) =>
+          console.error("Error deleting old image:", err),
+        );
       }
-      if (initialAudio && initialAudio !== formData.audioUrl && initialAudio.includes("cloudinary")) {
-        deleteToeicTestFile(initialAudio).catch((err) => console.error("Error deleting old audio:", err));
+      if (
+        initialAudio &&
+        initialAudio !== formData.audioUrl &&
+        initialAudio.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialAudio).catch((err) =>
+          console.error("Error deleting old audio:", err),
+        );
       }
       onSuccess();
     } catch (err) {

@@ -4,7 +4,12 @@ import DOMPurify from "dompurify";
 import Modal from "@/components/servers/Modal";
 import ToeicPassageDetails from "./ToeicPassageDetails";
 
-const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) => {
+const ToeicPassagesTable = ({
+  passages,
+  onEdit,
+  onDelete,
+  onManageQuestions,
+}) => {
   const [detailPassage, setDetailPassage] = useState(null);
 
   return (
@@ -37,8 +42,8 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageText ||
-                        passage.passage_text ||
-                        "No text",
+                          passage.passage_text ||
+                          "No text",
                       ),
                     }}
                   />
@@ -49,15 +54,17 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageTrans ||
-                        passage.passage_trans ||
-                        "No translation",
+                          passage.passage_trans ||
+                          "No translation",
                       ),
                     }}
                   />
                 </td>
                 <td className="px-6 py-4 text-sm font-semibold">
                   <button
-                    onClick={() => onManageQuestions && onManageQuestions(passage)}
+                    onClick={() =>
+                      onManageQuestions && onManageQuestions(passage)
+                    }
                     className="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 transition font-bold"
                     title="Manage Questions"
                   >
@@ -117,7 +124,9 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete, onManageQuestions }) =
                 <Info className="text-blue-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Passage Details</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Passage Details
+                </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   Detailed preview of the passage content
                 </p>

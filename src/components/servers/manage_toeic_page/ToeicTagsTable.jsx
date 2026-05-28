@@ -50,7 +50,11 @@ const ToeicTagsTable = ({
     const tag = tags[index];
     if (editedName.trim() === "") return;
     let pNum = null;
-    if (editedPartNumber !== "" && editedPartNumber !== null && editedPartNumber !== undefined) {
+    if (
+      editedPartNumber !== "" &&
+      editedPartNumber !== null &&
+      editedPartNumber !== undefined
+    ) {
       pNum = parseInt(editedPartNumber, 10);
       if (isNaN(pNum) || pNum < 1 || pNum > 7) {
         toast.error("Part number must be between 1 and 7");
@@ -240,7 +244,9 @@ const ToeicTagsTable = ({
           title={
             <div className="flex items-center gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Delete Tag</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Delete Tag
+                </h2>
               </div>
             </div>
           }
@@ -285,7 +291,9 @@ const ToeicTagsTable = ({
                 <Info className="text-pink-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Tag Details</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Tag Details
+                </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   Detailed information about the tag
                 </p>
@@ -306,22 +314,38 @@ const ToeicTagsTable = ({
           <div className="space-y-4 bg-gradient-to-br from-slate-50 to-pink-50 rounded-2xl p-6 border border-pink-200/50">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Tag ID</span>
-                <p className="text-sm font-mono font-bold text-slate-900 mt-1">#{tags[detailIndex]?.id}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Tag ID
+                </span>
+                <p className="text-sm font-mono font-bold text-slate-900 mt-1">
+                  #{tags[detailIndex]?.id}
+                </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Part Number</span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Part Number
+                </span>
                 <p className="text-sm font-bold text-slate-900 mt-1">
-                  {tags[detailIndex]?.part_number || tags[detailIndex]?.partNumber || "All Parts (Reusable)"}
+                  {tags[detailIndex]?.part_number ||
+                    tags[detailIndex]?.partNumber ||
+                    "All Parts (Reusable)"}
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Name</span>
-                <p className="text-sm font-bold text-slate-900 mt-1">{tags[detailIndex]?.name}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Name
+                </span>
+                <p className="text-sm font-bold text-slate-900 mt-1">
+                  {tags[detailIndex]?.name}
+                </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Alias</span>
-                <p className="text-sm font-medium text-slate-700 mt-1">{tags[detailIndex]?.alias}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Alias
+                </span>
+                <p className="text-sm font-medium text-slate-700 mt-1">
+                  {tags[detailIndex]?.alias}
+                </p>
               </div>
             </div>
           </div>

@@ -43,10 +43,14 @@ const ToeicPassageFormModal = ({
       if (!isSavedRef.current) {
         const { image, audio } = uploadedUrlsRef.current;
         if (image && image.includes("cloudinary")) {
-          deleteToeicTestFile(image).catch((err) => console.error("Error cleaning up image:", err));
+          deleteToeicTestFile(image).catch((err) =>
+            console.error("Error cleaning up image:", err),
+          );
         }
         if (audio && audio.includes("cloudinary")) {
-          deleteToeicTestFile(audio).catch((err) => console.error("Error cleaning up audio:", err));
+          deleteToeicTestFile(audio).catch((err) =>
+            console.error("Error cleaning up audio:", err),
+          );
         }
       }
     };
@@ -170,12 +174,25 @@ const ToeicPassageFormModal = ({
         toast.success("Passage created successfully");
       }
       isSavedRef.current = true;
-      const { image: initialImage, audio: initialAudio } = initialUrlsRef.current;
-      if (initialImage && initialImage !== formData.imageUrl && initialImage.includes("cloudinary")) {
-        deleteToeicTestFile(initialImage).catch((err) => console.error("Error deleting old image:", err));
+      const { image: initialImage, audio: initialAudio } =
+        initialUrlsRef.current;
+      if (
+        initialImage &&
+        initialImage !== formData.imageUrl &&
+        initialImage.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialImage).catch((err) =>
+          console.error("Error deleting old image:", err),
+        );
       }
-      if (initialAudio && initialAudio !== formData.audioUrl && initialAudio.includes("cloudinary")) {
-        deleteToeicTestFile(initialAudio).catch((err) => console.error("Error deleting old audio:", err));
+      if (
+        initialAudio &&
+        initialAudio !== formData.audioUrl &&
+        initialAudio.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialAudio).catch((err) =>
+          console.error("Error deleting old audio:", err),
+        );
       }
       onSuccess();
     } catch (err) {

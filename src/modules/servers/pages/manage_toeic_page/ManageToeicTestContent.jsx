@@ -120,7 +120,7 @@ const ManageToeicTestContent = () => {
   // Keep selectedPassage data fresh when passages list reloads
   useEffect(() => {
     if (selectedPassage && passages.length > 0) {
-      const currentPassage = passages.find(p => p.id === selectedPassage.id);
+      const currentPassage = passages.find((p) => p.id === selectedPassage.id);
       if (currentPassage) {
         setSelectedPassage(currentPassage);
       }
@@ -255,7 +255,9 @@ const ManageToeicTestContent = () => {
 
                 <ToeicQuestionsTable
                   questions={questions.filter(
-                    (q) => q.passage_id === selectedPassage.id || q.passageId === selectedPassage.id
+                    (q) =>
+                      q.passage_id === selectedPassage.id ||
+                      q.passageId === selectedPassage.id,
                   )}
                   partNumber={activePart}
                   onEdit={handleEditQuestion}

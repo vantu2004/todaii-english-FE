@@ -79,7 +79,7 @@ export const getToeicTestById = async (id) => {
 export const getQuestionsByPartNumber = async (testId, partNumber) => {
   try {
     const response = await clientInstance.get(
-      `/toeic/test/${testId}/part/${partNumber}/question`
+      `/toeic/test/${testId}/part/${partNumber}/question`,
     );
     return response.data;
   } catch (err) {
@@ -90,7 +90,7 @@ export const getQuestionsByPartNumber = async (testId, partNumber) => {
 export const getPassagesByPartNumber = async (testId, partNumber) => {
   try {
     const response = await clientInstance.get(
-      `/toeic/test/${testId}/part/${partNumber}/passage`
+      `/toeic/test/${testId}/part/${partNumber}/passage`,
     );
     return response.data;
   } catch (err) {
