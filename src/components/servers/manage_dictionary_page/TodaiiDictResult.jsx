@@ -1,92 +1,122 @@
 import { motion } from "framer-motion";
-import { Volume2, Award } from "lucide-react";
+import { Volume2 } from "lucide-react";
+import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
+import { useEffect, useMemo } from "react";
 
 const TodaiiDictResult = ({ data, onWordClick }) => {
-  // Check cấu trúc response của Todaii
-  if (!data || !data.result || data.result.length === 0) return null;
+  useEffect(() => {
+    loadVoices();
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
+
+  if (!data || !data.result || data.result.length === 0) {
+    return null;
+  }
+
+  const mainResults = useMemo(() => {
+    return data.result.slice(0, 8);
+  }, [data.result]);
 
   return (
-    <div className="space-y-8">
-      {data.result.map((entry, idx) => (
+    <div className="space-y-6">
+      {mainResults.map((entry, idx) => (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
           key={entry.id || idx}
-          className="bg-white dark:bg-gray-800/30 rounded-lg p-6 border border-gray-200 dark:border-gray-800"
+          initial={{
+            opacity: 0,
+            y: 10,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          className="rounded-lg bg-white dark:bg-zinc-900 shadow-sm p-6 mb-6"
         >
-          {/* Header Section */}
-          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+          {/* HEADER */}
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 {entry.word}
-              </h3>
-              <div className="flex items-center gap-3 text-lg font-mono text-gray-500 dark:text-gray-400">
-                {entry.pronounce?.base && <span>/{entry.pronounce.base}/</span>}
+              </h2>
+
+              <div className="mt-2 space-y-1 text-sm font-mono text-gray-500 dark:text-gray-400">
+                {entry.pronounce?.us && <p>US: /{entry.pronounce.us}/</p>}
+
+                {entry.pronounce?.gb && <p>UK: /{entry.pronounce.gb}/</p>}
               </div>
+
+              {entry.level_word?.toeic && (
+                <div className="mt-4 inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
+                  TOEIC {entry.level_word.toeic}
+                </div>
+              )}
             </div>
 
-            {/* Level Tags */}
-            {entry.levelWord && (
-              <div className="flex gap-2">
-                {entry.levelWord.toeic && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md text-sm font-medium">
-                    <Award className="w-4 h-4" />
-                    TOEIC {entry.levelWord.toeic}
-                  </span>
-                )}
-              </div>
-            )}
+            {/* AUDIO */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleSpeak(entry.word, "")}
+                className="flex items-center gap-2 rounded-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-zinc-700 transition"
+              >
+                <Volume2 className="w-4 h-4" />
+
+                <span className="text-xs font-medium">Speak</span>
+              </button>
+            </div>
           </div>
 
-          {/* Pronunciation Audio (Anh/Mỹ) */}
-          {entry.pronounce && (entry.pronounce.us || entry.pronounce.gb) && (
-            <div className="flex flex-wrap gap-3 mb-8 pb-6 border-b border-gray-100 dark:border-gray-800">
-              {entry.pronounce.us && (
-                <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors">
-                  <Volume2 className="w-4 h-4" />
-                  <span className="text-sm font-medium">US</span>
-                </button>
-              )}
-              {entry.pronounce.gb && (
-                <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors">
-                  <Volume2 className="w-4 h-4" />
-                  <span className="text-sm font-medium">UK</span>
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Main Content: Nghĩa và Ví dụ */}
-          <div className="space-y-8">
+          {/* CONTENT */}
+          <div className="mt-8 space-y-8">
             {entry.content?.map((contentBlock, cIdx) => (
               <div key={cIdx}>
-                {contentBlock.kind && (
-                  <div className="flex items-center gap-4 mb-4">
-                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
-                      {contentBlock.kind}
-                    </h4>
-                    <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-                  </div>
+                {(contentBlock.kind || contentBlock.field) && (
+                  <h3 className="mb-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                    {contentBlock.kind}
+
+                    {contentBlock.field && ` • ${contentBlock.field} `}
+                  </h3>
                 )}
 
-                <ul className="space-y-6 pl-4">
+                <div className="space-y-6">
                   {contentBlock.means?.map((mean, mIdx) => (
-                    <li key={mIdx} className="relative">
-                      <span className="absolute -left-4 top-2 w-1.5 h-1.5 rounded-full bg-gray-400" />
-                      <p className="text-base font-medium text-gray-900 dark:text-gray-100 mb-3">
+                    <div
+                      key={mIdx}
+                      className="border-l-2 border-gray-200 dark:border-zinc-700 pl-4"
+                    >
+                      <p className="text-base text-gray-900 dark:text-gray-100">
                         {mean.mean}
                       </p>
 
-                      {/* Examples */}
+                      {/* EXAMPLES */}
                       {mean.examples?.length > 0 && (
-                        <div className="space-y-2 bg-gray-50 dark:bg-gray-800 border-l-2 border-gray-300 dark:border-gray-600 rounded-r-lg p-3">
+                        <div className="mt-4 space-y-3">
                           {mean.examples.map((ex, eIdx) => (
-                            <div key={eIdx} className="mb-2 last:mb-0">
-                              <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                                {ex.e}
-                              </p>
+                            <div
+                              key={eIdx}
+                              className="rounded-xl bg-gray-50 dark:bg-zinc-800/60 p-4"
+                            >
+                              <div className="flex items-start justify-between gap-4">
+                                <p className="italic text-gray-700 dark:text-gray-300">
+                                  {ex.e}
+                                </p>
+
+                                <button
+                                  onClick={() => handleSpeak(ex.e, "")}
+                                  className="shrink-0 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                                >
+                                  <Volume2 className="w-4 h-4" />
+                                </button>
+                              </div>
+
                               {ex.m && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                                   {ex.m}
                                 </p>
                               )}
@@ -94,51 +124,33 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
                           ))}
                         </div>
                       )}
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Footer: Synonyms & Antonyms */}
-          {entry.snym?.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-6">
-              {entry.snym.map((snymBlock, sIdx) => (
-                <div
-                  key={sIdx}
-                  className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-lg"
-                >
-                  <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                    {snymBlock.kind}
-                  </h5>
-                  {snymBlock.content?.map((c, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-wrap gap-2 mb-2 last:mb-0"
+          {/* WORD FAMILY */}
+          {entry.word_family?.length > 0 && (
+            <div className="mt-8">
+              <h3 className="mb-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                Word Family
+              </h3>
+
+              <div className="flex flex-wrap gap-2">
+                {entry.word_family.map((wf, wfIdx) =>
+                  wf.content?.map((word, wIdx) => (
+                    <button
+                      key={`${wfIdx} -${wIdx} `}
+                      onClick={() => onWordClick?.(word)}
+                      className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-sm transition"
                     >
-                      {c.syno?.map((s, idx) => (
-                        <span
-                          key={`syn-${idx}`}
-                          onClick={() => onWordClick(s)}
-                          className="px-2.5 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                      {c.anto?.map((a, idx) => (
-                        <span
-                          key={`ant-${idx}`}
-                          onClick={() => onWordClick(a)}
-                          className="px-2.5 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 text-sm"
-                        >
-                          {a}
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              ))}
+                      {word}
+                    </button>
+                  )),
+                )}
+              </div>
             </div>
           )}
         </motion.div>

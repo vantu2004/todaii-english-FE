@@ -1,96 +1,127 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
+import { useEffect } from "react";
+import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 
 const FreeDictResult = ({ data, onWordClick }) => {
+  useEffect(() => {
+    loadVoices();
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
+
   if (!data || !Array.isArray(data) || data.length === 0) return null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {data.map((entry, idx) => (
         <motion.div
+          key={idx}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          key={idx}
-          className="bg-white dark:bg-gray-800/30 rounded-lg p-6 border border-gray-200 dark:border-gray-800"
+          className="rounded-lg bg-white dark:bg-zinc-900 shadow-sm p-6 mb-6"
         >
-          {/* Header */}
-          <div className="mb-6">
-            <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-              {entry.word}
-            </h3>
-            {entry.phonetic && (
-              <p className="text-lg text-gray-500 dark:text-gray-400 font-mono">
-                {entry.phonetic}
-              </p>
-            )}
-          </div>
+          {/* HEADER */}
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                {entry.word}
+              </h2>
 
-          {/* Audio */}
-          {entry.phonetics && entry.phonetics.length > 0 && (
-            <div className="flex flex-wrap gap-3 mb-8">
-              {entry.phonetics.map(
-                (p, i) =>
-                  p.audio && (
-                    <button
-                      key={i}
-                      onClick={() => new Audio(p.audio).play()}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {p.text || "Audio"}
-                      </span>
-                    </button>
-                  ),
+              {entry.phonetic && (
+                <p className="mt-1 text-sm font-mono text-gray-500 dark:text-gray-400">
+                  {entry.phonetic}
+                </p>
               )}
             </div>
-          )}
 
-          {/* Meanings */}
-          {entry.meanings?.map((meaning, mIdx) => (
-            <div key={mIdx} className="mb-8 last:mb-0">
-              <div className="flex items-center gap-4 mb-4">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
-                  {meaning.partOfSpeech}
-                </h4>
-                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-              </div>
+            {/* AUDIO */}
+            <div className="flex gap-2">
+              {entry.phonetics?.map((p, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSpeak(entry.word, p.audio)}
+                  className="flex items-center gap-2 rounded-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-zinc-700 transition"
+                >
+                  <Volume2 className="w-4 h-4" />
 
-              <ul className="space-y-4 pl-4">
-                {meaning.definitions?.map((def, dIdx) => (
-                  <li key={dIdx} className="relative">
-                    <span className="absolute -left-4 top-2 w-1.5 h-1.5 rounded-full bg-gray-400" />
-                    <p className="text-gray-700 dark:text-gray-300">
-                      {def.definition}
-                    </p>
-
-                    {def.example && (
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 italic bg-gray-50 dark:bg-gray-800 border-l-2 border-gray-300 dark:border-gray-600 pl-3 py-1">
-                        "{def.example}"
-                      </p>
-                    )}
-
-                    {def.synonyms?.length > 0 && (
-                      <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Synonyms:
-                        </span>
-                        {def.synonyms.map((syn, sIdx) => (
-                          <span
-                            key={sIdx}
-                            onClick={() => onWordClick(syn)}
-                            className="cursor-pointer text-sm bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-md px-2 py-0.5 hover:bg-gray-200 dark:hover:bg-gray-700"
-                          >
-                            {syn}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
+                  <span className="text-xs font-medium">
+                    {p.audio ? p.text || "Audio" : "TTS"}
+                  </span>
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* MEANINGS */}
+          <div className="mt-8 space-y-8">
+            {entry.meanings?.map((meaning, mIdx) => (
+              <div key={mIdx}>
+                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4 capitalize">
+                  {meaning.partOfSpeech}
+                </h3>
+
+                <ul className="space-y-6">
+                  {meaning.definitions?.map((def, dIdx) => (
+                    <li
+                      key={dIdx}
+                      className="pl-4 border-l-2 border-gray-200 dark:border-zinc-700"
+                    >
+                      {/* DEFINITION */}
+                      <p className="text-base text-gray-900 dark:text-gray-100">
+                        {def.definition}
+                      </p>
+
+                      {/* EXAMPLE */}
+                      {def.example && (
+                        <div className="mt-3 rounded-xl bg-gray-50 dark:bg-zinc-800/60 p-4">
+                          <p className="italic text-gray-700 dark:text-gray-300">
+                            "{def.example}"
+                          </p>
+                        </div>
+                      )}
+
+                      {/* SYNONYMS */}
+                      {def.synonyms?.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {def.synonyms.map((syn, sIdx) => (
+                            <button
+                              key={sIdx}
+                              onClick={() => onWordClick(syn)}
+                              className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-sm transition"
+                            >
+                              {syn}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* ANTONYMS */}
+                      {def.antonyms?.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {def.antonyms.map((ant, aIdx) => (
+                            <button
+                              key={aIdx}
+                              onClick={() => onWordClick(ant)}
+                              className="px-3 py-1 rounded-full border border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 text-sm transition"
+                            >
+                              {ant}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </motion.div>
       ))}
     </div>
