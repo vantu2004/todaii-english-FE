@@ -69,15 +69,15 @@ const ToeicQuestionFormModal = ({
   }, [isOpen, testId, partNumber, isPart12, isPart5]);
 
   const filteredTags = useMemo(() => {
-    return localTags.filter(
-      (tag) =>
-        tag.part_number === null ||
-        tag.part_number === undefined ||
-        tag.partNumber === null ||
-        tag.partNumber === undefined ||
-        tag.part_number === partNumber ||
-        tag.partNumber === partNumber,
-    );
+    return localTags.filter((tag) => {
+      const tagPart = tag.part_number;
+      return (
+        tagPart === null ||
+        tagPart === undefined ||
+        tagPart === "" ||
+        Number(tagPart) === Number(partNumber)
+      );
+    });
   }, [localTags, partNumber]);
 
   const [formData, setFormData] = useState({
