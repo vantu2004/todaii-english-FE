@@ -79,10 +79,11 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
                 return (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 ${isSortable
+                    className={`px-4 py-3 ${
+                      isSortable
                         ? "cursor-pointer select-none hover:text-gray-700 transition"
                         : ""
-                      }`}
+                    }`}
                     onClick={() => {
                       if (!isSortable) return;
 

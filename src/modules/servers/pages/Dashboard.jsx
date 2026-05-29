@@ -58,7 +58,7 @@ const Dashboard = () => {
   const [clientViewMode, setClientViewMode] = useState("user");
 
   const [dateRange, setDateRange] = useState({
-    startDate: formatDate(new Date().setDate(new Date().getDate() - 30)),
+    startDate: formatDate(new Date().setDate(new Date().getDate() - 7)),
     endDate: formatDate(new Date()),
   });
 

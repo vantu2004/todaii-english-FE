@@ -94,8 +94,12 @@ const ManageToeicTags = () => {
   };
 
   let filteredTags = tags.filter((t) => {
-    const matchesKeyword = t.name.toLowerCase().includes(query.keyword.toLowerCase());
-    const matchesPart = !query.partFilter || String(t.partNumber || t.part_number) === String(query.partFilter);
+    const matchesKeyword = t.name
+      .toLowerCase()
+      .includes(query.keyword.toLowerCase());
+    const matchesPart =
+      !query.partFilter ||
+      String(t.partNumber || t.part_number) === String(query.partFilter);
     return matchesKeyword && matchesPart;
   });
 

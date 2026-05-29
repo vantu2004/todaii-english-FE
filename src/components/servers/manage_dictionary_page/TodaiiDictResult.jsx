@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 const TodaiiDictResult = ({ data, onWordClick }) => {
   useEffect(() => {
@@ -20,9 +20,13 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
     return null;
   }
 
+  const mainResults = useMemo(() => {
+    return data.result.slice(0, data.result.length);
+  }, [data.result]);
+
   return (
     <div className="space-y-6">
-      {data.map((entry, idx) => (
+      {mainResults.map((entry, idx) => (
         <motion.div
           key={entry.id || idx}
           initial={{

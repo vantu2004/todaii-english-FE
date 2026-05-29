@@ -108,10 +108,11 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 return (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 ${isSortable
+                    className={`px-4 py-3 ${
+                      isSortable
                         ? "cursor-pointer select-none hover:text-gray-700 transition-colors"
                         : ""
-                      }`}
+                    }`}
                     onClick={() => {
                       if (!isSortable) return;
                       const newDirection = isActiveSort
@@ -196,14 +197,16 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                 <td className="px-4 py-3 text-sm">
                   <button
                     onClick={() => handleToggle(i)}
-                    className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${statusStates[i]
+                    className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
+                      statusStates[i]
                         ? "bg-green-400 border-green-400"
                         : "bg-neutral-300 border-neutral-200"
-                      }`}
+                    }`}
                   >
                     <div
-                      className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${statusStates[i] ? "translate-x-5" : "translate-x-0"
-                        }`}
+                      className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
+                        statusStates[i] ? "translate-x-5" : "translate-x-0"
+                      }`}
                     ></div>
                   </button>
                 </td>

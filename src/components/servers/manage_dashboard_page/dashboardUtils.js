@@ -1,36 +1,33 @@
 export const EVENT_COLORS = {
-  DICTIONARY_API: "rgba(96, 165, 250, 0.8)",
+  LOGIN_REQUEST: "rgba(34, 197, 94, 0.8)",
   AI_REQUEST: "rgba(168, 85, 247, 0.8)",
-  NEWSAPI_REQUEST: "rgba(251, 191, 36, 0.8)",
+  MAIL_SEND: "rgba(107, 114, 128, 0.8)",
+  DICTIONARY_API_REQUEST: "rgba(96, 165, 250, 0.8)",
+  TODAII_DICT_REQUEST: "rgba(59, 130, 246, 0.8)",
+  NEWS_API_REQUEST: "rgba(251, 191, 36, 0.8)",
   YOUTUBE_SEARCH: "rgba(220, 38, 38, 0.8)",
   CLOUDINARY_UPLOAD: "rgba(251, 146, 60, 0.8)",
-  USER_LOGIN: "rgba(34, 197, 94, 0.8)",
-  ADMIN_LOGIN: "rgba(30, 64, 175, 0.8)",
-  ADMIN_ACTION: "rgba(109, 40, 217, 0.8)",
-  MAIL_SEND: "rgba(107, 114, 128, 0.8)",
+  GOOGLE_TRANSLATE_REQUEST: "rgba(236, 72, 153, 0.8)",
 };
 
-export const getUniqueDates = (logTrends) => {
-  if (!logTrends) return [];
+export const getTokenChartData = (rawData) => {
+  if (!rawData || !Array.isArray(rawData)) return null;
 
-  const allDates = new Set();
+  const sortedData = [...rawData].sort((a, b) => a.date.localeCompare(b.date));
+  const dates = sortedData.map((d) => d.date);
 
-  Object.values(logTrends).forEach((arr) =>
-    arr.forEach((item) => allDates.add(item.date)),
+  const inputData = sortedData.map((d) =>
+    (d.ai_requests || []).reduce(
+      (sum, item) => sum + (item.input_token || 0),
+      0,
+    ),
   );
-
-  return Array.from(allDates).sort();
-};
-
-// Process Data cho Token Chart (Stacked Bar)
-// dashboardUtils.js
-export const getTokenChartData = (ai_token_trends) => {
-  if (!ai_token_trends) return null;
-
-  const dates = Object.keys(ai_token_trends).sort();
-
-  const inputData = dates.map((d) => ai_token_trends[d]?.input_token || 0);
-  const outputData = dates.map((d) => ai_token_trends[d]?.output_token || 0);
+  const outputData = sortedData.map((d) =>
+    (d.ai_requests || []).reduce(
+      (sum, item) => sum + (item.output_token || 0),
+      0,
+    ),
+  );
 
   return {
     labels: dates,
@@ -38,34 +35,66 @@ export const getTokenChartData = (ai_token_trends) => {
       {
         label: "Input Tokens",
         data: inputData,
-        backgroundColor: "rgba(59, 130, 246, 0.6)",
+        backgroundColor: "rgba(59, 130, 246, 0.7)",
         stack: "Stack 0",
       },
       {
         label: "Output Tokens",
         data: outputData,
-        backgroundColor: "rgba(16, 185, 129, 0.6)",
+        backgroundColor: "rgba(16, 185, 129, 0.7)",
         stack: "Stack 0",
       },
     ],
   };
 };
 
-// Process Data cho Distribution Chart (Doughnut)
 export const getEventDistributionData = (
-  log_summary,
+  rawData,
   exclude = ["YOUTUBE_SEARCH"],
 ) => {
-  if (!log_summary) return null;
+  if (!rawData || !Array.isArray(rawData)) return null;
 
-  const keys = Object.keys(log_summary).filter((k) => !exclude.includes(k));
+  const totals = {
+    LOGIN_REQUEST: 0,
+    AI_REQUEST: 0,
+    MAIL_SEND: 0,
+    DICTIONARY_API_REQUEST: 0,
+    TODAII_DICT_REQUEST: 0,
+    NEWS_API_REQUEST: 0,
+    YOUTUBE_SEARCH: 0,
+    CLOUDINARY_UPLOAD: 0,
+    GOOGLE_TRANSLATE_REQUEST: 0,
+  };
+
+  rawData.forEach((day) => {
+    totals.LOGIN_REQUEST += day.login_quantity || 0;
+    totals.AI_REQUEST += (day.ai_requests || []).reduce(
+      (sum, ai) => sum + (ai.quantity || 0),
+      0,
+    );
+    totals.MAIL_SEND += day.mail_sent_quantity || 0;
+    totals.DICTIONARY_API_REQUEST +=
+      day.dictionary_request?.dictionary_api_quantity || 0;
+    totals.TODAII_DICT_REQUEST +=
+      day.dictionary_request?.todaii_dict_quantity || 0;
+    totals.NEWS_API_REQUEST += day.news_api_quantity || 0;
+    totals.YOUTUBE_SEARCH += day.youtube_request?.quantity || 0;
+    totals.CLOUDINARY_UPLOAD += day.cloudinary_upload_quantity || 0;
+    totals.GOOGLE_TRANSLATE_REQUEST += day.gg_translate_request?.quantity || 0;
+  });
+
+  const keys = Object.keys(totals).filter(
+    (key) => !exclude.includes(key) && totals[key] > 0,
+  );
+
+  if (keys.length === 0) return null;
 
   return {
     labels: keys.map((k) => k.replace(/_/g, " ")),
     datasets: [
       {
-        data: keys.map((k) => log_summary[k]),
-        backgroundColor: keys.map((k) => EVENT_COLORS[k] || "#999"),
+        data: keys.map((k) => totals[k]),
+        backgroundColor: keys.map((k) => EVENT_COLORS[k] || "#e5e5e5"),
         borderWidth: 0,
         hoverOffset: 4,
       },
@@ -73,44 +102,94 @@ export const getEventDistributionData = (
   };
 };
 
-// Process Data cho từng Event Chart riêng biệt
-export const getEventChartsData = (log_trends, log_summary) => {
-  if (!log_trends) return [];
+export const getEventChartsData = (rawData) => {
+  if (!rawData || !Array.isArray(rawData)) return [];
 
-  const dates = getUniqueDates(log_trends);
+  const sortedData = [...rawData].sort((a, b) => a.date.localeCompare(b.date));
+  const dates = sortedData.map((d) => d.date);
 
-  return Object.keys(log_trends).map((key) => {
-    const quantityData = dates.map(
-      (date) => log_trends[key].find((d) => d.date === date)?.quantity || 0,
-    );
+  const metricsConfig = [
+    {
+      key: "LOGIN_REQUEST",
+      title: "Login Requests",
+      getValue: (d) => d.login_quantity || 0,
+      isLine: false,
+    },
+    {
+      key: "AI_REQUEST",
+      title: "AI Requests",
+      getValue: (d) =>
+        (d.ai_requests || []).reduce((sum, ai) => sum + (ai.quantity || 0), 0),
+      isLine: true,
+    },
+    {
+      key: "DICTIONARY_API_REQUEST",
+      title: "Dictionary API",
+      getValue: (d) => d.dictionary_request?.dictionary_api_quantity || 0,
+      isLine: true,
+    },
+    {
+      key: "TODAII_DICT_REQUEST",
+      title: "Todaii Dict",
+      getValue: (d) => d.dictionary_request?.todaii_dict_quantity || 0,
+      isLine: true,
+    },
+    {
+      key: "NEWS_API_REQUEST",
+      title: "News API",
+      getValue: (d) => d.news_api_quantity || 0,
+      isLine: false,
+    },
+    {
+      key: "YOUTUBE_SEARCH",
+      title: "YouTube Search",
+      getValue: (d) => d.youtube_request?.quantity || 0,
+      isLine: true,
+    },
+    {
+      key: "CLOUDINARY_UPLOAD",
+      title: "Cloudinary Uploads",
+      getValue: (d) => d.cloudinary_upload_quantity || 0,
+      isLine: false,
+    },
+    {
+      key: "GOOGLE_TRANSLATE_REQUEST",
+      title: "Google Translate",
+      getValue: (d) => d.gg_translate_request?.quantity || 0,
+      isLine: false,
+    },
+    {
+      key: "MAIL_SEND",
+      title: "Emails Sent",
+      getValue: (d) => d.mail_sent_quantity || 0,
+      isLine: false,
+    },
+  ];
 
-    const total = log_summary?.[key] || 0;
-    const color = EVENT_COLORS[key] || "#999";
-
-    const isLineChart = [
-      "YOUTUBE_SEARCH",
-      "NEWSAPI_REQUEST",
-      "DICTIONARY_API",
-      "AI_REQUEST",
-    ].includes(key);
+  return metricsConfig.map((metric) => {
+    const quantityData = sortedData.map((d) => metric.getValue(d));
+    const total = quantityData.reduce((sum, val) => sum + val, 0);
+    const color = EVENT_COLORS[metric.key] || "#999";
 
     return {
-      key,
-      title: key.replace(/_/g, " "),
+      key: metric.key,
+      title: metric.title,
       total,
-      isLineChart,
+      isLineChart: metric.isLine,
       chartData: {
         labels: dates,
         datasets: [
           {
-            label: `${key === "YOUTUBE_SEARCH" ? "Units" : "Quantity"}`,
+            label: "Quantity",
             data: quantityData,
             borderColor: color,
-            backgroundColor: isLineChart ? color.replace("0.8", "0.1") : color,
-            borderWidth: isLineChart ? 2 : 0,
-            pointRadius: isLineChart ? 3 : 0,
+            backgroundColor: metric.isLine
+              ? color.replace("0.8", "0.1")
+              : color,
+            borderWidth: metric.isLine ? 2 : 0,
+            pointRadius: metric.isLine ? 2 : 0,
             tension: 0.4,
-            fill: isLineChart,
+            fill: metric.isLine,
           },
         ],
       },
@@ -118,7 +197,6 @@ export const getEventChartsData = (log_trends, log_summary) => {
   });
 };
 
-// Config chung cho các chart nhỏ
 export const miniChartOptions = {
   responsive: true,
   maintainAspectRatio: false,

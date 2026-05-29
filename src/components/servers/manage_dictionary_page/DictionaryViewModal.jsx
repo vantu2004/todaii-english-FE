@@ -93,8 +93,7 @@ const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
             <div className="mt-4 flex gap-3 text-sm">
               {result.level_word.toeic && (
                 <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md font-medium border border-gray-200 flex items-center gap-1">
-                  TOEIC:{" "}
-                  {result.level_word.toeic}
+                  TOEIC: {result.level_word.toeic}
                 </span>
               )}
               {result.level_word.vietnam && (

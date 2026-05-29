@@ -148,20 +148,24 @@ const ToeicPassageFormModal = ({
       passage_text: formData.passageText,
       passage_trans: formData.passageTrans,
       image_request: {
-        uploaded_image: (formData.imageUrl && formData.imageUrl.includes("cloudinary"))
-          ? formData.imageUrl
-          : null,
-        image_url: (formData.imageUrl && !formData.imageUrl.includes("cloudinary"))
-          ? formData.imageUrl
-          : null,
+        uploaded_image:
+          formData.imageUrl && formData.imageUrl.includes("cloudinary")
+            ? formData.imageUrl
+            : null,
+        image_url:
+          formData.imageUrl && !formData.imageUrl.includes("cloudinary")
+            ? formData.imageUrl
+            : null,
       },
       audio_request: {
-        uploaded_audio: (formData.audioUrl && formData.audioUrl.includes("cloudinary"))
-          ? formData.audioUrl
-          : null,
-        audio_url: (formData.audioUrl && !formData.audioUrl.includes("cloudinary"))
-          ? formData.audioUrl
-          : null,
+        uploaded_audio:
+          formData.audioUrl && formData.audioUrl.includes("cloudinary")
+            ? formData.audioUrl
+            : null,
+        audio_url:
+          formData.audioUrl && !formData.audioUrl.includes("cloudinary")
+            ? formData.audioUrl
+            : null,
       },
     };
 

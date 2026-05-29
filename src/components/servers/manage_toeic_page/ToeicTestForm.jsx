@@ -170,20 +170,24 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
         ? Number(formData.collection_id)
         : null,
       image_request: {
-        uploaded_image: (formData.image_url && formData.image_url.includes("cloudinary"))
-          ? formData.image_url
-          : null,
-        image_url: (formData.image_url && !formData.image_url.includes("cloudinary"))
-          ? formData.image_url
-          : null,
+        uploaded_image:
+          formData.image_url && formData.image_url.includes("cloudinary")
+            ? formData.image_url
+            : null,
+        image_url:
+          formData.image_url && !formData.image_url.includes("cloudinary")
+            ? formData.image_url
+            : null,
       },
       audio_request: {
-        uploaded_audio: (formData.audio_url && formData.audio_url.includes("cloudinary"))
-          ? formData.audio_url
-          : null,
-        audio_url: (formData.audio_url && !formData.audio_url.includes("cloudinary"))
-          ? formData.audio_url
-          : null,
+        uploaded_audio:
+          formData.audio_url && formData.audio_url.includes("cloudinary")
+            ? formData.audio_url
+            : null,
+        audio_url:
+          formData.audio_url && !formData.audio_url.includes("cloudinary")
+            ? formData.audio_url
+            : null,
       },
     };
     try {

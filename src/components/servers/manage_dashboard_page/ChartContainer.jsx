@@ -1,6 +1,6 @@
 const ChartContainer = ({ title, subtitle, children, className = "" }) => (
   <div
-    className={`bg-white dark:bg-neutral-900 rounded-xl p-5 ring-1 ring-neutral-200 dark:ring-neutral-800 h-full flex flex-col ${className}`}
+    className={`bg-white dark:bg-neutral-900 rounded-xl p-6 ring-1 ring-neutral-200/60 dark:ring-neutral-800 h-full flex flex-col shadow-sm ${className}`}
   >
     <h3 className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">
       {title}
