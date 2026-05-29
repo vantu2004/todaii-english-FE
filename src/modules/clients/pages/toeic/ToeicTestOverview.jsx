@@ -13,13 +13,69 @@ import {
 import toast from "react-hot-toast";
 
 const PARTS_METADATA = [
-  { id: 1, name: "Part 1", fullName: "Photographs", questions: 6, time: 3, type: "listening", tags: ["Listening", "Photographs"] },
-  { id: 2, name: "Part 2", fullName: "Question-Response", questions: 25, time: 11, type: "listening", tags: ["Listening", "Question-Response"] },
-  { id: 3, name: "Part 3", fullName: "Conversations", questions: 39, time: 18, type: "listening", tags: ["Listening", "Conversations", "Audio"] },
-  { id: 4, name: "Part 4", fullName: "Talks", questions: 30, time: 14, type: "listening", tags: ["Listening", "Talks", "Audio"] },
-  { id: 5, name: "Part 5", fullName: "Incomplete Sentences", questions: 30, time: 23, type: "reading", tags: ["Reading", "Incomplete Sentences", "Grammar"] },
-  { id: 6, name: "Part 6", fullName: "Text Completion", questions: 16, time: 12, type: "reading", tags: ["Reading", "Text Completion", "Passage"] },
-  { id: 7, name: "Part 7", fullName: "Reading Comprehension", questions: 54, time: 41, type: "reading", tags: ["Reading", "Comprehension", "Multi-passage"] },
+  {
+    id: 1,
+    name: "Part 1",
+    fullName: "Photographs",
+    questions: 6,
+    time: 3,
+    type: "listening",
+    tags: ["Listening", "Photographs"],
+  },
+  {
+    id: 2,
+    name: "Part 2",
+    fullName: "Question-Response",
+    questions: 25,
+    time: 11,
+    type: "listening",
+    tags: ["Listening", "Question-Response"],
+  },
+  {
+    id: 3,
+    name: "Part 3",
+    fullName: "Conversations",
+    questions: 39,
+    time: 18,
+    type: "listening",
+    tags: ["Listening", "Conversations", "Audio"],
+  },
+  {
+    id: 4,
+    name: "Part 4",
+    fullName: "Talks",
+    questions: 30,
+    time: 14,
+    type: "listening",
+    tags: ["Listening", "Talks", "Audio"],
+  },
+  {
+    id: 5,
+    name: "Part 5",
+    fullName: "Incomplete Sentences",
+    questions: 30,
+    time: 23,
+    type: "reading",
+    tags: ["Reading", "Incomplete Sentences", "Grammar"],
+  },
+  {
+    id: 6,
+    name: "Part 6",
+    fullName: "Text Completion",
+    questions: 16,
+    time: 12,
+    type: "reading",
+    tags: ["Reading", "Text Completion", "Passage"],
+  },
+  {
+    id: 7,
+    name: "Part 7",
+    fullName: "Reading Comprehension",
+    questions: 54,
+    time: 41,
+    type: "reading",
+    tags: ["Reading", "Comprehension", "Multi-passage"],
+  },
 ];
 
 const ToeicTestOverview = () => {
@@ -49,9 +105,9 @@ const ToeicTestOverview = () => {
   }, [testId, navigate]);
 
   const handleTogglePart = (partId) => {
-    setSelectedParts(prev => {
+    setSelectedParts((prev) => {
       if (prev.includes(partId)) {
-        return prev.filter(id => id !== partId);
+        return prev.filter((id) => id !== partId);
       } else {
         return [...prev, partId].sort((a, b) => a - b);
       }
@@ -67,12 +123,12 @@ const ToeicTestOverview = () => {
   };
 
   const totalQuestions = selectedParts.reduce((acc, partId) => {
-    const part = PARTS_METADATA.find(p => p.id === partId);
+    const part = PARTS_METADATA.find((p) => p.id === partId);
     return acc + (part ? part.questions : 0);
   }, 0);
 
   const totalEstimatedTime = selectedParts.reduce((acc, partId) => {
-    const part = PARTS_METADATA.find(p => p.id === partId);
+    const part = PARTS_METADATA.find((p) => p.id === partId);
     return acc + (part ? part.time : 0);
   }, 0);
 
@@ -156,26 +212,33 @@ const ToeicTestOverview = () => {
 
             {/* Choosing parts section */}
             <div className="border-t border-neutral-100 dark:border-neutral-800 pt-8 mb-8">
-              <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">Luyện tập theo phần</h2>
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-4">
+                Luyện tập theo phần
+              </h2>
 
               <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl max-w-sm mb-6">
                 <button
                   type="button"
-                  onClick={() => { setPracticeMode("full"); setSelectedParts([1, 2, 3, 4, 5, 6, 7]); }}
-                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${practiceMode === "full"
-                    ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
-                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
-                    }`}
+                  onClick={() => {
+                    setPracticeMode("full");
+                    setSelectedParts([1, 2, 3, 4, 5, 6, 7]);
+                  }}
+                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
+                    practiceMode === "full"
+                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
+                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  }`}
                 >
                   Toàn bộ đề thi
                 </button>
                 <button
                   type="button"
                   onClick={() => setPracticeMode("parts")}
-                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${practiceMode === "parts"
-                    ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
-                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
-                    }`}
+                  className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
+                    practiceMode === "parts"
+                      ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
+                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
+                  }`}
                 >
                   Tự chọn phần thi
                 </button>
@@ -205,10 +268,11 @@ const ToeicTestOverview = () => {
                 {PARTS_METADATA.map((part) => (
                   <label
                     key={part.id}
-                    className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${selectedParts.includes(part.id)
-                      ? 'border-brand-500 bg-brand-50/30 dark:bg-brand-500/5'
-                      : 'border-neutral-150 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/30'
-                      } ${practiceMode === "full" ? "opacity-75 cursor-default" : ""}`}
+                    className={`flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition-all ${
+                      selectedParts.includes(part.id)
+                        ? "border-brand-500 bg-brand-50/30 dark:bg-brand-500/5"
+                        : "border-neutral-150 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/30"
+                    } ${practiceMode === "full" ? "opacity-75 cursor-default" : ""}`}
                   >
                     <input
                       type="checkbox"
@@ -219,22 +283,32 @@ const ToeicTestOverview = () => {
                     />
                     <div className="flex-1">
                       <div className="flex items-center justify-between gap-2 mb-1.5">
-                        <span className="font-bold text-neutral-800 dark:text-neutral-200">{part.name}</span>
+                        <span className="font-bold text-neutral-800 dark:text-neutral-200">
+                          {part.name}
+                        </span>
                         <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 shrink-0">
                           {part.questions} câu
                         </span>
                       </div>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 font-medium">{part.fullName}</p>
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-2 font-medium">
+                        {part.fullName}
+                      </p>
                       <div className="flex flex-wrap gap-1.5">
                         {part.tags.map((tag, idx) => {
-                          let tagClass = "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400";
+                          let tagClass =
+                            "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400";
                           if (tag === "Listening") {
-                            tagClass = "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400";
+                            tagClass =
+                              "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400";
                           } else if (tag === "Reading") {
-                            tagClass = "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400";
+                            tagClass =
+                              "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400";
                           }
                           return (
-                            <span key={idx} className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${tagClass}`}>
+                            <span
+                              key={idx}
+                              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${tagClass}`}
+                            >
                               #{tag}
                             </span>
                           );
@@ -247,7 +321,10 @@ const ToeicTestOverview = () => {
             </div>
 
             <div className="p-4 border border-brand-100 dark:border-brand-900/30 bg-brand-50/50 dark:bg-brand-900/10 rounded-2xl flex items-start gap-3">
-              <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={18} />
+              <AlertCircle
+                className="text-brand-500 shrink-0 mt-0.5"
+                size={18}
+              />
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 <strong className="text-brand-600 dark:text-brand-400">
                   Lưu ý:
@@ -261,7 +338,9 @@ const ToeicTestOverview = () => {
 
           <div className="w-full md:w-auto mt-6 md:mt-0 flex flex-col gap-4 sticky top-24 shrink-0">
             <div className="w-full md:w-80 bg-white dark:bg-neutral-900 border border-neutral-150 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
-              <h3 className="font-bold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">Thông tin bài làm</h3>
+              <h3 className="font-bold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">
+                Thông tin bài làm
+              </h3>
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-neutral-500">Chế độ:</span>
@@ -276,7 +355,9 @@ const ToeicTestOverview = () => {
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-neutral-500">Thời gian làm:</span>
+                  <span className="text-xs text-neutral-500">
+                    Thời gian làm:
+                  </span>
                   <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
                     {practiceMode === "full" ? 120 : totalEstimatedTime} phút
                   </span>
@@ -286,10 +367,15 @@ const ToeicTestOverview = () => {
               {practiceMode === "parts" && selectedParts.length === 0 ? (
                 <button
                   type="button"
-                  onClick={() => toast.error("Vui lòng chọn ít nhất một phần thi!")}
+                  onClick={() =>
+                    toast.error("Vui lòng chọn ít nhất một phần thi!")
+                  }
                   className="flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 rounded-2xl font-bold cursor-not-allowed shadow-sm"
                 >
-                  <Play size={18} className="fill-neutral-400 text-neutral-400" />
+                  <Play
+                    size={18}
+                    className="fill-neutral-400 text-neutral-400"
+                  />
                   <span>Bắt đầu thi</span>
                 </button>
               ) : (

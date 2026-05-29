@@ -1,7 +1,17 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getToeicTestById, getQuestionsByPartNumber, getPassagesByPartNumber } from "@/api/clients/toeicApi";
-import { Clock, CheckCircle2, ChevronRight, ChevronLeft, Menu } from "lucide-react";
+import {
+  getToeicTestById,
+  getQuestionsByPartNumber,
+  getPassagesByPartNumber,
+} from "@/api/clients/toeicApi";
+import {
+  Clock,
+  CheckCircle2,
+  ChevronRight,
+  ChevronLeft,
+  Menu,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 const PARTS = [
@@ -31,16 +41,16 @@ const PARTS = [
 
 const calculateInitialTime = (partIds) => {
   const timeMapping = {
-    1: 6 * 27,   // 162s
-    2: 25 * 27,  // 675s
-    3: 39 * 27,  // 1053s
-    4: 30 * 27,  // 810s
-    5: 30 * 45,  // 1350s
-    6: 16 * 45,  // 720s
-    7: 54 * 45,  // 2430s
+    1: 6 * 27, // 162s
+    2: 25 * 27, // 675s
+    3: 39 * 27, // 1053s
+    4: 30 * 27, // 810s
+    5: 30 * 45, // 1350s
+    6: 16 * 45, // 720s
+    7: 54 * 45, // 2430s
   };
   let totalSeconds = 0;
-  partIds.forEach(id => {
+  partIds.forEach((id) => {
     totalSeconds += timeMapping[id] || 0;
   });
   return totalSeconds;
@@ -55,35 +65,46 @@ const ToeicTakingTest = () => {
     const params = new URLSearchParams(search);
     const p = params.get("parts");
     if (p) {
-      const ids = p.split(",").map(Number).filter(id => id >= 1 && id <= 7);
+      const ids = p
+        .split(",")
+        .map(Number)
+        .filter((id) => id >= 1 && id <= 7);
       if (ids.length > 0) return ids;
     }
     return [1, 2, 3, 4, 5, 6, 7];
   }, [search]);
-  
+
   const [test, setTest] = useState(null);
   const [testData, setTestData] = useState({ questions: {}, passages: {} }); // partId -> data
   const [loading, setLoading] = useState(true);
-  
+
   const [currentPart, setCurrentPart] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const p = params.get("parts");
     if (p) {
-      const ids = p.split(",").map(Number).filter(id => id >= 1 && id <= 7);
+      const ids = p
+        .split(",")
+        .map(Number)
+        .filter((id) => id >= 1 && id <= 7);
       if (ids.length > 0) return ids[0];
     }
     return 1;
   });
-  
+
   const [answers, setAnswers] = useState({}); // questionId -> answer ('A', 'B', 'C', 'D')
-  
+
   const [timeLeft, setTimeLeft] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     const p = params.get("parts");
-    const ids = p ? p.split(",").map(Number).filter(id => id >= 1 && id <= 7) : [1, 2, 3, 4, 5, 6, 7];
+    const ids = p
+      ? p
+          .split(",")
+          .map(Number)
+          .filter((id) => id >= 1 && id <= 7)
+      : [1, 2, 3, 4, 5, 6, 7];
     return calculateInitialTime(ids.length > 0 ? ids : [1, 2, 3, 4, 5, 6, 7]);
   });
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -113,16 +134,18 @@ const ToeicTakingTest = () => {
 
       // Fetch only selected parts concurrently
       await Promise.all(
-        PARTS.filter(part => selectedPartIds.includes(part.id)).map(async (part) => {
-          const [questionsRes, passagesRes] = await Promise.all([
-            getQuestionsByPartNumber(testId, part.id).catch(() => []),
-            part.hasPassage
-              ? getPassagesByPartNumber(testId, part.id).catch(() => [])
-              : Promise.resolve([]),
-          ]);
-          allQuestions[part.id] = questionsRes || [];
-          allPassages[part.id] = passagesRes || [];
-        }),
+        PARTS.filter((part) => selectedPartIds.includes(part.id)).map(
+          async (part) => {
+            const [questionsRes, passagesRes] = await Promise.all([
+              getQuestionsByPartNumber(testId, part.id).catch(() => []),
+              part.hasPassage
+                ? getPassagesByPartNumber(testId, part.id).catch(() => [])
+                : Promise.resolve([]),
+            ]);
+            allQuestions[part.id] = questionsRes || [];
+            allPassages[part.id] = passagesRes || [];
+          },
+        ),
       );
 
       setTestData({ questions: allQuestions, passages: allPassages });
@@ -148,7 +171,7 @@ const ToeicTakingTest = () => {
       );
       if (!confirmSubmit) return;
     }
-    
+
     const initialTime = calculateInitialTime(selectedPartIds);
     // Store result in local storage or state to pass to result page
     const resultData = {
@@ -157,7 +180,7 @@ const ToeicTakingTest = () => {
       answers,
       testData,
       timeSpent: initialTime - timeLeft,
-      selectedPartIds
+      selectedPartIds,
     };
 
     localStorage.setItem(`toeic_result_${testId}`, JSON.stringify(resultData));
@@ -171,23 +194,38 @@ const ToeicTakingTest = () => {
   };
 
   const listeningParts = useMemo(() => {
-    return PARTS.slice(0, 4).filter(part => selectedPartIds.includes(part.id));
+    return PARTS.slice(0, 4).filter((part) =>
+      selectedPartIds.includes(part.id),
+    );
   }, [selectedPartIds]);
 
   const readingParts = useMemo(() => {
-    return PARTS.slice(4, 7).filter(part => selectedPartIds.includes(part.id));
+    return PARTS.slice(4, 7).filter((part) =>
+      selectedPartIds.includes(part.id),
+    );
   }, [selectedPartIds]);
 
   const totalQuestionsCount = useMemo(() => {
-    const questionCountMapping = { 1: 6, 2: 25, 3: 39, 4: 30, 5: 30, 6: 16, 7: 54 };
-    return selectedPartIds.reduce((acc, id) => acc + (questionCountMapping[id] || 0), 0);
+    const questionCountMapping = {
+      1: 6,
+      2: 25,
+      3: 39,
+      4: 30,
+      5: 30,
+      6: 16,
+      7: 54,
+    };
+    return selectedPartIds.reduce(
+      (acc, id) => acc + (questionCountMapping[id] || 0),
+      0,
+    );
   }, [selectedPartIds]);
 
   const calculateTotalAnswered = () => {
     let count = 0;
-    selectedPartIds.forEach(partId => {
+    selectedPartIds.forEach((partId) => {
       const questions = testData.questions[partId] || [];
-      questions.forEach(q => {
+      questions.forEach((q) => {
         if (answers[q.id]) {
           count++;
         }
@@ -198,7 +236,8 @@ const ToeicTakingTest = () => {
 
   const currentPartIndex = selectedPartIds.indexOf(currentPart);
   const hasPreviousPart = currentPartIndex > 0;
-  const hasNextPart = currentPartIndex !== -1 && currentPartIndex < selectedPartIds.length - 1;
+  const hasNextPart =
+    currentPartIndex !== -1 && currentPartIndex < selectedPartIds.length - 1;
 
   const handlePreviousPart = () => {
     if (hasPreviousPart) {
@@ -229,7 +268,10 @@ const ToeicTakingTest = () => {
           </div>
           <div className="flex-1">
             {q.question && (
-              <p className="text-neutral-900 dark:text-white font-medium mb-3 text-lg" dangerouslySetInnerHTML={{ __html: q.question }} />
+              <p
+                className="text-neutral-900 dark:text-white font-medium mb-3 text-lg"
+                dangerouslySetInnerHTML={{ __html: q.question }}
+              />
             )}
 
             {q.image_url && (
@@ -250,8 +292,8 @@ const ToeicTakingTest = () => {
 
             <div className="space-y-3 mt-4">
               {currentOptions.map((opt) => (
-                <label 
-                   key={opt}
+                <label
+                  key={opt}
                   className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
                     answers[q.id] === opt
                       ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
@@ -325,9 +367,12 @@ const ToeicTakingTest = () => {
                   src={passage.audio_url}
                 ></audio>
               )}
-              
+
               {passage.passage_text && (
-                <div className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: passage.passage_text }} />
+                <div
+                  className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200"
+                  dangerouslySetInnerHTML={{ __html: passage.passage_text }}
+                />
               )}
             </div>
 
@@ -361,7 +406,7 @@ const ToeicTakingTest = () => {
       {/* Header */}
       <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3 px-4 sm:px-6 flex items-center justify-between sticky top-[68px] z-40">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             type="button"
             className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -376,7 +421,9 @@ const ToeicTakingTest = () => {
         <div className="flex items-center gap-4 sm:gap-6">
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm font-medium">
             <CheckCircle2 size={16} className="text-brand-500" />
-            <span className="text-neutral-700 dark:text-neutral-300">{calculateTotalAnswered()} / {totalQuestionsCount} đã làm</span>
+            <span className="text-neutral-700 dark:text-neutral-300">
+              {calculateTotalAnswered()} / {totalQuestionsCount} đã làm
+            </span>
           </div>
 
           <div
@@ -406,17 +453,22 @@ const ToeicTakingTest = () => {
           <div className="p-4">
             {listeningParts.length > 0 && (
               <>
-                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">Phần Nghe (Listening)</h2>
+                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
+                  Phần Nghe (Listening)
+                </h2>
                 <div className="space-y-1 mb-6">
-                  {listeningParts.map(part => (
+                  {listeningParts.map((part) => (
                     <button
                       key={part.id}
                       type="button"
-                      onClick={() => { setCurrentPart(part.id); setIsSidebarOpen(false); }}
+                      onClick={() => {
+                        setCurrentPart(part.id);
+                        setIsSidebarOpen(false);
+                      }}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id 
-                          ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold'
-                          : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium'
+                        currentPart === part.id
+                          ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
                       }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
@@ -428,17 +480,22 @@ const ToeicTakingTest = () => {
 
             {readingParts.length > 0 && (
               <>
-                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">Phần Đọc (Reading)</h2>
+                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
+                  Phần Đọc (Reading)
+                </h2>
                 <div className="space-y-1">
-                  {readingParts.map(part => (
+                  {readingParts.map((part) => (
                     <button
                       key={part.id}
                       type="button"
-                      onClick={() => { setCurrentPart(part.id); setIsSidebarOpen(false); }}
+                      onClick={() => {
+                        setCurrentPart(part.id);
+                        setIsSidebarOpen(false);
+                      }}
                       className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id 
-                          ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold'
-                          : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium'
+                        currentPart === part.id
+                          ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
                       }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
@@ -480,7 +537,7 @@ const ToeicTakingTest = () => {
                 <ChevronLeft size={18} />
                 <span className="hidden sm:inline">Phần trước</span>
               </button>
-              
+
               <div className="text-sm font-medium text-neutral-500 font-semibold">
                 Phần {currentPartIndex + 1} / {selectedPartIds.length}
               </div>

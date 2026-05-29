@@ -130,11 +130,10 @@ const ToeicCollectionsTable = ({
                 return (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 ${
-                      isSortable
-                        ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-                        : ""
-                    }`}
+                    className={`px-4 py-3 ${isSortable
+                      ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+                      : ""
+                      }`}
                     onClick={() => {
                       if (!isSortable) return;
                       const newDirection = isActiveSort
@@ -226,22 +225,20 @@ const ToeicCollectionsTable = ({
                   <td className="px-4 py-3 text-sm">
                     <button
                       onClick={() => handleToggle(i)}
-                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
-                        enabledStates[i]
-                          ? "bg-green-400 border-green-400"
-                          : "bg-neutral-300 border-neutral-200"
-                      }`}
+                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${enabledStates[i]
+                        ? "bg-green-400 border-green-400"
+                        : "bg-neutral-300 border-neutral-200"
+                        }`}
                     >
                       <div
-                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
-                          enabledStates[i] ? "translate-x-5" : "translate-x-0"
-                        }`}
+                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${enabledStates[i] ? "translate-x-5" : "translate-x-0"
+                          }`}
                       ></div>
                     </button>
                   </td>
 
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       {isEditing ? (
                         <>
                           <button
@@ -357,7 +354,9 @@ const ToeicCollectionsTable = ({
                 <Info className="text-indigo-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Collection Details</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Collection Details
+                </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   Detailed information about the collection
                 </p>
@@ -378,28 +377,49 @@ const ToeicCollectionsTable = ({
           <div className="space-y-4 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Collection ID</span>
-                <p className="text-sm font-mono font-bold text-slate-900 mt-1">#{collections[detailIndex]?.id}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Collection ID
+                </span>
+                <p className="text-sm font-mono font-bold text-slate-900 mt-1">
+                  #{collections[detailIndex]?.id}
+                </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Status</span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Status
+                </span>
                 <p className="text-sm font-bold text-slate-900 mt-1">
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                  >
                     {collections[detailIndex]?.enabled ? "Enabled" : "Disabled"}
                   </span>
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Name</span>
-                <p className="text-sm font-bold text-slate-900 mt-1">{collections[detailIndex]?.name}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Name
+                </span>
+                <p className="text-sm font-bold text-slate-900 mt-1">
+                  {collections[detailIndex]?.name}
+                </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Alias</span>
-                <p className="text-sm font-medium text-slate-700 mt-1">{collections[detailIndex]?.alias}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Alias
+                </span>
+                <p className="text-sm font-medium text-slate-700 mt-1">
+                  {collections[detailIndex]?.alias}
+                </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Description</span>
-                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">{collections[detailIndex]?.description || "No description provided."}</p>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                  Description
+                </span>
+                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">
+                  {collections[detailIndex]?.description ||
+                    "No description provided."}
+                </p>
               </div>
               <div className="col-span-2">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Updated At</span>

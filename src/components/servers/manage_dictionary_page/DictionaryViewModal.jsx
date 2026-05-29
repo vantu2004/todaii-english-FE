@@ -1,156 +1,188 @@
-import { Volume2, BookOpen, Lightbulb, Link2 } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import Modal from "@/components/servers/Modal";
-import { formatISODate } from "@/utils/FormatDate";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
+import { useEffect } from "react";
 
 const DictionaryViewModal = ({ isOpen, onClose, dictionary }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  useEffect(() => {
+    loadVoices();
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
 
   if (!dictionary) return null;
 
-  const handlePlayAudio = async () => {
-    if (dictionary.audio_url) {
-      setIsPlaying(true);
-      try {
-        const audio = new Audio(dictionary.audio_url);
-        audio.onended = () => setIsPlaying(false);
-        await audio.play();
-      } catch (err) {
-        console.error(err);
-        toast.error("Audio playback failed");
-        setIsPlaying(false);
-      }
+  let parsedData = null;
+  let result = null;
+
+  // Lấy data an toàn bất chấp chuẩn naming
+  const jsonString = dictionary.json_data || dictionary.jsonData;
+
+  if (jsonString) {
+    try {
+      parsedData = JSON.parse(jsonString);
+      result = parsedData?.result?.[0];
+    } catch (e) {
+      console.error("Failed to parse JSON data", e);
     }
-  };
+  }
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       title={
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">
-            Dictionary Entry
-          </h2>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-900">Word Details</h2>
       }
-      width="sm:max-w-4xl"
+      width="max-w-3xl"
     >
-      <div className="space-y-5">
-        {/* Header Section */}
-        <div className="border border-gray-200 rounded-lg p-5 mb-6">
+      <div className="space-y-6">
+        {/* HEADER: Nếu ko có Json, vẫn hiện word */}
+        <div className="border border-gray-200 rounded-lg p-5 bg-gray-50">
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900">
-                {dictionary.headword}
+              <h3 className="text-2xl font-semibold text-gray-900 capitalize">
+                {dictionary.word}
               </h3>
-              {dictionary.ipa && (
-                <p className="text-lg text-gray-600 mt-2 font-mono">
-                  {dictionary.ipa}
+              {result?.pronounce?.base && (
+                <p className="text-lg text-gray-600 mt-1 font-mono tracking-wide">
+                  /{result.pronounce.base}/
                 </p>
               )}
             </div>
-            {dictionary.audio_url && (
-              <button
-                onClick={() => handlePlayAudio(dictionary.audio_url)}
-                className={`p-2.5 ${isPlaying ? "bg-gray-400" : "bg-gray-900"} text-white rounded-lg hover:bg-gray-800 transition-all`}
-                title="Play pronunciation"
-                disabled={isPlaying}
-              >
-                <Volume2 className="w-5 h-5" />
-              </button>
-            )}
-          </div>
-          <div className="mt-4 text-sm text-gray-500">
-            <span>Updated at: {formatISODate(dictionary.updated_at)}</span>
-          </div>
-        </div>
-
-        {/* Senses */}
-        <div className="space-y-4">
-          {dictionary.senses?.map((sense, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg border border-gray-200 p-5 transition-colors"
-            >
-              {/* POS and Meaning */}
-              <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
-                <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm font-medium border border-gray-200">
-                  {sense.pos}
-                </span>
-                <span className="text-lg font-medium text-gray-800">
-                  {sense.meaning}
-                </span>
-              </div>
-
-              <div className="space-y-4">
-                {/* Definition */}
-                <div className="flex gap-3">
-                  <div className="flex-shrink-0 mt-1">
-                    <BookOpen className="w-5 h-5 text-gray-400" />
-                  </div>
-                  <div>
-                    <span className="text-gray-700 leading-relaxed text-[15px]">
-                      {sense.definition}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Example */}
-                {sense.example && (
-                  <div className="flex gap-3 bg-amber-50/50 p-4 rounded-lg border border-amber-100">
-                    <div className="italic text-gray-700 leading-relaxed">
-                      "{sense.example}"
-                    </div>
-                  </div>
-                )}
-
-                {/* Synonyms and Collocations */}
-                {(sense.synonyms?.length > 0 ||
-                  sense.collocations?.length > 0) && (
-                  <div className="pt-4 border-t border-gray-100 grid sm:grid-cols-2 gap-4">
-                    {sense.synonyms?.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-500 mb-2">
-                          Synonyms
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {sense.synonyms.map((syn, i) => (
-                            <span
-                              key={i}
-                              className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm border border-gray-200 font-medium cursor-default"
-                            >
-                              {syn}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {sense.collocations?.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-500 mb-2">
-                          Collocations
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {sense.collocations.map((col, i) => (
-                            <span
-                              key={i}
-                              className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-sm border border-gray-200 font-medium cursor-default"
-                            >
-                              {col}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+            {/* Play âm thanh nếu có url us hoặc gb */}
+            <div className="flex gap-2">
+              {result?.pronounce?.us && (
+                <button
+                  onClick={() => handleSpeak(dictionary.word, null)}
+                  className="p-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-100 flex items-center gap-2"
+                >
+                  <Volume2 className="w-4 h-4" />{" "}
+                  <span className="text-xs font-medium">US</span>
+                </button>
+              )}
+              {result?.pronounce?.gb && (
+                <button
+                  onClick={() => handleSpeak(dictionary.word, null)}
+                  className="p-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-100 flex items-center gap-2"
+                >
+                  <Volume2 className="w-4 h-4" />{" "}
+                  <span className="text-xs font-medium">UK</span>
+                </button>
+              )}
+              {result?.pronounce?.base && (
+                <button
+                  onClick={() => handleSpeak(dictionary.word, null)}
+                  className="p-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-100 flex items-center gap-2"
+                >
+                  <Volume2 className="w-4 h-4" />{" "}
+                  <span className="text-xs font-medium">Base</span>
+                </button>
+              )}
             </div>
-          ))}
+          </div>
+
+          {/* Level Info (Sử dụng snake_case key) */}
+          {result?.level_word && (
+            <div className="mt-4 flex gap-3 text-sm">
+              {result.level_word.toeic && (
+                <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md font-medium border border-gray-200 flex items-center gap-1">
+                  TOEIC:{" "}
+                  {result.level_word.toeic}
+                </span>
+              )}
+              {result.level_word.vietnam && (
+                <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md font-medium border border-gray-200">
+                  VN Level: {result.level_word.vietnam}
+                </span>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* NẾU KHÔNG CÓ JSON DATA */}
+        {!result && (
+          <div className="text-center py-10 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+            <p className="text-gray-500">
+              Chưa có dữ liệu JSON chi tiết cho từ vựng này.
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Dữ liệu sẽ được tự động fetch khi có truy vấn từ người dùng.
+            </p>
+          </div>
+        )}
+
+        {/* NẾU CÓ DATA -> RENDER CÁC NGHĨA (CONTENT) */}
+        {result?.content?.map((contentBlock, i) => (
+          <div
+            key={i}
+            className="bg-white border border-gray-200 rounded-lg overflow-hidden"
+          >
+            <div className="bg-gray-100 px-4 py-2 border-b border-gray-200">
+              <span className="text-xs font-medium text-gray-500">
+                {contentBlock.kind || "Nghĩa"}
+              </span>
+            </div>
+
+            <div className="p-4 space-y-5">
+              {contentBlock.means?.map((mean, idx) => (
+                <div
+                  key={idx}
+                  className="relative pl-4 border-l-2 border-gray-300"
+                >
+                  <p className="font-medium text-gray-900 text-base mb-2">
+                    {mean.mean}
+                  </p>
+
+                  {/* Examples */}
+                  {mean.examples?.length > 0 && (
+                    <div className="space-y-3 mt-3">
+                      {mean.examples.map((ex, exIdx) => (
+                        <div
+                          key={exIdx}
+                          className="bg-gray-50 p-3 rounded-lg border border-gray-100"
+                        >
+                          <p className="text-gray-800 italic font-medium">
+                            "{ex.e}"
+                          </p>
+                          <p className="text-gray-500 text-sm mt-1">{ex.m}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* WORD FAMILY (Họ từ vựng - Snake case: word_family) */}
+        {result?.word_family?.length > 0 && (
+          <div>
+            <h4 className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-3">
+              Word Family
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {result.word_family.map((wf, wfIdx) => (
+                <div
+                  key={wfIdx}
+                  className="px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm"
+                >
+                  <span className="text-gray-500 italic mr-2">{wf.field}:</span>
+                  <span className="font-semibold text-gray-800">
+                    {wf.content?.join(", ")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Modal>
   );

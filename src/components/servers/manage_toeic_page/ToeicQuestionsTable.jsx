@@ -183,7 +183,9 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                 <Info className="text-blue-600" size={24} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Question Details</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Question Details
+                </h2>
                 <p className="text-sm text-gray-500 mt-0.5">
                   Detailed preview of the question content
                 </p>
@@ -201,7 +203,10 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
             </div>
           }
         >
-          <ToeicQuestionDetails question={detailQuestion} partNumber={partNumber} />
+          <ToeicQuestionDetails
+            question={detailQuestion}
+            partNumber={partNumber}
+          />
         </Modal>
       )}
     </div>

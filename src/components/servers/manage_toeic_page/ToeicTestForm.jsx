@@ -40,10 +40,14 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
       if (!isSavedRef.current) {
         const { image, audio } = uploadedUrlsRef.current;
         if (image && image.includes("cloudinary")) {
-          deleteToeicTestFile(image).catch((err) => console.error("Error cleaning up image:", err));
+          deleteToeicTestFile(image).catch((err) =>
+            console.error("Error cleaning up image:", err),
+          );
         }
         if (audio && audio.includes("cloudinary")) {
-          deleteToeicTestFile(audio).catch((err) => console.error("Error cleaning up audio:", err));
+          deleteToeicTestFile(audio).catch((err) =>
+            console.error("Error cleaning up audio:", err),
+          );
         }
       }
     };
@@ -63,13 +67,15 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
 
   useEffect(() => {
     if (initialData && Object.keys(initialData).length > 0) {
-      const img = initialData.image_request?.uploaded_image ||
+      const img =
+        initialData.image_request?.uploaded_image ||
         initialData.image_request?.image_url ||
         initialData.image_url ||
         initialData.imageUrl ||
         initialData.thumbnail ||
         "";
-      const aud = initialData.audio_request?.uploaded_audio ||
+      const aud =
+        initialData.audio_request?.uploaded_audio ||
         initialData.audio_request?.audio_url ||
         initialData.audio_url ||
         initialData.audioUrl ||
@@ -183,12 +189,25 @@ const ToeicTestForm = ({ mode, initialData = null, onSubmit }) => {
     try {
       await onSubmit(submitData);
       isSavedRef.current = true;
-      const { image: initialImage, audio: initialAudio } = initialUrlsRef.current;
-      if (initialImage && initialImage !== formData.image_url && initialImage.includes("cloudinary")) {
-        deleteToeicTestFile(initialImage).catch((err) => console.error("Error deleting old image:", err));
+      const { image: initialImage, audio: initialAudio } =
+        initialUrlsRef.current;
+      if (
+        initialImage &&
+        initialImage !== formData.image_url &&
+        initialImage.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialImage).catch((err) =>
+          console.error("Error deleting old image:", err),
+        );
       }
-      if (initialAudio && initialAudio !== formData.audio_url && initialAudio.includes("cloudinary")) {
-        deleteToeicTestFile(initialAudio).catch((err) => console.error("Error deleting old audio:", err));
+      if (
+        initialAudio &&
+        initialAudio !== formData.audio_url &&
+        initialAudio.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialAudio).catch((err) =>
+          console.error("Error deleting old audio:", err),
+        );
       }
     } catch (err) {
       console.error("Failed to save test", err);

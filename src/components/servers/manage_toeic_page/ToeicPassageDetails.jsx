@@ -1,9 +1,22 @@
-import { Image as ImageIcon, FileAudio, FileText, Languages } from "lucide-react";
+import {
+  Image as ImageIcon,
+  FileAudio,
+  FileText,
+  Languages,
+} from "lucide-react";
 import DOMPurify from "dompurify";
 
 const ToeicPassageDetails = ({ passage }) => {
-  const imageUrl = passage.imageUrl || passage.image_url || passage.image_request?.uploaded_image || passage.image_request?.image_url;
-  const audioUrl = passage.audioUrl || passage.audio_url || passage.audio_request?.uploaded_audio || passage.audio_request?.audio_url;
+  const imageUrl =
+    passage.imageUrl ||
+    passage.image_url ||
+    passage.image_request?.uploaded_image ||
+    passage.image_request?.image_url;
+  const audioUrl =
+    passage.audioUrl ||
+    passage.audio_url ||
+    passage.audio_request?.uploaded_audio ||
+    passage.audio_request?.audio_url;
 
   return (
     <div className="space-y-6">
@@ -25,7 +38,9 @@ const ToeicPassageDetails = ({ passage }) => {
                 <div className="p-2 bg-purple-100/50 rounded-lg">
                   <FileAudio size={20} className="text-purple-600" />
                 </div>
-                <span className="text-sm font-bold text-purple-800 uppercase tracking-wide">Passage Audio</span>
+                <span className="text-sm font-bold text-purple-800 uppercase tracking-wide">
+                  Passage Audio
+                </span>
               </div>
               <audio controls className="w-full" src={audioUrl}>
                 Your browser does not support the audio element.
@@ -50,7 +65,11 @@ const ToeicPassageDetails = ({ passage }) => {
           <div
             className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[100px] leading-relaxed"
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(passage.passageText || passage.passage_text || "No text provided."),
+              __html: DOMPurify.sanitize(
+                passage.passageText ||
+                  passage.passage_text ||
+                  "No text provided.",
+              ),
             }}
           />
         </div>
@@ -68,7 +87,11 @@ const ToeicPassageDetails = ({ passage }) => {
           <div
             className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[100px] leading-relaxed"
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(passage.passageTrans || passage.passage_trans || "No translation provided."),
+              __html: DOMPurify.sanitize(
+                passage.passageTrans ||
+                  passage.passage_trans ||
+                  "No translation provided.",
+              ),
             }}
           />
         </div>

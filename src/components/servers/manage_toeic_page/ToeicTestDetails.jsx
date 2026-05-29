@@ -79,9 +79,7 @@ const ToeicTestDetails = ({ test }) => {
 
           <div className="flex flex-col gap-1 p-3 border border-gray-100 rounded-lg">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-1">
-                Duration
-              </p>
+              <p className="text-xs font-medium text-gray-500 mb-1">Duration</p>
               <p className="text-sm font-medium text-gray-900">
                 {test.duration} minutes
               </p>
@@ -101,16 +99,15 @@ const ToeicTestDetails = ({ test }) => {
 
           <div className="flex flex-col gap-1 p-3 border border-gray-100 rounded-lg">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-1">
-                Status
-              </p>
+              <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
               <div
-                className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-medium rounded-md ${test.status === "PUBLISHED"
+                className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-medium rounded-md ${
+                  test.status === "PUBLISHED"
                     ? "bg-green-100 text-green-700"
                     : test.status === "ARCHIVED"
                       ? "bg-gray-100 text-gray-700"
                       : "bg-yellow-100 text-yellow-700"
-                  }`}
+                }`}
               >
                 {test.status}
               </div>
@@ -130,17 +127,13 @@ const ToeicTestDetails = ({ test }) => {
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
-            Last Updated
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-1">Last Updated</p>
           <p className="text-sm text-gray-900 font-medium">
             {formatISODate(test.updated_at)}
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
-            Created By
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-1">Created By</p>
           <p
             className="text-sm text-gray-900 font-medium truncate"
             title={
@@ -163,12 +156,18 @@ const ToeicTestDetails = ({ test }) => {
             title={
               typeof test.updated_by === "object"
                 ? test.updated_by.display_name
-                : test.updated_by || test.updatedBy?.display_name || test.updatedBy || "System"
+                : test.updated_by ||
+                  test.updatedBy?.display_name ||
+                  test.updatedBy ||
+                  "System"
             }
           >
             {typeof test.updated_by === "object"
               ? test.updated_by.display_name || test.updated_by.id
-              : test.updated_by || test.updatedBy?.display_name || test.updatedBy || "System"}
+              : test.updated_by ||
+                test.updatedBy?.display_name ||
+                test.updatedBy ||
+                "System"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
@@ -186,25 +185,25 @@ const ToeicTestDetails = ({ test }) => {
         test.passages_count !== undefined ||
         test.questions?.length !== undefined ||
         test.passages?.length !== undefined) && (
-          <div className="mt-6 flex justify-center gap-6">
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-              <span className="font-medium text-sm">
-                {test.passages_count !== undefined
-                  ? test.passages_count
-                  : test.passages?.length || 0}{" "}
-                Passages
-              </span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-              <span className="font-medium text-sm">
-                {test.questions_count !== undefined
-                  ? test.questions_count
-                  : test.questions?.length || 0}{" "}
-                Questions
-              </span>
-            </div>
+        <div className="mt-6 flex justify-center gap-6">
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+            <span className="font-medium text-sm">
+              {test.passages_count !== undefined
+                ? test.passages_count
+                : test.passages?.length || 0}{" "}
+              Passages
+            </span>
           </div>
-        )}
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+            <span className="font-medium text-sm">
+              {test.questions_count !== undefined
+                ? test.questions_count
+                : test.questions?.length || 0}{" "}
+              Questions
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

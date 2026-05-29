@@ -125,11 +125,10 @@ const VocabGroupsTable = ({
                 return (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 ${
-                      isSortable
-                        ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-blue-400 transition-colors"
-                        : ""
-                    }`}
+                    className={`px-4 py-3 ${isSortable
+                      ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-blue-400 transition-colors"
+                      : ""
+                      }`}
                     onClick={() => {
                       if (!isSortable) return;
                       const newDirection = isActiveSort
@@ -210,34 +209,32 @@ const VocabGroupsTable = ({
                   <td className="px-4 py-3 text-sm">
                     <button
                       onClick={() => handleToggle(i)}
-                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
-                        enabledStates[i]
-                          ? "bg-green-400 border-green-400"
-                          : "bg-neutral-300 border-neutral-200"
-                      }`}
+                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${enabledStates[i]
+                        ? "bg-green-400 border-green-400"
+                        : "bg-neutral-300 border-neutral-200"
+                        }`}
                     >
                       <div
-                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
-                          enabledStates[i] ? "translate-x-5" : "translate-x-0"
-                        }`}
+                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${enabledStates[i] ? "translate-x-5" : "translate-x-0"
+                          }`}
                       ></div>
                     </button>
                   </td>
 
                   {/* Actions */}
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       {isEditing ? (
                         <>
                           <button
                             onClick={() => handleSaveEdit(i)}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-green-700 rounded-lg transition-colors"
                           >
                             <Check className="w-4 h-4" />
                           </button>
                           <button
                             onClick={handleCancelEdit}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-red-700 rounded-lg transition-colors"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -252,7 +249,7 @@ const VocabGroupsTable = ({
                           </button>
                           <button
                             onClick={() => handleDeleteClick(i)}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-red-700 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
