@@ -21,7 +21,7 @@ const DictionaryFormModal = ({ isOpen, onClose, onSubmit }) => {
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50"
+            className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50"
           >
             Cancel
           </button>
@@ -48,7 +48,7 @@ const DictionaryFormModal = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setWord(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder="e.g. hello, robust..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-gray-500 focus:ring-1 focus:ring-gray-900 outline-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 outline-none"
           />
         </div>
         <p className="text-xs text-gray-500">

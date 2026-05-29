@@ -99,11 +99,10 @@ const ToeicTagsTable = ({
                 return (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 ${
-                      isSortable
+                    className={`px-4 py-3 ${isSortable
                         ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                         : ""
-                    }`}
+                      }`}
                     onClick={() => {
                       if (!isSortable) return;
                       const newDirection = isActiveSort
@@ -179,7 +178,7 @@ const ToeicTagsTable = ({
                   </td>
 
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       {isEditing ? (
                         <>
                           <button

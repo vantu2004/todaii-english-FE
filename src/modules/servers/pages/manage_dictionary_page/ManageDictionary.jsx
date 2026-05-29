@@ -140,14 +140,12 @@ const ManageDictionary = () => {
 
   return (
     <div className="flex flex-col h-full bg-gray-50/30">
-      <div className="flex-none pb-4">
-        <ToolBar
-          updateQuery={(newQ) => setQuery((prev) => ({ ...prev, ...newQ }))}
-          setIsModalOpen={setIsCreateModalOpen}
-        />
-      </div>
+      <ToolBar
+        updateQuery={(newQ) => setQuery((prev) => ({ ...prev, ...newQ }))}
+        setIsModalOpen={setIsCreateModalOpen}
+      />
 
-      <div className="flex-1 overflow-hidden border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col">
+      <div className="flex-1 overflow-hidden border border-gray-200 rounded-lg bg-white flex flex-col">
         <DictionaryTable
           dictionary={currentData}
           lastElementRef={lastElementRef}

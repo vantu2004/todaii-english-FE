@@ -37,17 +37,17 @@ const DictionaryTable = ({
   };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full rounded-lg overflow-y-auto">
       <table className="w-full whitespace-nowrap">
-        <thead className="sticky top-0 bg-gray-50 z-10 border-b border-gray-200">
-          <tr className="text-xs font-medium text-left text-gray-500 uppercase tracking-wider">
-            <th className="px-4 py-3 w-20">ID</th>
-            <th className="px-4 py-3 w-64">Word</th>
+        <thead className="sticky top-0 z-10">
+          <tr className="text-xs font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+            <th className="px-4 py-3 ">ID</th>
+            <th className="px-4 py-3 ">Word</th>
             <th className="px-4 py-3">JSON Data</th>
-            <th className="px-4 py-3 w-32 text-right">Actions</th>
+            <th className="px-4 py-3">Actions</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-100">
+        <tbody className="bg-white divide-y divide-gray-100 dark:divide-gray-800/50 dark:bg-gray-900">
           {dictionary.map((entry, index) => {
             const isLast = index === dictionary.length - 1;
             const isEditing = editingId === entry.id;
@@ -59,16 +59,16 @@ const DictionaryTable = ({
               <tr
                 key={entry.id}
                 ref={isLast ? lastElementRef : null}
-                className="hover:bg-gray-50/50 transition-colors"
+                className="text-gray-900 dark:text-gray-200 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors"
               >
-                <td className="px-4 py-3 text-sm text-gray-500">#{entry.id}</td>
+                <td className="px-4 py-3 text-sm">{entry.id}</td>
 
-                <td className="px-4 py-3 text-sm font-semibold text-gray-900">
+                <td className="px-4 py-3 text-sm font-semibold">
                   {isEditing ? (
                     <input
                       autoFocus
                       type="text"
-                      className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-gray-900/20 outline-none"
+                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 focus:ring-2 focus:ring-gray-900/10 dark:focus:ring-gray-100/10 focus:border-gray-400 outline-none text-gray-900 dark:text-gray-100 transition-colors"
                       value={editWordValue}
                       onChange={(e) => setEditWordValue(e.target.value)}
                       onKeyDown={(e) =>
@@ -81,24 +81,24 @@ const DictionaryTable = ({
                   )}
                 </td>
 
-                <td className="px-4 py-3 text-sm text-gray-500">
+                <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                   <div className="max-w-md truncate opacity-70">
                     {jsonString ? (
                       jsonString
                     ) : (
-                      <span className="italic text-gray-400">Null</span>
+                      <span className="italic">Null</span>
                     )}
                   </div>
                 </td>
 
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center justify-end space-x-2">
+                <td className="px-4 py-3">
+                  <div className=" space-x-4 text-sm">
                     {isEditing ? (
                       <>
                         <button
                           onClick={() => handleSave(entry.id)}
                           disabled={isSaving}
-                          className="p-1.5 text-green-600 hover:bg-green-50 rounded"
+                          className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-white"
                         >
                           {isSaving ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -109,7 +109,7 @@ const DictionaryTable = ({
                         <button
                           onClick={cancelEdit}
                           disabled={isSaving}
-                          className="p-1.5 text-gray-400 hover:bg-gray-100 rounded"
+                          className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-white"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -118,19 +118,22 @@ const DictionaryTable = ({
                       <>
                         <button
                           onClick={() => onViewClick(entry)}
-                          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+                          className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                          aria-label="View"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => startEdit(entry)}
-                          className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded"
+                          className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                          aria-label="Update"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => onDeleteClick(entry)}
-                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+                          className="p-1 text-gray-400 hover:text-red-600 dark:hover:text-red-400"
+                          aria-label="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

@@ -62,7 +62,7 @@ const DictionaryApi = () => {
         {/* Left Sidebar: Search History (Desktop Only) */}
         {searchHistory && searchHistory.length > 0 && (
           <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">
-            <div className="sticky top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 shadow-sm">
+            <div className="sticky top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
               <SearchHistory
                 history={searchHistory}
                 onHistoryClick={handleWordClick}
@@ -77,7 +77,7 @@ const DictionaryApi = () => {
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Mobile-only History (Hiển thị dưới Search Bar trên màn hình nhỏ) */}
           {searchHistory && searchHistory.length > 0 && (
-            <div className="lg:hidden mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 shadow-sm">
+            <div className="lg:hidden mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
               <SearchHistory
                 history={searchHistory}
                 onHistoryClick={handleWordClick}
