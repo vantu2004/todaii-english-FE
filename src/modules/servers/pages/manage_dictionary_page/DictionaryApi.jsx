@@ -3,11 +3,11 @@ import { BookOpen, AlertTriangle } from "lucide-react";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import LoadingSkeleton from "@/components/servers/manage_dictionary_page/LoadingSkeleton";
 import FreeDictResult from "@/components/servers/manage_dictionary_page/FreeDictResult";
-import SearchHeader from "@/components/servers/manage_dictionary_page/SeachHeader";
+import SearchHeader from "@/components/servers/manage_dictionary_page/SearchHeader";
 import NotFoundState from "@/components/servers/manage_dictionary_page/NotFoundState";
 import TodaiiDictResult from "@/components/servers/manage_dictionary_page/TodaiiDictResult";
 import SearchHistory from "@/components/servers/manage_dictionary_page/SearchHistory";
-import { useDictionarySearch } from "@/hooks/servers/useDictionarySearch";
+import { useDictionarySearch } from "@/hooks/servers/dictionary/useDictionarySearch";
 
 const DictionaryApi = () => {
   const { setHeader } = useHeaderContext();

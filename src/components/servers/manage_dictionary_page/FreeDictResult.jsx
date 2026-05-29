@@ -25,12 +25,12 @@ const FreeDictResult = ({ data, onWordClick }) => {
           key={idx}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-lg bg-white dark:bg-zinc-900 shadow-sm p-6 mb-6"
+          className="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-5 mb-5"
         >
           {/* HEADER */}
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
                 {entry.word}
               </h2>
 
@@ -47,7 +47,7 @@ const FreeDictResult = ({ data, onWordClick }) => {
                 <button
                   key={i}
                   onClick={() => handleSpeak(entry.word, p.audio)}
-                  className="flex items-center gap-2 rounded-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-zinc-700 transition"
+                  className="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                 >
                   <Volume2 className="w-4 h-4" />
 
@@ -71,7 +71,7 @@ const FreeDictResult = ({ data, onWordClick }) => {
                   {meaning.definitions?.map((def, dIdx) => (
                     <li
                       key={dIdx}
-                      className="pl-4 border-l-2 border-gray-200 dark:border-zinc-700"
+                      className="pl-4 border-l-2 border-gray-200 dark:border-gray-700"
                     >
                       {/* DEFINITION */}
                       <p className="text-base text-gray-900 dark:text-gray-100">
@@ -80,7 +80,7 @@ const FreeDictResult = ({ data, onWordClick }) => {
 
                       {/* EXAMPLE */}
                       {def.example && (
-                        <div className="mt-3 rounded-xl bg-gray-50 dark:bg-zinc-800/60 p-4">
+                        <div className="mt-3 rounded-lg bg-gray-50 dark:bg-gray-800/60 p-4 border border-gray-100 dark:border-gray-700">
                           <p className="italic text-gray-700 dark:text-gray-300">
                             "{def.example}"
                           </p>
@@ -94,7 +94,7 @@ const FreeDictResult = ({ data, onWordClick }) => {
                             <button
                               key={sIdx}
                               onClick={() => onWordClick(syn)}
-                              className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-sm transition"
+                              className="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm transition"
                             >
                               {syn}
                             </button>
@@ -109,7 +109,7 @@ const FreeDictResult = ({ data, onWordClick }) => {
                             <button
                               key={aIdx}
                               onClick={() => onWordClick(ant)}
-                              className="px-3 py-1 rounded-full border border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 text-sm transition"
+                              className="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition"
                             >
                               {ant}
                             </button>

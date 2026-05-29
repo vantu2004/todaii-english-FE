@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 const TodaiiDictResult = ({ data, onWordClick }) => {
   useEffect(() => {
@@ -20,13 +20,9 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
     return null;
   }
 
-  const mainResults = useMemo(() => {
-    return data.result.slice(0, 8);
-  }, [data.result]);
-
   return (
     <div className="space-y-6">
-      {mainResults.map((entry, idx) => (
+      {data.map((entry, idx) => (
         <motion.div
           key={entry.id || idx}
           initial={{
@@ -37,12 +33,12 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
             opacity: 1,
             y: 0,
           }}
-          className="rounded-lg bg-white dark:bg-zinc-900 shadow-sm p-6 mb-6"
+          className="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-5 mb-5"
         >
           {/* HEADER */}
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
                 {entry.word}
               </h2>
 
@@ -53,7 +49,7 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
               </div>
 
               {entry.level_word?.toeic && (
-                <div className="mt-4 inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/30 px-3 py-1 text-sm font-medium text-blue-700 dark:text-blue-300">
+                <div className="mt-4 inline-flex items-center rounded-md bg-gray-100 dark:bg-gray-800 px-3 py-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                   TOEIC {entry.level_word.toeic}
                 </div>
               )}
@@ -63,7 +59,7 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
             <div className="flex gap-2">
               <button
                 onClick={() => handleSpeak(entry.word, "")}
-                className="flex items-center gap-2 rounded-full bg-gray-100 dark:bg-zinc-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-zinc-700 transition"
+                className="flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               >
                 <Volume2 className="w-4 h-4" />
 
@@ -88,7 +84,7 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
                   {contentBlock.means?.map((mean, mIdx) => (
                     <div
                       key={mIdx}
-                      className="border-l-2 border-gray-200 dark:border-zinc-700 pl-4"
+                      className="border-l-2 border-gray-200 dark:border-gray-700 pl-4"
                     >
                       <p className="text-base text-gray-900 dark:text-gray-100">
                         {mean.mean}
@@ -100,7 +96,7 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
                           {mean.examples.map((ex, eIdx) => (
                             <div
                               key={eIdx}
-                              className="rounded-xl bg-gray-50 dark:bg-zinc-800/60 p-4"
+                              className="rounded-lg bg-gray-50 dark:bg-gray-800/60 p-4 border border-gray-100 dark:border-gray-700"
                             >
                               <div className="flex items-start justify-between gap-4">
                                 <p className="italic text-gray-700 dark:text-gray-300">
@@ -144,7 +140,7 @@ const TodaiiDictResult = ({ data, onWordClick }) => {
                     <button
                       key={`${wfIdx} -${wIdx} `}
                       onClick={() => onWordClick?.(word)}
-                      className="px-3 py-1 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-sm transition"
+                      className="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm transition"
                     >
                       {word}
                     </button>
