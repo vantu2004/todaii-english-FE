@@ -1,140 +1,91 @@
-import { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
-import ClientActivitySection from "@/components/servers/manage_dashboard_page/ClientActivitySection";
-import { logError } from "@/utils/LogError";
-import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
-import { formatDate } from "@/utils/FormatDate";
-import { getUserChartById } from "@/api/servers/dashboardApi";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import toast from "react-hot-toast";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { getUserChartById } from "@/api/servers/dashboardApi";
+import { formatDate } from "@/utils/FormatDate";
+import { logError } from "@/utils/LogError";
+import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
+import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-);
+const getRangeForDays = (days) => {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - (days - 1));
+  return {
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+  };
+};
 
 const UserDashboard = () => {
+  const { id } = useParams();
   const { setHeader } = useHeaderContext();
 
-  const { id } = useParams();
+  // Date picker states
+  const [preset, setPreset] = useState("7");
+  const [dates, setDates] = useState(() => getRangeForDays(7));
 
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // Chart data states
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [dateRange, setDateRange] = useState({
-    startDate: formatDate(new Date().setDate(new Date().getDate() - 30)),
-    endDate: formatDate(new Date()),
-  });
+  // Setup header
+  useEffect(() => {
+    setHeader({
+      title: `User Dashboard`,
+      breadcrumb: [
+        { label: "Home", to: "/server" },
+        { label: "Users", to: "/server/user" },
+        { label: `User ID: ${id}` },
+      ],
+    });
+  }, [id]);
 
-  const fetchData = async () => {
-    setLoading(true);
+  // Fetch charts data
+  const fetchUserChartData = async () => {
     try {
-      const myRes = await getUserChartById(
-        id,
-        dateRange.startDate,
-        dateRange.endDate,
-      );
-
-      setUserData(myRes);
+      setLoading(true);
+      const data = await getUserChartById(id, dates.startDate, dates.endDate);
+      setChartData(data);
     } catch (error) {
       logError(error);
+      toast.error(`Failed to fetch dashboard data for User ID: ${id}`);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    setHeader({
-      title: "Manage Users",
-      breadcrumb: [
-        { label: "Home", to: "/server" },
-        { label: "Manage Users", to: "/server/user" },
-        { label: "User Dashboard" },
-      ],
-    });
-  }, []);
+    fetchUserChartData();
+  }, [id, dates]);
 
-  useEffect(() => {
-    fetchData();
-  }, [dateRange]);
+  const handleRangeChange = (start, end) => {
+    setDates({ startDate: start, endDate: end });
+  };
 
   return (
-    <>
-      {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
-        <button
-          onClick={() => window.history.back()}
-          className="flex items-center gap-1.5 sm:gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-3 sm:mb-4 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">Back to previous page</span>
-        </button>
+    <div className="flex flex-col space-y-6 min-h-full pb-10">
+      {/* Date Filter & Controls */}
+      <DateRangePicker
+        startDate={dates.startDate}
+        endDate={dates.endDate}
+        onRangeChange={handleRangeChange}
+        preset={preset}
+        setPreset={setPreset}
+        onRefresh={fetchUserChartData}
+        loading={loading}
+      />
 
-        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-900 p-2 rounded-lg border border-gray-200 dark:border-gray-800">
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900">
-            <CalendarIcon size={16} className="text-gray-400 mr-2" />
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
-              value={dateRange.startDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, startDate: e.target.value })
-              }
-            />
-          </div>
-          <span className="self-center text-gray-400">-</span>
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900">
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
-              value={dateRange.endDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, endDate: e.target.value })
-              }
-            />
-          </div>
-          <button
-            onClick={fetchData}
-            className="p-2 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors"
-            title="Refresh Data"
-          >
-            <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
-          </button>
-        </div>
+      {/* Render Charts */}
+      <div className="flex-1">
+        <DashboardCharts
+          chartData={chartData}
+          loading={loading}
+          activeTab="user-chart"
+        />
       </div>
-
-      {/* Content Sections */}
-      {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900 dark:border-white"></div>
-        </div>
-      ) : (
-        <>
-          <ClientActivitySection data={userData} type={"User"} />
-        </>
-      )}
-    </>
+    </div>
   );
 };
 

@@ -1,203 +1,250 @@
-import { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-import {
-  LayoutDashboard,
-  Calendar as CalendarIcon,
-  RefreshCcw,
-  User,
-  Users,
-  UserCircle,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import {
   getSummary,
+  getMyChart,
   getAdminDashboard,
+  getAdminChartById,
   getUserChart,
+  getUserChartById,
   getGuestChart,
 } from "@/api/servers/dashboardApi";
-import AdminSection from "@/components/servers/manage_dashboard_page/AdminSection";
-import ClientActivitySection from "@/components/servers/manage_dashboard_page/ClientActivitySection";
-import SummaryStats from "@/components/servers/manage_dashboard_page/SummaryStats";
-import { logError } from "@/utils/LogError";
-import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 import { formatDate } from "@/utils/FormatDate";
-import { set } from "date-fns";
+import { logError } from "@/utils/LogError";
+import SummaryCards from "@/components/servers/dashboard/SummaryCards";
+import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
+import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
+import { Search, X } from "lucide-react";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-);
+const getRangeForDays = (days) => {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - (days - 1));
+  return {
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+  };
+};
 
 const Dashboard = () => {
   const { setHeader } = useHeaderContext();
 
-  const [summary, setSummary] = useState(null);
-  const [adminData, setAdminData] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [guestData, setGuestData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [clientViewMode, setClientViewMode] = useState("user");
+  // Summary Metrics State
+  const [summaryData, setSummaryData] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
 
-  const [dateRange, setDateRange] = useState({
-    startDate: formatDate(new Date().setDate(new Date().getDate() - 7)),
-    endDate: formatDate(new Date()),
-  });
+  // Date Range and Preset State
+  const [preset, setPreset] = useState("7");
+  const [dates, setDates] = useState(() => getRangeForDays(7));
 
-  const fetchData = async () => {
-    setLoading(true);
+  // Chart Data State
+  const [activeTab, setActiveTab] = useState("my-chart"); // my-chart, admin-chart, user-chart, guest-chart
+  const [searchId, setSearchId] = useState("");
+  const [inputId, setInputId] = useState("");
+  const [chartData, setChartData] = useState([]);
+  const [chartsLoading, setChartsLoading] = useState(true);
+
+  // Setup header
+  useEffect(() => {
+    setHeader({
+      title: "Dashboard",
+      breadcrumb: [{ label: "Home", to: "/server" }, { label: "Dashboard" }],
+    });
+  }, []);
+
+  // Fetch summary data once on load
+  const fetchSummary = async () => {
     try {
-      const [sumRes, adminRes, userRes, guestRes] = await Promise.all([
-        getSummary(),
-        getAdminDashboard(dateRange.startDate, dateRange.endDate),
-        getUserChart(dateRange.startDate, dateRange.endDate),
-        getGuestChart(dateRange.startDate, dateRange.endDate),
-      ]);
-
-      setSummary(sumRes);
-      setAdminData(adminRes);
-      setUserData(userRes);
-      setGuestData(guestRes);
+      setSummaryLoading(true);
+      const data = await getSummary();
+      setSummaryData(data);
     } catch (error) {
       logError(error);
+      toast.error("Failed to fetch summary statistics");
     } finally {
-      setLoading(false);
+      setSummaryLoading(false);
     }
   };
 
   useEffect(() => {
-    setHeader({
-      title: "Dashboard",
-      breadcrumb: [{ label: `Continuous Updates - ${formatDate(new Date())}` }],
-    });
+    fetchSummary();
   }, []);
 
+  // Fetch chart data when dates, tab, or searchId changes
+  const fetchChartData = async () => {
+    try {
+      setChartsLoading(true);
+      let data = [];
+      if (activeTab === "my-chart") {
+        data = await getMyChart(dates.startDate, dates.endDate);
+      } else if (activeTab === "admin-chart") {
+        if (searchId.trim()) {
+          data = await getAdminChartById(
+            searchId.trim(),
+            dates.startDate,
+            dates.endDate,
+          );
+        } else {
+          data = await getAdminDashboard(dates.startDate, dates.endDate);
+        }
+      } else if (activeTab === "user-chart") {
+        if (searchId.trim()) {
+          data = await getUserChartById(
+            searchId.trim(),
+            dates.startDate,
+            dates.endDate,
+          );
+        } else {
+          data = await getUserChart(dates.startDate, dates.endDate);
+        }
+      } else if (activeTab === "guest-chart") {
+        data = await getGuestChart(dates.startDate, dates.endDate);
+      }
+      setChartData(data);
+    } catch (error) {
+      logError(error);
+      toast.error("Failed to fetch chart details");
+    } finally {
+      setChartsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchData();
-  }, [dateRange]);
+    fetchChartData();
+  }, [dates, activeTab, searchId]);
+
+  const handleRangeChange = (start, end) => {
+    setDates({ startDate: start, endDate: end });
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setSearchId("");
+    setInputId("");
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setSearchId(inputId);
+  };
+
+  const handleClearSearch = () => {
+    setSearchId("");
+    setInputId("");
+  };
 
   return (
-    <>
-      {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white flex items-center gap-2">
-            <LayoutDashboard className="text-neutral-500 dark:text-neutral-400" />{" "}
-            Dashboard Overview
-          </h1>
-          <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
-            Real-time Insights for Todaii Ecosystem
-          </p>
-        </div>
+    <div className="flex flex-col space-y-6 min-h-full pb-10">
+      {/* 1. Summary Cards Section */}
+      <SummaryCards summaryData={summaryData} loading={summaryLoading} />
 
-        {/* Date Filter */}
-        <div className="flex flex-col sm:flex-row gap-2 bg-white dark:bg-neutral-900 p-1.5 rounded-lg ring-1 ring-neutral-200 dark:ring-neutral-800">
-          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md">
-            <CalendarIcon size={16} className="text-neutral-400 mr-2" />
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white py-2 outline-none"
-              value={dateRange.startDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, startDate: e.target.value })
-              }
-            />
+      {/* 2. Controls Row */}
+      <div className="flex flex-col space-y-4">
+        {/* Date Range Picker */}
+        <DateRangePicker
+          startDate={dates.startDate}
+          endDate={dates.endDate}
+          onRangeChange={handleRangeChange}
+          preset={preset}
+          setPreset={setPreset}
+          onRefresh={fetchChartData}
+          loading={chartsLoading}
+        />
+
+        {/* Actor Tabs & Optional ID Search */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
+          <div className="flex bg-gray-100 dark:bg-gray-850 p-1 rounded-lg self-start">
+            <button
+              onClick={() => handleTabChange("my-chart")}
+              className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
+                activeTab === "my-chart"
+                  ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              My Chart
+            </button>
+            <button
+              onClick={() => handleTabChange("admin-chart")}
+              className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
+                activeTab === "admin-chart"
+                  ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              Admin
+            </button>
+            <button
+              onClick={() => handleTabChange("user-chart")}
+              className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
+                activeTab === "user-chart"
+                  ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              User
+            </button>
+            <button
+              onClick={() => handleTabChange("guest-chart")}
+              className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
+                activeTab === "guest-chart"
+                  ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              }`}
+            >
+              Guest
+            </button>
           </div>
-          <span className="self-center text-neutral-400">-</span>
-          <div className="flex items-center px-3 border border-neutral-200 dark:border-neutral-700 rounded-md">
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white py-2 outline-none"
-              value={dateRange.endDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, endDate: e.target.value })
-              }
-            />
-          </div>
-          <button
-            onClick={fetchData}
-            className="p-2 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-md transition-colors"
-            title="Refresh Data"
-          >
-            <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
-          </button>
-        </div>
-      </div>
 
-      {/* Content Sections */}
-      {loading && !summary ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-neutral-900 dark:border-white"></div>
-        </div>
-      ) : (
-        <>
-          <SummaryStats data={summary} />
-          <AdminSection data={adminData} />
-
-          {/* (User / Guest Switcher) */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-                <Users size={20} /> Client Activities
-              </h2>
-
-              {/* Toggle Switch */}
-              <div className="flex bg-neutral-100 dark:bg-neutral-800/50 p-1 rounded-lg ring-1 ring-neutral-200 dark:ring-neutral-800/50">
-                <button
-                  onClick={() => setClientViewMode("user")}
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
-                    clientViewMode === "user"
-                      ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10"
-                      : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
-                  }`}
-                >
-                  <UserCircle size={16} /> Registered Users
-                </button>
-                <button
-                  onClick={() => setClientViewMode("guest")}
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
-                    clientViewMode === "guest"
-                      ? "bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10"
-                      : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
-                  }`}
-                >
-                  <User size={16} /> Guests
-                </button>
+          {/* Search ID Form (for Admin and User tabs) */}
+          {(activeTab === "admin-chart" || activeTab === "user-chart") && (
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center gap-2"
+            >
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={`Enter ${activeTab === "admin-chart" ? "Admin" : "User"} ID`}
+                  value={inputId}
+                  onChange={(e) => setInputId(e.target.value)}
+                  className="pl-8 pr-8 py-2 text-xs border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 w-52"
+                />
+                <Search
+                  size={14}
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                {inputId && (
+                  <button
+                    type="button"
+                    onClick={handleClearSearch}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-650 dark:hover:text-gray-250"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
               </div>
-            </div>
-
-            {/* Render Section based on Selection */}
-            {clientViewMode === "user" ? (
-              <ClientActivitySection data={userData} type="User" />
-            ) : (
-              <ClientActivitySection data={guestData} type="Guest" />
-            )}
-          </div>
-        </>
-      )}
-
-      <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-center text-sm text-neutral-500">
-        TODAII - Team • {formatDate(new Date())}
+              <button
+                type="submit"
+                className="px-3 py-2 text-xs font-medium bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                Search
+              </button>
+            </form>
+          )}
+        </div>
       </div>
-    </>
+
+      {/* 3. Charts Area */}
+      <div className="flex-1">
+        <DashboardCharts
+          chartData={chartData}
+          loading={chartsLoading}
+          activeTab={activeTab}
+        />
+      </div>
+    </div>
   );
 };
 
