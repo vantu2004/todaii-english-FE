@@ -1,42 +1,68 @@
 import { useNavigate } from "react-router-dom";
 import {
-  Shield,
   Users,
   FileText,
-  Layers,
-  Languages,
+  BookOpen,
   GraduationCap,
-  Video,
+  ChevronRight,
 } from "lucide-react";
 
-const SummaryCard = ({ label, value, icon: Icon, loading, onClick }) => {
+const GroupCard = ({ title, icon: Icon, items, loading, onNavigate }) => {
   if (loading) {
     return (
-      <div className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg animate-pulse">
-        <div className="flex justify-between items-start mb-3">
-          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-800 rounded"></div>
-          <div className="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800"></div>
+      <div className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg animate-pulse min-h-[140px] flex flex-col justify-between">
+        <div className="flex justify-between items-center mb-4">
+          <div className="h-4 w-20 bg-gray-200 dark:bg-gray-850 rounded"></div>
+          <div className="w-8 h-8 bg-gray-200 dark:bg-gray-850 rounded-lg"></div>
         </div>
-        <div className="h-8 w-16 bg-gray-200 dark:bg-gray-800 rounded"></div>
+        <div className="space-y-3">
+          <div className="h-6 bg-gray-200 dark:bg-gray-850 rounded w-full"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-850 rounded w-full"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div
-      onClick={onClick}
-      className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg flex items-center justify-between cursor-pointer hover:border-gray-450 hover:bg-gray-50/50 dark:hover:border-gray-700 dark:hover:bg-gray-800/35 transition-all select-none group"
-    >
-      <div>
-        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-300">
-          {label}
-        </span>
-        <span className="text-2xl font-semibold text-gray-900 dark:text-white">
-          {typeof value === "number" ? value.toLocaleString() : value || 0}
-        </span>
+    <div className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg flex flex-col justify-between hover:border-gray-300 dark:hover:border-gray-700 transition-all shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+          {title}
+        </h4>
+        <div className="p-2 bg-gray-50 dark:bg-gray-850 rounded-lg text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center">
+          <Icon size={18} />
+        </div>
       </div>
-      <div className="p-2.5 bg-gray-50 dark:bg-gray-850 rounded-lg text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center group-hover:text-gray-700 dark:group-hover:text-white group-hover:bg-gray-100 dark:group-hover:bg-gray-800 transition-colors">
-        <Icon size={20} />
+
+      {/* Items List */}
+      <div className="space-y-1">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => item.to && onNavigate(item.to)}
+            className="flex items-center justify-between py-2 px-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-850 cursor-pointer group transition-colors"
+          >
+            <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-950 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
+              {item.label}
+              <ChevronRight
+                size={12}
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400"
+              />
+            </span>
+            <span className="text-base font-semibold text-gray-950 dark:text-white">
+              {typeof item.value === "number"
+                ? item.value.toLocaleString()
+                : item.value || 0}
+            </span>
+          </div>
+        ))}
+        {/* Spacing placeholder for single item groups to maintain consistent card height */}
+        {items.length === 1 && (
+          <div className="py-2 px-3 opacity-0 select-none pointer-events-none">
+            <span className="text-sm">Placeholder</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -45,63 +71,79 @@ const SummaryCard = ({ label, value, icon: Icon, loading, onClick }) => {
 const SummaryCards = ({ summaryData, loading }) => {
   const navigate = useNavigate();
 
-  const cards = [
+  const cardGroups = [
     {
-      label: "Admins",
-      value: summaryData?.total_admins,
-      icon: Shield,
-      to: "/server/admin",
-    },
-    {
-      label: "Users",
-      value: summaryData?.total_users,
+      title: "Accounts",
       icon: Users,
-      to: "/server/user",
+      items: [
+        {
+          label: "Admins",
+          value: summaryData?.total_admins,
+          to: "/server/admin",
+        },
+        {
+          label: "Users",
+          value: summaryData?.total_users,
+          to: "/server/user",
+        },
+      ],
     },
     {
-      label: "Articles",
-      value: summaryData?.total_articles,
+      title: "Content",
       icon: FileText,
-      to: "/server/article",
+      items: [
+        {
+          label: "Articles",
+          value: summaryData?.total_articles,
+          to: "/server/article",
+        },
+        {
+          label: "Videos",
+          value: summaryData?.total_videos,
+          to: "/server/video",
+        },
+      ],
     },
     {
-      label: "Vocab Decks",
-      value: summaryData?.total_vocabulary_decks,
-      icon: Layers,
-      to: "/server/vocab-deck",
+      title: "Vocabulary",
+      icon: BookOpen,
+      items: [
+        {
+          label: "Vocab Decks",
+          value: summaryData?.total_vocabulary_decks,
+          to: "/server/vocab-deck",
+        },
+        {
+          label: "Dict Words",
+          value: summaryData?.total_dictionary_words,
+          to: "/server/dictionary",
+        },
+      ],
     },
     {
-      label: "Dict Words",
-      value: summaryData?.total_dictionary_words,
-      icon: Languages,
-      to: "/server/dictionary",
-    },
-    {
-      label: "Toeic Tests",
-      value: summaryData?.total_toeic_test,
+      title: "Exams",
       icon: GraduationCap,
-      to: "/server/toeic-test",
-    },
-    {
-      label: "Videos",
-      value: summaryData?.total_videos,
-      icon: Video,
-      to: "/server/video",
+      items: [
+        {
+          label: "TOEIC Tests",
+          value: summaryData?.total_toeic_test,
+          to: "/server/toeic-test",
+        },
+      ],
     },
   ];
 
   return (
     <div className="mb-6">
-      {/* 7 Cards in a single grid-cols-4 layout to enforce equal width wrapping */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {cards.map((card, idx) => (
-          <SummaryCard
+        {cardGroups.map((group, idx) => (
+          <GroupCard
             key={idx}
-            label={card.label}
-            value={card.value}
-            icon={card.icon}
+            title={group.title}
+            icon={group.icon}
+            items={group.items}
             loading={loading}
-            onClick={() => card.to && navigate(card.to)}
+            onNavigate={navigate}
           />
         ))}
       </div>
