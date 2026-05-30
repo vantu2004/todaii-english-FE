@@ -100,3 +100,13 @@ export const getGuestChart = async (startDate, endDate) => {
     throw error;
   }
 };
+
+export const getStats = async () => {
+  try {
+    const response = await serverInstance.get("/dashboard/upstash-stats");
+    return response.data;
+  } catch (error) {
+    console.log("Error: ", error);
+    throw error;
+  }
+};
