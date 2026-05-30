@@ -3,8 +3,8 @@ import { Flame, RefreshCw, TrendingUp } from "lucide-react";
 import { getTopWords } from "@/api/servers/dictionaryApi";
 
 const MEDAL_COLORS = [
-  "bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800", // #1 gold
-  "bg-gray-50 text-gray-500 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700", // #2 silver
+  "bg-yellow-150 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800", // #1 gold
+  "bg-gray-100 text-gray-500 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700", // #2 silver
   "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800", // #3 bronze
 ];
 
@@ -119,7 +119,7 @@ const TopWordsList = ({ onWordClick }) => {
               key={item.word}
               onClick={() => onWordClick?.(item.word)}
               className="w-full group flex items-center gap-2.5 px-2.5 py-2 rounded-lg
-                hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all text-left"
+                hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-all text-left"
             >
               {/* Rank badge */}
               <span
