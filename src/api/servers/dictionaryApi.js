@@ -70,6 +70,16 @@ export const getAiSuggestion = async (word) => {
   }
 };
 
+export const getTopWords = async () => {
+  try {
+    const response = await serverInstance.get("/dictionary/top-words");
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const createWord = async (word) => {
   try {
     const response = await serverInstance.post("/dictionary", null, {

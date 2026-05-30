@@ -7,6 +7,7 @@ import SearchHeader from "@/components/servers/manage_dictionary_page/SearchHead
 import NotFoundState from "@/components/servers/manage_dictionary_page/NotFoundState";
 import TodaiiDictResult from "@/components/servers/manage_dictionary_page/TodaiiDictResult";
 import SearchHistory from "@/components/servers/manage_dictionary_page/SearchHistory";
+import TopWordsList from "@/components/servers/manage_dictionary_page/TopWordsList";
 import { useDictionarySearch } from "@/hooks/servers/dictionary/useDictionarySearch";
 
 const DictionaryApi = () => {
@@ -60,32 +61,34 @@ const DictionaryApi = () => {
       {/* ─── Bottom Section: 2 Columns (History & Results) ─── */}
       <div className="flex flex-col lg:flex-row gap-6 flex-1 min-w-0">
         {/* Left Sidebar: Search History (Desktop Only) */}
-        {searchHistory && searchHistory.length > 0 && (
-          <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">
-            <div className="sticky top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+        <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">
+          <div className="sticky top-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 max-h-[calc(100vh-14rem)] overflow-y-auto">
+            {searchHistory && searchHistory.length > 0 && (
               <SearchHistory
                 history={searchHistory}
                 onHistoryClick={handleWordClick}
                 onRemoveItem={removeHistoryItem}
                 onClearAll={clearHistory}
               />
-            </div>
-          </aside>
-        )}
+            )}
+            <TopWordsList onWordClick={handleWordClick} />
+          </div>
+        </aside>
 
         {/* Main Content Area: Results */}
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Mobile-only History (Hiển thị dưới Search Bar trên màn hình nhỏ) */}
-          {searchHistory && searchHistory.length > 0 && (
-            <div className="lg:hidden mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+          <div className="lg:hidden mb-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
+            {searchHistory && searchHistory.length > 0 && (
               <SearchHistory
                 history={searchHistory}
                 onHistoryClick={handleWordClick}
                 onRemoveItem={removeHistoryItem}
                 onClearAll={clearHistory}
               />
-            </div>
-          )}
+            )}
+            <TopWordsList onWordClick={handleWordClick} />
+          </div>
 
           {/* Result Container */}
           <div className="flex-1">
