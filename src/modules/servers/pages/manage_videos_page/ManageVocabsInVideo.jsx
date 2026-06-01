@@ -4,6 +4,7 @@ import {
   addWordToVideo,
   deleteWordFromVideo,
   deleteAllWordsFromVideo,
+  vocabExtractionVideo,
 } from "@/api/servers/videoApi";
 
 const ManageVocabsInVideo = () => {
@@ -13,7 +14,7 @@ const ManageVocabsInVideo = () => {
       addApi={addWordToVideo}
       deleteApi={deleteWordFromVideo}
       clearApi={deleteAllWordsFromVideo}
-      onAutoGenerate={null}
+      onVocabExtract={vocabExtractionVideo}
       title="VIDEO"
     />
   );

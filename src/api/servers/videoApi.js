@@ -105,6 +105,18 @@ export const deleteVideo = async (videoId) => {
   }
 };
 
+export const vocabExtractionVideo = async (videoId) => {
+  try {
+    const response = await serverInstance.get(
+      `/video/${videoId}/vocab-extraction`,
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const addWordToVideo = async (videoId, wordId) => {
   try {
     await serverInstance.post(`/video/${videoId}/word/${wordId}`);

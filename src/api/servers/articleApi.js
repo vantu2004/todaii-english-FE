@@ -104,6 +104,18 @@ export const deleteArticle = async (articleId) => {
   }
 };
 
+export const vocabExtractionArticle = async (articleId) => {
+  try {
+    const response = await serverInstance.get(
+      `/article/${articleId}/vocab-extraction`,
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
 export const addWordToArticle = async (articleId, wordId) => {
   try {
     await serverInstance.post(`/article/${articleId}/word/${wordId}`);

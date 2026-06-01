@@ -7,8 +7,9 @@ import VocabHeader from "@/components/servers/manage_vocabs_page/VocabHeader";
 import DictionarySearchPanel from "@/components/servers/manage_vocabs_page/DictionarySearchPanel";
 import SelectedWordsPanel from "@/components/servers/manage_vocabs_page/SelectedWordsPanel";
 import { logError } from "@/utils/LogError";
-import { createDictionaryEntryByGemini } from "@/api/servers/dictionaryApi";
+import { createWord } from "@/api/servers/dictionaryApi";
 import DictionaryViewModal from "@/components/servers/manage_dictionary_page/DictionaryViewModal";
+import VocabExtractionModal from "@/components/servers/manage_vocabs_page/VocabExtractionModal";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
 
 const VocabManagerContainer = ({
@@ -17,7 +18,7 @@ const VocabManagerContainer = ({
   deleteApi, // (id, wordId) => remove word
   clearApi, // (id) => clear vocab
   title,
-  onAutoGenerate, // optional
+  onVocabExtract, // optional
 }) => {
   const { setHeader } = useHeaderContext();
 
@@ -29,15 +30,21 @@ const VocabManagerContainer = ({
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedWord, setSelectedWord] = useState(null);
 
+  const [isExtractionModalOpen, setIsExtractionModalOpen] = useState(false);
+  const [extractedWords, setExtractedWords] = useState([]);
+  const [isExtracting, setIsExtracting] = useState(false);
+
   const handleFetch = async () => {
     try {
       setLoading(true);
 
       const response = await fetchApi(id); // <== dùng API truyền vào module
 
-      const sortedWords = response.words?.sort((a, b) =>
-        a.headword.localeCompare(b.headword),
-      );
+      const sortedWords = response.words?.sort((a, b) => {
+        const wordA = a.word || a.headword || "";
+        const wordB = b.word || b.headword || "";
+        return wordA.localeCompare(wordB);
+      });
 
       setSelectedWords(sortedWords || []);
       setContentInfo({
@@ -55,29 +62,44 @@ const VocabManagerContainer = ({
     handleFetch();
   }, [id]);
 
-  const handleAutoGenerate = async () => {
-    if (!onAutoGenerate) return;
-
+  const handleVocabExtract = async () => {
+    if (!onVocabExtract) return;
     try {
-      await onAutoGenerate(id);
-      await handleFetch();
-      toast.success("Generated vocabularies successfully");
+      setIsExtracting(true);
+      const words = await onVocabExtract(id);
+      setExtractedWords(words || []);
+      setIsExtractionModalOpen(true);
     } catch (error) {
-      toast.error("Failed to generate vocabularies");
+      logError(error);
+    } finally {
+      setIsExtracting(false);
     }
   };
 
-  const handleCreateDictionaryEntryByGemini = async (word) => {
+  const handleAddCustomWord = async (word) => {
     try {
-      const response = await createDictionaryEntryByGemini(word.trim());
-
-      for (const entry of response) {
-        await handleAdd(entry.id);
-      }
-
-      toast.success("Word created by AI successfully");
+      const entry = await createWord(word.trim());
+      await handleAdd(entry.id || entry.word_id);
+      toast.success("Word created and added successfully");
     } catch (error) {
       logError(error);
+      toast.error("Failed to create word");
+    }
+  };
+
+  const handleAddExtractedWords = async (wordIds) => {
+    try {
+      for (const wordId of wordIds) {
+        if (!selectedWords.some((w) => (w.id || w.word_id) === wordId)) {
+          await addApi(id, wordId);
+        }
+      }
+      await handleFetch();
+      toast.success(`Added ${wordIds.length} words successfully`);
+      setIsExtractionModalOpen(false);
+    } catch (error) {
+      logError(error);
+      toast.error("Failed to add some words");
     }
   };
 
@@ -146,7 +168,8 @@ const VocabManagerContainer = ({
 
         <VocabHeader
           contentInfo={contentInfo}
-          onAutoGenerate={onAutoGenerate ? handleAutoGenerate : null}
+          onVocabExtract={onVocabExtract ? handleVocabExtract : null}
+          isExtracting={isExtracting}
         />
 
         {/* Main Content */}
@@ -161,7 +184,7 @@ const VocabManagerContainer = ({
             <DictionarySearchPanel
               selectedWords={selectedWords}
               onSelectWord={handleAdd}
-              onAddCustomWord={handleCreateDictionaryEntryByGemini}
+              onAddCustomWord={handleAddCustomWord}
               onViewWord={handleViewWord}
             />
 
@@ -183,6 +206,15 @@ const VocabManagerContainer = ({
           dictionary={selectedWord}
         />
       )}
+
+      {/* Extraction Modal */}
+      <VocabExtractionModal
+        isOpen={isExtractionModalOpen}
+        onClose={() => setIsExtractionModalOpen(false)}
+        extractedWords={extractedWords}
+        currentWords={selectedWords}
+        onAddSelected={handleAddExtractedWords}
+      />
     </>
   );
 };
