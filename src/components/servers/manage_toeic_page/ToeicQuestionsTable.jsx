@@ -1,69 +1,23 @@
-import { Pencil, Trash2, Volume2, Image as ImageIcon } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { Pencil, Trash2, Eye, Info } from "lucide-react";
+import { useState } from "react";
 import DOMPurify from "dompurify";
+import Modal from "@/components/servers/Modal";
+import ToeicQuestionDetails from "./ToeicQuestionDetails";
 
 const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
-  const [playingId, setPlayingId] = useState(null);
-
-  const audioRef = useRef(null);
-
-  const handlePlayAudio = async (question) => {
-    const audioUrl = question.audio_url;
-
-    if (!audioUrl) return;
-
-    // click same audio again -> stop
-    if (playingId === question.id && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-
-      audioRef.current = null;
-      setPlayingId(null);
-
-      return;
-    }
-
-    try {
-      // stop previous audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-
-      const audio = new Audio(audioUrl);
-
-      audioRef.current = audio;
-
-      setPlayingId(question.id);
-
-      audio.onended = () => {
-        audioRef.current = null;
-        setPlayingId(null);
-      };
-
-      await audio.play();
-    } catch (err) {
-      console.error(err);
-
-      audioRef.current = null;
-      setPlayingId(null);
-    }
-  };
-
-  const getAudioUrl = (question) => question.audio_url;
-
-  const getImageUrl = (question) => question.image_url;
+  const [detailQuestion, setDetailQuestion] = useState(null);
 
   const isPart12 = partNumber === 1 || partNumber === 2;
+  const isPart5 = partNumber === 5;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500">
               <th className="px-6 py-4 w-16">ID</th>
-              {!isPart12 && partNumber !== 5 && (
+              {!isPart12 && !isPart5 && (
                 <th className="px-6 py-4 w-32">Passage ID</th>
               )}
               <th className="px-6 py-4 min-w-[200px]">
@@ -77,11 +31,10 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                   <th className="px-6 py-4">Option D</th>
                 </>
               )}
-              <th className="px-6 py-4">Correct Answer</th>
+              <th className="px-6 py-4 w-28">Correct</th>
               <th className="px-6 py-4 min-w-[200px]">Explanation</th>
               <th className="px-6 py-4 w-32">Tags</th>
-              {isPart12 && <th className="px-6 py-4">Media</th>}
-              <th className="px-6 py-4 w-24">Actions</th>
+              <th className="px-6 py-4 w-28">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -94,17 +47,15 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                   {question.id}
                 </td>
 
-                {!isPart12 && partNumber !== 5 && (
-                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-200">
-                      {question.passage_id}
-                    </td>
+                {!isPart12 && !isPart5 && (
+                  <td className="px-6 py-4 text-sm font-medium text-gray-950 dark:text-gray-200">
+                    #{question.passage_id || question.passageId || "N/A"}
                   </td>
                 )}
 
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                   <div
-                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    className="truncate max-w-xs line-clamp-2 prose dark:prose-invert prose-sm text-ellipsis overflow-hidden"
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         isPart12
@@ -119,40 +70,40 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                   <>
                     <td
                       className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate"
-                      title={question.option_a}
+                      title={question.option_a || question.optionA}
                     >
-                      {question.option_a}
+                      {question.option_a || question.optionA}
                     </td>
                     <td
                       className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate"
-                      title={question.option_b}
+                      title={question.option_b || question.optionB}
                     >
-                      {question.option_b}
+                      {question.option_b || question.optionB}
                     </td>
                     <td
                       className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate"
-                      title={question.option_c}
+                      title={question.option_c || question.optionC}
                     >
-                      {question.option_c}
+                      {question.option_c || question.optionC}
                     </td>
                     <td
                       className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-[150px] truncate"
-                      title={question.option_d}
+                      title={question.option_d || question.optionD}
                     >
-                      {question.option_d}
+                      {question.option_d || question.optionD}
                     </td>
                   </>
                 )}
 
                 <td className="px-6 py-4 text-sm">
-                  <span className="font-bold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200">
-                    {question.correct_ans || "N/A"}
+                  <span className="font-bold text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800">
+                    {question.correct_ans || question.correctAns || "N/A"}
                   </span>
                 </td>
 
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                   <div
-                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    className="truncate max-w-xs line-clamp-2 prose dark:prose-invert prose-sm text-ellipsis overflow-hidden"
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         question.explanation || "No explanation",
@@ -167,9 +118,9 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                       question.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs whitespace-nowrap"
+                          className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200 px-2 py-0.5 rounded text-xs whitespace-nowrap"
                         >
-                          {tag.alias}
+                          {tag.name || tag.alias}
                         </span>
                       ))
                     ) : (
@@ -180,54 +131,28 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
                   </div>
                 </td>
 
-                {isPart12 && (
-                  <td className="px-6 py-4 text-sm">
-                    <div className="flex gap-2 items-center">
-                      {getImageUrl(question) && (
-                        <ImageIcon
-                          size={18}
-                          className="text-blue-500 cursor-pointer"
-                          title="Has Image"
-                        />
-                      )}
-                      {getAudioUrl(question) && (
-                        <button
-                          onClick={() => handlePlayAudio(question)}
-                          className="text-purple-500 hover:text-purple-700 transition cursor-pointer"
-                          title="Play Audio"
-                        >
-                          <Volume2
-                            size={18}
-                            className={
-                              playingId === question.id ? "animate-pulse" : ""
-                            }
-                          />
-                        </button>
-                      )}
-                      {!getImageUrl(question) && !getAudioUrl(question) && (
-                        <span className="text-gray-400 italic text-xs">
-                          None
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                )}
-
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <button
+                      onClick={() => setDetailQuestion(question)}
+                      className="text-blue-600 hover:text-blue-800 transition"
+                      title="View Detail"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button
                       onClick={() => onEdit(question)}
-                      className="text-yellow-600 hover:text-yellow-800 transition"
+                      className="text-gray-400 hover:text-gray-700 transition"
                       title="Edit"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => onDelete(question.id)}
-                      className="text-red-600 hover:text-red-800 transition"
+                      className="text-red-500 hover:text-red-700 transition"
                       title="Delete"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>
@@ -236,7 +161,7 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
             {questions.length === 0 && (
               <tr>
                 <td
-                  colSpan={isPart12 ? 7 : partNumber === 5 ? 10 : 11}
+                  colSpan={isPart12 ? 6 : isPart5 ? 9 : 10}
                   className="px-6 py-8 text-center text-gray-500 text-sm italic"
                 >
                   No questions found for this part.
@@ -246,6 +171,44 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
           </tbody>
         </table>
       </div>
+
+      {detailQuestion && (
+        <Modal
+          isOpen={true}
+          onClose={() => setDetailQuestion(null)}
+          width="sm:max-w-4xl"
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
+                <Info className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Question Details
+                </h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Detailed preview of the question content
+                </p>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDetailQuestion(null)}
+                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <ToeicQuestionDetails
+            question={detailQuestion}
+            partNumber={partNumber}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

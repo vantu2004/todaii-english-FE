@@ -49,9 +49,11 @@ const ToeicResult = () => {
     let readingTotal = 0;
 
     const { answers, testData } = resultData;
+    const selectedPartIds = resultData.selectedPartIds || [1, 2, 3, 4, 5, 6, 7];
 
     // Process Part 1-4 (Listening)
     for (let part = 1; part <= 4; part++) {
+      if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
       questions.forEach((q) => {
         listeningTotal++;
@@ -63,6 +65,7 @@ const ToeicResult = () => {
 
     // Process Part 5-7 (Reading)
     for (let part = 5; part <= 7; part++) {
+      if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
       questions.forEach((q) => {
         readingTotal++;
@@ -72,9 +75,17 @@ const ToeicResult = () => {
       });
     }
 
-    const listeningScore = convertListeningScore(listeningCorrect);
-    const readingScore = convertReadingScore(readingCorrect);
+    const listeningScore =
+      listeningTotal > 0
+        ? convertListeningScore((listeningCorrect / listeningTotal) * 100)
+        : 0;
+    const readingScore =
+      readingTotal > 0
+        ? convertReadingScore((readingCorrect / readingTotal) * 100)
+        : 0;
     const totalScore = listeningScore + readingScore;
+    const maxScore =
+      (listeningTotal > 0 ? 495 : 0) + (readingTotal > 0 ? 495 : 0);
 
     return {
       listening: {
@@ -88,6 +99,7 @@ const ToeicResult = () => {
         score: readingScore,
       },
       totalScore,
+      maxScore: maxScore || 990,
     };
   }, [resultData]);
 
@@ -135,11 +147,14 @@ const ToeicResult = () => {
               Điểm Nghe (Listening)
             </h3>
             <div className="text-4xl font-extrabold text-blue-700 dark:text-blue-300 mb-2">
-              {scoreDetails.listening.score}
+              {scoreDetails.listening.total === 0
+                ? "Không làm"
+                : scoreDetails.listening.score}
             </div>
             <p className="text-sm text-blue-600/80 dark:text-blue-400/80">
-              {scoreDetails.listening.correct} / {scoreDetails.listening.total}{" "}
-              câu đúng
+              {scoreDetails.listening.total === 0
+                ? "—"
+                : `${scoreDetails.listening.correct} / ${scoreDetails.listening.total} câu đúng`}
             </p>
           </div>
 
@@ -148,11 +163,14 @@ const ToeicResult = () => {
               Điểm Đọc (Reading)
             </h3>
             <div className="text-4xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-2">
-              {scoreDetails.reading.score}
+              {scoreDetails.reading.total === 0
+                ? "Không làm"
+                : scoreDetails.reading.score}
             </div>
             <p className="text-sm text-emerald-600/80 dark:text-emerald-400/80">
-              {scoreDetails.reading.correct} / {scoreDetails.reading.total} câu
-              đúng
+              {scoreDetails.reading.total === 0
+                ? "—"
+                : `${scoreDetails.reading.correct} / ${scoreDetails.reading.total} câu đúng`}
             </p>
           </div>
 
@@ -164,10 +182,10 @@ const ToeicResult = () => {
               Total Score
             </h3>
             <div className="text-5xl font-black text-brand-700 dark:text-brand-300 mb-2">
-              {scoreDetails.totalScore}
+              {scoreDetails.maxScore === 0 ? "—" : scoreDetails.totalScore}
             </div>
             <p className="text-sm text-brand-600/80 dark:text-brand-400/80">
-              / 990
+              / {scoreDetails.maxScore}
             </p>
           </div>
         </div>
@@ -207,15 +225,8 @@ const ToeicResult = () => {
               </p>
               <p className="font-bold text-neutral-900 dark:text-white">
                 {scoreDetails.listening.total + scoreDetails.reading.total > 0
-                  ? Math.round(
-                      ((scoreDetails.listening.correct +
-                        scoreDetails.reading.correct) /
-                        (scoreDetails.listening.total +
-                          scoreDetails.reading.total)) *
-                        100,
-                    )
-                  : 0}
-                %
+                  ? `${Math.round(((scoreDetails.listening.correct + scoreDetails.reading.correct) / (scoreDetails.listening.total + scoreDetails.reading.total)) * 100)}%`
+                  : "—"}
               </p>
             </div>
           </div>

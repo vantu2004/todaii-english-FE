@@ -132,7 +132,7 @@ const LyricsTable = ({ columns, lyrics, reloadLyrics, query, updateQuery }) => {
 
                 {/* ACTIONS */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-4">
                     <button
                       onClick={() => handleUpdateClick(i)}
                       className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition"

@@ -1,46 +1,30 @@
-import { Pencil, Trash2, Volume2, Image as ImageIcon } from "lucide-react";
+import { Pencil, Trash2, Eye, List, Info } from "lucide-react";
 import { useState } from "react";
 import DOMPurify from "dompurify";
+import Modal from "@/components/servers/Modal";
+import ToeicPassageDetails from "./ToeicPassageDetails";
 
-const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
-  const [playingId, setPlayingId] = useState(null);
-
-  const handlePlayAudio = async (passage) => {
-    const audioUrl =
-      passage.audioUrl ||
-      passage.audio_url ||
-      passage.audio_request?.uploaded_audio ||
-      passage.audio_request?.audio_url;
-    if (audioUrl) {
-      setPlayingId(passage.id);
-      try {
-        const audio = new Audio(audioUrl);
-        audio.onended = () => setPlayingId(null);
-        await audio.play();
-      } catch (err) {
-        console.error(err);
-        setPlayingId(null);
-      }
-    }
-  };
-
-  const getAudioUrl = (passage) => passage.audio_url;
-
-  const getImageUrl = (passage) => passage.image_url;
+const ToeicPassagesTable = ({
+  passages,
+  onEdit,
+  onDelete,
+  onManageQuestions,
+}) => {
+  const [detailPassage, setDetailPassage] = useState(null);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
       <div className="overflow-x-auto">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-left text-xs font-semibold text-gray-500">
               <th className="px-6 py-4 w-16">ID</th>
-              <th className="px-6 py-4 min-w-[200px]">
+              <th className="px-6 py-4 min-w-[250px]">
                 Passage Text (Preview)
               </th>
-              <th className="px-6 py-4 min-w-[200px]">Passage Translation</th>
-              <th className="px-6 py-4">Media</th>
-              <th className="px-6 py-4 w-24">Actions</th>
+              <th className="px-6 py-4 min-w-[250px]">Passage Translation</th>
+              <th className="px-6 py-4 w-32">Questions</th>
+              <th className="px-6 py-4 w-28">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -54,7 +38,7 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                   <div
-                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    className="truncate max-w-xs line-clamp-2 prose dark:prose-invert prose-sm text-ellipsis overflow-hidden"
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageText ||
@@ -66,7 +50,7 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                   <div
-                    className="truncate max-w-xs line-clamp-3 prose dark:prose-invert prose-sm"
+                    className="truncate max-w-xs line-clamp-2 prose dark:prose-invert prose-sm text-ellipsis overflow-hidden"
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(
                         passage.passageTrans ||
@@ -76,50 +60,40 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
                     }}
                   />
                 </td>
-                <td className="px-6 py-4 text-sm">
-                  <div className="flex gap-2 items-center">
-                    {getImageUrl(passage) && (
-                      <ImageIcon
-                        size={18}
-                        className="text-blue-500"
-                        title="Has Image"
-                      />
-                    )}
-                    {getAudioUrl(passage) && (
-                      <button
-                        onClick={() => handlePlayAudio(passage)}
-                        disabled={playingId === passage.id}
-                        className="text-purple-500 hover:text-purple-700 transition"
-                        title="Play Audio"
-                      >
-                        <Volume2
-                          size={18}
-                          className={
-                            playingId === passage.id ? "animate-pulse" : ""
-                          }
-                        />
-                      </button>
-                    )}
-                    {!getImageUrl(passage) && !getAudioUrl(passage) && (
-                      <span className="text-gray-400 italic text-xs">None</span>
-                    )}
-                  </div>
+                <td className="px-6 py-4 text-sm font-semibold">
+                  <button
+                    onClick={() =>
+                      onManageQuestions && onManageQuestions(passage)
+                    }
+                    className="flex items-center gap-1.5 text-blue-600 hover:text-blue-800 transition font-bold"
+                    title="Manage Questions"
+                  >
+                    <List size={18} />
+                    Questions ({passage.questions?.length || 0})
+                  </button>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <button
+                      onClick={() => setDetailPassage(passage)}
+                      className="text-blue-600 hover:text-blue-800 transition"
+                      title="View Detail"
+                    >
+                      <Eye size={18} />
+                    </button>
+                    <button
                       onClick={() => onEdit(passage)}
-                      className="text-yellow-600 hover:text-yellow-800 transition"
+                      className="text-gray-400 hover:text-gray-700 transition"
                       title="Edit"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
                     </button>
                     <button
                       onClick={() => onDelete(passage.id)}
-                      className="text-red-600 hover:text-red-800 transition"
+                      className="text-red-500 hover:text-red-700 transition"
                       title="Delete"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>
@@ -138,6 +112,41 @@ const ToeicPassagesTable = ({ passages, onEdit, onDelete }) => {
           </tbody>
         </table>
       </div>
+
+      {detailPassage && (
+        <Modal
+          isOpen={true}
+          onClose={() => setDetailPassage(null)}
+          width="sm:max-w-4xl"
+          title={
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
+                <Info className="text-blue-600" size={24} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Passage Details
+                </h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Detailed preview of the passage content
+                </p>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDetailPassage(null)}
+                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <ToeicPassageDetails passage={detailPassage} />
+        </Modal>
+      )}
     </div>
   );
 };

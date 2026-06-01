@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Modal from "@/components/servers/Modal";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -21,6 +21,8 @@ import {
   createPart34567Question,
   updatePart34567Question,
 } from "@/api/servers/toeicQuestionApi";
+import { fetchAllToeicTags } from "@/api/servers/toeicTagApi";
+import { getPassagesByPartNumber } from "@/api/servers/toeicPassageApi";
 import { logError } from "@/utils/LogError";
 import toast from "react-hot-toast";
 
@@ -32,6 +34,7 @@ const ToeicQuestionFormModal = ({
   testId,
   passages,
   tags,
+  defaultPassageId,
   onSuccess,
 }) => {
   const isUpdate = !!initialData;
@@ -39,11 +42,46 @@ const ToeicQuestionFormModal = ({
   const isPart5 = partNumber === 5;
   const isPart6 = partNumber === 6;
 
+  const [localTags, setLocalTags] = useState([]);
+  const [localPassages, setLocalPassages] = useState([]);
+  const [isLoadingDynamic, setIsLoadingDynamic] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const loadDynamicData = async () => {
+        setIsLoadingDynamic(true);
+        try {
+          const fetchedTags = await fetchAllToeicTags();
+          setLocalTags(fetchedTags);
+
+          if (!isPart12 && !isPart5) {
+            const fetchedPassages = await getPassagesByPartNumber(
+              testId,
+              partNumber,
+            );
+            setLocalPassages(fetchedPassages);
+          }
+        } catch (err) {
+          logError(err);
+        } finally {
+          setIsLoadingDynamic(false);
+        }
+      };
+      loadDynamicData();
+    }
+  }, [isOpen, testId, partNumber, isPart12, isPart5]);
+
   const filteredTags = useMemo(() => {
-    return tags.filter(
-      (tag) => tag.part_number === partNumber || tag.partNumber === partNumber,
-    );
-  }, [tags, partNumber]);
+    return localTags.filter((tag) => {
+      const tagPart = tag.part_number;
+      return (
+        tagPart === null ||
+        tagPart === undefined ||
+        tagPart === "" ||
+        Number(tagPart) === Number(partNumber)
+      );
+    });
+  }, [localTags, partNumber]);
 
   const [formData, setFormData] = useState({
     transcript: "",
@@ -66,8 +104,33 @@ const ToeicQuestionFormModal = ({
   const [isDeletingAudio, setIsDeletingAudio] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isSavedRef = useRef(false);
+  const uploadedUrlsRef = useRef({ image: "", audio: "" });
+  const initialUrlsRef = useRef({ image: "", audio: "" });
+
+  useEffect(() => {
+    return () => {
+      if (!isSavedRef.current) {
+        const { image, audio } = uploadedUrlsRef.current;
+        if (image && image.includes("cloudinary")) {
+          deleteToeicTestFile(image).catch((err) =>
+            console.error("Error cleaning up image:", err),
+          );
+        }
+        if (audio && audio.includes("cloudinary")) {
+          deleteToeicTestFile(audio).catch((err) =>
+            console.error("Error cleaning up audio:", err),
+          );
+        }
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (initialData) {
+      const img = initialData.uploaded_image || initialData.image_url || "";
+      const aud = initialData.uploaded_audio || initialData.audio_url || "";
+      initialUrlsRef.current = { image: img, audio: aud };
       setFormData({
         transcript: initialData.transcript || "",
         question: initialData.question || "",
@@ -79,10 +142,11 @@ const ToeicQuestionFormModal = ({
         explanation: initialData.explanation || "",
         passageId: initialData.passage_id || "",
         tagIds: initialData.tags?.map((t) => t.id) || initialData.tag_ids || [],
-        imageUrl: initialData.uploaded_image || initialData.image_url || "",
-        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
+        imageUrl: img,
+        audioUrl: aud,
       });
     } else {
+      initialUrlsRef.current = { image: "", audio: "" };
       setFormData({
         transcript: "",
         question: "",
@@ -92,13 +156,15 @@ const ToeicQuestionFormModal = ({
         optionD: "",
         correctAns: "A",
         explanation: "",
-        passageId: passages?.length > 0 ? passages[0].id : "",
+        passageId:
+          defaultPassageId ||
+          (localPassages?.length > 0 ? localPassages[0].id : ""),
         tagIds: [],
         imageUrl: "",
         audioUrl: "",
       });
     }
-  }, [initialData, passages]);
+  }, [initialData, localPassages, defaultPassageId, isOpen]);
 
   const handleUploadFile = async (e, type) => {
     const file = e.target.files[0];
@@ -113,6 +179,7 @@ const ToeicQuestionFormModal = ({
         ...prev,
         [type === "image" ? "imageUrl" : "audioUrl"]: url,
       }));
+      uploadedUrlsRef.current[type] = url;
       toast.success(
         `${type === "image" ? "Image" : "Audio"} uploaded successfully!`,
       );
@@ -134,8 +201,12 @@ const ToeicQuestionFormModal = ({
     else setIsDeletingAudio(true);
 
     try {
-      if (url.includes("cloudinary")) {
-        await deleteToeicTestFile(url);
+      // Only delete from Cloudinary immediately if it was newly uploaded in this session
+      if (url === uploadedUrlsRef.current[type]) {
+        if (url.includes("cloudinary")) {
+          await deleteToeicTestFile(url);
+        }
+        uploadedUrlsRef.current[type] = "";
       }
       setFormData((prev) => ({
         ...prev,
@@ -190,20 +261,24 @@ const ToeicQuestionFormModal = ({
           explanation: formData.explanation,
           tag_ids: formData.tagIds,
           image_request: {
-            uploaded_image: formData.imageUrl?.includes("cloudinary")
-              ? formData.imageUrl
-              : "",
-            image_url: !formData.imageUrl?.includes("cloudinary")
-              ? formData.imageUrl
-              : "",
+            uploaded_image:
+              formData.imageUrl && formData.imageUrl.includes("cloudinary")
+                ? formData.imageUrl
+                : null,
+            image_url:
+              formData.imageUrl && !formData.imageUrl.includes("cloudinary")
+                ? formData.imageUrl
+                : null,
           },
           audio_request: {
-            uploaded_audio: formData.audioUrl?.includes("cloudinary")
-              ? formData.audioUrl
-              : "",
-            audio_url: !formData.audioUrl?.includes("cloudinary")
-              ? formData.audioUrl
-              : "",
+            uploaded_audio:
+              formData.audioUrl && formData.audioUrl.includes("cloudinary")
+                ? formData.audioUrl
+                : null,
+            audio_url:
+              formData.audioUrl && !formData.audioUrl.includes("cloudinary")
+                ? formData.audioUrl
+                : null,
           },
         };
 
@@ -237,6 +312,27 @@ const ToeicQuestionFormModal = ({
           toast.success("Question created successfully");
         }
       }
+      isSavedRef.current = true;
+      const { image: initialImage, audio: initialAudio } =
+        initialUrlsRef.current;
+      if (
+        initialImage &&
+        initialImage !== formData.imageUrl &&
+        initialImage.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialImage).catch((err) =>
+          console.error("Error deleting old image:", err),
+        );
+      }
+      if (
+        initialAudio &&
+        initialAudio !== formData.audioUrl &&
+        initialAudio.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialAudio).catch((err) =>
+          console.error("Error deleting old audio:", err),
+        );
+      }
       onSuccess();
     } catch (err) {
       logError(err);
@@ -259,14 +355,14 @@ const ToeicQuestionFormModal = ({
         <div className="flex justify-end gap-3 w-full">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+            className="px-5 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <Save size={18} />
             {isSubmitting ? "Saving..." : "Save Question"}
@@ -274,13 +370,12 @@ const ToeicQuestionFormModal = ({
         </div>
       }
     >
-      <form className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+      <form className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* PASSAGE SELECTION (Part 3, 4, 6, 7) */}
           {!isPart12 && !isPart5 && (
             <div className="md:col-span-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                <AlignLeft size={16} className="text-blue-600" />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Select Passage <span className="text-red-500">*</span>
               </label>
               <select
@@ -288,10 +383,11 @@ const ToeicQuestionFormModal = ({
                 value={formData.passageId}
                 onChange={handleChange}
                 required
+                disabled={!!defaultPassageId}
                 className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
               >
                 <option value="">-- Select a passage --</option>
-                {passages?.map((p) => (
+                {localPassages?.map((p) => (
                   <option key={p.id} value={p.id}>
                     Passage #{p.id} - {p.passageText?.substring(0, 50)}...
                   </option>
@@ -303,8 +399,7 @@ const ToeicQuestionFormModal = ({
           {/* QUESTION TEXT */}
           {!isPart12 && (
             <div className="md:col-span-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                <FileText size={16} className="text-blue-600" />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Question Text{" "}
                 {!isPart6 && <span className="text-red-500">*</span>}
               </label>
@@ -314,7 +409,7 @@ const ToeicQuestionFormModal = ({
                 onChange={handleChange}
                 rows={3}
                 required={!isPart6}
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none"
               />
             </div>
           )}
@@ -322,8 +417,7 @@ const ToeicQuestionFormModal = ({
           {/* TRANSCRIPT (Part 1, 2) */}
           {isPart12 && (
             <div className="md:col-span-2">
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                <FileText size={16} className="text-blue-600" />
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Transcript <span className="text-red-500">*</span>
               </label>
               <ReactQuill
@@ -341,7 +435,7 @@ const ToeicQuestionFormModal = ({
           {!isPart12 && (
             <>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Option A <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -350,11 +444,11 @@ const ToeicQuestionFormModal = ({
                   value={formData.optionA}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Option B <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -363,11 +457,11 @@ const ToeicQuestionFormModal = ({
                   value={formData.optionB}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Option C <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -376,11 +470,11 @@ const ToeicQuestionFormModal = ({
                   value={formData.optionC}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Option D <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -389,7 +483,7 @@ const ToeicQuestionFormModal = ({
                   value={formData.optionD}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none"
                 />
               </div>
             </>
@@ -397,15 +491,14 @@ const ToeicQuestionFormModal = ({
 
           {/* CORRECT ANSWER */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              <CheckSquare size={16} className="text-green-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Correct Answer <span className="text-red-500">*</span>
             </label>
             <select
-              name="correct_ans"
+              name="correctAns"
               value={formData.correctAns}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:bg-gray-700 dark:text-white outline-none font-bold"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none font-bold"
             >
               <option value="A">A</option>
               <option value="B">B</option>
@@ -416,21 +509,20 @@ const ToeicQuestionFormModal = ({
 
           {/* TAGS */}
           <div className="md:col-span-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              <Tags size={16} className="text-blue-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags (Select up to 5) <span className="text-red-500">*</span>
             </label>
             <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-750">
               {filteredTags.map((tag) => (
                 <label
                   key={tag.id}
-                  className="flex items-center gap-2 cursor-pointer bg-white dark:bg-gray-800 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600 hover:border-blue-400 transition"
+                  className="flex items-center gap-2 cursor-pointer bg-white dark:bg-gray-800 px-3 py-1.5 rounded-md border border-gray-200 dark:border-gray-600 hover:border-gray-300 transition"
                 >
                   <input
                     type="checkbox"
                     checked={formData.tagIds.includes(tag.id)}
                     onChange={() => toggleTag(tag.id)}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                    className="w-4 h-4 text-gray-900 rounded focus:ring-gray-900/10"
                   />
                   <span className="text-sm text-gray-700 dark:text-gray-300">
                     {tag.name}
@@ -452,8 +544,7 @@ const ToeicQuestionFormModal = ({
 
           {/* EXPLANATION */}
           <div className="md:col-span-2">
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              <FileText size={16} className="text-gray-600" />
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Explanation <span className="text-red-500">*</span>
             </label>
             <ReactQuill
@@ -471,26 +562,26 @@ const ToeicQuestionFormModal = ({
             <>
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    <ImageIcon size={16} className="text-blue-600" />
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Image URL{" "}
                     {partNumber === 1 && (
                       <span className="text-red-500">*</span>
                     )}
                   </label>
                   <div className="flex gap-2 items-center">
-                    <label
-                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
-                    >
-                      {isUploadingImage ? "Uploading..." : "Upload Image"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => handleUploadFile(e, "image")}
-                      />
-                    </label>
-                    {formData.imageUrl?.includes("cloudinary") && (
+                    {!formData.imageUrl?.includes("cloudinary") ? (
+                      <label
+                        className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
+                      >
+                        {isUploadingImage ? "Uploading..." : "Upload Image"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleUploadFile(e, "image")}
+                        />
+                      </label>
+                    ) : (
                       <button
                         type="button"
                         onClick={() => handleDeleteFile("image")}
@@ -508,7 +599,7 @@ const ToeicQuestionFormModal = ({
                   value={formData.imageUrl}
                   onChange={handleChange}
                   placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
                   disabled={formData.imageUrl?.includes("cloudinary")}
                   required={partNumber === 1}
                 />
@@ -526,23 +617,23 @@ const ToeicQuestionFormModal = ({
 
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    <FileAudio size={16} className="text-blue-600" />
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Audio URL <span className="text-red-500">*</span>
                   </label>
                   <div className="flex gap-2 items-center">
-                    <label
-                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
-                    >
-                      {isUploadingAudio ? "Uploading..." : "Upload Audio"}
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="hidden"
-                        onChange={(e) => handleUploadFile(e, "audio")}
-                      />
-                    </label>
-                    {formData.audioUrl?.includes("cloudinary") && (
+                    {!formData.audioUrl?.includes("cloudinary") ? (
+                      <label
+                        className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
+                      >
+                        {isUploadingAudio ? "Uploading..." : "Upload Audio"}
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          className="hidden"
+                          onChange={(e) => handleUploadFile(e, "audio")}
+                        />
+                      </label>
+                    ) : (
                       <button
                         type="button"
                         onClick={() => handleDeleteFile("audio")}
@@ -560,7 +651,7 @@ const ToeicQuestionFormModal = ({
                   value={formData.audioUrl}
                   onChange={handleChange}
                   placeholder="https://example.com/audio.mp3"
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:text-white outline-none mb-3"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
                   disabled={formData.audioUrl?.includes("cloudinary")}
                   required
                 />

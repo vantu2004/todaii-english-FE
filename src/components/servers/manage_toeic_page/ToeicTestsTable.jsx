@@ -119,7 +119,7 @@ const ToeicTestsTable = ({
                     key={col.key}
                     className={`px-4 py-3 ${
                       isSortable
-                        ? "cursor-pointer select-none hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        ? "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                         : ""
                     }`}
                     onClick={() => {
@@ -142,9 +142,9 @@ const ToeicTestsTable = ({
                       {isSortable && isActiveSort && (
                         <span className="inline-flex items-center">
                           {query.direction === "asc" ? (
-                            <ArrowUp className="w-3 h-3 text-blue-600" />
+                            <ArrowUp className="w-3 h-3 text-gray-900" />
                           ) : (
-                            <ArrowDown className="w-3 h-3 text-blue-600" />
+                            <ArrowDown className="w-3 h-3 text-gray-900" />
                           )}
                         </span>
                       )}
@@ -159,7 +159,7 @@ const ToeicTestsTable = ({
             {tests.map((item, i) => (
               <tr
                 key={i}
-                className="border-t border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
               >
                 <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                 <td className="px-4 py-3 text-sm font-medium">{item.title}</td>
@@ -172,7 +172,7 @@ const ToeicTestsTable = ({
                     <button
                       onClick={() => handlePlayAudio(i, getAudioUrl(item))}
                       disabled={playingIndex === i}
-                      className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition"
+                      className="flex items-center gap-1 text-gray-500 hover:text-gray-700 transition"
                     >
                       <Volume2 className="w-5 h-5" />
                       {playingIndex === i ? "Playing..." : "Play"}
@@ -194,37 +194,37 @@ const ToeicTestsTable = ({
                 </td>
 
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
+                  <div className="flex items-center space-x-4 text-sm">
                     <button
                       onClick={() => onManageContent(item)}
-                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
                       title="Manage Content"
                     >
-                      <List className="w-5 h-5" />
+                      <List className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-3 text-sm">
+                  <div className="flex items-center space-x-4 text-sm">
                     <button
                       onClick={() => handleMetadataClick(i)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
                       title="View Metadata"
                     >
-                      <Eye className="w-5 h-5" />
+                      <Eye className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onEdit(item)}
-                      className="p-2 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
                       title="Edit Test"
                     >
-                      <Pencil className="w-5 h-5" />
+                      <Pencil className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-red-600 hover:text-red-700 rounded-lg transition-colors"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </td>
@@ -261,16 +261,10 @@ const ToeicTestsTable = ({
           width="sm:max-w-5xl"
           title={
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
-                <Info className="text-blue-600" size={24} />
-              </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-lg font-semibold text-gray-900">
                   Test Details
                 </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  Detailed information about the test
-                </p>
               </div>
             </div>
           }
@@ -278,7 +272,7 @@ const ToeicTestsTable = ({
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setMetadataIndex(null)}
-                className="px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all"
+                className="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
               >
                 Close
               </button>

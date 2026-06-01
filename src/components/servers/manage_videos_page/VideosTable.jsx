@@ -230,7 +230,7 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
 
                     <button
                       onClick={() => handleDeleteClick(i)}
-                      className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                      className="p-2 text-gray-400 hover:text-red-700 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

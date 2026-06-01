@@ -338,12 +338,13 @@ const Sidebar = () => {
               to="/server/my-dashboard"
               className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300"
             >
-              <BarChart3 size={14} /> Dashboard
+              <BarChart3 size={14} />
+              Dashboard
             </Link>
           </div>
           <button
             onClick={() => handleLogout(authUser?.email)}
-            disabled={loading} // Thêm w-full để chiếm hết chiều rộng và đổi màu nền
+            disabled={loading}
             className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg text-xs font-medium text-red-600 dark:text-red-400"
           >
             {loading ? (

@@ -25,6 +25,7 @@ const ManageToeicTags = () => {
     keyword: "",
     sortBy: "id",
     direction: "desc",
+    partFilter: "",
   });
 
   const columns = [
@@ -92,9 +93,15 @@ const ManageToeicTags = () => {
     }
   };
 
-  let filteredTags = tags.filter((t) =>
-    t.name.toLowerCase().includes(query.keyword.toLowerCase()),
-  );
+  let filteredTags = tags.filter((t) => {
+    const matchesKeyword = t.name
+      .toLowerCase()
+      .includes(query.keyword.toLowerCase());
+    const matchesPart =
+      !query.partFilter ||
+      String(t.partNumber || t.part_number) === String(query.partFilter);
+    return matchesKeyword && matchesPart;
+  });
 
   if (query.sortBy) {
     filteredTags.sort((a, b) => {
@@ -116,14 +123,29 @@ const ManageToeicTags = () => {
         <ToolBar
           updateQuery={updateQuery}
           setIsModalOpen={() => handleOpenModal()}
-        />
+        >
+          <select
+            value={query.partFilter}
+            onChange={(e) => updateQuery({ partFilter: e.target.value })}
+            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:text-white"
+          >
+            <option value="">All Parts</option>
+            <option value="1">Part 1</option>
+            <option value="2">Part 2</option>
+            <option value="3">Part 3</option>
+            <option value="4">Part 4</option>
+            <option value="5">Part 5</option>
+            <option value="6">Part 6</option>
+            <option value="7">Part 7</option>
+          </select>
+        </ToolBar>
 
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.5 }}
-          className="flex-1 overflow-hidden border border-gray-300 rounded-lg shadow-sm"
+          className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
         >
           <ToeicTagsTable
             columns={columns}

@@ -226,18 +226,18 @@ const VocabGroupsTable = ({
 
                   {/* Actions */}
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       {isEditing ? (
                         <>
                           <button
                             onClick={() => handleSaveEdit(i)}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-green-700 rounded-lg transition-colors"
                           >
                             <Check className="w-4 h-4" />
                           </button>
                           <button
                             onClick={handleCancelEdit}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-red-700 rounded-lg transition-colors"
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -252,7 +252,7 @@ const VocabGroupsTable = ({
                           </button>
                           <button
                             onClick={() => handleDeleteClick(i)}
-                            className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-red-700 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

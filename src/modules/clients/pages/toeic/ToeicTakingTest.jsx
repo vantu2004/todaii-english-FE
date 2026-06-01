@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   getToeicTestById,
   getQuestionsByPartNumber,
@@ -39,23 +39,78 @@ const PARTS = [
   },
 ];
 
+const calculateInitialTime = (partIds) => {
+  const timeMapping = {
+    1: 6 * 27, // 162s
+    2: 25 * 27, // 675s
+    3: 39 * 27, // 1053s
+    4: 30 * 27, // 810s
+    5: 30 * 45, // 1350s
+    6: 16 * 45, // 720s
+    7: 54 * 45, // 2430s
+  };
+  let totalSeconds = 0;
+  partIds.forEach((id) => {
+    totalSeconds += timeMapping[id] || 0;
+  });
+  return totalSeconds;
+};
+
 const ToeicTakingTest = () => {
   const { testId } = useParams();
   const navigate = useNavigate();
+  const { search } = useLocation();
+
+  const selectedPartIds = useMemo(() => {
+    const params = new URLSearchParams(search);
+    const p = params.get("parts");
+    if (p) {
+      const ids = p
+        .split(",")
+        .map(Number)
+        .filter((id) => id >= 1 && id <= 7);
+      if (ids.length > 0) return ids;
+    }
+    return [1, 2, 3, 4, 5, 6, 7];
+  }, [search]);
 
   const [test, setTest] = useState(null);
   const [testData, setTestData] = useState({ questions: {}, passages: {} }); // partId -> data
   const [loading, setLoading] = useState(true);
-  const [currentPart, setCurrentPart] = useState(1);
+
+  const [currentPart, setCurrentPart] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get("parts");
+    if (p) {
+      const ids = p
+        .split(",")
+        .map(Number)
+        .filter((id) => id >= 1 && id <= 7);
+      if (ids.length > 0) return ids[0];
+    }
+    return 1;
+  });
+
   const [answers, setAnswers] = useState({}); // questionId -> answer ('A', 'B', 'C', 'D')
 
-  const [timeLeft, setTimeLeft] = useState(120 * 60); // 120 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get("parts");
+    const ids = p
+      ? p
+          .split(",")
+          .map(Number)
+          .filter((id) => id >= 1 && id <= 7)
+      : [1, 2, 3, 4, 5, 6, 7];
+    return calculateInitialTime(ids.length > 0 ? ids : [1, 2, 3, 4, 5, 6, 7]);
+  });
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchTestAllData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [testId]);
+  }, [testId, search]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -77,18 +132,20 @@ const ToeicTakingTest = () => {
       const allQuestions = {};
       const allPassages = {};
 
-      // Fetch all parts concurrently
+      // Fetch only selected parts concurrently
       await Promise.all(
-        PARTS.map(async (part) => {
-          const [questionsRes, passagesRes] = await Promise.all([
-            getQuestionsByPartNumber(testId, part.id).catch(() => []),
-            part.hasPassage
-              ? getPassagesByPartNumber(testId, part.id).catch(() => [])
-              : Promise.resolve([]),
-          ]);
-          allQuestions[part.id] = questionsRes || [];
-          allPassages[part.id] = passagesRes || [];
-        }),
+        PARTS.filter((part) => selectedPartIds.includes(part.id)).map(
+          async (part) => {
+            const [questionsRes, passagesRes] = await Promise.all([
+              getQuestionsByPartNumber(testId, part.id).catch(() => []),
+              part.hasPassage
+                ? getPassagesByPartNumber(testId, part.id).catch(() => [])
+                : Promise.resolve([]),
+            ]);
+            allQuestions[part.id] = questionsRes || [];
+            allPassages[part.id] = passagesRes || [];
+          },
+        ),
       );
 
       setTestData({ questions: allQuestions, passages: allPassages });
@@ -115,13 +172,15 @@ const ToeicTakingTest = () => {
       if (!confirmSubmit) return;
     }
 
+    const initialTime = calculateInitialTime(selectedPartIds);
     // Store result in local storage or state to pass to result page
     const resultData = {
       testId,
-      testName: test?.name,
+      testName: test?.title,
       answers,
       testData,
-      timeSpent: 120 * 60 - timeLeft,
+      timeSpent: initialTime - timeLeft,
+      selectedPartIds,
     };
 
     localStorage.setItem(`toeic_result_${testId}`, JSON.stringify(resultData));
@@ -134,8 +193,62 @@ const ToeicTakingTest = () => {
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
+  const listeningParts = useMemo(() => {
+    return PARTS.slice(0, 4).filter((part) =>
+      selectedPartIds.includes(part.id),
+    );
+  }, [selectedPartIds]);
+
+  const readingParts = useMemo(() => {
+    return PARTS.slice(4, 7).filter((part) =>
+      selectedPartIds.includes(part.id),
+    );
+  }, [selectedPartIds]);
+
+  const totalQuestionsCount = useMemo(() => {
+    const questionCountMapping = {
+      1: 6,
+      2: 25,
+      3: 39,
+      4: 30,
+      5: 30,
+      6: 16,
+      7: 54,
+    };
+    return selectedPartIds.reduce(
+      (acc, id) => acc + (questionCountMapping[id] || 0),
+      0,
+    );
+  }, [selectedPartIds]);
+
   const calculateTotalAnswered = () => {
-    return Object.keys(answers).length;
+    let count = 0;
+    selectedPartIds.forEach((partId) => {
+      const questions = testData.questions[partId] || [];
+      questions.forEach((q) => {
+        if (answers[q.id]) {
+          count++;
+        }
+      });
+    });
+    return count;
+  };
+
+  const currentPartIndex = selectedPartIds.indexOf(currentPart);
+  const hasPreviousPart = currentPartIndex > 0;
+  const hasNextPart =
+    currentPartIndex !== -1 && currentPartIndex < selectedPartIds.length - 1;
+
+  const handlePreviousPart = () => {
+    if (hasPreviousPart) {
+      setCurrentPart(selectedPartIds[currentPartIndex - 1]);
+    }
+  };
+
+  const handleNextPart = () => {
+    if (hasNextPart) {
+      setCurrentPart(selectedPartIds[currentPartIndex + 1]);
+    }
   };
 
   // Render question UI based on part
@@ -154,10 +267,10 @@ const ToeicTakingTest = () => {
             {index + 1}
           </div>
           <div className="flex-1">
-            {q.question_content && (
+            {q.question && (
               <p
                 className="text-neutral-900 dark:text-white font-medium mb-3 text-lg"
-                dangerouslySetInnerHTML={{ __html: q.question_content }}
+                dangerouslySetInnerHTML={{ __html: q.question }}
               />
             )}
 
@@ -224,7 +337,7 @@ const ToeicTakingTest = () => {
 
     const currentPartInfo = PARTS.find((p) => p.id === currentPart);
 
-    if (currentPartInfo.hasPassage) {
+    if (currentPartInfo?.hasPassage) {
       // Render passages and their associated questions
       return passages.map((passage, pIndex) => {
         // Find questions belonging to this passage
@@ -255,10 +368,10 @@ const ToeicTakingTest = () => {
                 ></audio>
               )}
 
-              {passage.content && (
+              {passage.passage_text && (
                 <div
                   className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200"
-                  dangerouslySetInnerHTML={{ __html: passage.content }}
+                  dangerouslySetInnerHTML={{ __html: passage.passage_text }}
                 />
               )}
             </div>
@@ -289,18 +402,19 @@ const ToeicTakingTest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col pt-[68px]">
+    <div className="h-[calc(100vh-68px)] bg-neutral-50 dark:bg-neutral-950 flex flex-col mt-[68px]">
       {/* Header */}
       <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3 px-4 sm:px-6 flex items-center justify-between sticky top-[68px] z-40">
         <div className="flex items-center gap-3">
           <button
+            type="button"
             className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <Menu size={20} />
           </button>
           <h1 className="text-lg font-bold text-neutral-900 dark:text-white truncate max-w-[200px] md:max-w-md">
-            {test?.name}
+            {test?.title}
           </h1>
         </div>
 
@@ -308,7 +422,7 @@ const ToeicTakingTest = () => {
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm font-medium">
             <CheckCircle2 size={16} className="text-brand-500" />
             <span className="text-neutral-700 dark:text-neutral-300">
-              {calculateTotalAnswered()} / 200 đã làm
+              {calculateTotalAnswered()} / {totalQuestionsCount} đã làm
             </span>
           </div>
 
@@ -337,49 +451,59 @@ const ToeicTakingTest = () => {
         `}
         >
           <div className="p-4">
-            <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
-              Phần Nghe (Listening)
-            </h2>
-            <div className="space-y-1 mb-6">
-              {PARTS.slice(0, 4).map((part) => (
-                <button
-                  key={part.id}
-                  onClick={() => {
-                    setCurrentPart(part.id);
-                    setIsSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                    currentPart === part.id
-                      ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                  }`}
-                >
-                  <span className="truncate pr-2">{part.name}</span>
-                </button>
-              ))}
-            </div>
+            {listeningParts.length > 0 && (
+              <>
+                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
+                  Phần Nghe (Listening)
+                </h2>
+                <div className="space-y-1 mb-6">
+                  {listeningParts.map((part) => (
+                    <button
+                      key={part.id}
+                      type="button"
+                      onClick={() => {
+                        setCurrentPart(part.id);
+                        setIsSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                        currentPart === part.id
+                          ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
+                      }`}
+                    >
+                      <span className="truncate pr-2">{part.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
 
-            <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
-              Phần Đọc (Reading)
-            </h2>
-            <div className="space-y-1">
-              {PARTS.slice(4, 7).map((part) => (
-                <button
-                  key={part.id}
-                  onClick={() => {
-                    setCurrentPart(part.id);
-                    setIsSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                    currentPart === part.id
-                      ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                  }`}
-                >
-                  <span className="truncate pr-2">{part.name}</span>
-                </button>
-              ))}
-            </div>
+            {readingParts.length > 0 && (
+              <>
+                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
+                  Phần Đọc (Reading)
+                </h2>
+                <div className="space-y-1">
+                  {readingParts.map((part) => (
+                    <button
+                      key={part.id}
+                      type="button"
+                      onClick={() => {
+                        setCurrentPart(part.id);
+                        setIsSidebarOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                        currentPart === part.id
+                          ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
+                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
+                      }`}
+                    >
+                      <span className="truncate pr-2">{part.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -405,21 +529,23 @@ const ToeicTakingTest = () => {
             {/* Bottom Navigation */}
             <div className="fixed bottom-0 left-0 lg:left-64 right-0 p-4 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center z-10">
               <button
-                disabled={currentPart === 1}
-                onClick={() => setCurrentPart((prev) => prev - 1)}
+                type="button"
+                disabled={!hasPreviousPart}
+                onClick={handlePreviousPart}
                 className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft size={18} />
                 <span className="hidden sm:inline">Phần trước</span>
               </button>
 
-              <div className="text-sm font-medium text-neutral-500">
-                Phần {currentPart} / 7
+              <div className="text-sm font-medium text-neutral-500 font-semibold">
+                Phần {currentPartIndex + 1} / {selectedPartIds.length}
               </div>
 
               <button
-                disabled={currentPart === 7}
-                onClick={() => setCurrentPart((prev) => prev + 1)}
+                type="button"
+                disabled={!hasNextPart}
+                onClick={handleNextPart}
                 className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <span className="hidden sm:inline">Phần tiếp</span>

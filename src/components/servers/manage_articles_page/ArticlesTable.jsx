@@ -210,7 +210,7 @@ const ArticlesTable = ({
                 </td>
 
                 <td className="px-4 py-3">
-                  <div className="flex items-center text-sm space-x-2">
+                  <div className="flex items-center text-sm space-x-4">
                     <button
                       onClick={() => handleViewClick(i)}
                       className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"

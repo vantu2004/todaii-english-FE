@@ -254,7 +254,7 @@ const AdminsTable = ({ columns, admins, reloadAdmins, query, updateQuery }) => {
                     </button>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-1 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       <button
                         onClick={() => handleViewClick(i)}
                         className="p-1 text-gray-400 hover:text-gray-700 dark:hover:text-white"
