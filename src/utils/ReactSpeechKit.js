@@ -1,4 +1,4 @@
-import { playAudio } from "./PlayAudio";
+import { playAudio } from "./playAudio";
 
 let voices = [];
 

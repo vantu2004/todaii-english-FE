@@ -1,5 +1,5 @@
 import { Search, Volume2, Eye } from "lucide-react";
-import { playAudioWithEvent } from "@/utils/PlayAudio";
+import { playAudioWithEvent } from "@/utils/playAudio";
 import { parseDictionaryWord } from "@/utils/wordParser";
 
 const DictionaryWordsList = ({
