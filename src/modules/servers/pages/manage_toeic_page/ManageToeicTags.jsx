@@ -32,7 +32,7 @@ const ManageToeicTags = () => {
     { key: "id", label: "ID", sortField: "id" },
     { key: "name", label: "Tag Name", sortField: "name" },
     { key: "alias", label: "Alias", sortField: "alias" },
-    { key: "part_number", label: "Part Number", sortField: "part_number" },
+    { key: "partNumbers", label: "Part Numbers", sortField: "partNumbers" },
     { key: "actions", label: "Actions" },
   ];
 
@@ -72,9 +72,9 @@ const ManageToeicTags = () => {
     setEditingTag(null);
   };
 
-  const handleSubmit = async (name, partNumber) => {
+  const handleSubmit = async (name, partNumbers) => {
     try {
-      await createToeicTag(name, partNumber);
+      await createToeicTag(name, partNumbers);
       toast.success("Tag created successfully");
       await reloadTags();
       handleCloseModal();
@@ -83,9 +83,9 @@ const ManageToeicTags = () => {
     }
   };
 
-  const handleSaveEdit = async (id, newName, newPartNumber) => {
+  const handleSaveEdit = async (id, newName, newPartNumbers) => {
     try {
-      await updateToeicTag(id, newName, newPartNumber);
+      await updateToeicTag(id, newName, newPartNumbers);
       toast.success("Tag updated successfully");
       await reloadTags();
     } catch (error) {
@@ -97,9 +97,14 @@ const ManageToeicTags = () => {
     const matchesKeyword = t.name
       .toLowerCase()
       .includes(query.keyword.toLowerCase());
+    const partNumbersStr =
+      t.partNumbers || t.part_numbers || t.partNumber || t.part_number || "";
     const matchesPart =
       !query.partFilter ||
-      String(t.partNumber || t.part_number) === String(query.partFilter);
+      partNumbersStr
+        .split(",")
+        .map((p) => p.trim())
+        .includes(String(query.partFilter));
     return matchesKeyword && matchesPart;
   });
 
