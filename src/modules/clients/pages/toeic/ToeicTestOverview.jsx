@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getToeicTestById } from "@/api/clients/toeicApi";
+import { getTestById } from "@/api/clients/toeicTestApi";
 import {
   ArrowLeft,
   BookOpen,
@@ -91,7 +91,7 @@ const ToeicTestOverview = () => {
     const fetchTestDetails = async () => {
       try {
         setLoading(true);
-        const data = await getToeicTestById(testId);
+        const data = await getTestById(testId);
         setTest(data);
       } catch (err) {
         console.error("Failed to fetch test details", err);
@@ -162,7 +162,9 @@ const ToeicTestOverview = () => {
             <div className="flex flex-wrap items-center gap-4 text-neutral-600 dark:text-neutral-300 mb-8">
               <div className="flex items-center gap-2 px-4 py-2 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
                 <Clock className="text-brand-500" size={18} />
-                <span className="font-semibold">120 phút</span>
+                <span className="font-semibold">
+                  {test.duration || 120} phút
+                </span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
                 <BookOpen className="text-brand-500" size={18} />

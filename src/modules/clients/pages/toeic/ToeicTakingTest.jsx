@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import {
-  getToeicTestById,
-  getQuestionsByPartNumber,
-  getPassagesByPartNumber,
-} from "@/api/clients/toeicApi";
+import { getTestById } from "@/api/clients/toeicTestApi";
+import { getQuestionByPartNumber } from "@/api/clients/toeicQuestionApi";
+import { getPassageByPartNumber } from "@/api/clients/toeicPassageApi";
 import {
   Clock,
   CheckCircle2,
@@ -126,7 +124,7 @@ const ToeicTakingTest = () => {
   const fetchTestAllData = async () => {
     try {
       setLoading(true);
-      const testInfo = await getToeicTestById(testId);
+      const testInfo = await getTestById(testId);
       setTest(testInfo);
 
       const allQuestions = {};
@@ -137,9 +135,9 @@ const ToeicTakingTest = () => {
         PARTS.filter((part) => selectedPartIds.includes(part.id)).map(
           async (part) => {
             const [questionsRes, passagesRes] = await Promise.all([
-              getQuestionsByPartNumber(testId, part.id).catch(() => []),
+              getQuestionByPartNumber(testId, part.id).catch(() => []),
               part.hasPassage
-                ? getPassagesByPartNumber(testId, part.id).catch(() => [])
+                ? getPassageByPartNumber(testId, part.id).catch(() => [])
                 : Promise.resolve([]),
             ]);
             allQuestions[part.id] = questionsRes || [];
