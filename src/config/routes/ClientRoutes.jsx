@@ -16,6 +16,7 @@ import {
 import ArticleDetails from "@/modules/clients/pages/ArticleDetails";
 import PageNotFound from "@/pages/PageNotFound";
 import Profile from "@/modules/clients/pages/Profile";
+import Dashboard from "@/modules/clients/pages/Dashboard";
 import Video from "@/modules/clients/pages/Video";
 import VideoFilter from "@/modules/clients/pages/VideoFilter";
 import VideoDetails from "@/modules/clients/pages/VideoDetails";
@@ -118,6 +119,15 @@ export default function ClientRoutes() {
             element={
               <ClientProtectRoutes>
                 <Profile />
+              </ClientProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ClientProtectRoutes>
+                <Dashboard />
               </ClientProtectRoutes>
             }
           />

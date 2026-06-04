@@ -45,6 +45,7 @@ const UpdateToeicTest = () => {
       navigate("/server/toeic-test");
     } catch (error) {
       logError(error);
+      throw error;
     }
   };
 

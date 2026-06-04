@@ -12,6 +12,8 @@ import {
   GraduationCap,
   BookMarked,
   Languages,
+  LayoutDashboard,
+  BarChart3,
 } from "lucide-react";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 
@@ -218,6 +220,19 @@ const ClientNavBar = () => {
                         />
                       </div>
                       <span className="font-medium">Bài viết đã lưu</span>
+                    </Link>
+                    <Link
+                      to="/client/dashboard"
+                      className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
+                      onClick={() => setIsProfileOpen(false)}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
+                        <BarChart3
+                          size={14}
+                          className="text-neutral-500 dark:text-neutral-400"
+                        />
+                      </div>
+                      <span className="font-medium">Thống kê hoạt động</span>
                     </Link>
                   </div>
 

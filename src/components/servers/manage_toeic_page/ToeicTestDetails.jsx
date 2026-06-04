@@ -79,9 +79,7 @@ const ToeicTestDetails = ({ test }) => {
 
           <div className="flex flex-col gap-1 p-3 border border-gray-100 rounded-lg">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-1">
-                Duration
-              </p>
+              <p className="text-xs font-medium text-gray-500 mb-1">Duration</p>
               <p className="text-sm font-medium text-gray-900">
                 {test.duration} minutes
               </p>
@@ -101,9 +99,7 @@ const ToeicTestDetails = ({ test }) => {
 
           <div className="flex flex-col gap-1 p-3 border border-gray-100 rounded-lg">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-1">
-                Status
-              </p>
+              <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
               <div
                 className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-medium rounded-md ${
                   test.status === "PUBLISHED"
@@ -121,9 +117,9 @@ const ToeicTestDetails = ({ test }) => {
       </div>
 
       {/* === Meta Information === */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/60 hover:shadow-md transition-all">
+          <p className="text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide">
             Created At
           </p>
           <p className="text-sm text-gray-900 font-medium">
@@ -131,17 +127,13 @@ const ToeicTestDetails = ({ test }) => {
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
-            Last Updated
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-1">Last Updated</p>
           <p className="text-sm text-gray-900 font-medium">
             {formatISODate(test.updated_at)}
           </p>
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
-            Created By
-          </p>
+          <p className="text-xs font-medium text-gray-500 mb-1">Created By</p>
           <p
             className="text-sm text-gray-900 font-medium truncate"
             title={
@@ -155,8 +147,31 @@ const ToeicTestDetails = ({ test }) => {
               : test.created_by || "System"}
           </p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">
+        <div className="bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl p-4 border border-teal-200/60 hover:shadow-md transition-all">
+          <p className="text-xs font-bold text-teal-700 mb-2 uppercase tracking-wide">
+            Updated By
+          </p>
+          <p
+            className="text-sm text-gray-900 font-semibold truncate"
+            title={
+              typeof test.updated_by === "object"
+                ? test.updated_by.display_name
+                : test.updated_by ||
+                  test.updatedBy?.display_name ||
+                  test.updatedBy ||
+                  "System"
+            }
+          >
+            {typeof test.updated_by === "object"
+              ? test.updated_by.display_name || test.updated_by.id
+              : test.updated_by ||
+                test.updatedBy?.display_name ||
+                test.updatedBy ||
+                "System"}
+          </p>
+        </div>
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
+          <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
             Test ID
           </p>
           <p className="text-sm text-gray-900 font-mono font-medium">

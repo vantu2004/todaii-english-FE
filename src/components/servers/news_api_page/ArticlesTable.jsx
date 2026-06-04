@@ -80,7 +80,7 @@ const ArticlesTable = ({ columns, articles }) => {
 
                 {/* Actions */}
                 <td className="px-4 py-3">
-                  <div className="flex items-center space-x-2 text-sm">
+                  <div className="flex items-center space-x-4 text-sm">
                     <button
                       onClick={() => handleViewClick(article)}
                       className="p-1.5 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-lg"

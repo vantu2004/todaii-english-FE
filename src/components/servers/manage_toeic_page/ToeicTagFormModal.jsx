@@ -10,15 +10,21 @@ const ToeicTagFormModal = ({
   initialData = null,
 }) => {
   const [name, setName] = useState("");
-  const [partNumber, setPartNumber] = useState("");
+  const [partNumbers, setPartNumbers] = useState("");
 
   useEffect(() => {
     if (initialData) {
       setName(initialData.name || "");
-      setPartNumber(initialData.partNumber || initialData.part_number || "");
+      setPartNumbers(
+        initialData.partNumbers ||
+          initialData.part_numbers ||
+          initialData.partNumber ||
+          initialData.part_number ||
+          "",
+      );
     } else {
       setName("");
-      setPartNumber("");
+      setPartNumbers("");
     }
   }, [initialData, isOpen]);
 
@@ -27,12 +33,20 @@ const ToeicTagFormModal = ({
       toast.error("Tag name is required");
       return;
     }
-    const pNum = parseInt(partNumber, 10);
-    if (isNaN(pNum) || pNum < 1 || pNum > 7) {
-      toast.error("Part number must be between 1 and 7");
-      return;
+    const cleaned = partNumbers.trim();
+    if (cleaned !== "") {
+      const parts = cleaned.split(",").map((p) => p.trim());
+      for (const part of parts) {
+        const pNum = parseInt(part, 10);
+        if (isNaN(pNum) || pNum < 1 || pNum > 7) {
+          toast.error(
+            "Each part number must be between 1 and 7 (separated by commas)",
+          );
+          return;
+        }
+      }
     }
-    onSubmit(name, pNum);
+    onSubmit(name, cleaned);
   };
 
   return (
@@ -82,16 +96,44 @@ const ToeicTagFormModal = ({
           </div>
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              Part Number <span className="text-red-500">*</span>
+              Part Numbers
             </label>
-            <input
-              type="number"
-              name="partNumber"
-              value={partNumber}
-              onChange={(e) => setPartNumber(e.target.value)}
-              placeholder="e.g., 1"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 outline-none transition-all"
-            />
+            <div className="flex flex-wrap gap-2">
+              {[1, 2, 3, 4, 5, 6, 7].map((num) => {
+                const isSelected = partNumbers
+                  .split(",")
+                  .map((p) => p.trim())
+                  .includes(String(num));
+                return (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => {
+                      let list = partNumbers
+                        ? partNumbers
+                            .split(",")
+                            .map((p) => p.trim())
+                            .filter(Boolean)
+                        : [];
+                      if (list.includes(String(num))) {
+                        list = list.filter((item) => item !== String(num));
+                      } else {
+                        list = [...list, String(num)];
+                      }
+                      list.sort((a, b) => Number(a) - Number(b));
+                      setPartNumbers(list.join(", "));
+                    }}
+                    className={`px-3.5 py-2 rounded-lg border text-sm font-medium transition-all ${
+                      isSelected
+                        ? "bg-gray-900 border-gray-900 text-white dark:bg-white dark:text-gray-900 dark:border-white shadow-sm"
+                        : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-750"
+                    }`}
+                  >
+                    Part {num}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

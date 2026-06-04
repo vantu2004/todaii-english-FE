@@ -9,6 +9,8 @@ import {
   X,
   ArrowUp,
   ArrowDown,
+  Eye,
+  Info,
 } from "lucide-react";
 import { deleteToeicTag } from "@/api/servers/toeicTagApi";
 import { logError } from "@/utils/LogError";
@@ -25,31 +27,47 @@ const ToeicTagsTable = ({
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedName, setEditedName] = useState("");
-  const [editedPartNumber, setEditedPartNumber] = useState("");
+  const [editedPartNumbers, setEditedPartNumbers] = useState("");
+  const [detailIndex, setDetailIndex] = useState(null);
 
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditedName(tags[index].name);
-    setEditedPartNumber(
-      tags[index].part_number !== null && tags[index].part_number !== undefined
-        ? tags[index].part_number
-        : "",
+    setEditedPartNumbers(
+      tags[index].partNumbers ||
+        tags[index].part_numbers ||
+        tags[index].partNumber ||
+        tags[index].part_number ||
+        "",
     );
   };
 
   const handleCancelEdit = () => {
     setEditingIndex(null);
     setEditedName("");
-    setEditedPartNumber("");
+    setEditedPartNumbers("");
   };
 
   const handleSave = async (index) => {
     const tag = tags[index];
     if (editedName.trim() === "") return;
-    await onSaveEdit(tag.id, editedName, editedPartNumber);
+    const cleaned = editedPartNumbers.trim();
+    if (cleaned !== "") {
+      const parts = cleaned.split(",").map((p) => p.trim());
+      for (const part of parts) {
+        const pNum = parseInt(part, 10);
+        if (isNaN(pNum) || pNum < 1 || pNum > 7) {
+          toast.error(
+            "Each part number must be between 1 and 7 (separated by commas)",
+          );
+          return;
+        }
+      }
+    }
+    await onSaveEdit(tag.id, editedName, cleaned);
     setEditingIndex(null);
     setEditedName("");
-    setEditedPartNumber("");
+    setEditedPartNumbers("");
   };
 
   const handleDeleteClick = (index) => {
@@ -147,24 +165,56 @@ const ToeicTagsTable = ({
                   <td className="px-4 py-3 text-sm">{item.alias}</td>
                   <td className="px-4 py-3 text-sm">
                     {isEditing ? (
-                      <input
-                        type="number"
-                        min={1}
-                        max={7}
-                        value={editedPartNumber}
-                        onChange={(e) => setEditedPartNumber(e.target.value)}
-                        className="w-20 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:bg-gray-700 dark:text-white"
-                      />
-                    ) : item.part_number !== undefined &&
-                      item.part_number !== null ? (
-                      item.part_number
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5, 6, 7].map((num) => {
+                          const isSelected = editedPartNumbers
+                            .split(",")
+                            .map((p) => p.trim())
+                            .includes(String(num));
+                          return (
+                            <button
+                              key={num}
+                              type="button"
+                              onClick={() => {
+                                let list = editedPartNumbers
+                                  ? editedPartNumbers
+                                      .split(",")
+                                      .map((p) => p.trim())
+                                      .filter(Boolean)
+                                  : [];
+                                if (list.includes(String(num))) {
+                                  list = list.filter(
+                                    (item) => item !== String(num),
+                                  );
+                                } else {
+                                  list = [...list, String(num)];
+                                }
+                                list.sort((a, b) => Number(a) - Number(b));
+                                setEditedPartNumbers(list.join(", "));
+                              }}
+                              className={`w-6 h-6 flex items-center justify-center rounded-full border text-xs font-semibold transition-all ${
+                                isSelected
+                                  ? "bg-gray-900 border-gray-900 text-white dark:bg-white dark:text-gray-900 dark:border-white"
+                                  : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 dark:bg-gray-850 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-750"
+                              }`}
+                              title={`Part ${num}`}
+                            >
+                              {num}
+                            </button>
+                          );
+                        })}
+                      </div>
                     ) : (
+                      item.partNumbers ||
+                      item.part_numbers ||
+                      item.partNumber ||
+                      item.part_number ||
                       "-"
                     )}
                   </td>
 
                   <td className="px-4 py-3">
-                    <div className="flex items-center space-x-3 text-sm">
+                    <div className="flex items-center space-x-4 text-sm">
                       {isEditing ? (
                         <>
                           <button
@@ -182,6 +232,13 @@ const ToeicTagsTable = ({
                         </>
                       ) : (
                         <>
+                          <button
+                            onClick={() => setDetailIndex(i)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="View Detail"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
                           <button
                             onClick={() => handleEditClick(i)}
                             className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-lg transition-colors"
@@ -222,7 +279,9 @@ const ToeicTagsTable = ({
           title={
             <div className="flex items-center gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Delete Tag</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Delete Tag
+                </h2>
               </div>
             </div>
           }
@@ -252,6 +311,69 @@ const ToeicTagsTable = ({
               <p className="text-sm font-semibold text-gray-900">
                 {tags[selectedIndex]?.name}
               </p>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {detailIndex !== null && (
+        <Modal
+          isOpen={true}
+          onClose={() => setDetailIndex(null)}
+          title={
+            <div className="flex items-center gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Tag Details
+                </h2>
+              </div>
+            </div>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDetailIndex(null)}
+                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all"
+              >
+                Close
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4 border border-gray-200 rounded-lg p-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-xs font-medium text-gray-500">
+                  Tag ID
+                </span>
+                <p className="text-sm font-mono font-medium text-gray-900 dark:text-white mt-1">
+                  #{tags[detailIndex]?.id}
+                </p>
+              </div>
+              <div>
+                <span className="text-xs font-medium text-gray-500">
+                  Part Numbers
+                </span>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                  {tags[detailIndex]?.partNumbers ||
+                    tags[detailIndex]?.part_numbers ||
+                    tags[detailIndex]?.partNumber ||
+                    tags[detailIndex]?.part_number ||
+                    "All Parts (Reusable)"}
+                </p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-medium text-gray-500">Name</span>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                  {tags[detailIndex]?.name}
+                </p>
+              </div>
+              <div className="col-span-2">
+                <span className="text-xs font-medium text-gray-500">Alias</span>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                  {tags[detailIndex]?.alias}
+                </p>
+              </div>
             </div>
           </div>
         </Modal>

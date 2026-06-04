@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -9,6 +9,10 @@ import {
   BarChart3,
   AlertCircle,
 } from "lucide-react";
+import { getTestById } from "@/api/clients/toeicTestApi";
+import { getQuestionByPartNumber } from "@/api/clients/toeicQuestionApi";
+import { getPassageByPartNumber } from "@/api/clients/toeicPassageApi";
+import { getSessionDetails } from "@/api/clients/toeicSessionApi";
 
 // TOEIC Score Conversion Table (simplified approximation)
 // In a real app, this might be more complex or fetched from backend
@@ -26,19 +30,106 @@ const convertReadingScore = (correctCount) => {
   return Math.min(495, Math.round(correctCount * 4.95) + 5);
 };
 
+const PARTS = [
+  { id: 1, hasPassage: false },
+  { id: 2, hasPassage: false },
+  { id: 3, hasPassage: true },
+  { id: 4, hasPassage: true },
+  { id: 5, hasPassage: false },
+  { id: 6, hasPassage: true },
+  { id: 7, hasPassage: true },
+];
+
 const ToeicResult = () => {
   const { testId } = useParams();
   const navigate = useNavigate();
+  const { search } = useLocation();
   const [resultData, setResultData] = useState(null);
 
   useEffect(() => {
-    const data = localStorage.getItem(`toeic_result_${testId}`);
-    if (data) {
-      setResultData(JSON.parse(data));
-    } else {
-      navigate("/client/toeic");
-    }
-  }, [testId, navigate]);
+    const fetchSessionResult = async () => {
+      const params = new URLSearchParams(search);
+      const sessionId = params.get("sessionId");
+
+      if (sessionId) {
+        try {
+          const sessionData = await getSessionDetails(sessionId);
+
+          let partIds = [1, 2, 3, 4, 5, 6, 7];
+          if (sessionData.parts_done) {
+            partIds = sessionData.parts_done
+              .split(",")
+              .map(Number)
+              .filter((id) => id >= 1 && id <= 7);
+          }
+
+          const currentTestId = sessionData.test_id || testId;
+          const testInfo = await getTestById(currentTestId);
+
+          const allQuestions = {};
+          const allPassages = {};
+
+          await Promise.all(
+            PARTS.filter((part) => partIds.includes(part.id)).map(
+              async (part) => {
+                const [questionsRes, passagesRes] = await Promise.all([
+                  getQuestionByPartNumber(currentTestId, part.id).catch(
+                    () => [],
+                  ),
+                  part.hasPassage
+                    ? getPassageByPartNumber(currentTestId, part.id).catch(
+                        () => [],
+                      )
+                    : Promise.resolve([]),
+                ]);
+                allQuestions[part.id] = questionsRes || [];
+                allPassages[part.id] = passagesRes || [];
+              },
+            ),
+          );
+
+          const loadedAnswers = {};
+          if (sessionData.answers) {
+            sessionData.answers.forEach((ans) => {
+              const qId = ans.question_id || ans.questionId || ans.id;
+              const opt =
+                ans.selected_option || ans.selectedOption || ans.answer;
+              if (qId && opt) {
+                loadedAnswers[qId] = opt;
+              }
+            });
+          }
+
+          const reconstructedData = {
+            testId: currentTestId,
+            testName: testInfo.title,
+            answers: loadedAnswers,
+            testData: { questions: allQuestions, passages: allPassages },
+            timeSpent: sessionData.time_spent || 0,
+            selectedPartIds: partIds,
+          };
+
+          setResultData(reconstructedData);
+        } catch (err) {
+          console.error("Failed to load session result", err);
+          loadFromLocalStorage();
+        }
+      } else {
+        loadFromLocalStorage();
+      }
+    };
+
+    const loadFromLocalStorage = () => {
+      const data = localStorage.getItem(`toeic_result_${testId}`);
+      if (data) {
+        setResultData(JSON.parse(data));
+      } else {
+        navigate("/client/toeic");
+      }
+    };
+
+    fetchSessionResult();
+  }, [testId, search, navigate]);
 
   const scoreDetails = useMemo(() => {
     if (!resultData) return null;
@@ -49,9 +140,11 @@ const ToeicResult = () => {
     let readingTotal = 0;
 
     const { answers, testData } = resultData;
+    const selectedPartIds = resultData.selectedPartIds || [1, 2, 3, 4, 5, 6, 7];
 
     // Process Part 1-4 (Listening)
     for (let part = 1; part <= 4; part++) {
+      if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
       questions.forEach((q) => {
         listeningTotal++;
@@ -63,6 +156,7 @@ const ToeicResult = () => {
 
     // Process Part 5-7 (Reading)
     for (let part = 5; part <= 7; part++) {
+      if (!selectedPartIds.includes(part)) continue;
       const questions = testData.questions[part] || [];
       questions.forEach((q) => {
         readingTotal++;
@@ -72,9 +166,17 @@ const ToeicResult = () => {
       });
     }
 
-    const listeningScore = convertListeningScore(listeningCorrect);
-    const readingScore = convertReadingScore(readingCorrect);
+    const listeningScore =
+      listeningTotal > 0
+        ? convertListeningScore((listeningCorrect / listeningTotal) * 100)
+        : 0;
+    const readingScore =
+      readingTotal > 0
+        ? convertReadingScore((readingCorrect / readingTotal) * 100)
+        : 0;
     const totalScore = listeningScore + readingScore;
+    const maxScore =
+      (listeningTotal > 0 ? 495 : 0) + (readingTotal > 0 ? 495 : 0);
 
     return {
       listening: {
@@ -88,6 +190,7 @@ const ToeicResult = () => {
         score: readingScore,
       },
       totalScore,
+      maxScore: maxScore || 990,
     };
   }, [resultData]);
 
@@ -135,11 +238,14 @@ const ToeicResult = () => {
               Điểm Nghe (Listening)
             </h3>
             <div className="text-4xl font-extrabold text-blue-700 dark:text-blue-300 mb-2">
-              {scoreDetails.listening.score}
+              {scoreDetails.listening.total === 0
+                ? "Không làm"
+                : scoreDetails.listening.score}
             </div>
             <p className="text-sm text-blue-600/80 dark:text-blue-400/80">
-              {scoreDetails.listening.correct} / {scoreDetails.listening.total}{" "}
-              câu đúng
+              {scoreDetails.listening.total === 0
+                ? "—"
+                : `${scoreDetails.listening.correct} / ${scoreDetails.listening.total} câu đúng`}
             </p>
           </div>
 
@@ -148,11 +254,14 @@ const ToeicResult = () => {
               Điểm Đọc (Reading)
             </h3>
             <div className="text-4xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-2">
-              {scoreDetails.reading.score}
+              {scoreDetails.reading.total === 0
+                ? "Không làm"
+                : scoreDetails.reading.score}
             </div>
             <p className="text-sm text-emerald-600/80 dark:text-emerald-400/80">
-              {scoreDetails.reading.correct} / {scoreDetails.reading.total} câu
-              đúng
+              {scoreDetails.reading.total === 0
+                ? "—"
+                : `${scoreDetails.reading.correct} / ${scoreDetails.reading.total} câu đúng`}
             </p>
           </div>
 
@@ -164,10 +273,10 @@ const ToeicResult = () => {
               Total Score
             </h3>
             <div className="text-5xl font-black text-brand-700 dark:text-brand-300 mb-2">
-              {scoreDetails.totalScore}
+              {scoreDetails.maxScore === 0 ? "—" : scoreDetails.totalScore}
             </div>
             <p className="text-sm text-brand-600/80 dark:text-brand-400/80">
-              / 990
+              / {scoreDetails.maxScore}
             </p>
           </div>
         </div>
@@ -207,15 +316,8 @@ const ToeicResult = () => {
               </p>
               <p className="font-bold text-neutral-900 dark:text-white">
                 {scoreDetails.listening.total + scoreDetails.reading.total > 0
-                  ? Math.round(
-                      ((scoreDetails.listening.correct +
-                        scoreDetails.reading.correct) /
-                        (scoreDetails.listening.total +
-                          scoreDetails.reading.total)) *
-                        100,
-                    )
-                  : 0}
-                %
+                  ? `${Math.round(((scoreDetails.listening.correct + scoreDetails.reading.correct) / (scoreDetails.listening.total + scoreDetails.reading.total)) * 100)}%`
+                  : "—"}
               </p>
             </div>
           </div>

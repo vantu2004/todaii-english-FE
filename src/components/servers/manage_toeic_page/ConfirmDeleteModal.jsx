@@ -40,9 +40,7 @@ const ConfirmDeleteModal = ({
         <h3 className="text-sm text-gray-900">
           Are you sure you want to delete this {itemName.toLowerCase()}?
         </h3>
-        {warningText && (
-          <p className="text-sm text-gray-500">{warningText}</p>
-        )}
+        {warningText && <p className="text-sm text-gray-500">{warningText}</p>}
         {targetName && (
           <div className="bg-gray-50 rounded-md p-3 border border-gray-200 text-sm font-semibold text-gray-900">
             {targetName}
