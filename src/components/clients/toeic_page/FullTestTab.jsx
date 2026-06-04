@@ -1,8 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Play, ShieldAlert } from "lucide-react";
 
-const FullTestTab = ({ testId, duration = 120 }) => {
+const FullTestTab = ({
+  testId,
+  duration = 120,
+  onStartSession,
+  startingSession = false,
+}) => {
   return (
     <div className="space-y-8 animate-fade-in">
       <div className="bg-neutral-50/50 dark:bg-neutral-900/40 p-6 rounded-2xl border border-neutral-100 dark:border-neutral-800/80 space-y-4">
@@ -56,13 +60,27 @@ const FullTestTab = ({ testId, duration = 120 }) => {
       </div>
 
       <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800/80">
-        <Link
-          to={`/client/toeic/${testId}/take?parts=1,2,3,4,5,6,7`}
-          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl font-semibold shadow-sm transition-all duration-300"
+        <button
+          type="button"
+          disabled={startingSession}
+          onClick={() =>
+            onStartSession({
+              mode: "FULL_TEST",
+              parts: [1, 2, 3, 4, 5, 6, 7],
+              duration,
+            })
+          }
+          className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl font-semibold shadow-sm transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          <Play size={18} className="fill-current" />
-          <span>Bắt đầu thi Full Test</span>
-        </Link>
+          {startingSession ? (
+            <div className="w-[18px] h-[18px] border-2 border-white/30 border-t-white dark:border-neutral-900/30 dark:border-t-neutral-900 rounded-full animate-spin" />
+          ) : (
+            <Play size={18} className="fill-current" />
+          )}
+          <span>
+            {startingSession ? "Đang khởi tạo..." : "Bắt đầu thi Full Test"}
+          </span>
+        </button>
       </div>
     </div>
   );

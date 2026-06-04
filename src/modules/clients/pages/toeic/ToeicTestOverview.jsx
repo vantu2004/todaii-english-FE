@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getTestById } from "@/api/clients/toeicTestApi";
-import { getSessionHistory } from "@/api/clients/toeicSessionApi";
+import { getSessionHistory, startSession } from "@/api/clients/toeicSessionApi";
 import { findAllTagsByTestId } from "@/api/clients/toeicTagApi";
 import { ArrowLeft, BookOpen, Clock, Award } from "lucide-react";
 import toast from "react-hot-toast";
@@ -33,6 +33,27 @@ const ToeicTestOverview = () => {
 
   // Practice state
   const [selectedParts, setSelectedParts] = useState([1, 2, 3, 4, 5, 6, 7]);
+
+  // Session start
+  const [startingSession, setStartingSession] = useState(false);
+
+  const handleStartSession = async ({ mode, parts, duration }) => {
+    try {
+      setStartingSession(true);
+      const session = await startSession({
+        testId: Number(testId),
+        mode,
+        timeSpent: duration * 60,
+        partsDone: parts.join(","),
+      });
+      navigate(`/client/toeic/${testId}/take?sessionId=${session.id}`);
+    } catch (err) {
+      console.error("Failed to start session", err);
+      toast.error("Không thể bắt đầu phiên thi. Vui lòng thử lại.");
+    } finally {
+      setStartingSession(false);
+    }
+  };
 
   useEffect(() => {
     const fetchTestDetails = async () => {
@@ -224,10 +245,17 @@ const ToeicTestOverview = () => {
                   onTogglePart={handleTogglePart}
                   onSelectAll={handleSelectAll}
                   onDeselectAll={handleDeselectAll}
+                  onStartSession={handleStartSession}
+                  startingSession={startingSession}
                 />
               )}
               {activeTab === "fulltest" && (
-                <FullTestTab testId={testId} duration={test.duration || 120} />
+                <FullTestTab
+                  testId={testId}
+                  duration={test.duration || 120}
+                  onStartSession={handleStartSession}
+                  startingSession={startingSession}
+                />
               )}
             </div>
           </div>

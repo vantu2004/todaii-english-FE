@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -9,6 +9,10 @@ import {
   BarChart3,
   AlertCircle,
 } from "lucide-react";
+import { getTestById } from "@/api/clients/toeicTestApi";
+import { getQuestionByPartNumber } from "@/api/clients/toeicQuestionApi";
+import { getPassageByPartNumber } from "@/api/clients/toeicPassageApi";
+import { getSessionDetails } from "@/api/clients/toeicSessionApi";
 
 // TOEIC Score Conversion Table (simplified approximation)
 // In a real app, this might be more complex or fetched from backend
@@ -26,19 +30,106 @@ const convertReadingScore = (correctCount) => {
   return Math.min(495, Math.round(correctCount * 4.95) + 5);
 };
 
+const PARTS = [
+  { id: 1, hasPassage: false },
+  { id: 2, hasPassage: false },
+  { id: 3, hasPassage: true },
+  { id: 4, hasPassage: true },
+  { id: 5, hasPassage: false },
+  { id: 6, hasPassage: true },
+  { id: 7, hasPassage: true },
+];
+
 const ToeicResult = () => {
   const { testId } = useParams();
   const navigate = useNavigate();
+  const { search } = useLocation();
   const [resultData, setResultData] = useState(null);
 
   useEffect(() => {
-    const data = localStorage.getItem(`toeic_result_${testId}`);
-    if (data) {
-      setResultData(JSON.parse(data));
-    } else {
-      navigate("/client/toeic");
-    }
-  }, [testId, navigate]);
+    const fetchSessionResult = async () => {
+      const params = new URLSearchParams(search);
+      const sessionId = params.get("sessionId");
+
+      if (sessionId) {
+        try {
+          const sessionData = await getSessionDetails(sessionId);
+
+          let partIds = [1, 2, 3, 4, 5, 6, 7];
+          if (sessionData.parts_done) {
+            partIds = sessionData.parts_done
+              .split(",")
+              .map(Number)
+              .filter((id) => id >= 1 && id <= 7);
+          }
+
+          const currentTestId = sessionData.test_id || testId;
+          const testInfo = await getTestById(currentTestId);
+
+          const allQuestions = {};
+          const allPassages = {};
+
+          await Promise.all(
+            PARTS.filter((part) => partIds.includes(part.id)).map(
+              async (part) => {
+                const [questionsRes, passagesRes] = await Promise.all([
+                  getQuestionByPartNumber(currentTestId, part.id).catch(
+                    () => [],
+                  ),
+                  part.hasPassage
+                    ? getPassageByPartNumber(currentTestId, part.id).catch(
+                        () => [],
+                      )
+                    : Promise.resolve([]),
+                ]);
+                allQuestions[part.id] = questionsRes || [];
+                allPassages[part.id] = passagesRes || [];
+              },
+            ),
+          );
+
+          const loadedAnswers = {};
+          if (sessionData.answers) {
+            sessionData.answers.forEach((ans) => {
+              const qId = ans.question_id || ans.questionId || ans.id;
+              const opt =
+                ans.selected_option || ans.selectedOption || ans.answer;
+              if (qId && opt) {
+                loadedAnswers[qId] = opt;
+              }
+            });
+          }
+
+          const reconstructedData = {
+            testId: currentTestId,
+            testName: testInfo.title,
+            answers: loadedAnswers,
+            testData: { questions: allQuestions, passages: allPassages },
+            timeSpent: sessionData.time_spent || 0,
+            selectedPartIds: partIds,
+          };
+
+          setResultData(reconstructedData);
+        } catch (err) {
+          console.error("Failed to load session result", err);
+          loadFromLocalStorage();
+        }
+      } else {
+        loadFromLocalStorage();
+      }
+    };
+
+    const loadFromLocalStorage = () => {
+      const data = localStorage.getItem(`toeic_result_${testId}`);
+      if (data) {
+        setResultData(JSON.parse(data));
+      } else {
+        navigate("/client/toeic");
+      }
+    };
+
+    fetchSessionResult();
+  }, [testId, search, navigate]);
 
   const scoreDetails = useMemo(() => {
     if (!resultData) return null;

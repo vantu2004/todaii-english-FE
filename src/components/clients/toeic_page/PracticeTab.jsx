@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo, useState } from "react";
 import { Play, Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -63,7 +62,11 @@ const PracticeTab = ({
   onTogglePart,
   onSelectAll,
   onDeselectAll,
+  onStartSession,
+  startingSession = false,
 }) => {
+  const [duration, setDuration] = useState(30); // Default to 30 minutes
+
   // Group tags by part number (supports both snake_case and camelCase)
   const tagsByPart = useMemo(() => {
     const grouped = {};
@@ -173,6 +176,26 @@ const PracticeTab = ({
         </div>
       </div>
 
+      {/* Time Selection */}
+      <div className="space-y-2 pt-2">
+        <label className="block text-sm font-semibold text-neutral-900 dark:text-white">
+          Thời gian làm bài
+        </label>
+        <select
+          value={duration}
+          onChange={(e) => setDuration(Number(e.target.value))}
+          className="w-full sm:w-64 px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-semibold text-neutral-700 dark:text-neutral-350 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+        >
+          <option value={10}>10 phút</option>
+          <option value={20}>20 phút</option>
+          <option value={30}>30 phút</option>
+          <option value={45}>45 phút</option>
+          <option value={60}>60 phút</option>
+          <option value={90}>90 phút</option>
+          <option value={120}>120 phút</option>
+        </select>
+      </div>
+
       {/* Start Button */}
       <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800/80">
         {selectedParts.length === 0 ? (
@@ -185,13 +208,27 @@ const PracticeTab = ({
             <span>Bắt đầu luyện tập</span>
           </button>
         ) : (
-          <Link
-            to={`/client/toeic/${testId}/take?parts=${selectedParts.join(",")}`}
-            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl font-semibold shadow-sm transition-all duration-300"
+          <button
+            type="button"
+            disabled={startingSession}
+            onClick={() =>
+              onStartSession({
+                mode: "PRACTICE",
+                parts: selectedParts,
+                duration,
+              })
+            }
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl font-semibold shadow-sm transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Play size={18} className="fill-current" />
-            <span>Bắt đầu luyện tập</span>
-          </Link>
+            {startingSession ? (
+              <div className="w-[18px] h-[18px] border-2 border-white/30 border-t-white dark:border-neutral-900/30 dark:border-t-neutral-900 rounded-full animate-spin" />
+            ) : (
+              <Play size={18} className="fill-current" />
+            )}
+            <span>
+              {startingSession ? "Đang khởi tạo..." : "Bắt đầu luyện tập"}
+            </span>
+          </button>
         )}
       </div>
     </div>
