@@ -62,45 +62,6 @@ const TestInfoTab = ({ test, sessions = [], loadingSessions = false }) => {
         </p>
       </div>
 
-      {/* Best Attempt Section */}
-      {bestSession && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-            <span>🏆 Lần làm cao nhất</span>
-          </h3>
-          <div className="bg-gradient-to-r from-brand-50/30 to-indigo-50/20 dark:from-brand-500/5 dark:to-indigo-500/5 border border-brand-100/50 dark:border-brand-500/20 rounded-2xl p-6 shadow-sm">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-              <div>
-                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Ngày làm</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-250">{formatDate(bestSession.started_at)}</span>
-              </div>
-              <div>
-                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Chế độ</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-250">
-                  {bestSession.mode === "FULL_TEST" ? "Thi Full Test" : "Luyện tập"}
-                </span>
-              </div>
-              <div>
-                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Số câu đúng</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-450">
-                  {bestSession.correct_count ?? 0} / {bestSession.total_questions ?? 200}
-                </span>
-              </div>
-              <div>
-                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Điểm số</span>
-                <span className="font-bold text-brand-600 dark:text-brand-450">
-                  {bestSession.mode === "FULL_TEST" ? `${bestSession.total_score ?? 0} / 990` : "—"}
-                </span>
-              </div>
-              <div>
-                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Thời gian</span>
-                <span className="font-semibold text-neutral-800 dark:text-neutral-250">{bestSession.time_spent} phút</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Session History Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">

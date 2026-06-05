@@ -4,8 +4,8 @@ import {
   getAllTestsPaged,
   getAllTestsByCollectionPaged,
 } from "@/api/clients/toeicTestApi";
-import CollectionSidebar from "@/components/clients/toeic_page/CollectionSidebar";
-import TestGrid from "@/components/clients/toeic_page/TestGrid";
+import CollectionSidebar from "@/components/clients/toeic_page/home/CollectionSidebar";
+import TestGrid from "@/components/clients/toeic_page/home/TestGrid";
 import Pagination from "@/components/clients/Pagination";
 import { logError } from "@/utils/LogError";
 

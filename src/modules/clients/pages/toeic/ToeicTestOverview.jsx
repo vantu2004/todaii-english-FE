@@ -7,10 +7,10 @@ import { ArrowLeft, BookOpen, Clock, Award } from "lucide-react";
 import toast from "react-hot-toast";
 
 // Sub-components
-import TestInfoTab from "@/components/clients/toeic_page/TestInfoTab";
-import PracticeTab from "@/components/clients/toeic_page/PracticeTab";
-import FullTestTab from "@/components/clients/toeic_page/FullTestTab";
-import TestDetailSidebar from "@/components/clients/toeic_page/TestDetailSidebar";
+import TestInfoTab from "@/components/clients/toeic_page/overview/TestInfoTab";
+import PracticeTab from "@/components/clients/toeic_page/overview/PracticeTab";
+import FullTestTab from "@/components/clients/toeic_page/overview/FullTestTab";
+import TestDetailSidebar from "@/components/clients/toeic_page/overview/TestDetailSidebar";
 import { logError } from "@/utils/LogError";
 
 const ToeicTestOverview = () => {

@@ -20,10 +20,10 @@ import {
 import toast from "react-hot-toast";
 
 // Sub-components
-import QuestionItem from "@/components/clients/toeic_page/QuestionItem";
-import PassageGroup from "@/components/clients/toeic_page/PassageGroup";
-import QuestionNavigator from "@/components/clients/toeic_page/QuestionNavigator";
-import SubmitConfirmDialog from "@/components/clients/toeic_page/SubmitConfirmDialog";
+import QuestionItem from "@/components/clients/toeic_page/taking_test/QuestionItem";
+import PassageGroup from "@/components/clients/toeic_page/taking_test/PassageGroup";
+import QuestionNavigator from "@/components/clients/toeic_page/taking_test/QuestionNavigator";
+import SubmitConfirmDialog from "@/components/clients/toeic_page/taking_test/SubmitConfirmDialog";
 import { logError } from "@/utils/LogError";
 
 const PARTS = [

@@ -4,7 +4,7 @@ import {
   Clock,
   Calendar,
   CheckCircle2,
-  History,
+  Award,
 } from "lucide-react";
 import { formatDate } from "@/utils/FormatDate";
 
@@ -13,18 +13,25 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
     if (!sessions || sessions.length === 0) return null;
 
     const totalAttempts = sessions.length;
-    const bestSession = [...sessions].sort(
-      (a, b) => (b.correct_count ?? 0) - (a.correct_count ?? 0),
-    )[0];
-    const latestSession = [...sessions].sort(
-      (a, b) => new Date(b.started_at) - new Date(a.started_at),
-    )[0];
+    const bestSession = [...sessions].sort((a, b) => {
+      const scoreA = a.total_score ?? 0;
+      const scoreB = b.total_score ?? 0;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return (b.correct_count ?? 0) - (a.correct_count ?? 0);
+    })[0];
+
+    const avgCorrect = Math.round(
+      sessions.reduce((sum, s) => sum + (s.correct_count ?? 0), 0) / totalAttempts
+    );
+    const avgTime = Math.round(
+      sessions.reduce((sum, s) => sum + (s.time_spent ?? 0), 0) / totalAttempts
+    );
 
     return {
       totalAttempts,
-      bestCorrect: bestSession.correct_count ?? 0,
-      bestTotal: bestSession.total_questions ?? 200,
-      latest: latestSession,
+      avgCorrect,
+      avgTime,
+      best: bestSession,
     };
   }, [sessions]);
 
@@ -39,7 +46,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 
   return (
     <div
-      className={`grid grid-cols-1 ${stats?.latest ? "md:grid-cols-2" : ""} gap-6`}
+      className={`grid grid-cols-1 ${stats?.best ? "md:grid-cols-2" : ""} gap-6`}
     >
       {/* Overview Stats */}
       <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 shadow-sm">
@@ -57,11 +64,15 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500">
-                Kết quả tốt nhất:
-              </span>
+              <span className="text-sm text-neutral-500">Đúng trung bình:</span>
               <span className="text-sm font-bold text-emerald-600 dark:text-emerald-450 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100/50 dark:border-emerald-900/20 px-2.5 py-0.5 rounded-lg">
-                {stats.bestCorrect} / {stats.bestTotal}
+                {stats.avgCorrect} câu
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-neutral-500">Thời gian trung bình:</span>
+              <span className="text-sm font-bold text-brand-600 dark:text-brand-450 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2.5 py-0.5 rounded-lg">
+                {stats.avgTime} phút
               </span>
             </div>
           </div>
@@ -72,15 +83,12 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
         )}
       </div>
 
-      {/* Latest Attempt Details */}
-      {stats?.latest && (
+      {/* Best Attempt Details */}
+      {stats?.best && (
         <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 shadow-sm">
           <h3 className="font-semibold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100/80 dark:border-neutral-800 flex items-center gap-2">
-            <History
-              className="text-neutral-500 dark:text-neutral-400"
-              size={18}
-            />
-            <span>Lần làm gần nhất</span>
+            <Award className="text-brand-500" size={18} />
+            <span>Lần làm cao nhất</span>
           </h3>
 
           <div className="space-y-3.5">
@@ -90,7 +98,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 Ngày làm:
               </span>
               <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                {formatDate(stats.latest.started_at)}
+                {formatDate(stats.best.started_at)}
               </span>
             </div>
 
@@ -100,8 +108,20 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 Đúng:
               </span>
               <span className="font-bold text-emerald-600 dark:text-emerald-450">
-                {stats.latest.correct_count ?? 0} /{" "}
-                {stats.latest.total_questions ?? 200} câu
+                {stats.best.correct_count ?? 0} /{" "}
+                {stats.best.total_questions ?? 200} câu
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-neutral-500 flex items-center gap-1.5">
+                <Award size={14} className="text-neutral-400" />
+                Điểm số:
+              </span>
+              <span className="font-bold text-brand-600 dark:text-brand-450">
+                {stats.best.mode === "FULL_TEST"
+                  ? `${stats.best.total_score ?? 0} / 990`
+                  : "—"}
               </span>
             </div>
 
@@ -111,14 +131,14 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 Thời gian (phút):
               </span>
               <span className="font-semibold text-neutral-850 dark:text-neutral-200">
-                {stats.latest.time_spent}
+                {stats.best.time_spent}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-sm">
               <span className="text-neutral-500">Chế độ:</span>
               <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                {stats.latest.mode === "FULL_TEST"
+                {stats.best.mode === "FULL_TEST"
                   ? "Thi Full Test"
                   : "Luyện tập"}
               </span>
@@ -131,3 +151,4 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 };
 
 export default TestDetailSidebar;
+

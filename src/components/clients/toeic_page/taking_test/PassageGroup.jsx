@@ -1,5 +1,5 @@
 import React from "react";
-import QuestionItem from "@/components/clients/toeic_page/QuestionItem";
+import QuestionItem from "./QuestionItem";
 
 const PassageGroup = ({
   passage,
