@@ -105,7 +105,7 @@ const ToeicResult = () => {
             testName: testInfo.title,
             answers: loadedAnswers,
             testData: { questions: allQuestions, passages: allPassages },
-            timeSpent: sessionData.time_spent || 0,
+            timeSpent: (sessionData.time_spent || 0) * 60,
             selectedPartIds: partIds,
           };
 

@@ -45,7 +45,7 @@ const ToeicTestOverview = () => {
       const session = await startSession({
         testId: Number(testId),
         mode,
-        timeSpent: duration * 60,
+        timeSpent: duration,
         partsDone: parts.join(","),
       });
 

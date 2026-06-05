@@ -156,6 +156,7 @@ const ToeicTakingTest = () => {
         if (sessionData.answers) {
           const loadedAnswers = loadAnswers(sessionData.answers);
           setAnswers(loadedAnswers);
+          console.log('loadedAnswers', loadedAnswers);
         }
 
         // Setup initial time left
@@ -163,10 +164,7 @@ const ToeicTakingTest = () => {
           sessionData.time_spent !== undefined &&
           sessionData.time_spent !== null
         ) {
-          let timeVal = Number(sessionData.time_spent);
-          if (sessionData.mode === "FULL_TEST" && timeVal <= 180) {
-            timeVal = timeVal * 60;
-          }
+          let timeVal = Number(sessionData.time_spent) * 60;
 
           // Adjust for elapsed time since the session started to prevent timer reset on refresh
           if (sessionData.started_at) {
@@ -207,8 +205,8 @@ const ToeicTakingTest = () => {
                 getQuestionByPartNumber(currentTestId, part.id).catch(() => []),
                 part.hasPassage
                   ? getPassageByPartNumber(currentTestId, part.id).catch(
-                      () => [],
-                    )
+                    () => [],
+                  )
                   : Promise.resolve([]),
               ]);
               allQuestions[part.id] = questionsRes || [];
@@ -634,11 +632,10 @@ const ToeicTakingTest = () => {
           </div>
 
           <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${
-              timeLeft < 300
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${timeLeft < 300
                 ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 animate-pulse"
                 : "bg-brand-50 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400"
-            }`}
+              }`}
           >
             <Clock size={20} />
             <span className="w-16 tabular-nums">{formatTime(timeLeft)}</span>
@@ -685,11 +682,10 @@ const ToeicTakingTest = () => {
                         setCurrentPart(part.id);
                         setIsSidebarOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${currentPart === part.id
                           ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
                           : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                      }`}
+                        }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
                     </button>
@@ -712,11 +708,10 @@ const ToeicTakingTest = () => {
                         setCurrentPart(part.id);
                         setIsSidebarOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${currentPart === part.id
                           ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
                           : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                      }`}
+                        }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
                     </button>
@@ -799,9 +794,8 @@ const ToeicTakingTest = () => {
 
         {/* Mobile Right Sidebar: Slide-over Drawer for Question Navigator */}
         <div
-          className={`fixed inset-y-0 right-0 z-50 w-80 bg-white dark:bg-neutral-900 shadow-2xl xl:hidden flex flex-col h-full transform transition-transform duration-300 ease-in-out ${
-            isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`fixed inset-y-0 right-0 z-50 w-80 bg-white dark:bg-neutral-900 shadow-2xl xl:hidden flex flex-col h-full transform transition-transform duration-300 ease-in-out ${isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="flex justify-between items-center p-4 border-b border-neutral-100 dark:border-neutral-800">
             <span className="font-bold text-neutral-900 dark:text-white">

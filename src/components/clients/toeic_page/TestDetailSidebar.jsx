@@ -6,30 +6,7 @@ import {
   CheckCircle2,
   History,
 } from "lucide-react";
-
-// Format seconds → HH:MM:SS
-const formatTimeSpent = (seconds) => {
-  if (!seconds && seconds !== 0) return "--:--:--";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-};
-
-// Format date string → DD/MM/YYYY
-const formatDate = (dateStr) => {
-  if (!dateStr) return "--/--/----";
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  } catch (e) {
-    return "--/--/----";
-  }
-};
+import { formatDate } from "@/utils/FormatDate";
 
 const TestDetailSidebar = ({ sessions = [], loading = false }) => {
   const stats = useMemo(() => {
@@ -131,10 +108,10 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
             <div className="flex items-center justify-between text-sm">
               <span className="text-neutral-500 flex items-center gap-1.5">
                 <Clock size={14} className="text-neutral-400" />
-                Thời gian:
+                Thời gian (phút):
               </span>
               <span className="font-semibold text-neutral-850 dark:text-neutral-200">
-                {formatTimeSpent(stats.latest.time_spent)}
+                {stats.latest.time_spent}
               </span>
             </div>
 

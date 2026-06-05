@@ -1,8 +1,19 @@
 import React from "react";
 import { Headphones, BookText, AlertCircle } from "lucide-react";
+import { formatDate } from "@/utils/FormatDate";
 import SessionHistoryTable from "./SessionHistoryTable";
 
 const TestInfoTab = ({ test, sessions = [], loadingSessions = false }) => {
+  const bestSession = React.useMemo(() => {
+    if (!sessions || sessions.length === 0) return null;
+    return [...sessions].sort((a, b) => {
+      const scoreA = a.total_score ?? 0;
+      const scoreB = b.total_score ?? 0;
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return (b.correct_count ?? 0) - (a.correct_count ?? 0);
+    })[0];
+  }, [sessions]);
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Listening & Reading Info Cards */}
@@ -24,7 +35,7 @@ const TestInfoTab = ({ test, sessions = [], loadingSessions = false }) => {
         </div>
 
         <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100/50 dark:border-emerald-900/30 p-5 rounded-2xl flex items-start gap-4">
-          <div className="mt-1 bg-emerald-100/70 dark:bg-emerald-900/40 p-2.5 rounded-xl text-emerald-600 dark:text-emerald-400 shrink-0">
+          <div className="mt-1 bg-emerald-100/70 dark:bg-emerald-900/40 p-2.5 rounded-xl text-emerald-600 dark:text-emerald-450 shrink-0">
             <BookText size={20} />
           </div>
           <div>
@@ -50,6 +61,45 @@ const TestInfoTab = ({ test, sessions = [], loadingSessions = false }) => {
           giữa các phần.
         </p>
       </div>
+
+      {/* Best Attempt Section */}
+      {bestSession && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+            <span>🏆 Lần làm cao nhất</span>
+          </h3>
+          <div className="bg-gradient-to-r from-brand-50/30 to-indigo-50/20 dark:from-brand-500/5 dark:to-indigo-500/5 border border-brand-100/50 dark:border-brand-500/20 rounded-2xl p-6 shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+              <div>
+                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Ngày làm</span>
+                <span className="font-semibold text-neutral-800 dark:text-neutral-250">{formatDate(bestSession.started_at)}</span>
+              </div>
+              <div>
+                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Chế độ</span>
+                <span className="font-semibold text-neutral-800 dark:text-neutral-250">
+                  {bestSession.mode === "FULL_TEST" ? "Thi Full Test" : "Luyện tập"}
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Số câu đúng</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-450">
+                  {bestSession.correct_count ?? 0} / {bestSession.total_questions ?? 200}
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Điểm số</span>
+                <span className="font-bold text-brand-600 dark:text-brand-450">
+                  {bestSession.mode === "FULL_TEST" ? `${bestSession.total_score ?? 0} / 990` : "—"}
+                </span>
+              </div>
+              <div>
+                <span className="text-xs text-neutral-500 dark:text-neutral-450 block mb-1">Thời gian</span>
+                <span className="font-semibold text-neutral-800 dark:text-neutral-250">{bestSession.time_spent} phút</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Session History Section */}
       <div className="space-y-4">

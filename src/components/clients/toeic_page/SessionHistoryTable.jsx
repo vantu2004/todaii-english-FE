@@ -1,30 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Clock, CheckCircle2, Award } from "lucide-react";
-
-// Format seconds → HH:MM:SS
-const formatTimeSpent = (seconds) => {
-  if (!seconds && seconds !== 0) return "--:--:--";
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-};
-
-// Format date string → DD/MM/YYYY
-const formatDate = (dateStr) => {
-  if (!dateStr) return "--/--/----";
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  } catch (e) {
-    return "--/--/----";
-  }
-};
+import { formatDate } from "@/utils/FormatDate";
 
 const SessionHistoryTable = ({ sessions = [], loading = false }) => {
   if (loading) {
@@ -93,7 +70,7 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                   scope="col"
                   className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
                 >
-                  Thời gian
+                  Thời gian (phút)
                 </th>
                 <th
                   scope="col"
@@ -180,7 +157,7 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-medium">
                       <div className="flex items-center gap-1.5">
                         <Clock size={14} className="text-neutral-400" />
-                        <span>{formatTimeSpent(session.time_spent)}</span>
+                        <span>{session.time_spent}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm">
