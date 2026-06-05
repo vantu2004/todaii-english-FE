@@ -163,7 +163,25 @@ const ToeicTakingTest = () => {
           sessionData.time_spent !== undefined &&
           sessionData.time_spent !== null
         ) {
-          setTimeLeft(Number(sessionData.time_spent));
+          let timeVal = Number(sessionData.time_spent);
+          if (sessionData.mode === "FULL_TEST" && timeVal <= 180) {
+            timeVal = timeVal * 60;
+          }
+
+          // Adjust for elapsed time since the session started to prevent timer reset on refresh
+          if (sessionData.started_at) {
+            const startTime = new Date(sessionData.started_at).getTime();
+            if (!isNaN(startTime)) {
+              const elapsedSeconds = Math.floor(
+                (Date.now() - startTime) / 1000,
+              );
+              if (elapsedSeconds > 0 && elapsedSeconds < timeVal) {
+                timeVal = timeVal - elapsedSeconds;
+              }
+            }
+          }
+
+          setTimeLeft(timeVal);
         } else {
           const durationParam = params.get("duration");
           if (durationParam) {
