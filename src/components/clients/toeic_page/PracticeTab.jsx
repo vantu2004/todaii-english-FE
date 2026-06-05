@@ -65,13 +65,14 @@ const PracticeTab = ({
   onStartSession,
   startingSession = false,
 }) => {
-  const [duration, setDuration] = useState(30); // Default to 30 minutes
+  const [duration, setDuration] = useState(30);
 
-  // Group tags by part number (supports both snake_case and camelCase)
   const tagsByPart = useMemo(() => {
     const grouped = {};
+
     tags.forEach((tag) => {
-      const partNumStr = tag.part_numbers || tag.partNumbers || "";
+      const partNumStr = tag.part_numbers || "";
+
       const parts = partNumStr.split(",").map(Number).filter(Boolean);
       parts.forEach((partId) => {
         if (!grouped[partId]) grouped[partId] = [];
@@ -157,7 +158,7 @@ const PracticeTab = ({
                       {partTags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/20 dark:border-neutral-700/30"
+                          className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/20 dark:border-neutral-700/30"
                         >
                           #{tag.name}
                         </span>
@@ -201,7 +202,7 @@ const PracticeTab = ({
         {selectedParts.length === 0 ? (
           <button
             type="button"
-            onClick={() => toast.error("Vui lòng chọn ít nhất một phần thi!")}
+            onClick={() => toast.error("Please select at least one part!")}
             className="flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 rounded-xl font-bold cursor-not-allowed transition-colors"
           >
             <Play size={18} className="fill-neutral-400 text-neutral-400" />

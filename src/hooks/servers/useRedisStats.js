@@ -17,7 +17,7 @@ export const useRedisStats = () => {
     } catch (err) {
       logError(err);
       setError(err);
-      toast.error("Không thể lấy dữ liệu thống kê Redis");
+      toast.error("Failed to fetch Redis statistics");
     } finally {
       setLoading(false);
     }

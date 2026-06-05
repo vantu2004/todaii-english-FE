@@ -47,7 +47,7 @@ const VocabDeckDetails = () => {
             audio_url: w.audio_url,
             // Lấy sense đầu tiên làm nghĩa chính
             pos: w.senses?.[0]?.pos || "N/A",
-            meaning: w.senses?.[0]?.meaning || "Chưa cập nhật nghĩa",
+            meaning: w.senses?.[0]?.meaning || "No translation available",
             definition: w.senses?.[0]?.definition,
             example: w.senses?.[0]?.example,
           }));
@@ -251,7 +251,7 @@ const VocabDeckDetails = () => {
           <div className="text-center py-20">
             <BookOpen className="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-700 mb-3" />
             <p className="text-neutral-500 dark:text-neutral-400 font-medium">
-              Bộ từ vựng này chưa có từ nào.
+              This vocabulary deck has no words yet.
             </p>
           </div>
         )}

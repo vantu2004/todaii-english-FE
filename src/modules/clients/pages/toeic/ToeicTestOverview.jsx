@@ -11,6 +11,7 @@ import TestInfoTab from "@/components/clients/toeic_page/TestInfoTab";
 import PracticeTab from "@/components/clients/toeic_page/PracticeTab";
 import FullTestTab from "@/components/clients/toeic_page/FullTestTab";
 import TestDetailSidebar from "@/components/clients/toeic_page/TestDetailSidebar";
+import { logError } from "@/utils/LogError";
 
 const ToeicTestOverview = () => {
   const { testId } = useParams();
@@ -40,16 +41,17 @@ const ToeicTestOverview = () => {
   const handleStartSession = async ({ mode, parts, duration }) => {
     try {
       setStartingSession(true);
+
       const session = await startSession({
         testId: Number(testId),
         mode,
-        timeSpent: duration * 60,
+        timeSpent: duration,
         partsDone: parts.join(","),
       });
+
       navigate(`/client/toeic/${testId}/take?sessionId=${session.id}`);
     } catch (err) {
-      console.error("Failed to start session", err);
-      toast.error("Không thể bắt đầu phiên thi. Vui lòng thử lại.");
+      logError(err);
     } finally {
       setStartingSession(false);
     }
@@ -59,16 +61,19 @@ const ToeicTestOverview = () => {
     const fetchTestDetails = async () => {
       try {
         setLoadingTest(true);
+
         const data = await getTestById(testId);
+
         setTest(data);
       } catch (err) {
-        console.error("Failed to fetch test details", err);
-        toast.error("Không thể tải thông tin đề thi.");
+        logError(err);
+
         navigate("/client/toeic");
       } finally {
         setLoadingTest(false);
       }
     };
+
     fetchTestDetails();
   }, [testId, navigate]);
 
@@ -76,22 +81,27 @@ const ToeicTestOverview = () => {
     const fetchSessionHistory = async () => {
       try {
         setLoadingSessions(true);
+
         const allSessions = await getSessionHistory();
+
         // Filter sessions by test_id (returned as snake_case)
         const testSessions = (allSessions || []).filter(
           (s) => Number(s.test_id) === Number(testId),
         );
+
         // Sort sessions by started_at DESC
         const sortedSessions = testSessions.sort(
           (a, b) => new Date(b.started_at) - new Date(a.started_at),
         );
+
         setSessions(sortedSessions);
       } catch (err) {
-        console.error("Failed to fetch session history", err);
+        logError(err);
       } finally {
         setLoadingSessions(false);
       }
     };
+
     fetchSessionHistory();
   }, [testId]);
 
@@ -99,14 +109,17 @@ const ToeicTestOverview = () => {
     const fetchTags = async () => {
       try {
         setLoadingTags(true);
+
         const testTags = await findAllTagsByTestId(testId);
+
         setTags(testTags || []);
       } catch (err) {
-        console.error("Failed to fetch tags", err);
+        logError(err);
       } finally {
         setLoadingTags(false);
       }
     };
+
     fetchTags();
   }, [testId]);
 

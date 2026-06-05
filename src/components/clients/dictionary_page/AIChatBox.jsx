@@ -10,7 +10,7 @@ const AIChatBox = () => {
       id: "welcome",
       sender: "bot",
       content:
-        "Xin chào! Tôi là trợ lý AI. Bạn cần giải thích từ vựng hay đặt câu ví dụ nào không?",
+        "Hello! I am your AI assistant. Do you need help with vocabulary explanations or example sentences?",
       timestamp: Date.now(),
     },
   ]);
@@ -37,7 +37,7 @@ const AIChatBox = () => {
       {
         id: Date.now(),
         sender: "bot",
-        content: "Đã xóa lịch sử trò chuyện.",
+        content: "Chat history cleared.",
         timestamp: Date.now(),
       },
     ]);
@@ -48,7 +48,9 @@ const AIChatBox = () => {
 
     if (!question) return;
     if (question.length > MAX_CHAR_LIMIT) {
-      alert(`Câu hỏi quá dài (${question.length}/${MAX_CHAR_LIMIT} ký tự).`);
+      alert(
+        `Question is too long (${question.length}/${MAX_CHAR_LIMIT} characters).`,
+      );
       return;
     }
 
@@ -96,8 +98,7 @@ const AIChatBox = () => {
         id: Date.now() + 1,
         sender: "bot",
         isError: true,
-        content:
-          "Xin lỗi, hiện tại tôi không thể trả lời. Vui lòng thử lại sau.",
+        content: "Sorry, I cannot reply right now. Please try again later.",
         timestamp: Date.now(),
       };
 
@@ -138,7 +139,7 @@ const AIChatBox = () => {
         <button
           onClick={handleClearChat}
           className="text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:bg-red-900/20 transition-colors p-1.5 rounded-md hover:bg-red-50"
-          title="Xóa lịch sử chat"
+          title="Clear chat history"
         >
           <Trash2 size={16} />
         </button>
@@ -220,7 +221,7 @@ const AIChatBox = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
-            placeholder={isLoading ? "Đang trả lời..." : "Hỏi gì đó..."}
+            placeholder={isLoading ? "Replying..." : "Ask something..."}
             className="w-full pl-4 pr-12 py-3 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 focus:ring-4 focus:ring-neutral-100 dark:focus:ring-neutral-800 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
           />
           <button
@@ -232,7 +233,7 @@ const AIChatBox = () => {
           </button>
         </div>
         <p className="text-[10px] text-center text-neutral-400 dark:text-neutral-500 mt-2">
-          AI có thể mắc lỗi. Hãy kiểm tra lại thông tin quan trọng.
+          AI can make mistakes. Please verify important info.
         </p>
       </div>
     </div>

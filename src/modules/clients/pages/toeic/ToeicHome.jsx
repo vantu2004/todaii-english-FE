@@ -7,6 +7,7 @@ import {
 import CollectionSidebar from "@/components/clients/toeic_page/CollectionSidebar";
 import TestGrid from "@/components/clients/toeic_page/TestGrid";
 import Pagination from "@/components/clients/Pagination";
+import { logError } from "@/utils/LogError";
 
 const ToeicHome = () => {
   const [collections, setCollections] = useState([]);
@@ -35,11 +36,13 @@ const ToeicHome = () => {
   const loadCollections = async () => {
     try {
       setLoadingCollections(true);
+
       const res = await getAllCollections();
+
       const enabledCollections = (res || []).filter((c) => c.enabled !== false);
       setCollections(enabledCollections);
     } catch (err) {
-      console.error("Failed to load collections", err);
+      logError(err);
     } finally {
       setLoadingCollections(false);
     }
@@ -48,6 +51,7 @@ const ToeicHome = () => {
   const loadTests = async () => {
     try {
       setLoadingTests(true);
+
       let res;
       if (selectedCollection) {
         res = await getAllTestsByCollectionPaged(
@@ -61,12 +65,16 @@ const ToeicHome = () => {
       } else {
         res = await getAllTestsPaged(page, size, sortBy, direction, keyword);
       }
+
       setTests(res.content || []);
+
       setTotalPages(res.totalPages || res.total_pages || 0);
       setTotalElements(res.totalElements || res.total_elements || 0);
     } catch (err) {
-      console.error("Failed to load tests", err);
+      logError(err);
+
       setTests([]);
+
       setTotalPages(0);
       setTotalElements(0);
     } finally {

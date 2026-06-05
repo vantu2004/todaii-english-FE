@@ -24,6 +24,7 @@ import QuestionItem from "@/components/clients/toeic_page/QuestionItem";
 import PassageGroup from "@/components/clients/toeic_page/PassageGroup";
 import QuestionNavigator from "@/components/clients/toeic_page/QuestionNavigator";
 import SubmitConfirmDialog from "@/components/clients/toeic_page/SubmitConfirmDialog";
+import { logError } from "@/utils/LogError";
 
 const PARTS = [
   { id: 1, name: "Part 1: Photographs", type: "listening", hasPassage: false },
@@ -99,17 +100,18 @@ const ToeicTakingTest = () => {
     answersRef.current = answers;
   }, [answers]);
 
-  // Load answers safely handling both camelCase and snake_case API shapes
   const loadAnswers = (sessionAnswers) => {
     if (!sessionAnswers || !Array.isArray(sessionAnswers)) return {};
     const parsed = {};
+
     sessionAnswers.forEach((ans) => {
-      const qId = ans.question_id || ans.questionId || ans.id;
-      const opt = ans.selected_option || ans.selectedOption || ans.answer;
+      const qId = ans.question_id;
+      const opt = ans.selected_option;
       if (qId && opt) {
         parsed[qId] = opt;
       }
     });
+
     return parsed;
   };
 
@@ -118,11 +120,15 @@ const ToeicTakingTest = () => {
     const fetchSessionAndTestData = async () => {
       try {
         setLoading(true);
+
         const params = new URLSearchParams(search);
+
         const sessId = params.get("sessionId");
         if (!sessId) {
-          toast.error("Không tìm thấy thông tin phiên thi!");
+          toast.error("Test session info not found!");
+
           navigate("/client/toeic");
+
           return;
         }
         setSessionId(sessId);
@@ -195,8 +201,7 @@ const ToeicTakingTest = () => {
 
         setTestData({ questions: allQuestions, passages: allPassages });
       } catch (err) {
-        console.error("Failed to load session/test data", err);
-        toast.error("Lỗi khi tải dữ liệu bài thi!");
+        logError(err);
         navigate("/client/toeic");
       } finally {
         setLoading(false);
@@ -204,7 +209,6 @@ const ToeicTakingTest = () => {
     };
 
     fetchSessionAndTestData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testId, search]);
 
   // Timer Tickdown & Auto Submit
@@ -250,7 +254,7 @@ const ToeicTakingTest = () => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
       e.returnValue =
-        "Bạn có chắc chắn muốn rời đi? Tiến trình làm bài sẽ được lưu.";
+        "Are you sure you want to leave? Your progress will be saved.";
       return e.returnValue;
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -354,12 +358,12 @@ const ToeicTakingTest = () => {
       }));
       await saveAnswers(sessionId, requests);
       if (showToast) {
-        toast.success("Đã lưu tiến độ làm bài!");
+        toast.success("Progress saved successfully!");
       }
     } catch (err) {
       console.error("Failed to save answers", err);
       if (showToast) {
-        toast.error("Không thể lưu tiến độ. Vui lòng kiểm tra kết nối.");
+        toast.error("Failed to save progress. Please check your connection.");
       }
     } finally {
       setSaving(false);
@@ -382,14 +386,16 @@ const ToeicTakingTest = () => {
   };
 
   const handleAutoSubmit = async () => {
-    toast.error("Hết giờ làm bài! Hệ thống đang tự động nộp bài.", {
+    toast.error("Time is up!", {
       id: "timeout-toast",
     });
+
     await executeSubmit(true);
   };
 
   const executeSubmit = async () => {
     if (!sessionId) return;
+
     try {
       setSubmitting(true);
       const requests = Object.entries(answers).map(([qId, opt]) => ({
@@ -404,7 +410,7 @@ const ToeicTakingTest = () => {
       // Save to localStorage for backward compatibility with ToeicResult.jsx
       const durationParam = new URLSearchParams(search).get("duration");
       const initialTime = durationParam
-        ? Number(durationParam) * 60
+        ? Number(durationParam)
         : calculateInitialTime(selectedPartIds);
       const timeSpent = Math.max(0, initialTime - timeLeft);
 
@@ -422,13 +428,13 @@ const ToeicTakingTest = () => {
       );
 
       setIsSubmitDialogOpen(false);
-      toast.success("Nộp bài thành công!");
+      toast.success("Test submitted successfully!");
       navigate(`/client/toeic/${testId}/result?sessionId=${sessionId}`, {
         replace: true,
       });
     } catch (err) {
       console.error("Failed to submit session", err);
-      toast.error("Nộp bài thất bại. Vui lòng thử lại!");
+      toast.error("Submission failed. Please try again!");
     } finally {
       setSubmitting(false);
     }

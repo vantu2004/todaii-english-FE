@@ -35,7 +35,7 @@ const Dashboard = () => {
       setChartData(data || []);
     } catch (error) {
       logError(error);
-      toast.error("Không thể lấy dữ liệu thống kê hoạt động");
+      toast.error("Failed to fetch activity statistics");
     } finally {
       setLoading(false);
     }

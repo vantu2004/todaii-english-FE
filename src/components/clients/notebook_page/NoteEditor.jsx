@@ -87,7 +87,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
       setSearchState((prev) => ({
         ...prev,
-        error: "Không tìm thấy từ.",
+        error: "Word not found.",
       }));
     } finally {
       setSearchState((prev) => ({ ...prev, isSearching: false }));
@@ -166,7 +166,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
             <button
               onClick={onToggleSidebar}
               className="text-neutral-400 hover:text-neutral-900 transition-colors dark:text-neutral-500 dark:hover:text-white"
-              title={isSidebarOpen ? "Đóng Sidebar" : "Mở Sidebar"}
+              title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
             >
               <Sidebar size={18} />
             </button>
@@ -178,7 +178,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 {note.name}
               </h2>
               <p className="text-xs text-neutral-500 font-medium dark:text-neutral-400">
-                {savedWords.length} từ vựng
+                {savedWords.length} words
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           <SearchBar
             value={searchState.term}
             onSearch={handleSearch}
-            placeholder="Nhập từ vựng mới để thêm vào bộ..."
+            placeholder="Enter new vocabulary to add to deck..."
           />
         </div>
 
@@ -240,10 +240,10 @@ const EmptyNoteState = () => (
       <BookOpen size={32} className="opacity-50" />
     </div>
     <p className="text-lg font-medium text-neutral-400 dark:text-neutral-500">
-      Chọn một bộ từ vựng để bắt đầu
+      Select a vocabulary deck to start
     </p>
     <p className="text-sm text-neutral-300 dark:text-neutral-600">
-      Hoặc tạo mới từ thanh bên trái
+      Or create a new one from the left sidebar
     </p>
   </div>
 );
@@ -259,7 +259,7 @@ const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
     return (
       <div className="flex flex-col items-center justify-center h-full text-neutral-400 opacity-60 select-none dark:text-neutral-500">
         <BookDashed size={40} className="mb-3" />
-        <p className="text-sm">Danh sách trống</p>
+        <p className="text-sm">Empty list</p>
       </div>
     );
 
@@ -308,7 +308,7 @@ const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
               <button
                 onClick={(e) => onRemove(word.id, e)}
                 className="p-1.5 rounded-md text-neutral-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all shrink-0 dark:text-neutral-600 dark:hover:text-red-400 dark:hover:bg-red-900/20"
-                title="Xóa từ"
+                title="Delete word"
               >
                 <Trash2 size={14} />
               </button>
@@ -329,7 +329,7 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
           size={32}
         />
         <p className="text-sm text-neutral-400 animate-pulse dark:text-neutral-500">
-          Đang tra cứu...
+          Searching...
         </p>
       </div>
     );
@@ -338,7 +338,7 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-red-50 rounded-3xl border border-red-100 dark:bg-red-900/20 dark:border-red-800">
         <p className="text-red-600 font-medium mb-1 dark:text-red-400">
-          Không tìm thấy kết quả
+          No results found
         </p>
         <p className="text-xs text-red-400 dark:text-red-500">{state.error}</p>
       </div>
@@ -348,7 +348,7 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-neutral-300 select-none dark:text-neutral-600">
         <Search size={48} className="mb-4 opacity-20" />
-        <p className="text-sm">Nhập từ khóa để xem chi tiết</p>
+        <p className="text-sm">Enter keyword to view details</p>
       </div>
     );
 
@@ -362,7 +362,7 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
           </div>
           <div>
             <p className="text-xs font-medium text-neutral-300 uppercase tracking-wider dark:text-neutral-400">
-              Kết quả cho
+              Results for
             </p>
             <p className="text-sm font-bold dark:text-white">"{state.term}"</p>
           </div>
@@ -372,7 +372,7 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
           className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-200 px-5 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm active:scale-95 dark:hover:bg-neutral-100"
         >
           <Plus size={16} />
-          Lưu vào bộ từ
+          Save to deck
         </button>
       </div>
 

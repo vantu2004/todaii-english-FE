@@ -74,7 +74,7 @@ const Dictionary = () => {
             saveHistory(rawRes[0].word);
             // Có thể hiện thông báo nhỏ: "Chưa có bản dịch tiếng Việt, hiển thị tiếng Anh"
           } else {
-            setError("Không tìm thấy từ này trong từ điển.");
+            setError("Word not found in dictionary.");
           }
         }
       } else {
@@ -84,12 +84,12 @@ const Dictionary = () => {
           setRawEntry(rawRes);
           saveHistory(rawRes[0].word);
         } else {
-          setError("Không tìm thấy định nghĩa tiếng Anh cho từ này.");
+          setError("English definition not found for this word.");
         }
       }
     } catch (err) {
       console.error(err);
-      setError("Đã có lỗi xảy ra khi tra cứu.");
+      setError("An error occurred during lookup.");
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ const Dictionary = () => {
       }
     } catch (err) {
       console.error(err);
-      setError("Đã có lỗi xảy ra khi lấy dữ liệu AI.");
+      setError("An error occurred while fetching AI data.");
     } finally {
       setLoading(false);
     }
