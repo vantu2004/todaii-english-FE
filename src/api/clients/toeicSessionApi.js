@@ -40,7 +40,7 @@ export const saveAnswers = async (sessionId, requests) => {
   try {
     const response = await clientInstance.post(
       `/toeic/session/${sessionId}/answers`,
-      { requests },
+      requests,
     );
 
     return response.data;
