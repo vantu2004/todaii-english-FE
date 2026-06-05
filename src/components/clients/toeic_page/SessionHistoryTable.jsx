@@ -69,13 +69,7 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                   scope="col"
                   className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
                 >
-                  Kết quả
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
-                >
-                  Thời gian
+                  Trạng thái
                 </th>
                 <th
                   scope="col"
@@ -87,13 +81,31 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                   scope="col"
                   className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
                 >
+                  Số câu
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
+                >
+                  Điểm số
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
+                >
+                  Thời gian
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
+                >
                   Phần đã làm
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-4 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider"
                 >
-                  Chi tiết
+                  Thao tác
                 </th>
               </tr>
             </thead>
@@ -103,6 +115,8 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                   ? session.parts_done.split(",")
                   : [];
 
+                const isInProgress = session.status === "IN_PROGRESS";
+
                 return (
                   <tr
                     key={session.id}
@@ -111,20 +125,16 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 dark:text-neutral-300 font-medium">
                       {formatDate(session.started_at)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 dark:text-white font-semibold">
-                      <div className="flex items-center gap-1.5">
-                        <CheckCircle2 size={16} className="text-emerald-500" />
-                        <span>
-                          {session.correct_count ?? 0} /{" "}
-                          {session.total_questions ?? 200}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {isInProgress ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-955/30 text-amber-700 dark:text-amber-400 border border-amber-100/50 dark:border-amber-900/20">
+                          Đang làm
                         </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-medium">
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={14} className="text-neutral-400" />
-                        <span>{formatTimeSpent(session.time_spent)}</span>
-                      </div>
+                      ) : (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-450 border border-emerald-100/50 dark:border-emerald-900/20">
+                          Đã hoàn thành
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {session.mode === "FULL_TEST" ? (
@@ -136,6 +146,42 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                           Luyện tập
                         </span>
                       )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex flex-col gap-0.5 text-xs font-medium">
+                        <span className="text-emerald-600 dark:text-emerald-450">
+                          Đúng: {session.correct_count ?? 0}
+                        </span>
+                        <span className="text-red-650 dark:text-red-400">
+                          Sai: {session.incorrect_count ?? 0}
+                        </span>
+                        <span className="text-neutral-500 dark:text-neutral-450">
+                          Bỏ qua: {session.skipped_count ?? 0}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {session.mode === "FULL_TEST" ? (
+                        <div className="flex flex-col">
+                          <span className="font-bold text-neutral-900 dark:text-white text-sm">
+                            {session.total_score ?? 0}
+                          </span>
+                          <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
+                            L: {session.score_l ?? 0} | R:{" "}
+                            {session.score_r ?? 0}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-neutral-400 dark:text-neutral-500">
+                          —
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                      <div className="flex items-center gap-1.5">
+                        <Clock size={14} className="text-neutral-400" />
+                        <span>{formatTimeSpent(session.time_spent)}</span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex flex-wrap gap-1">
@@ -150,12 +196,21 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
-                      <Link
-                        to={`/client/toeic/${session.test_id}/result?sessionId=${session.id}`}
-                        className="text-brand-500 hover:text-brand-600 dark:hover:text-brand-450 transition-colors"
-                      >
-                        Xem chi tiết
-                      </Link>
+                      {isInProgress ? (
+                        <Link
+                          to={`/client/toeic/${session.test_id}/take?sessionId=${session.id}`}
+                          className="text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 transition-colors"
+                        >
+                          Tiếp tục làm
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/client/toeic/${session.test_id}/result?sessionId=${session.id}`}
+                          className="text-brand-500 hover:text-brand-600 dark:hover:text-brand-450 transition-colors"
+                        >
+                          Xem chi tiết
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 );

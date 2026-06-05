@@ -53,15 +53,17 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 
   if (loading) {
     return (
-      <div className="w-full md:w-80 shrink-0 space-y-4 animate-pulse">
-        <div className="h-44 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
-        <div className="h-56 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
+        <div className="h-32 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
+        <div className="h-32 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
       </div>
     );
   }
 
   return (
-    <div className="w-full lg:w-80 shrink-0 space-y-6">
+    <div
+      className={`grid grid-cols-1 ${stats?.latest ? "md:grid-cols-2" : ""} gap-6`}
+    >
       {/* Overview Stats */}
       <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 shadow-sm">
         <h3 className="font-semibold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100/80 dark:border-neutral-800 flex items-center gap-2">

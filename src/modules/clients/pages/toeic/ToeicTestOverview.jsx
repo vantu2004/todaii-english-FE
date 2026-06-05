@@ -45,7 +45,7 @@ const ToeicTestOverview = () => {
       const session = await startSession({
         testId: Number(testId),
         mode,
-        timeSpent: duration,
+        timeSpent: duration * 60,
         partsDone: parts.join(","),
       });
 
@@ -199,10 +199,13 @@ const ToeicTestOverview = () => {
           </div>
         </div>
 
-        {/* Main Content & Sidebar Grid */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Main Tabs Area */}
-          <div className="flex-1 w-full space-y-6">
+        {/* Main Content Area */}
+        <div className="w-full space-y-8">
+          {/* Stats & Latest Attempt */}
+          <TestDetailSidebar sessions={sessions} loading={loadingSessions} />
+
+          {/* Test Action Tabs */}
+          <div className="space-y-6">
             {/* Tab Switched Header */}
             <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-neutral-800/80 rounded-xl max-w-md">
               <button
@@ -272,9 +275,6 @@ const ToeicTestOverview = () => {
               )}
             </div>
           </div>
-
-          {/* Right Sidebar Stats */}
-          <TestDetailSidebar sessions={sessions} loading={loadingSessions} />
         </div>
       </div>
     </div>

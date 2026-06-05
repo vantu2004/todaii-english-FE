@@ -409,9 +409,12 @@ const ToeicTakingTest = () => {
 
       // Save to localStorage for backward compatibility with ToeicResult.jsx
       const durationParam = new URLSearchParams(search).get("duration");
-      const initialTime = durationParam
-        ? Number(durationParam)
-        : calculateInitialTime(selectedPartIds);
+      const initialTime =
+        session?.time_spent !== undefined && session?.time_spent !== null
+          ? Number(session.time_spent)
+          : durationParam
+            ? Number(durationParam) * 60
+            : calculateInitialTime(selectedPartIds);
       const timeSpent = Math.max(0, initialTime - timeLeft);
 
       const resultData = {
