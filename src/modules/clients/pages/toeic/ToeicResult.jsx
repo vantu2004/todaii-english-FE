@@ -28,31 +28,22 @@ const ToeicResult = () => {
       try {
         const sessionData = await getSessionDetails(sessionId);
 
-        // Read testId (handle both snake_case and camelCase)
-        const currentTestId = sessionData.test_id || sessionData.testId;
+        // Read testId
+        const currentTestId = sessionData.test_id;
         const testInfo = await getTestById(currentTestId);
 
         // Read scores from BE DTO
-        const scoreL = sessionData.score_l ?? sessionData.scoreL ?? 0;
-        const scoreR = sessionData.score_r ?? sessionData.scoreR ?? 0;
-        const totalScore =
-          sessionData.total_score ?? sessionData.totalScore ?? 0;
-        const correctCount =
-          sessionData.correct_count ?? sessionData.correctCount ?? 0;
-        const incorrectCount =
-          sessionData.incorrect_count ?? sessionData.incorrectCount ?? 0;
-        const skippedCount =
-          sessionData.skipped_count ?? sessionData.skippedCount ?? 0;
-        const timeSpentMinutes =
-          sessionData.time_spent ?? sessionData.timeSpent ?? 0;
+        const scoreL = sessionData.score_l ?? 0;
+        const scoreR = sessionData.score_r ?? 0;
+        const totalScore = sessionData.total_score ?? 0;
+        const correctCount = sessionData.correct_count ?? 0;
+        const incorrectCount = sessionData.incorrect_count ?? 0;
+        const skippedCount = sessionData.skipped_count ?? 0;
+        const timeSpentMinutes = sessionData.time_spent ?? 0;
 
-        // Compute elapsed time from startedAt → completedAt (or stoppedAt) for display
-        const startedAt = sessionData.started_at || sessionData.startedAt;
-        const completedAt =
-          sessionData.completed_at ||
-          sessionData.completedAt ||
-          sessionData.stopped_at ||
-          sessionData.stoppedAt;
+        // Compute elapsed time from started_at → completed_at (or stopped_at) for display
+        const startedAt = sessionData.started_at;
+        const completedAt = sessionData.completed_at || sessionData.stopped_at;
         let elapsedSeconds = timeSpentMinutes * 60; // fallback
         if (startedAt && completedAt) {
           elapsedSeconds = Math.max(
@@ -68,8 +59,7 @@ const ToeicResult = () => {
         const totalAnswered = correctCount + incorrectCount;
         const totalQuestions = totalAnswered + skippedCount;
 
-        const partsDoneStr =
-          sessionData.parts_done || sessionData.partsDone || "";
+        const partsDoneStr = sessionData.parts_done || "";
         const mode = sessionData.mode;
         const isFullTest = mode === "FULL_TEST";
 

@@ -68,8 +68,8 @@ const ToeicHome = () => {
 
       setTests(res.content || []);
 
-      setTotalPages(res.totalPages || res.total_pages || 0);
-      setTotalElements(res.totalElements || res.total_elements || 0);
+      setTotalPages(res.total_pages || 0);
+      setTotalElements(res.total_elements || 0);
     } catch (err) {
       logError(err);
 

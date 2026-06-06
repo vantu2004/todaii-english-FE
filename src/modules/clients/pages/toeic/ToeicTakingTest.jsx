@@ -78,9 +78,8 @@ const ToeicTakingTest = () => {
 
   const isFirstTime = useMemo(() => {
     if (!session) return true;
-    const answersList =
-      session.userAnswers || session.user_answers || session.answers || [];
-    const timeSpentVal = session.time_spent || session.timeSpent || 0;
+    const answersList = session.user_answers || [];
+    const timeSpentVal = session.time_spent || 0;
     return timeSpentVal === 0 && answersList.length === 0;
   }, [session]);
 
@@ -94,9 +93,8 @@ const ToeicTakingTest = () => {
     const parsed = {};
 
     sessionAnswers.forEach((ans) => {
-      const qId = ans.question_id || ans.questionId || ans.id;
-      const opt =
-        ans.user_choice || ans.selected_option || ans.selectedOption || null;
+      const qId = ans.question_id || ans.id;
+      const opt = ans.user_choice || null;
       parsed[qId] = {
         user_choice: opt,
         is_marked: ans.is_marked ?? false,
@@ -156,7 +154,7 @@ const ToeicTakingTest = () => {
         setSession(sessionData);
 
         // Parse parts_done from session (e.g. "1,2,3")
-        const partsDoneStr = sessionData.parts_done || sessionData.partsDone;
+        const partsDoneStr = sessionData.parts_done;
         let partIds = [1, 2, 3, 4, 5, 6, 7];
         if (partsDoneStr) {
           partIds = partsDoneStr
@@ -172,18 +170,14 @@ const ToeicTakingTest = () => {
         }
 
         // Pre-fill answers from session
-        const answersList =
-          sessionData.userAnswers ||
-          sessionData.user_answers ||
-          sessionData.answers;
+        const answersList = sessionData.user_answers;
         if (answersList) {
           const loadedAnswers = initAnswers(answersList);
           setAnswers(loadedAnswers);
         }
 
         // Setup initial time left using localStorage cache if valid (reload check)
-        const timeSpentVal =
-          sessionData.time_spent || sessionData.timeSpent || 0;
+        const timeSpentVal = sessionData.time_spent || 0;
         const initialSeconds = timeSpentVal * 60;
 
         const cachedTimeLeftStr = localStorage.getItem(
@@ -210,8 +204,8 @@ const ToeicTakingTest = () => {
 
         if (finalTimeLeft === null) {
           // Bypassed or expired -> read from DB
-          const stoppedAtVal = sessionData.stopped_at || sessionData.stoppedAt;
-          const startedAtVal = sessionData.started_at || sessionData.startedAt;
+          const stoppedAtVal = sessionData.stopped_at;
+          const startedAtVal = sessionData.started_at;
           const endRef = stoppedAtVal
             ? new Date(stoppedAtVal).getTime()
             : Date.now();
@@ -231,7 +225,7 @@ const ToeicTakingTest = () => {
         );
 
         // 2. Fetch Test Info
-        const currentTestId = sessionData.test_id || sessionData.testId;
+        const currentTestId = sessionData.test_id;
         const testInfo = await getTestById(currentTestId);
         setTest(testInfo);
 
@@ -283,7 +277,7 @@ const ToeicTakingTest = () => {
   // Autoplay full test audio on mount / first interaction
   useEffect(() => {
     if (session?.mode === "FULL_TEST" && test && isFirstTime) {
-      const audioUrl = test.audio_url || test.audioUrl;
+      const audioUrl = test.audio_url;
       if (audioUrl && audioRef.current) {
         const playAudio = () => {
           audioRef.current.play().catch((err) => {
@@ -629,24 +623,23 @@ const ToeicTakingTest = () => {
 
         <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Global test audio for FULL TEST mode */}
-          {session?.mode === "FULL_TEST" &&
-            (test?.audio_url || test?.audioUrl) && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider hidden lg:inline">
-                  Audio Đề Thi:
-                </span>
-                <audio
-                  ref={audioRef}
-                  src={test.audio_url || test.audioUrl}
-                  controls
-                  controlsList="nodownload"
-                  autoPlay={isFirstTime}
-                  className="h-8 w-44 sm:w-64 focus:outline-none"
-                >
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            )}
+          {session?.mode === "FULL_TEST" && test?.audio_url && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider hidden lg:inline">
+                Audio Đề Thi:
+              </span>
+              <audio
+                ref={audioRef}
+                src={test.audio_url}
+                controls
+                controlsList="nodownload"
+                autoPlay={isFirstTime}
+                className="h-8 w-44 sm:w-64 focus:outline-none"
+              >
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
 
           <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded text-xs font-medium">
             <CheckCircle2 size={12} className="text-brand-500" />

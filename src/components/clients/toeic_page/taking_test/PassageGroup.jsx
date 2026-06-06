@@ -21,12 +21,10 @@ const PassageGroup = ({
   partNumber,
   mode,
 }) => {
-  const images = getImages(passage.image_url || passage.imageUrl);
+  const images = getImages(passage.image_url);
   const hasImages = images.length > 0;
   const showAudio =
-    (passage.audio_url || passage.audioUrl) &&
-    mode !== "FULL_TEST" &&
-    ![6, 7].includes(partNumber);
+    passage.audio_url && mode !== "FULL_TEST" && ![6, 7].includes(partNumber);
 
   // Prioritize images over text for parts 6 and 7; hide text entirely for parts 3 and 4.
   let showText = false;
@@ -50,11 +48,7 @@ const PassageGroup = ({
           />
         ))}
         {showAudio && (
-          <audio
-            controls
-            className="w-full"
-            src={passage.audio_url || passage.audioUrl}
-          />
+          <audio controls className="w-full" src={passage.audio_url} />
         )}
         {showText && (
           <div

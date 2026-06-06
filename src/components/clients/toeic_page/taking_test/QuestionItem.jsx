@@ -25,19 +25,18 @@ const QuestionItem = forwardRef(
     ref,
   ) => {
     const options = optionCount === 3 ? ["A", "B", "C"] : ["A", "B", "C", "D"];
-    const resolvedPartNumber =
-      partNumber || question.part_number || question.partNumber;
+    const resolvedPartNumber = partNumber || question.part_number;
     const showAudio =
-      (question.audio_url || question.audioUrl) &&
+      question.audio_url &&
       mode !== "FULL_TEST" &&
       ![5, 6, 7].includes(resolvedPartNumber);
-    const hasMedia = question.image_url || question.imageUrl || showAudio;
+    const hasMedia = question.image_url || showAudio;
 
     return (
       <div
         ref={ref}
         id={`question-${question.id}`}
-        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border-neutral-150 dark:border-neutral-800 shadow-sm transition-colors"
+        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-150 dark:border-neutral-800 shadow-sm transition-colors"
       >
         <div
           className={
@@ -47,22 +46,16 @@ const QuestionItem = forwardRef(
           {/* Media Column (Left) */}
           {hasMedia && (
             <div className="flex flex-col gap-2.5 justify-center min-w-0">
-              {getImages(question.image_url || question.imageUrl).map(
-                (imgUrl, i) => (
-                  <img
-                    key={i}
-                    src={imgUrl}
-                    alt={`Câu ${questionNumber}`}
-                    className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-850"
-                  />
-                ),
-              )}
-              {showAudio && (
-                <audio
-                  controls
-                  className="w-full"
-                  src={question.audio_url || question.audioUrl}
+              {getImages(question.image_url).map((imgUrl, i) => (
+                <img
+                  key={i}
+                  src={imgUrl}
+                  alt={`Câu ${questionNumber}`}
+                  className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-850"
                 />
+              ))}
+              {showAudio && (
+                <audio controls className="w-full" src={question.audio_url} />
               )}
             </div>
           )}
