@@ -36,7 +36,7 @@ const QuestionItem = forwardRef(
       <div
         ref={ref}
         id={`question-${question.id}`}
-        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-150 dark:border-neutral-800 shadow-sm transition-colors"
+        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border-neutral-150 dark:border-neutral-800 shadow-sm transition-colors"
       >
         <div
           className={
