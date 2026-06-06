@@ -6,7 +6,6 @@ const PassageGroup = ({
   questions,
   startNumber,
   answers,
-  marks,
   onSelectAnswer,
   onToggleMark,
   optionCount = 4,
@@ -56,8 +55,8 @@ const PassageGroup = ({
             }}
             question={q}
             questionNumber={startNumber + qIndex}
-            selectedAnswer={answers[q.id] || null}
-            isMarked={marks.has(q.id)}
+            selectedAnswer={answers[q.id]?.user_choice || null}
+            isMarked={answers[q.id]?.is_marked || false}
             onSelectAnswer={onSelectAnswer}
             onToggleMark={onToggleMark}
             optionCount={optionCount}

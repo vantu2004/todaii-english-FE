@@ -49,7 +49,7 @@ const ToeicTestOverview = () => {
         partsDone: parts.join(","),
       });
 
-      navigate(`/client/toeic/${testId}/take?sessionId=${session.id}`);
+      navigate(`/client/toeic/exam/${session.id}`);
     } catch (err) {
       logError(err);
     } finally {

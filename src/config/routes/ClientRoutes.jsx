@@ -100,10 +100,13 @@ export default function ClientRoutes() {
           <Route path="/toeic" element={<ToeicHome />}></Route>
           <Route path="/toeic/:testId" element={<ToeicTestOverview />}></Route>
           <Route
-            path="/toeic/:testId/take"
+            path="/toeic/exam/:sessionId"
             element={<ToeicTakingTest />}
           ></Route>
-          <Route path="/toeic/:testId/result" element={<ToeicResult />}></Route>
+          <Route
+            path="/toeic/result/:sessionId"
+            element={<ToeicResult />}
+          ></Route>
 
           <Route
             path="/notebook"

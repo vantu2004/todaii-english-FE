@@ -138,21 +138,14 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {session.mode === "FULL_TEST" ? (
-                        <div className="flex flex-col">
-                          <span className="font-bold text-neutral-900 dark:text-white text-sm">
-                            {session.total_score ?? 0}
-                          </span>
-                          <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
-                            L: {session.score_l ?? 0} | R:{" "}
-                            {session.score_r ?? 0}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-neutral-400 dark:text-neutral-500">
-                          —
+                      <div className="flex flex-col">
+                        <span className="font-bold text-neutral-900 dark:text-white text-sm">
+                          {session.total_score ?? 0}
                         </span>
-                      )}
+                        <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
+                          L: {session.score_l ?? 0} | R: {session.score_r ?? 0}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-600 dark:text-neutral-400 font-medium">
                       <div className="flex items-center gap-1.5">
@@ -175,15 +168,15 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
                       {isInProgress ? (
                         <Link
-                          to={`/client/toeic/${session.test_id}/take?sessionId=${session.id}`}
+                          to={`/client/toeic/exam/${session.id}`}
                           className="text-amber-600 hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400 transition-colors"
                         >
                           Tiếp tục làm
                         </Link>
                       ) : (
                         <Link
-                          to={`/client/toeic/${session.test_id}/result?sessionId=${session.id}`}
-                          className="text-brand-500 hover:text-brand-600 dark:hover:text-brand-450 transition-colors"
+                          to={`/client/toeic/result/${session.id}`}
+                          className="text-brand-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                         >
                           Xem chi tiết
                         </Link>

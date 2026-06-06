@@ -1,11 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  BarChart3,
-  Clock,
-  Calendar,
-  CheckCircle2,
-  Award,
-} from "lucide-react";
+import { BarChart3, Clock, Calendar, CheckCircle2, Award } from "lucide-react";
 import { formatDate } from "@/utils/FormatDate";
 
 const TestDetailSidebar = ({ sessions = [], loading = false }) => {
@@ -21,10 +15,11 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
     })[0];
 
     const avgCorrect = Math.round(
-      sessions.reduce((sum, s) => sum + (s.correct_count ?? 0), 0) / totalAttempts
+      sessions.reduce((sum, s) => sum + (s.correct_count ?? 0), 0) /
+        totalAttempts,
     );
     const avgTime = Math.round(
-      sessions.reduce((sum, s) => sum + (s.time_spent ?? 0), 0) / totalAttempts
+      sessions.reduce((sum, s) => sum + (s.time_spent ?? 0), 0) / totalAttempts,
     );
 
     return {
@@ -70,7 +65,9 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500">Thời gian trung bình:</span>
+              <span className="text-sm text-neutral-500">
+                Thời gian trung bình:
+              </span>
               <span className="text-sm font-bold text-brand-600 dark:text-brand-450 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2.5 py-0.5 rounded-lg">
                 {stats.avgTime} phút
               </span>
@@ -119,9 +116,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 Điểm số:
               </span>
               <span className="font-bold text-brand-600 dark:text-brand-450">
-                {stats.best.mode === "FULL_TEST"
-                  ? `${stats.best.total_score ?? 0} / 990`
-                  : "—"}
+                {stats.best.total_score}
               </span>
             </div>
 
@@ -151,4 +146,3 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 };
 
 export default TestDetailSidebar;
-

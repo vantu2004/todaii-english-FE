@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getTestById } from "@/api/clients/toeicTestApi";
 import { getQuestionByPartNumber } from "@/api/clients/toeicQuestionApi";
 import { getPassageByPartNumber } from "@/api/clients/toeicPassageApi";
@@ -51,39 +51,19 @@ const PARTS = [
   },
 ];
 
-const calculateInitialTime = (partIds) => {
-  const timeMapping = {
-    1: 6 * 27, // 162s
-    2: 25 * 27, // 675s
-    3: 39 * 27, // 1053s
-    4: 30 * 27, // 810s
-    5: 30 * 45, // 1350s
-    6: 16 * 45, // 720s
-    7: 54 * 45, // 2430s
-  };
-  let totalSeconds = 0;
-  partIds.forEach((id) => {
-    totalSeconds += timeMapping[id] || 0;
-  });
-  return totalSeconds;
-};
-
 const ToeicTakingTest = () => {
-  const { testId } = useParams();
+  const { sessionId } = useParams();
   const navigate = useNavigate();
-  const { search } = useLocation();
 
-  const [sessionId, setSessionId] = useState(null);
   const [session, setSession] = useState(null);
   const [selectedPartIds, setSelectedPartIds] = useState([1, 2, 3, 4, 5, 6, 7]);
   const [test, setTest] = useState(null);
-  const [testData, setTestData] = useState({ questions: {}, passages: {} }); // partId -> data
+  const [partItems, setPartItems] = useState({}); // partId -> Item[]
   const [loading, setLoading] = useState(true);
 
   const [currentPart, setCurrentPart] = useState(1);
-  const [answers, setAnswers] = useState({}); // questionId -> answer ('A', 'B', 'C', 'D')
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [marks, setMarks] = useState(new Set());
+  const [answers, setAnswers] = useState({}); // questionId -> { user_choice, is_marked }
+  const [timeLeft, setTimeLeft] = useState(null);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
@@ -95,24 +75,52 @@ const ToeicTakingTest = () => {
   const questionRefs = useRef({});
   const answersRef = useRef(answers);
 
-  // Sync answersRef with answers state for auto-save and beforeunload handlers
+  // Sync answersRef with answers state for handlers
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
 
-  const loadAnswers = (sessionAnswers) => {
+  const initAnswers = (sessionAnswers) => {
     if (!sessionAnswers || !Array.isArray(sessionAnswers)) return {};
     const parsed = {};
 
     sessionAnswers.forEach((ans) => {
-      const qId = ans.question_id;
-      const opt = ans.selected_option;
-      if (qId && opt) {
-        parsed[qId] = opt;
-      }
+      const qId = ans.question_id || ans.questionId || ans.id;
+      const opt =
+        ans.user_choice || ans.selected_option || ans.selectedOption || null;
+      parsed[qId] = {
+        user_choice: opt,
+        is_marked: ans.is_marked ?? false,
+      };
     });
 
     return parsed;
+  };
+
+  const loadPart = async (testId, partNumber) => {
+    const [questions, passages] = await Promise.all([
+      getQuestionByPartNumber(testId, partNumber).catch(() => []),
+      getPassageByPartNumber(testId, partNumber).catch(() => []),
+    ]);
+
+    // LỌC: chỉ lấy câu có passageId == null (câu độc lập)
+    const standaloneQuestions = (questions || []).filter((q) => !q.passage_id);
+
+    // MERGE standalone + passages → sort theo createdAt
+    const items = [
+      ...standaloneQuestions.map((q) => ({
+        type: "question",
+        data: q,
+        createdAt: q.created_at,
+      })),
+      ...(passages || []).map((p) => ({
+        type: "passage",
+        data: p,
+        createdAt: p.created_at,
+      })),
+    ];
+
+    return items.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   };
 
   // Fetch session details and related test data on mount
@@ -121,28 +129,30 @@ const ToeicTakingTest = () => {
       try {
         setLoading(true);
 
-        const params = new URLSearchParams(search);
-
-        const sessId = params.get("sessionId");
-        if (!sessId) {
+        if (!sessionId) {
           toast.error("Test session info not found!");
-
           navigate("/client/toeic");
-
           return;
         }
-        setSessionId(sessId);
 
         // 1. Fetch Session Details
-        const sessionData = await getSessionDetails(sessId);
+        const sessionData = await getSessionDetails(sessionId);
+
+        if (sessionData.status === "COMPLETED") {
+          localStorage.removeItem(`toeic_timeLeft_${sessionId}`);
+          localStorage.removeItem(`toeic_lastTime_${sessionId}`);
+          navigate(`/client/toeic/result/${sessionId}`, { replace: true });
+          return;
+        }
         setSession(sessionData);
 
         // Parse parts_done from session (e.g. "1,2,3")
+        const partsDoneStr = sessionData.parts_done || sessionData.partsDone;
         let partIds = [1, 2, 3, 4, 5, 6, 7];
-        if (sessionData.parts_done) {
-          partIds = sessionData.parts_done
+        if (partsDoneStr) {
+          partIds = partsDoneStr
             .split(",")
-            .map(Number)
+            .map((s) => parseInt(s.trim()))
             .filter((id) => id >= 1 && id <= 7);
         }
         setSelectedPartIds(partIds);
@@ -153,69 +163,78 @@ const ToeicTakingTest = () => {
         }
 
         // Pre-fill answers from session
-        if (sessionData.answers) {
-          const loadedAnswers = loadAnswers(sessionData.answers);
+        const answersList =
+          sessionData.userAnswers ||
+          sessionData.user_answers ||
+          sessionData.answers;
+        if (answersList) {
+          const loadedAnswers = initAnswers(answersList);
           setAnswers(loadedAnswers);
-          console.log('loadedAnswers', loadedAnswers);
         }
 
-        // Setup initial time left
-        if (
-          sessionData.time_spent !== undefined &&
-          sessionData.time_spent !== null
-        ) {
-          let timeVal = Number(sessionData.time_spent) * 60;
+        // Setup initial time left using localStorage cache if valid (reload check)
+        const timeSpentVal =
+          sessionData.time_spent || sessionData.timeSpent || 0;
+        const initialSeconds = timeSpentVal * 60;
 
-          // Adjust for elapsed time since the session started to prevent timer reset on refresh
-          if (sessionData.started_at) {
-            const startTime = new Date(sessionData.started_at).getTime();
-            if (!isNaN(startTime)) {
-              const elapsedSeconds = Math.floor(
-                (Date.now() - startTime) / 1000,
-              );
-              if (elapsedSeconds > 0 && elapsedSeconds < timeVal) {
-                timeVal = timeVal - elapsedSeconds;
-              }
-            }
-          }
+        const cachedTimeLeftStr = localStorage.getItem(
+          `toeic_timeLeft_${sessionId}`,
+        );
+        const cachedLastTimeStr = localStorage.getItem(
+          `toeic_lastTime_${sessionId}`,
+        );
+        let finalTimeLeft = null;
 
-          setTimeLeft(timeVal);
-        } else {
-          const durationParam = params.get("duration");
-          if (durationParam) {
-            setTimeLeft(Number(durationParam) * 60);
-          } else {
-            setTimeLeft(calculateInitialTime(partIds));
+        if (cachedTimeLeftStr && cachedLastTimeStr) {
+          const cachedTimeLeft = parseInt(cachedTimeLeftStr, 10);
+          const cachedLastTime = parseInt(cachedLastTimeStr, 10);
+          const timeDiff = Math.max(
+            0,
+            Math.floor((Date.now() - cachedLastTime) / 1000),
+          );
+
+          if (timeDiff < 60) {
+            // Under 60s gap -> it's a page reload or brief blur
+            finalTimeLeft = Math.max(0, cachedTimeLeft - timeDiff);
           }
         }
+
+        if (finalTimeLeft === null) {
+          // Bypassed or expired -> read from DB
+          const stoppedAtVal = sessionData.stopped_at || sessionData.stoppedAt;
+          const startedAtVal = sessionData.started_at || sessionData.startedAt;
+          const endRef = stoppedAtVal
+            ? new Date(stoppedAtVal).getTime()
+            : Date.now();
+          const startRef = new Date(startedAtVal).getTime();
+          const elapsed = Math.max(0, Math.floor((endRef - startRef) / 1000));
+          finalTimeLeft = Math.max(0, initialSeconds - elapsed);
+        }
+
+        setTimeLeft(finalTimeLeft);
+        localStorage.setItem(
+          `toeic_timeLeft_${sessionId}`,
+          finalTimeLeft.toString(),
+        );
+        localStorage.setItem(
+          `toeic_lastTime_${sessionId}`,
+          Date.now().toString(),
+        );
 
         // 2. Fetch Test Info
-        const currentTestId = sessionData.test_id || testId;
+        const currentTestId = sessionData.test_id || sessionData.testId;
         const testInfo = await getTestById(currentTestId);
         setTest(testInfo);
 
         // 3. Fetch Questions and Passages concurrently
-        const allQuestions = {};
-        const allPassages = {};
-
+        const allPartItems = {};
         await Promise.all(
-          PARTS.filter((part) => partIds.includes(part.id)).map(
-            async (part) => {
-              const [questionsRes, passagesRes] = await Promise.all([
-                getQuestionByPartNumber(currentTestId, part.id).catch(() => []),
-                part.hasPassage
-                  ? getPassageByPartNumber(currentTestId, part.id).catch(
-                    () => [],
-                  )
-                  : Promise.resolve([]),
-              ]);
-              allQuestions[part.id] = questionsRes || [];
-              allPassages[part.id] = passagesRes || [];
-            },
-          ),
+          partIds.map(async (partId) => {
+            const items = await loadPart(currentTestId, partId);
+            allPartItems[partId] = items;
+          }),
         );
-
-        setTestData({ questions: allQuestions, passages: allPassages });
+        setPartItems(allPartItems);
       } catch (err) {
         logError(err);
         navigate("/client/toeic");
@@ -225,69 +244,100 @@ const ToeicTakingTest = () => {
     };
 
     fetchSessionAndTestData();
-  }, [testId, search]);
+  }, [sessionId, navigate]);
 
   // Timer Tickdown & Auto Submit
   useEffect(() => {
-    if (loading) return;
+    if (loading || timeLeft === null) return;
     if (timeLeft <= 0) {
       handleAutoSubmit();
       return;
     }
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
+        const nextVal = prev > 1 ? prev - 1 : 0;
+        localStorage.setItem(`toeic_timeLeft_${sessionId}`, nextVal.toString());
+        localStorage.setItem(
+          `toeic_lastTime_${sessionId}`,
+          Date.now().toString(),
+        );
+        if (nextVal === 0) {
           clearInterval(timer);
-          return 0;
+          handleAutoSubmit();
         }
-        return prev - 1;
+        return nextVal;
       });
     }, 1000);
     return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeLeft, loading]);
+  }, [loading, sessionId]);
+
+  const buildAnswerRequests = (currentAnswers) =>
+    Object.entries(currentAnswers).map(([qId, ans]) => ({
+      question_id: Number(qId),
+      user_choice: ans.user_choice ?? null,
+      is_marked: ans.is_marked ?? false,
+    }));
 
   // Auto-Save progress every 2 minutes
   useEffect(() => {
     if (!sessionId || loading) return;
     const autoSaveInterval = setInterval(() => {
       const currentAnswers = answersRef.current;
-      const requests = Object.entries(currentAnswers).map(([qId, opt]) => ({
-        question_id: Number(qId),
-        questionId: Number(qId),
-        selected_option: opt,
-        selectedOption: opt,
-      }));
-      saveAnswers(sessionId, requests).catch((err) =>
-        console.error("Auto-save failed", err),
-      );
+      const requests = buildAnswerRequests(currentAnswers);
+      if (requests.length > 0) {
+        saveAnswers(sessionId, requests).catch((err) =>
+          console.error("Auto-save failed", err),
+        );
+      }
     }, 120000);
     return () => clearInterval(autoSaveInterval);
   }, [sessionId, loading]);
 
-  // Warning before unload
+  // Save answers on visibilitychange (tab hidden) and beforeunload
   useEffect(() => {
+    if (!sessionId || loading) return;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        const currentAnswers = answersRef.current;
+        const requests = buildAnswerRequests(currentAnswers);
+        if (requests.length > 0) {
+          saveAnswers(sessionId, requests).catch((err) =>
+            console.error("Visibility change save failed", err),
+          );
+        }
+      }
+    };
+
     const handleBeforeUnload = (e) => {
+      const currentAnswers = answersRef.current;
+      const requests = buildAnswerRequests(currentAnswers);
+      if (requests.length > 0) {
+        saveAnswers(sessionId, requests).catch((err) =>
+          console.error("Before unload save failed", err),
+        );
+      }
       e.preventDefault();
       e.returnValue =
         "Are you sure you want to leave? Your progress will be saved.";
       return e.returnValue;
     };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, []);
 
-  // Save answers on SPA route change / unmount
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [sessionId, loading]);
+
+  // Save answers on component unmount
   useEffect(() => {
     return () => {
       const currentAnswers = answersRef.current;
       if (sessionId && Object.keys(currentAnswers).length > 0) {
-        const requests = Object.entries(currentAnswers).map(([qId, opt]) => ({
-          question_id: Number(qId),
-          questionId: Number(qId),
-          selected_option: opt,
-          selectedOption: opt,
-        }));
+        const requests = buildAnswerRequests(currentAnswers);
         saveAnswers(sessionId, requests).catch((err) =>
           console.error("Save on unmount failed", err),
         );
@@ -298,86 +348,72 @@ const ToeicTakingTest = () => {
   // Question Flattening & Numbering
   const allQuestionsFlat = useMemo(() => {
     const flat = [];
-    let qNumber = 1;
-    selectedPartIds.forEach((partId) => {
-      const partQuestions = testData.questions[partId] || [];
-      const partPassages = testData.passages[partId] || [];
-      const currentPartInfo = PARTS.find((p) => p.id === partId);
+    let questionIndex = 0;
 
-      if (currentPartInfo?.hasPassage) {
-        partPassages.forEach((passage) => {
-          const passageQuestions = partQuestions.filter(
-            (q) => q.passage_id === passage.id,
-          );
-          passageQuestions.forEach((q) => {
+    selectedPartIds.forEach((partId) => {
+      const items = partItems[partId] || [];
+      items.forEach((item) => {
+        if (item.type === "question") {
+          questionIndex++;
+          flat.push({
+            id: item.data.id,
+            partNumber: partId,
+            questionNumber: questionIndex,
+          });
+        } else {
+          // passage -> questions inside
+          (item.data.questions || []).forEach((q) => {
+            questionIndex++;
             flat.push({
               id: q.id,
               partNumber: partId,
-              questionNumber: qNumber++,
+              questionNumber: questionIndex,
             });
           });
-        });
-        const orphanQuestions = partQuestions.filter((q) => !q.passage_id);
-        orphanQuestions.forEach((q) => {
-          flat.push({
-            id: q.id,
-            partNumber: partId,
-            questionNumber: qNumber++,
-          });
-        });
-      } else {
-        partQuestions.forEach((q) => {
-          flat.push({
-            id: q.id,
-            partNumber: partId,
-            questionNumber: qNumber++,
-          });
-        });
-      }
+        }
+      });
     });
     return flat;
-  }, [testData, selectedPartIds]);
+  }, [partItems, selectedPartIds]);
 
   const getQuestionNumber = (questionId) => {
     const q = allQuestionsFlat.find((x) => x.id === questionId);
     return q ? q.questionNumber : 1;
   };
 
-  const handleAnswerSelect = (questionId, option) => {
+  const handleAnswerSelect = (questionId, choice) => {
     setAnswers((prev) => ({
       ...prev,
-      [questionId]: option,
+      [questionId]: {
+        ...prev[questionId],
+        user_choice: choice,
+      },
     }));
   };
 
   const handleToggleMark = (questionId) => {
-    setMarks((prev) => {
-      const next = new Set(prev);
-      if (next.has(questionId)) {
-        next.delete(questionId);
-      } else {
-        next.add(questionId);
-      }
-      return next;
-    });
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: {
+        ...prev[questionId],
+        is_marked: !prev[questionId]?.is_marked,
+      },
+    }));
   };
 
   const handleSaveAnswers = async (showToast = true) => {
     if (!sessionId) return;
+    const requests = buildAnswerRequests(answersRef.current);
+    if (requests.length === 0) return;
+
     try {
       setSaving(true);
-      const requests = Object.entries(answers).map(([qId, opt]) => ({
-        question_id: Number(qId),
-        questionId: Number(qId),
-        selected_option: opt,
-        selectedOption: opt,
-      }));
       await saveAnswers(sessionId, requests);
       if (showToast) {
         toast.success("Progress saved successfully!");
       }
     } catch (err) {
-      console.error("Failed to save answers", err);
+      logError(err);
       if (showToast) {
         toast.error("Failed to save progress. Please check your connection.");
       }
@@ -405,8 +441,7 @@ const ToeicTakingTest = () => {
     toast.error("Time is up!", {
       id: "timeout-toast",
     });
-
-    await executeSubmit(true);
+    await executeSubmit();
   };
 
   const executeSubmit = async () => {
@@ -414,45 +449,19 @@ const ToeicTakingTest = () => {
 
     try {
       setSubmitting(true);
-      const requests = Object.entries(answers).map(([qId, opt]) => ({
-        question_id: Number(qId),
-        questionId: Number(qId),
-        selected_option: opt,
-        selectedOption: opt,
-      }));
+      const requests = buildAnswerRequests(answers);
 
       await submitSession(sessionId, requests);
 
-      // Save to localStorage for backward compatibility with ToeicResult.jsx
-      const durationParam = new URLSearchParams(search).get("duration");
-      const initialTime =
-        session?.time_spent !== undefined && session?.time_spent !== null
-          ? Number(session.time_spent)
-          : durationParam
-            ? Number(durationParam) * 60
-            : calculateInitialTime(selectedPartIds);
-      const timeSpent = Math.max(0, initialTime - timeLeft);
-
-      const resultData = {
-        testId,
-        testName: test?.title,
-        answers,
-        testData,
-        timeSpent,
-        selectedPartIds,
-      };
-      localStorage.setItem(
-        `toeic_result_${testId}`,
-        JSON.stringify(resultData),
-      );
+      // Clear timer cache
+      localStorage.removeItem(`toeic_timeLeft_${sessionId}`);
+      localStorage.removeItem(`toeic_lastTime_${sessionId}`);
 
       setIsSubmitDialogOpen(false);
       toast.success("Test submitted successfully!");
-      navigate(`/client/toeic/${testId}/result?sessionId=${sessionId}`, {
-        replace: true,
-      });
+      navigate(`/client/toeic/result/${sessionId}`, { replace: true });
     } catch (err) {
-      console.error("Failed to submit session", err);
+      logError(err);
       toast.error("Submission failed. Please try again!");
     } finally {
       setSubmitting(false);
@@ -460,9 +469,15 @@ const ToeicTakingTest = () => {
   };
 
   const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    if (seconds === null) return "00:00:00";
+    const h = Math.floor(seconds / 3600)
+      .toString()
+      .padStart(2, "0");
+    const m = Math.floor((seconds % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${h}:${m}:${s}`;
   };
 
   const listeningParts = useMemo(() => {
@@ -478,12 +493,12 @@ const ToeicTakingTest = () => {
   }, [selectedPartIds]);
 
   const answeredCount = useMemo(() => {
-    return allQuestionsFlat.filter((q) => answers[q.id]).length;
+    return allQuestionsFlat.filter((q) => answers[q.id]?.user_choice).length;
   }, [allQuestionsFlat, answers]);
 
   const markedCount = useMemo(() => {
-    return allQuestionsFlat.filter((q) => marks.has(q.id)).length;
-  }, [allQuestionsFlat, marks]);
+    return allQuestionsFlat.filter((q) => answers[q.id]?.is_marked).length;
+  }, [allQuestionsFlat, answers]);
 
   const unansweredCount = useMemo(() => {
     return allQuestionsFlat.length - answeredCount;
@@ -507,10 +522,9 @@ const ToeicTakingTest = () => {
   };
 
   const renderPartContent = () => {
-    const questions = testData.questions[currentPart] || [];
-    const passages = testData.passages[currentPart] || [];
+    const items = partItems[currentPart] || [];
 
-    if (questions.length === 0 && passages.length === 0) {
+    if (items.length === 0) {
       return (
         <div className="text-center py-12 text-neutral-500">
           Không có dữ liệu cho phần này.
@@ -518,78 +532,45 @@ const ToeicTakingTest = () => {
       );
     }
 
-    const currentPartInfo = PARTS.find((p) => p.id === currentPart);
-
-    if (currentPartInfo?.hasPassage) {
-      const passageElements = passages.map((passage) => {
-        const passageQuestions = questions.filter(
-          (q) => q.passage_id === passage.id,
+    return items.map((item) => {
+      if (item.type === "question") {
+        const questionNumber = getQuestionNumber(item.data.id);
+        return (
+          <QuestionItem
+            key={item.data.id}
+            ref={(el) => {
+              questionRefs.current[item.data.id] = el;
+            }}
+            question={item.data}
+            questionNumber={questionNumber}
+            selectedAnswer={answers[item.data.id]?.user_choice || null}
+            isMarked={answers[item.data.id]?.is_marked || false}
+            onSelectAnswer={handleAnswerSelect}
+            onToggleMark={handleToggleMark}
+            optionCount={currentPart === 2 ? 3 : 4}
+          />
         );
-        if (passageQuestions.length === 0) return null;
-        const firstQ = passageQuestions[0];
-        const startNumber = firstQ ? getQuestionNumber(firstQ.id) : 1;
+      } else {
+        // passage
+        const passageQuestions = item.data.questions || [];
+        const startNumber =
+          passageQuestions.length > 0
+            ? getQuestionNumber(passageQuestions[0].id)
+            : 1;
         return (
           <PassageGroup
-            key={passage.id}
-            passage={passage}
+            key={item.data.id}
+            passage={item.data}
             questions={passageQuestions}
             startNumber={startNumber}
             answers={answers}
-            marks={marks}
             onSelectAnswer={handleAnswerSelect}
             onToggleMark={handleToggleMark}
             optionCount={4}
             questionRefs={questionRefs}
           />
         );
-      });
-
-      const orphanQuestions = questions.filter((q) => !q.passage_id);
-      const orphanElements = orphanQuestions.map((q) => {
-        const questionNumber = getQuestionNumber(q.id);
-        return (
-          <QuestionItem
-            key={q.id}
-            ref={(el) => {
-              questionRefs.current[q.id] = el;
-            }}
-            question={q}
-            questionNumber={questionNumber}
-            selectedAnswer={answers[q.id] || null}
-            isMarked={marks.has(q.id)}
-            onSelectAnswer={handleAnswerSelect}
-            onToggleMark={handleToggleMark}
-            optionCount={4}
-          />
-        );
-      });
-
-      return (
-        <div>
-          {passageElements}
-          {orphanElements}
-        </div>
-      );
-    }
-
-    // Render standalone questions (Part 1, 2, 5)
-    return questions.map((q) => {
-      const questionNumber = getQuestionNumber(q.id);
-      return (
-        <QuestionItem
-          key={q.id}
-          ref={(el) => {
-            questionRefs.current[q.id] = el;
-          }}
-          question={q}
-          questionNumber={questionNumber}
-          selectedAnswer={answers[q.id] || null}
-          isMarked={marks.has(q.id)}
-          onSelectAnswer={handleAnswerSelect}
-          onToggleMark={handleToggleMark}
-          optionCount={currentPart === 2 ? 3 : 4}
-        />
-      );
+      }
     });
   };
 
@@ -632,10 +613,11 @@ const ToeicTakingTest = () => {
           </div>
 
           <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${timeLeft < 300
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${
+              timeLeft !== null && timeLeft < 300
                 ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 animate-pulse"
                 : "bg-brand-50 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400"
-              }`}
+            }`}
           >
             <Clock size={20} />
             <span className="w-16 tabular-nums">{formatTime(timeLeft)}</span>
@@ -682,10 +664,11 @@ const ToeicTakingTest = () => {
                         setCurrentPart(part.id);
                         setIsSidebarOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${currentPart === part.id
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                        currentPart === part.id
                           ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
                           : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                        }`}
+                      }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
                     </button>
@@ -708,10 +691,11 @@ const ToeicTakingTest = () => {
                         setCurrentPart(part.id);
                         setIsSidebarOpen(false);
                       }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${currentPart === part.id
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                        currentPart === part.id
                           ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
                           : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                        }`}
+                      }`}
                     >
                       <span className="truncate pr-2">{part.name}</span>
                     </button>
@@ -775,7 +759,6 @@ const ToeicTakingTest = () => {
           <QuestionNavigator
             questions={allQuestionsFlat}
             answers={answers}
-            marks={marks}
             onNavigateToQuestion={handleNavigateToQuestion}
             onSave={() => handleSaveAnswers(true)}
             onSubmit={() => setIsSubmitDialogOpen(true)}
@@ -794,8 +777,9 @@ const ToeicTakingTest = () => {
 
         {/* Mobile Right Sidebar: Slide-over Drawer for Question Navigator */}
         <div
-          className={`fixed inset-y-0 right-0 z-50 w-80 bg-white dark:bg-neutral-900 shadow-2xl xl:hidden flex flex-col h-full transform transition-transform duration-300 ease-in-out ${isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          className={`fixed inset-y-0 right-0 z-50 w-80 bg-white dark:bg-neutral-900 shadow-2xl xl:hidden flex flex-col h-full transform transition-transform duration-300 ease-in-out ${
+            isRightSidebarOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           <div className="flex justify-between items-center p-4 border-b border-neutral-100 dark:border-neutral-800">
             <span className="font-bold text-neutral-900 dark:text-white">
@@ -812,7 +796,6 @@ const ToeicTakingTest = () => {
             <QuestionNavigator
               questions={allQuestionsFlat}
               answers={answers}
-              marks={marks}
               onNavigateToQuestion={(qId) => {
                 handleNavigateToQuestion(qId);
                 setIsRightSidebarOpen(false);

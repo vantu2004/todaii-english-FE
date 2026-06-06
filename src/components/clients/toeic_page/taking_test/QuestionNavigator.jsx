@@ -13,8 +13,7 @@ const PARTS = [
 
 const QuestionNavigator = ({
   questions, // flat list: [{ id, partNumber, questionNumber }]
-  answers, // object: { questionId: 'A'|'B'|'C'|'D' }
-  marks, // Set<questionId>
+  answers, // object: { questionId: { user_choice, is_marked } }
   onNavigateToQuestion,
   onSave,
   onSubmit,
@@ -33,8 +32,10 @@ const QuestionNavigator = ({
     return groups;
   }, [questions]);
 
-  const answeredCount = questions.filter((q) => answers[q.id]).length;
-  const markedCount = questions.filter((q) => marks.has(q.id)).length;
+  const answeredCount = questions.filter(
+    (q) => answers[q.id]?.user_choice,
+  ).length;
+  const markedCount = questions.filter((q) => answers[q.id]?.is_marked).length;
   const unansweredCount = questions.length - answeredCount;
 
   return (
@@ -74,8 +75,8 @@ const QuestionNavigator = ({
               </h4>
               <div className="grid grid-cols-6 gap-1.5">
                 {partQuestions.map((q) => {
-                  const isAnswered = !!answers[q.id];
-                  const isMarkd = marks.has(q.id);
+                  const isAnswered = !!answers[q.id]?.user_choice;
+                  const isMarkd = !!answers[q.id]?.is_marked;
 
                   let btnClass =
                     "bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400";

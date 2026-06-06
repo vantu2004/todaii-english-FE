@@ -5,7 +5,7 @@ import FloatingChatbot from "@/components/clients/chatbot/FloatingChatbot";
 
 const ClientLayout = () => {
   const location = useLocation();
-  const isTakingTest = location.pathname.endsWith("/take");
+  const isTakingTest = location.pathname.includes("/toeic/exam");
   const isNotebook = location.pathname.includes("/notebook");
   const hideFooterAndChatbot = isTakingTest || isNotebook;
 
