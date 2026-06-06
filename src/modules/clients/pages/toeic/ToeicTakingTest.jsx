@@ -74,6 +74,7 @@ const ToeicTakingTest = () => {
 
   const questionRefs = useRef({});
   const answersRef = useRef(answers);
+  const allQuestionsFlatRef = useRef([]);
 
   // Sync answersRef with answers state for handlers
   useEffect(() => {
@@ -272,10 +273,10 @@ const ToeicTakingTest = () => {
   }, [loading, sessionId]);
 
   const buildAnswerRequests = (currentAnswers) =>
-    Object.entries(currentAnswers).map(([qId, ans]) => ({
-      question_id: Number(qId),
-      user_choice: ans.user_choice ?? null,
-      is_marked: ans.is_marked ?? false,
+    allQuestionsFlatRef.current.map((q) => ({
+      question_id: q.id,
+      user_choice: currentAnswers[q.id]?.user_choice ?? null,
+      is_marked: currentAnswers[q.id]?.is_marked ?? false,
     }));
 
   // Auto-Save progress every 2 minutes
@@ -338,9 +339,11 @@ const ToeicTakingTest = () => {
       const currentAnswers = answersRef.current;
       if (sessionId && Object.keys(currentAnswers).length > 0) {
         const requests = buildAnswerRequests(currentAnswers);
-        saveAnswers(sessionId, requests).catch((err) =>
-          console.error("Save on unmount failed", err),
-        );
+        if (requests.length > 0) {
+          saveAnswers(sessionId, requests).catch((err) =>
+            console.error("Save on unmount failed", err),
+          );
+        }
       }
     };
   }, [sessionId]);
@@ -375,6 +378,10 @@ const ToeicTakingTest = () => {
     });
     return flat;
   }, [partItems, selectedPartIds]);
+
+  useEffect(() => {
+    allQuestionsFlatRef.current = allQuestionsFlat;
+  }, [allQuestionsFlat]);
 
   const getQuestionNumber = (questionId) => {
     const q = allQuestionsFlat.find((x) => x.id === questionId);
