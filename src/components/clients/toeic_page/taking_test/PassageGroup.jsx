@@ -22,17 +22,25 @@ const PassageGroup = ({
   mode,
 }) => {
   const images = getImages(passage.image_url || passage.imageUrl);
+  const hasImages = images.length > 0;
   const showAudio =
     (passage.audio_url || passage.audioUrl) &&
     mode !== "FULL_TEST" &&
     ![6, 7].includes(partNumber);
-  const showText = ![3, 4, 6, 7].includes(partNumber) && passage.passage_text;
 
-  const hasMedia = images.length > 0 || showAudio || showText;
+  // Prioritize images over text for parts 6 and 7; hide text entirely for parts 3 and 4.
+  let showText = false;
+  if ([6, 7].includes(partNumber)) {
+    showText = !hasImages && !!passage.passage_text;
+  } else if (![3, 4].includes(partNumber)) {
+    showText = !!passage.passage_text;
+  }
+
+  const hasMedia = hasImages || showAudio || showText;
 
   const renderMediaColumn = () => {
     return (
-      <div className="space-y-3 w-full">
+      <div className="space-y-3 w-full min-w-0">
         {images.map((imgUrl, i) => (
           <img
             key={i}
@@ -50,7 +58,7 @@ const PassageGroup = ({
         )}
         {showText && (
           <div
-            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed"
+            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed p-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-sm whitespace-pre-wrap break-words"
             dangerouslySetInnerHTML={{ __html: passage.passage_text }}
           />
         )}
@@ -75,7 +83,7 @@ const PassageGroup = ({
         {hasMedia && renderMediaColumn()}
 
         {/* Right column: Questions list */}
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0">
           {questions.map((q, qIndex) => (
             <QuestionItem
               key={q.id}

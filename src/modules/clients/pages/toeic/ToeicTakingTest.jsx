@@ -76,6 +76,14 @@ const ToeicTakingTest = () => {
   const answersRef = useRef(answers);
   const allQuestionsFlatRef = useRef([]);
 
+  const isFirstTime = useMemo(() => {
+    if (!session) return true;
+    const answersList =
+      session.userAnswers || session.user_answers || session.answers || [];
+    const timeSpentVal = session.time_spent || session.timeSpent || 0;
+    return timeSpentVal === 0 && answersList.length === 0;
+  }, [session]);
+
   // Sync answersRef with answers state for handlers
   useEffect(() => {
     answersRef.current = answers;
@@ -274,7 +282,7 @@ const ToeicTakingTest = () => {
 
   // Autoplay full test audio on mount / first interaction
   useEffect(() => {
-    if (session?.mode === "FULL_TEST" && test) {
+    if (session?.mode === "FULL_TEST" && test && isFirstTime) {
       const audioUrl = test.audio_url || test.audioUrl;
       if (audioUrl && audioRef.current) {
         const playAudio = () => {
@@ -293,7 +301,7 @@ const ToeicTakingTest = () => {
         setTimeout(playAudio, 500);
       }
     }
-  }, [session, test]);
+  }, [session, test, isFirstTime]);
 
   const buildAnswerRequests = (currentAnswers) =>
     allQuestionsFlatRef.current.map((q) => ({
@@ -623,17 +631,20 @@ const ToeicTakingTest = () => {
           {/* Global test audio for FULL TEST mode */}
           {session?.mode === "FULL_TEST" &&
             (test?.audio_url || test?.audioUrl) && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-neutral-50 dark:bg-neutral-800 rounded-md text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brand-500"></span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider hidden lg:inline">
+                  Audio Đề Thi:
                 </span>
-                <span>Audio bài thi đang phát</span>
                 <audio
                   ref={audioRef}
                   src={test.audio_url || test.audioUrl}
-                  autoPlay
-                />
+                  controls
+                  controlsList="nodownload"
+                  autoPlay={isFirstTime}
+                  className="h-8 w-44 sm:w-64 focus:outline-none"
+                >
+                  Your browser does not support the audio element.
+                </audio>
               </div>
             )}
 
