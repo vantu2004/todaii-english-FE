@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Plus } from "lucide-react";
 import DictionaryWordsList from "./DictionaryWordsList";
 import AddCustomWordForm from "./AddCustomWordForm";
-import { fetchDictionary } from "@/api/servers/dictionaryApi";
+import { searchInDb } from "@/api/servers/dictionaryApi";
 import { logError } from "@/utils/LogError";
 
 const DictionarySearchPanel = ({
@@ -30,13 +30,7 @@ const DictionarySearchPanel = ({
 
   const reloadDictionary = async () => {
     try {
-      const data = await fetchDictionary(
-        query.page,
-        query.size,
-        query.sortBy,
-        query.direction,
-        query.keyword,
-      );
+      const data = await searchInDb(query.keyword, query.page, query.size);
 
       setDictionaryWords(data.content || []);
     } catch (err) {
@@ -56,13 +50,13 @@ const DictionarySearchPanel = ({
   useEffect(() => {
     const delay = setTimeout(() => {
       updateQuery({ keyword: searchTerm });
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(delay);
   }, [searchTerm]);
 
   const isWordSelected = (wordId) => {
-    return selectedWords.some((w) => w.id === wordId);
+    return selectedWords.some((w) => (w.id || w.word_id) === wordId);
   };
 
   return (

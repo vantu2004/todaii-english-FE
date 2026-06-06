@@ -45,9 +45,7 @@ const ChatInput = ({ onSend, isLoading }) => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={isLoading}
-          placeholder={
-            isLoading ? "Đang trả lời..." : "Nhắn gì đó với Todaii..."
-          }
+          placeholder={isLoading ? "Replying..." : "Message Todaii..."}
           className="flex-1 resize-none bg-transparent border-none focus:ring-0 text-[13.5px] py-1 text-slate-800 placeholder:text-slate-400 disabled:opacity-50 outline-none leading-relaxed"
         />
 
@@ -60,18 +58,18 @@ const ChatInput = ({ onSend, isLoading }) => {
                 ? "bg-zinc-900 text-white shadow-md shadow-zinc-950/15 hover:bg-zinc-800 active:scale-95"
                 : "bg-slate-100 text-slate-300 cursor-not-allowed"
             }`}
-          aria-label="Gửi tin nhắn"
+          aria-label="Send message"
         >
           <Send size={14} className={canSend ? "translate-x-px" : ""} />
         </button>
       </div>
 
       <p className="text-[10.5px] text-center text-slate-400 mt-2 select-none">
-        AI có thể mắc lỗi · Nhấn{" "}
+        AI can make mistakes · Press{" "}
         <kbd className="text-[9px] font-mono bg-slate-100 px-1 rounded">
           Enter
         </kbd>{" "}
-        để gửi
+        to send
       </p>
     </div>
   );

@@ -73,13 +73,15 @@ const ToeicQuestionFormModal = ({
 
   const filteredTags = useMemo(() => {
     return localTags.filter((tag) => {
-      const tagPart = tag.part_number;
-      return (
-        tagPart === null ||
-        tagPart === undefined ||
-        tagPart === "" ||
-        Number(tagPart) === Number(partNumber)
-      );
+      const partNumbersStr =
+        tag.partNumbers ||
+        tag.part_numbers ||
+        tag.partNumber ||
+        tag.part_number ||
+        "";
+      if (!partNumbersStr) return true;
+      const partsList = partNumbersStr.split(",").map((p) => p.trim());
+      return partsList.includes(String(partNumber));
     });
   }, [localTags, partNumber]);
 

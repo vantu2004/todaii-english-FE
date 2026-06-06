@@ -6,12 +6,12 @@ const SUGGESTIONS = [
   {
     id: 2,
     icon: <BookOpen size={15} />,
-    title: "Giải thích ngữ pháp",
+    title: "Explain grammar",
   },
   {
     id: 3,
     icon: <Languages size={15} />,
-    title: "Dịch văn bản",
+    title: "Translate text",
   },
 ];
 
@@ -42,7 +42,7 @@ const WelcomeScreen = ({ onLoadHistory, isHistoryLoading }) => {
         {...fadeUp(0.09)}
         className="text-[12.5px] text-zinc-500 max-w-[240px] mb-5 leading-relaxed"
       >
-        Trợ lý học tiếng Anh hiệu quả hơn.
+        Your assistant for learning English more effectively.
       </motion.p>
 
       {/* History button - clean Messenger style */}
@@ -56,15 +56,13 @@ const WelcomeScreen = ({ onLoadHistory, isHistoryLoading }) => {
           active:scale-95 disabled:opacity-50 transition-all duration-150"
       >
         <History size={13} className={isHistoryLoading ? "animate-spin" : ""} />
-        <span>
-          {isHistoryLoading ? "Đang tải..." : "Xem lịch sử trò chuyện"}
-        </span>
+        <span>{isHistoryLoading ? "Loading..." : "View chat history"}</span>
       </motion.button>
 
       {/* Quick suggestions */}
       <motion.div {...fadeUp(0.16)} className="w-full space-y-2">
         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-3">
-          Gợi ý câu hỏi
+          Suggested questions
         </p>
         {SUGGESTIONS.map((s) => (
           <button

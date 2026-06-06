@@ -8,15 +8,15 @@ const CopyButton = ({ text }) => {
   const handle = () => {
     navigator.clipboard.writeText(text);
     setCopied(true);
-    toast.success("Đã sao chép");
+    toast.success("Copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
   };
   return (
     <button
       onClick={handle}
       className="p-1.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-      title="Sao chép"
-      aria-label="Sao chép code"
+      title="Copy"
+      aria-label="Copy code"
     >
       {copied ? <Check size={13} /> : <Copy size={13} />}
     </button>

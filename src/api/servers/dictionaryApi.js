@@ -112,13 +112,3 @@ export const deleteWord = async (id) => {
     throw err;
   }
 };
-
-export const fetchDictionary = async (
-  page,
-  size,
-  sortBy,
-  direction,
-  keyword,
-) => {};
-
-export const createDictionaryEntryByGemini = async (word) => {};
