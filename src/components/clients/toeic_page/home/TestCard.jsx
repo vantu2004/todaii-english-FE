@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { GraduationCap, Clock, BookOpen } from "lucide-react";
 
 const TestCard = ({ test }) => {
-  const imageUrl = test.imageUrl || test.image_url;
+  const imageUrl = test.image_url;
 
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-100 dark:border-neutral-800 flex flex-col hover:shadow-md hover:-translate-y-1 transition-all duration-300 group overflow-hidden h-full">

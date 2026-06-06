@@ -1,6 +1,14 @@
 import React from "react";
 import QuestionItem from "./QuestionItem";
 
+const getImages = (urlStr) => {
+  if (!urlStr) return [];
+  return urlStr
+    .split(",")
+    .map((u) => u.trim())
+    .filter(Boolean);
+};
+
 const PassageGroup = ({
   passage,
   questions,
@@ -10,58 +18,82 @@ const PassageGroup = ({
   onToggleMark,
   optionCount = 4,
   questionRefs,
+  partNumber,
+  mode,
 }) => {
-  return (
-    <div className="mb-10">
-      {/* Passage content */}
-      <div className="mb-6 p-5 sm:p-6 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl border border-neutral-200 dark:border-neutral-700">
-        <h3 className="font-bold mb-4 text-neutral-900 dark:text-white text-sm uppercase tracking-wider">
-          Câu {startNumber}
-          {questions.length > 1
-            ? ` – ${startNumber + questions.length - 1}`
-            : ""}
-        </h3>
+  const images = getImages(passage.image_url || passage.imageUrl);
+  const showAudio =
+    (passage.audio_url || passage.audioUrl) &&
+    mode !== "FULL_TEST" &&
+    ![6, 7].includes(partNumber);
+  const showText = ![3, 4, 6, 7].includes(partNumber) && passage.passage_text;
 
-        {/* Passage image */}
-        {passage.image_url && (
+  const hasMedia = images.length > 0 || showAudio || showText;
+
+  const renderMediaColumn = () => {
+    return (
+      <div className="space-y-3 w-full">
+        {images.map((imgUrl, i) => (
           <img
-            src={passage.image_url}
-            alt="Passage image"
-            className="max-w-full rounded-xl mb-4"
+            key={i}
+            src={imgUrl}
+            alt="Passage Illustration"
+            className="w-full rounded-xl object-contain border border-neutral-100 dark:border-neutral-800"
+          />
+        ))}
+        {showAudio && (
+          <audio
+            controls
+            className="w-full"
+            src={passage.audio_url || passage.audioUrl}
           />
         )}
-
-        {/* Passage audio */}
-        {passage.audio_url && (
-          <audio controls className="w-full mb-4" src={passage.audio_url} />
-        )}
-
-        {/* Passage text */}
-        {passage.passage_text && (
+        {showText && (
           <div
-            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm sm:text-base leading-relaxed"
+            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed"
             dangerouslySetInnerHTML={{ __html: passage.passage_text }}
           />
         )}
       </div>
+    );
+  };
 
-      {/* Questions belonging to this passage */}
-      <div className="pl-0 lg:pl-6 border-l-0 lg:border-l-2 border-neutral-100 dark:border-neutral-800">
-        {questions.map((q, qIndex) => (
-          <QuestionItem
-            key={q.id}
-            ref={(el) => {
-              if (questionRefs) questionRefs.current[q.id] = el;
-            }}
-            question={q}
-            questionNumber={startNumber + qIndex}
-            selectedAnswer={answers[q.id]?.user_choice || null}
-            isMarked={answers[q.id]?.is_marked || false}
-            onSelectAnswer={onSelectAnswer}
-            onToggleMark={onToggleMark}
-            optionCount={optionCount}
-          />
-        ))}
+  return (
+    <div className="mb-4">
+      {/* Passage Header */}
+      <div className="mb-1.5 px-1 text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+        Câu {startNumber}
+        {questions.length > 1 ? ` – ${startNumber + questions.length - 1}` : ""}
+      </div>
+
+      <div
+        className={
+          hasMedia ? "grid grid-cols-1 lg:grid-cols-2 gap-4" : "space-y-3"
+        }
+      >
+        {/* Left column: Passage Media (sticky) */}
+        {hasMedia && renderMediaColumn()}
+
+        {/* Right column: Questions list */}
+        <div className="space-y-3">
+          {questions.map((q, qIndex) => (
+            <QuestionItem
+              key={q.id}
+              ref={(el) => {
+                if (questionRefs) questionRefs.current[q.id] = el;
+              }}
+              question={q}
+              questionNumber={startNumber + qIndex}
+              selectedAnswer={answers[q.id]?.user_choice || null}
+              isMarked={answers[q.id]?.is_marked || false}
+              onSelectAnswer={onSelectAnswer}
+              onToggleMark={onToggleMark}
+              optionCount={optionCount}
+              mode={mode}
+              partNumber={partNumber}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

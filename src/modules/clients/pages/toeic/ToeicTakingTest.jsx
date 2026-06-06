@@ -65,7 +65,6 @@ const ToeicTakingTest = () => {
   const [answers, setAnswers] = useState({}); // questionId -> { user_choice, is_marked }
   const [timeLeft, setTimeLeft] = useState(null);
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
 
@@ -73,6 +72,7 @@ const ToeicTakingTest = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const questionRefs = useRef({});
+  const audioRef = useRef(null);
   const answersRef = useRef(answers);
   const allQuestionsFlatRef = useRef([]);
 
@@ -271,6 +271,29 @@ const ToeicTakingTest = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, [loading, sessionId]);
+
+  // Autoplay full test audio on mount / first interaction
+  useEffect(() => {
+    if (session?.mode === "FULL_TEST" && test) {
+      const audioUrl = test.audio_url || test.audioUrl;
+      if (audioUrl && audioRef.current) {
+        const playAudio = () => {
+          audioRef.current.play().catch((err) => {
+            console.log(
+              "Autoplay prevented, will try on first interaction:",
+              err,
+            );
+            const startOnInteraction = () => {
+              audioRef.current?.play().catch(() => {});
+              document.removeEventListener("click", startOnInteraction);
+            };
+            document.addEventListener("click", startOnInteraction);
+          });
+        };
+        setTimeout(playAudio, 500);
+      }
+    }
+  }, [session, test]);
 
   const buildAnswerRequests = (currentAnswers) =>
     allQuestionsFlatRef.current.map((q) => ({
@@ -487,18 +510,6 @@ const ToeicTakingTest = () => {
     return `${h}:${m}:${s}`;
   };
 
-  const listeningParts = useMemo(() => {
-    return PARTS.slice(0, 4).filter((part) =>
-      selectedPartIds.includes(part.id),
-    );
-  }, [selectedPartIds]);
-
-  const readingParts = useMemo(() => {
-    return PARTS.slice(4, 7).filter((part) =>
-      selectedPartIds.includes(part.id),
-    );
-  }, [selectedPartIds]);
-
   const answeredCount = useMemo(() => {
     return allQuestionsFlat.filter((q) => answers[q.id]?.user_choice).length;
   }, [allQuestionsFlat, answers]);
@@ -555,6 +566,8 @@ const ToeicTakingTest = () => {
             onSelectAnswer={handleAnswerSelect}
             onToggleMark={handleToggleMark}
             optionCount={currentPart === 2 ? 3 : 4}
+            mode={session?.mode}
+            partNumber={currentPart}
           />
         );
       } else {
@@ -575,6 +588,8 @@ const ToeicTakingTest = () => {
             onToggleMark={handleToggleMark}
             optionCount={4}
             questionRefs={questionRefs}
+            partNumber={currentPart}
+            mode={session?.mode}
           />
         );
       }
@@ -597,154 +612,94 @@ const ToeicTakingTest = () => {
   return (
     <div className="h-[calc(100vh-68px)] bg-surface-primary dark:bg-neutral-950 flex flex-col mt-[68px]">
       {/* Header */}
-      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-3 px-4 sm:px-6 flex items-center justify-between sticky top-[68px] z-45">
+      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-1.5 px-3 sm:px-4 flex items-center justify-between sticky top-[68px] z-45">
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            className="lg:hidden p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          >
-            <Menu size={20} />
-          </button>
-          <h1 className="text-lg font-bold text-neutral-900 dark:text-white truncate max-w-[200px] md:max-w-md">
+          <h1 className="text-sm sm:text-base font-bold text-neutral-900 dark:text-white truncate max-w-[150px] md:max-w-md">
             {test?.title}
           </h1>
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-6">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-sm font-medium">
-            <CheckCircle2 size={16} className="text-brand-500" />
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Global test audio for FULL TEST mode */}
+          {session?.mode === "FULL_TEST" &&
+            (test?.audio_url || test?.audioUrl) && (
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-neutral-50 dark:bg-neutral-800 rounded-md text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brand-500"></span>
+                </span>
+                <span>Audio bài thi đang phát</span>
+                <audio
+                  ref={audioRef}
+                  src={test.audio_url || test.audioUrl}
+                  autoPlay
+                />
+              </div>
+            )}
+
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded text-xs font-medium">
+            <CheckCircle2 size={12} className="text-brand-500" />
             <span className="text-neutral-700 dark:text-neutral-300">
               {answeredCount} / {allQuestionsFlat.length} đã làm
             </span>
           </div>
 
           <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-lg ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md font-bold text-sm ${
               timeLeft !== null && timeLeft < 300
                 ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 animate-pulse"
                 : "bg-brand-50 text-brand-600 dark:bg-brand-900/20 dark:text-brand-400"
             }`}
           >
-            <Clock size={20} />
-            <span className="w-16 tabular-nums">{formatTime(timeLeft)}</span>
+            <Clock size={14} />
+            <span className="w-14 text-center tabular-nums">
+              {formatTime(timeLeft)}
+            </span>
           </div>
 
           <button
             onClick={() => setIsSubmitDialogOpen(true)}
-            className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-semibold shadow-sm transition-colors"
+            className="px-3 py-1 bg-brand-500 hover:bg-brand-600 text-white rounded-md text-xs sm:text-sm font-semibold shadow-sm transition-colors"
           >
             Nộp bài
           </button>
 
           <button
             type="button"
-            className="xl:hidden p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg"
+            className="xl:hidden p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md"
             onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
             title="Bản đồ câu hỏi"
           >
-            <Map size={20} />
+            <Map size={16} />
           </button>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Left Sidebar Parts switcher */}
-        <div
-          className={`
-            absolute lg:static inset-y-0 left-0 z-30 w-64 bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 transform transition-transform duration-300 ease-in-out overflow-y-auto
-            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          `}
-        >
-          <div className="p-4">
-            {listeningParts.length > 0 && (
-              <>
-                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
-                  Phần Nghe (Listening)
-                </h2>
-                <div className="space-y-1 mb-6">
-                  {listeningParts.map((part) => (
-                    <button
-                      key={part.id}
-                      type="button"
-                      onClick={() => {
-                        setCurrentPart(part.id);
-                        setIsSidebarOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id
-                          ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
-                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                      }`}
-                    >
-                      <span className="truncate pr-2">{part.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {readingParts.length > 0 && (
-              <>
-                <h2 className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4 px-2">
-                  Phần Đọc (Reading)
-                </h2>
-                <div className="space-y-1">
-                  {readingParts.map((part) => (
-                    <button
-                      key={part.id}
-                      type="button"
-                      onClick={() => {
-                        setCurrentPart(part.id);
-                        setIsSidebarOpen(false);
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
-                        currentPart === part.id
-                          ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
-                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium"
-                      }`}
-                    >
-                      <span className="truncate pr-2">{part.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Backdrop for mobile left sidebar */}
-        {isSidebarOpen && (
-          <div
-            className="absolute inset-0 bg-black/20 dark:bg-black/40 z-20 lg:hidden"
-            onClick={() => setIsSidebarOpen(false)}
-          />
-        )}
-
         {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto bg-surface-primary dark:bg-neutral-950 p-4 sm:p-6 lg:p-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-6 pb-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+        <div className="flex-1 overflow-y-auto bg-surface-primary dark:bg-neutral-950 p-2 sm:p-3 lg:p-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-3 pb-1.5 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+              <h2 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white">
                 {PARTS.find((p) => p.id === currentPart)?.name}
               </h2>
             </div>
 
-            <div className="pb-20">{renderPartContent()}</div>
+            <div className="pb-12">{renderPartContent()}</div>
 
             {/* Bottom Navigation */}
-            <div className="fixed bottom-0 left-0 lg:left-64 right-0 xl:right-80 p-4 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center z-10">
+            <div className="fixed bottom-0 left-0 right-0 xl:right-80 p-2 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center z-10">
               <button
                 type="button"
                 disabled={!hasPreviousPart}
                 onClick={handlePreviousPart}
-                className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1 px-2 py-1 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-md text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <ChevronLeft size={18} />
-                <span className="hidden sm:inline">Phần trước</span>
+                <ChevronLeft size={14} />
+                <span>Phần trước</span>
               </button>
 
-              <div className="text-sm font-semibold text-neutral-500">
+              <div className="text-xs font-semibold text-neutral-500">
                 Phần {currentPartIndex + 1} / {selectedPartIds.length}
               </div>
 
@@ -752,10 +707,10 @@ const ToeicTakingTest = () => {
                 type="button"
                 disabled={!hasNextPart}
                 onClick={handleNextPart}
-                className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="flex items-center gap-1 px-2 py-1 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-md text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <span className="hidden sm:inline">Phần tiếp</span>
-                <ChevronRight size={18} />
+                <span>Phần tiếp</span>
+                <ChevronRight size={14} />
               </button>
             </div>
           </div>
