@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, AlertTriangle, BookOpen } from "lucide-react";
+import { X, AlertTriangle, BookOpen, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   searchByFreeDictionaryApi,
@@ -9,6 +9,7 @@ import TodaiiDictResult from "@/components/clients/dictionary_page/TodaiiDictRes
 import FreeDictResult from "@/components/clients/dictionary_page/FreeDictResult";
 import LoadingSkeleton from "@/components/clients/dictionary_page/LoadingSkeleton";
 import NotFoundState from "@/components/clients/dictionary_page/NotFoundState";
+import SaveToNotebookModal from "@/components/clients/SaveToNotebookModal";
 
 const DictionaryModal = ({ word, isOpen, onClose }) => {
   const [localWord, setLocalWord] = useState(word || "");
@@ -16,6 +17,7 @@ const DictionaryModal = ({ word, isOpen, onClose }) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   // Sync localWord khi modal mở hoặc prop word thay đổi
   useEffect(() => {
@@ -123,27 +125,38 @@ const DictionaryModal = ({ word, isOpen, onClose }) => {
               </button>
             </div>
 
-            {/* Tab switcher */}
-            <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl shadow-inner mb-6 self-start">
+            {/* Tab switcher & Save Action */}
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl shadow-inner">
+                <button
+                  onClick={() => setApiSource("todaii")}
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    apiSource === "todaii"
+                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                      : "text-neutral-505 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                  }`}
+                >
+                  Todaii API
+                </button>
+                <button
+                  onClick={() => setApiSource("free")}
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                    apiSource === "free"
+                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                      : "text-neutral-505 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                  }`}
+                >
+                  Free API
+                </button>
+              </div>
+
+              {/* Save to Notebook Button */}
               <button
-                onClick={() => setApiSource("todaii")}
-                className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  apiSource === "todaii"
-                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
-                    : "text-neutral-505 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                }`}
+                onClick={() => setIsSaveModalOpen(true)}
+                className="flex items-center gap-1.5 px-4 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl text-xs font-semibold transition-all shadow-sm active:scale-95"
               >
-                Todaii API
-              </button>
-              <button
-                onClick={() => setApiSource("free")}
-                className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  apiSource === "free"
-                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
-                    : "text-neutral-505 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                }`}
-              >
-                Free API
+                <Plus className="w-3.5 h-3.5" />
+                <span>Lưu sổ tay</span>
               </button>
             </div>
 
@@ -182,6 +195,13 @@ const DictionaryModal = ({ word, isOpen, onClose }) => {
               )}
             </div>
           </motion.div>
+
+          <SaveToNotebookModal
+            word={localWord}
+            entryId={apiSource === "todaii" ? data?.result?.[0]?.id : null}
+            isOpen={isSaveModalOpen}
+            onClose={() => setIsSaveModalOpen(false)}
+          />
         </div>
       )}
     </AnimatePresence>

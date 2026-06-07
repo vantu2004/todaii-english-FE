@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { Volume2 } from "lucide-react";
+import { Volume2, Plus } from "lucide-react";
 import { useEffect } from "react";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 
-const FreeDictResult = ({ data, onWordClick }) => {
+const FreeDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
   useEffect(() => {
     loadVoices();
 
@@ -41,13 +41,22 @@ const FreeDictResult = ({ data, onWordClick }) => {
               )}
             </div>
 
-            {/* AUDIO */}
-            <div className="flex flex-wrap gap-2">
+            {/* AUDIO & SAVE */}
+            <div className="flex flex-wrap gap-2 items-center">
+              {onSaveToNotebook && (
+                <button
+                  onClick={() => onSaveToNotebook(entry.word, null)}
+                  className="flex items-center gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-750 dark:text-neutral-300 shadow-sm active:scale-95 animate-in fade-in duration-200"
+                >
+                  <Plus className="w-4 h-4 text-brand-500" />
+                  <span className="text-xs font-semibold">Lưu sổ tay</span>
+                </button>
+              )}
               {entry.phonetics?.map((p, i) => (
                 <button
                   key={i}
                   onClick={() => handleSpeak(entry.word, p.audio)}
-                  className="flex items-center gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-gray-300 border-neutral-150 dark:border-neutral-700 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
+                  className="flex items-center gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
                 >
                   <Volume2 className="w-4 h-4 text-brand-500" />
                   <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">

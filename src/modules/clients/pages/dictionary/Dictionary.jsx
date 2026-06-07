@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDictionarySearch } from "@/hooks/clients/useDictionarySearch";
 import SearchHeader from "@/components/clients/dictionary_page/SearchHeader";
 import SearchHistory from "@/components/clients/dictionary_page/SearchHistory";
@@ -8,6 +9,7 @@ import FreeDictResult from "@/components/clients/dictionary_page/FreeDictResult"
 import TodaiiDictResult from "@/components/clients/dictionary_page/TodaiiDictResult";
 import { BookOpen, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SaveToNotebookModal from "@/components/clients/SaveToNotebookModal";
 
 const Dictionary = () => {
   const {
@@ -23,6 +25,16 @@ const Dictionary = () => {
     removeHistoryItem,
     executeSearch,
   } = useDictionarySearch();
+
+  const [saveWord, setSaveWord] = useState("");
+  const [saveEntryId, setSaveEntryId] = useState(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+  const handleSaveToNotebook = (word, entryId) => {
+    setSaveWord(word);
+    setSaveEntryId(entryId);
+    setIsSaveModalOpen(true);
+  };
 
   const handleWordClick = (word) => {
     setSearchTerm(word);
@@ -113,11 +125,19 @@ const Dictionary = () => {
                 )}
 
                 {hasResults && apiSource === "free" && (
-                  <FreeDictResult data={data} onWordClick={handleWordClick} />
+                  <FreeDictResult
+                    data={data}
+                    onWordClick={handleWordClick}
+                    onSaveToNotebook={handleSaveToNotebook}
+                  />
                 )}
 
                 {hasResults && apiSource === "todaii" && (
-                  <TodaiiDictResult data={data} onWordClick={handleWordClick} />
+                  <TodaiiDictResult
+                    data={data}
+                    onWordClick={handleWordClick}
+                    onSaveToNotebook={handleSaveToNotebook}
+                  />
                 )}
 
                 {isEmptyState && (
@@ -139,6 +159,13 @@ const Dictionary = () => {
           </div>
         </div>
       </motion.div>
+
+      <SaveToNotebookModal
+        word={saveWord}
+        entryId={saveEntryId}
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+      />
     </AnimatePresence>
   );
 };

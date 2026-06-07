@@ -43,7 +43,7 @@ const NotFoundState = ({ word, onSuggestionClick }) => {
       </p>
 
       {/* AI Suggestions Section */}
-      <div className="w-full max-w-lg bg-neutral-50 dark:bg-neutral-900/30 rounded-2xl p-6 border border-gray-300 border-neutral-150 dark:border-neutral-800">
+      <div className="w-full max-w-lg bg-neutral-50 dark:bg-neutral-900/30 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center justify-center gap-2 mb-4 text-neutral-700 dark:text-neutral-300">
           <Sparkles className="w-5 h-5 text-brand-500" />
           <span className="font-semibold text-sm">AI Gợi ý từ tương tự</span>

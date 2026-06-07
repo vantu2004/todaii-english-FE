@@ -3,6 +3,7 @@ import { Volume2, Languages, ChevronDown, Loader2 } from "lucide-react";
 import { logError } from "@/utils/LogError";
 import { handleSpeak } from "@/utils/ReactSpeechKit";
 import DictionaryModal from "./DictionaryModal";
+import SaveToNotebookModal from "./SaveToNotebookModal";
 
 const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
   const [words, setWords] = useState([]);
@@ -14,6 +15,17 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
   // States cho Dictionary Modal
   const [activeWord, setActiveWord] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // States cho SaveToNotebook Modal
+  const [saveWord, setSaveWord] = useState("");
+  const [saveEntryId, setSaveEntryId] = useState(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+  const handleOpenSaveModal = (word, entryId = null) => {
+    setSaveWord(word);
+    setSaveEntryId(entryId);
+    setIsSaveModalOpen(true);
+  };
 
   useEffect(() => {
     if (id) fetchWords(1);
@@ -135,10 +147,18 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
 
               <button
                 onClick={() => handleOpenModal(entry.word)}
-                className="px-2.5 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
                   hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
               >
                 Xem nghĩa
+              </button>
+
+              <button
+                onClick={() => handleOpenSaveModal(entry.word, entry.id)}
+                className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors border-l border-neutral-200 dark:border-neutral-700 pl-2"
+              >
+                Lưu sổ tay
               </button>
             </div>
           </div>
@@ -175,6 +195,13 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
         word={activeWord}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+      />
+
+      <SaveToNotebookModal
+        word={saveWord}
+        entryId={saveEntryId}
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
       />
     </div>
   );
