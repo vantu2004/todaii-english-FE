@@ -18,7 +18,6 @@ const ArticleContent = ({ paragraphs }) => {
   const currentWordIndexRef = useRef(0);
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
-  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -74,17 +73,6 @@ const ArticleContent = ({ paragraphs }) => {
     window.speechSynthesis.onvoiceschanged = loadVoices;
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsVoiceOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   // State quản lý việc ẩn/hiện dịch của từng đoạn (key: index, value: boolean)
   const [showTranslations, setShowTranslations] = useState({});
 
@@ -104,6 +92,7 @@ const ArticleContent = ({ paragraphs }) => {
   // --- LOGIC TTS (Giữ nguyên) ---
   const speakParagraphs = (startIndex = 0) => {
     if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
     setIsSpeaking(true);
     setCurrentParagraph(startIndex);
@@ -149,20 +138,17 @@ const ArticleContent = ({ paragraphs }) => {
   };
 
   const pauseSpeech = () => {
-    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-      window.speechSynthesis.pause();
-      setIsSpeaking(false);
-    }
+    window.speechSynthesis.pause();
+    setIsSpeaking(false);
   };
 
   const resumeSpeech = () => {
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-      setIsSpeaking(true);
-    }
+    window.speechSynthesis.resume();
+    setIsSpeaking(true);
   };
 
   const stopSpeech = () => {
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
     setCurrentParagraph(0);
