@@ -5,9 +5,8 @@ import {
   removeWordFromNotebook,
 } from "@/api/clients/noteDictApi";
 import {
-  getWordByHeadword,
-  getRawWord,
-  getWordByGemini,
+  searchByFreeDictionaryApi,
+  searchByTodaiiDictionary,
 } from "@/api/clients/dictionaryApi";
 import {
   Plus,
@@ -20,8 +19,8 @@ import {
   Search,
 } from "lucide-react";
 import SearchBar from "@/components/clients/SearchBar";
-import DictDetailWord from "@/components/clients/dictionary_page/DictDetailWord";
-import RawDetailWord from "@/components/clients/dictionary_page/RawDetailWord";
+import TodaiiDictResult from "@/components/clients/dictionary_page/TodaiiDictResult";
+import FreeDictResult from "@/components/clients/dictionary_page/FreeDictResult";
 import RelatedWords from "@/components/clients/dictionary_page/RelatedWords";
 import { logError } from "@/utils/LogError";
 
@@ -71,15 +70,25 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     }));
 
     try {
-      // Ưu tiên tìm trong DB
-      const dbRes = await getWordByHeadword(wordToSearch);
-      if (dbRes?.length) {
-        setSearchState((prev) => ({ ...prev, result: dbRes, type: "db" }));
+      // Ưu tiên tìm trong Todaii Dictionary
+      const todaiiRes = await searchByTodaiiDictionary(wordToSearch, 1, 20);
+      if (todaiiRes?.result?.length) {
+        setSearchState((prev) => ({
+          ...prev,
+          result: todaiiRes.result,
+          type: "todaii",
+        }));
       } else {
-        // Fallback sang Raw API
-        const rawRes = await getRawWord(wordToSearch);
-        if (rawRes?.length) {
-          setSearchState((prev) => ({ ...prev, result: rawRes, type: "raw" }));
+        // Fallback sang Free Dictionary API
+        const freeRes = await searchByFreeDictionaryApi(wordToSearch);
+        if (freeRes?.length) {
+          setSearchState((prev) => ({
+            ...prev,
+            result: freeRes,
+            type: "free",
+          }));
+        } else {
+          setSearchState((prev) => ({ ...prev, error: "Word not found." }));
         }
       }
     } catch (error) {
@@ -97,7 +106,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const handleAddWord = async () => {
     if (!searchState.result.length || !note) return;
     const entry = searchState.result[0];
-    const headword = entry.headword || entry.word;
+    const headword = entry.word || entry.headword;
 
     // đảm bảo lưu 1 lần
     if (savedWords.some((w) => (w.headword || w.word) === headword)) {
@@ -105,18 +114,20 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     }
 
     const newWord = {
-      id: entry.id || Date.now(), // Temp ID nếu là raw
+      id: entry.id || Date.now(), // Temp ID nếu là free
       headword,
-      ipa: entry.ipa || entry.phonetic,
+      ipa: entry.pronounce?.us || entry.phonetic || "",
       definition:
-        entry.senses?.[0]?.meaning ||
-        entry.meanings?.[0]?.definitions?.[0]?.definition,
+        entry.content?.[0]?.means?.[0]?.mean ||
+        entry.meanings?.[0]?.definitions?.[0]?.definition ||
+        "",
     };
     setSavedWords([newWord, ...savedWords]);
 
     try {
-      // chỉ lưu khi từ có trong DB
-      if (searchState.type === "db") await addWordToNotebook(note.id, entry.id);
+      // chỉ lưu khi từ có trong DB (todaii)
+      if (searchState.type === "todaii")
+        await addWordToNotebook(note.id, entry.id);
     } catch (error) {
       console.error(error);
 
@@ -138,19 +149,6 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       console.error(error);
 
       setSavedWords(prev);
-    }
-  };
-
-  const handleRequestAI = async (word) => {
-    setSearchState((prev) => ({ ...prev, isSearching: true }));
-    try {
-      const res = await getWordByGemini(word);
-      if (res?.length)
-        setSearchState((prev) => ({ ...prev, result: res, type: "db" }));
-    } catch (error) {
-      logError(error);
-    } finally {
-      setSearchState((prev) => ({ ...prev, isSearching: false }));
     }
   };
 
@@ -207,11 +205,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
         {/* Detail Content Area */}
         <div className="flex-1 overflow-y-auto bg-white p-6 w-full dark:bg-neutral-950">
-          <SearchResultPanel
-            state={searchState}
-            onAdd={handleAddWord}
-            onRequestAI={handleRequestAI}
-          />
+          <SearchResultPanel state={searchState} onAdd={handleAddWord} />
         </div>
 
         {/* Footer: Related Words (Chỉ hiện khi có content) */}
@@ -320,7 +314,7 @@ const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
   );
 };
 
-const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
+const SearchResultPanel = ({ state, onAdd }) => {
   if (state.isSearching)
     return (
       <div className="flex flex-col items-center justify-center h-64">
@@ -378,14 +372,10 @@ const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
 
       {/* Detail View */}
       <div>
-        {state.type === "db" ? (
-          <DictDetailWord data={state.result} />
+        {state.type === "todaii" ? (
+          <TodaiiDictResult data={{ result: state.result }} />
         ) : (
-          <RawDetailWord
-            data={state.result}
-            onRequestAI={onRequestAI}
-            showAIButton={true}
-          />
+          <FreeDictResult data={state.result} />
         )}
       </div>
     </div>

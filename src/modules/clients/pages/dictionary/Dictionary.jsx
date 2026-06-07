@@ -1,122 +1,36 @@
-import { useState, useEffect } from "react";
-import { Loader2, Languages, BookA } from "lucide-react";
-import {
-  getWordByHeadword,
-  getRawWord,
-  getWordByGemini,
-} from "@/api/clients/dictionaryApi";
-
+import { useDictionarySearch } from "@/hooks/clients/useDictionarySearch";
+import SearchHeader from "@/components/clients/dictionary_page/SearchHeader";
 import SearchHistory from "@/components/clients/dictionary_page/SearchHistory";
-import DictDetailWord from "@/components/clients/dictionary_page/DictDetailWord";
-import RawDetailWord from "@/components/clients/dictionary_page/RawDetailWord";
-import AIChatBox from "@/components/clients/dictionary_page/AIChatBox";
-import SearchBar from "@/components/clients/SearchBar";
-import RelatedWords from "@/components/clients/dictionary_page/RelatedWords";
-
+import TopWordsList from "@/components/clients/dictionary_page/TopWordsList";
+import LoadingSkeleton from "@/components/clients/dictionary_page/LoadingSkeleton";
+import NotFoundState from "@/components/clients/dictionary_page/NotFoundState";
+import FreeDictResult from "@/components/clients/dictionary_page/FreeDictResult";
+import TodaiiDictResult from "@/components/clients/dictionary_page/TodaiiDictResult";
+import { BookOpen, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Dictionary = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [searchMode, setSearchMode] = useState("en-vi");
+  const {
+    searchTerm,
+    setSearchTerm,
+    apiSource,
+    setApiSource,
+    data,
+    isLoading,
+    error,
+    searchHistory,
+    clearHistory,
+    removeHistoryItem,
+    executeSearch,
+  } = useDictionarySearch();
 
-  // Data states
-  const [dbEntry, setDbEntry] = useState([]);
-  const [rawEntry, setRawEntry] = useState([]);
-  const [error, setError] = useState(null);
-
-  const [history, setHistory] = useState(
-    JSON.parse(localStorage.getItem("dict_history") || "[]"),
-  );
-
-  const saveHistory = (term) => {
-    setHistory((prev) => {
-      if (prev.includes(term)) return prev;
-      const newHistory = [term, ...prev].slice(0, 20);
-      localStorage.setItem("dict_history", JSON.stringify(newHistory));
-      return newHistory;
-    });
+  const handleWordClick = (word) => {
+    setSearchTerm(word);
+    executeSearch(word, apiSource);
   };
 
-  const deleteHistoryItem = (wordToDelete, e) => {
-    e.stopPropagation();
-
-    const newHistory = history.filter((w) => w !== wordToDelete);
-    setHistory(newHistory);
-
-    localStorage.setItem("dict_history", JSON.stringify(newHistory));
-  };
-
-  const handleSearch = async (term) => {
-    const wordToSearch = term || searchTerm;
-    if (!wordToSearch.trim()) return;
-
-    // Cập nhật UI input nếu search từ lịch sử/gợi ý
-    if (term) setSearchTerm(term);
-
-    setLoading(true);
-    setDbEntry([]);
-    setRawEntry([]);
-    setError(null);
-
-    try {
-      if (searchMode === "en-vi") {
-        const dbRes = await getWordByHeadword(wordToSearch);
-
-        if (dbRes && dbRes.length > 0) {
-          setDbEntry(dbRes);
-          saveHistory(dbRes[0].headword);
-        } else {
-          // Fallback: Nếu không có Anh-Việt, thử tra Raw (Anh-Anh) để người dùng không bị trắng trang
-          const rawRes = await getRawWord(wordToSearch);
-          if (rawRes && rawRes.length > 0) {
-            setRawEntry(rawRes);
-            saveHistory(rawRes[0].word);
-            // Có thể hiện thông báo nhỏ: "Chưa có bản dịch tiếng Việt, hiển thị tiếng Anh"
-          } else {
-            setError("Word not found in dictionary.");
-          }
-        }
-      } else {
-        const rawRes = await getRawWord(wordToSearch);
-
-        if (rawRes && rawRes.length > 0) {
-          setRawEntry(rawRes);
-          saveHistory(rawRes[0].word);
-        } else {
-          setError("English definition not found for this word.");
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      setError("An error occurred during lookup.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Gọi lại search khi đổi chế độ (nếu đang có từ khóa)
-  useEffect(() => {
-    if (searchTerm) {
-      handleSearch(searchTerm);
-    }
-  }, [searchMode]);
-
-  const handleRequestAI = async (word) => {
-    setLoading(true);
-    try {
-      const aiRes = await getWordByGemini(word);
-      if (aiRes && aiRes.length > 0) {
-        setDbEntry(aiRes);
-        setRawEntry(null);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("An error occurred while fetching AI data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const hasResults = !isLoading && !error && data;
+  const isEmptyState = !isLoading && !error && !data;
 
   return (
     <AnimatePresence>
@@ -126,129 +40,101 @@ const Dictionary = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
+        className="min-h-screen flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col">
-          {/* --- SEARCH SECTION  --- */}
-          <div className="max-w-7xl mx-auto w-full mb-6">
-            <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
-              {/* 1. Search Bar (Chiếm phần lớn không gian) */}
-              <div className="flex-1 relative z-10">
-                <SearchBar
-                  value={searchTerm}
-                  // Thay đổi placeholder ngắn gọn hơn khi ở giao diện ngang
-                  placeholder={
-                    searchMode === "en-vi"
-                      ? "Nhập từ vựng tiếng Anh..."
-                      : "Type a word to define..."
-                  }
-                  onSearch={handleSearch}
-                />
-              </div>
-
-              {/* 2. Mode Switcher (Nằm bên phải) */}
-              <div className="flex-shrink-0">
-                <div className="bg-white dark:bg-neutral-900 p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm flex items-center h-full">
-                  <button
-                    onClick={() => setSearchMode("en-vi")}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
-                      searchMode === "en-vi"
-                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md"
-                        : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
-                    }`}
-                  >
-                    <Languages size={16} />
-                    <span className="hidden sm:inline">Anh - Việt</span>
-                    <span className="sm:hidden">En-Vi</span>
-                  </button>
-
-                  <button
-                    onClick={() => setSearchMode("en-en")}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
-                      searchMode === "en-en"
-                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 shadow-md"
-                        : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white"
-                    }`}
-                  >
-                    <BookA size={16} />
-                    <span className="hidden sm:inline">Anh - Anh</span>
-                    <span className="sm:hidden">En-En</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col gap-6">
+          {/* ─── Top Section: Full Width Search Header ─── */}
+          <div className="w-full">
+            <SearchHeader
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              apiSource={apiSource}
+              onSourceChange={setApiSource}
+              isLoading={isLoading}
+            />
           </div>
 
-          {/* --- MAIN GRID --- */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1 w-full">
-            {/* Left Sidebar (History & Related) - 3/12 */}
-            <div className="lg:col-span-2 hidden lg:block sticky top-24 space-y-6">
-              <SearchHistory
-                history={history}
-                onSelectWord={handleSearch}
-                onDeleteHistoryItem={deleteHistoryItem}
-              />
-              <RelatedWords
-                word={dbEntry[0]?.headword || rawEntry[0]?.word}
-                onSelectWord={handleSearch}
-              />
-            </div>
-
-            {/* Center Content (Result) - 6/12 */}
-            <div className="lg:col-span-6 min-h-[600px]">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
-                  <Loader2
-                    className="animate-spin text-neutral-400 mb-3"
-                    size={40}
+          {/* ─── Bottom Section: 2 Columns (History & Results) ─── */}
+          <div className="flex flex-col lg:flex-row gap-6 flex-1 min-w-0">
+            {/* Left Sidebar: Search History & Top Words (Desktop Only) */}
+            <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">
+              <div className="sticky top-28 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-5 max-h-[calc(100vh-14rem)] overflow-y-auto shadow-sm">
+                {searchHistory && searchHistory.length > 0 && (
+                  <SearchHistory
+                    history={searchHistory}
+                    onHistoryClick={handleWordClick}
+                    onRemoveItem={removeHistoryItem}
+                    onClearAll={clearHistory}
                   />
-                  <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium animate-pulse">
-                    Đang tra cứu...
-                  </p>
-                </div>
-              ) : error ? (
-                <div className="bg-white dark:bg-neutral-900/60 p-12 rounded-3xl border border-neutral-100 dark:border-neutral-800 text-center shadow-sm">
-                  <div className="w-16 h-16 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">🤔</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
-                    Không tìm thấy kết quả
-                  </h3>
-                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">
-                    {error}
-                  </p>
-                </div>
-              ) : dbEntry.length > 0 ? (
-                <DictDetailWord data={dbEntry} />
-              ) : rawEntry.length > 0 ? (
-                <RawDetailWord
-                  data={rawEntry}
-                  onRequestAI={handleRequestAI}
-                  showAIButton={searchMode === "en-vi"}
-                />
-              ) : (
-                /* Empty State */
-                <div className="bg-white dark:bg-neutral-900/60 p-16 rounded-3xl border border-neutral-100 dark:border-neutral-800 text-center shadow-sm">
-                  <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <BookA
-                      size={32}
-                      className="text-neutral-300 dark:text-neutral-600"
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
-                    Từ điển trực tuyến
-                  </h3>
-                  <p className="text-neutral-400 dark:text-neutral-500 text-sm max-w-xs mx-auto">
-                    Hãy nhập từ vựng vào ô tìm kiếm để xem định nghĩa, phát âm
-                    và ví dụ.
-                  </p>
-                </div>
-              )}
-            </div>
+                )}
+                <TopWordsList onWordClick={handleWordClick} />
+              </div>
+            </aside>
 
-            {/* Right Sidebar (AI & Trends) - 3/12 */}
-            <div className="lg:col-span-4 hidden lg:block sticky top-24">
-              <AIChatBox />
+            {/* Main Content Area: Results */}
+            <div className="flex-1 min-w-0 flex flex-col">
+              {/* Mobile-only History */}
+              <div className="lg:hidden mb-6 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-5 shadow-sm">
+                {searchHistory && searchHistory.length > 0 && (
+                  <SearchHistory
+                    history={searchHistory}
+                    onHistoryClick={handleWordClick}
+                    onRemoveItem={removeHistoryItem}
+                    onClearAll={clearHistory}
+                  />
+                )}
+                <TopWordsList onWordClick={handleWordClick} />
+              </div>
+
+              {/* Result Container */}
+              <div className="flex-1">
+                {isLoading && <LoadingSkeleton />}
+
+                {error === "NOT_FOUND" && (
+                  <NotFoundState
+                    word={searchTerm}
+                    onSuggestionClick={handleWordClick}
+                  />
+                )}
+
+                {error === "SERVER_ERROR" && (
+                  <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                    <div className="w-14 h-14 bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 rounded-full flex items-center justify-center mb-4">
+                      <AlertTriangle className="w-7 h-7" />
+                    </div>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                      Đã xảy ra lỗi kết nối
+                    </h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm">
+                      Không thể kết nối đến máy chủ từ điển. Vui lòng kiểm tra
+                      lại đường truyền mạng và thử lại sau.
+                    </p>
+                  </div>
+                )}
+
+                {hasResults && apiSource === "free" && (
+                  <FreeDictResult data={data} onWordClick={handleWordClick} />
+                )}
+
+                {hasResults && apiSource === "todaii" && (
+                  <TodaiiDictResult data={data} onWordClick={handleWordClick} />
+                )}
+
+                {isEmptyState && (
+                  <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                    <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 text-neutral-355 dark:text-neutral-500 rounded-full flex items-center justify-center mb-6">
+                      <BookOpen className="w-10 h-10 text-neutral-300 dark:text-neutral-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                      Tra cứu từ điển trực tuyến
+                    </h3>
+                    <p className="text-sm text-neutral-400 dark:text-neutral-500 max-w-xs mx-auto">
+                      Hãy nhập từ vựng tiếng Anh vào ô tìm kiếm phía trên để tra
+                      cứu định nghĩa, phát âm và ví dụ.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
