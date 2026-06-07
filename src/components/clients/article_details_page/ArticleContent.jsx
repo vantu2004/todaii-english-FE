@@ -24,11 +24,49 @@ const ArticleContent = ({ paragraphs }) => {
     const loadVoices = () => {
       const allVoices = window.speechSynthesis
         .getVoices()
-        .filter((v) => v.localService);
-      setVoices(allVoices);
+        .filter((v) => v.lang.startsWith("en"));
 
-      const enVoice = allVoices.find((v) => v.lang.startsWith("en"));
-      setSelectedVoice(enVoice || allVoices[0]);
+      const preferredVoices = [
+        "Microsoft Aria",
+        "Microsoft Davis",
+        "Microsoft Guy",
+        "Microsoft Jenny",
+        "Google US English",
+        "Google UK English Female",
+      ];
+
+      let filteredVoices = allVoices.filter(
+        (v) =>
+          preferredVoices.some((prefName) => v.name.includes(prefName)) &&
+          !v.name.toLowerCase().includes("multilingual"),
+      );
+
+      // Fallback to all English voices if no preferred premium voice is available
+      if (filteredVoices.length === 0) {
+        filteredVoices = allVoices;
+      }
+
+      setVoices(filteredVoices);
+
+      let defaultVoice = null;
+      for (const name of preferredVoices) {
+        const found = filteredVoices.find((v) => v.name.includes(name));
+        if (found) {
+          defaultVoice = found;
+          break;
+        }
+      }
+
+      setSelectedVoice((prev) => {
+        if (prev && filteredVoices.some((v) => v.name === prev.name)) {
+          return prev;
+        }
+        return (
+          defaultVoice ||
+          filteredVoices.find((v) => v.lang.startsWith("en-US")) ||
+          filteredVoices[0]
+        );
+      });
     };
 
     loadVoices();
@@ -80,7 +118,12 @@ const ArticleContent = ({ paragraphs }) => {
       const utterance = new SpeechSynthesisUtterance(p.text_en);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = "en-US";
       }
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
       utteranceRef.current = utterance;
 
       utterance.onstart = () => {

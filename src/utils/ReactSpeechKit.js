@@ -23,12 +23,21 @@ const getBestVoice = () => {
   ];
 
   for (const name of preferredVoices) {
-    const found = voices.find((v) => v.name.includes(name));
+    const found = voices.find(
+      (v) =>
+        v.name.includes(name) && !v.name.toLowerCase().includes("multilingual"),
+    );
 
     if (found) return found;
   }
 
-  return voices.find((v) => v.lang === "en-US") || voices[0];
+  return (
+    voices.find(
+      (v) =>
+        (v.lang === "en-US" || v.lang.startsWith("en")) &&
+        !v.name.toLowerCase().includes("multilingual"),
+    ) || voices[0]
+  );
 };
 
 const speakText = (text) => {
