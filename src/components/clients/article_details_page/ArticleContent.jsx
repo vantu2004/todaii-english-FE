@@ -9,6 +9,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import VoiceSelector from "./VoiceSelector";
+import DictionaryModal from "@/components/clients/DictionaryModal";
 
 const ArticleContent = ({ paragraphs }) => {
   const [voices, setVoices] = useState([]);
@@ -18,6 +19,16 @@ const ArticleContent = ({ paragraphs }) => {
   const currentWordIndexRef = useRef(0);
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
+  const [lookupWord, setLookupWord] = useState("");
+  const [isLookupOpen, setIsLookupOpen] = useState(false);
+
+  const handleWordClick = (word) => {
+    const cleaned = word.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "");
+    if (cleaned) {
+      setLookupWord(cleaned);
+      setIsLookupOpen(true);
+    }
+  };
 
   useEffect(() => {
     const loadVoices = () => {
@@ -223,12 +234,13 @@ const ArticleContent = ({ paragraphs }) => {
               {/* ENGLISH TEXT */}
               <p className="text-lg md:text-xl text-neutral-900 dark:text-neutral-100 leading-loose font-serif mb-3">
                 {isCurrent
-                  ? // Active Paragraph Rendering (Highlight word)
-                    p.text_en.split(/\s+/).map((word, i) => (
+                  ? // Active Paragraph Rendering (Highlight word + Clickable)
+                    p.text_en?.split(/\s+/).map((word, i) => (
                       <span
                         key={i}
+                        onClick={() => handleWordClick(word)}
                         className={`
-                          transition-colors duration-150 rounded px-0.5
+                          cursor-pointer hover:text-brand-500 dark:hover:text-brand-400 transition-colors duration-150 rounded px-0.5
                           ${
                             i === currentWordIndexRef.current
                               ? "bg-yellow-200 dark:bg-yellow-500/30 text-neutral-900 dark:text-white font-medium"
@@ -239,8 +251,16 @@ const ArticleContent = ({ paragraphs }) => {
                         {word}{" "}
                       </span>
                     ))
-                  : // Inactive Paragraph
-                    p.text_en}
+                  : // Inactive Paragraph (Clickable)
+                    p.text_en?.split(/\s+/).map((word, i) => (
+                      <span
+                        key={i}
+                        onClick={() => handleWordClick(word)}
+                        className="cursor-pointer hover:text-brand-500 dark:hover:text-brand-400 transition-colors duration-150 rounded px-0.5"
+                      >
+                        {word}{" "}
+                      </span>
+                    ))}
               </p>
 
               {/* VIETNAMESE TRANSLATION (Collapsible) */}
@@ -295,6 +315,12 @@ const ArticleContent = ({ paragraphs }) => {
           ? `Đang đọc đoạn ${currentParagraph + 1} / ${paragraphs.length}`
           : "Sẵn sàng đọc"}
       </div>
+
+      <DictionaryModal
+        word={lookupWord}
+        isOpen={isLookupOpen}
+        onClose={() => setIsLookupOpen(false)}
+      />
     </div>
   );
 };
