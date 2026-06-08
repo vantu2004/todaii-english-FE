@@ -12,17 +12,17 @@ export default function VideoPlayer({
   setPlayerRef,
 }) {
   return (
-    <div className="w-full max-w-5xl mx-auto mb-8">
+    <div className="w-full max-w-5xl mx-auto mb-6">
       <button
         onClick={() => window.history.back()}
-        className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-transform duration-200 mb-4"
+        className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 mb-3"
       >
         <ArrowLeft className="w-5 h-5" />
         <span>Quay lại</span>
       </button>
 
       {/* Container bọc ngoài tạo hiệu ứng nổi khối */}
-      <div className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-neutral-900/5 group">
+      <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 group">
         <ReactPlayer
           ref={setPlayerRef}
           className="react-player absolute top-0 left-0"

@@ -51,15 +51,15 @@ const DateFilterSection = ({
   };
 
   return (
-    <section className="px-6 md:px-12 py-12 bg-surface-primary dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800">
+    <section className="px-4 md:px-8 py-8 bg-surface-primary dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800">
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-neutral-900 dark:text-white border-l-4 border-brand-500 pl-3">
+        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white border-l-2 border-brand-500 pl-2">
           Video Theo Ngày
         </h3>
       </div>
 
       {/* Date Controls Bar */}
-      <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-8 bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 shadow-sm">
+      <div className="flex flex-wrap md:flex-nowrap items-center gap-4 mb-6 bg-white dark:bg-neutral-900 p-2 rounded-lg border border-neutral-200 dark:border-neutral-800">
         {/* MUI Date Picker (from home page) */}
         <div className="relative z-10 flex-shrink-0 bg-white dark:bg-neutral-900 rounded-lg min-w-[180px] min-h-[60px] flex items-center">
           <BasicDatePicker
@@ -77,7 +77,7 @@ const DateFilterSection = ({
         <div className="flex-1 flex items-center gap-2 overflow-hidden w-full">
           <button
             onClick={() => scrollDays("left")}
-            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors shadow-sm flex-shrink-0"
+            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors flex-shrink-0"
           >
             <ChevronLeft size={16} />
           </button>
@@ -93,10 +93,10 @@ const DateFilterSection = ({
                 <button
                   key={day.value}
                   onClick={() => handleSelectDate(day.value)}
-                  className={`flex-shrink-0 px-5 py-2 rounded-full text-sm font-semibold transition-all border
+                  className={`flex-shrink-0 px-4 py-1.5 rounded-md text-sm font-medium transition-colors border
                     ${
                       isSelected
-                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-md transform scale-105"
+                        ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white"
                         : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:border-brand-200 dark:hover:border-brand-800"
                     }`}
                 >
@@ -108,7 +108,7 @@ const DateFilterSection = ({
 
           <button
             onClick={() => scrollDays("right")}
-            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors shadow-sm flex-shrink-0"
+            className="p-2 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-brand-500 transition-colors flex-shrink-0"
           >
             <ChevronRight size={16} />
           </button>
@@ -118,7 +118,7 @@ const DateFilterSection = ({
       {/* Video Grid */}
       {videos.length > 0 ? (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 animate-fade-in">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 animate-fade-in">
             {videos.map((video) => (
               <VideoCard
                 key={`date-${video.id}`} // Dùng ID duy nhất để React không warn
@@ -129,24 +129,21 @@ const DateFilterSection = ({
 
           {/* Load More Button (Pagination) */}
           {hasMore && (
-            <div className="mt-12 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <button
                 onClick={onLoadMore}
                 disabled={isLoading}
-                className="group px-8 py-3 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 font-bold rounded-full hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-brand-400 hover:text-brand-500 transition-all shadow-sm flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group px-5 py-2 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 font-medium rounded-md hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 size={18} className="animate-spin" />
+                    <Loader2 size={16} className="animate-spin" />
                     Đang tải thêm...
                   </>
                 ) : (
                   <>
                     Xem thêm ngày {formatISODate(selectedDate)}
-                    <ChevronDown
-                      size={18}
-                      className="group-hover:translate-y-1 transition-transform"
-                    />
+                    <ChevronDown size={16} />
                   </>
                 )}
               </button>
@@ -154,14 +151,14 @@ const DateFilterSection = ({
           )}
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 bg-white dark:bg-neutral-900/50 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-700 shadow-sm">
-          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-full mb-4">
+        <div className="flex flex-col items-center justify-center py-10 bg-white dark:bg-neutral-900/50 rounded-lg border border-dashed border-neutral-300 dark:border-neutral-700">
+          <div className="bg-neutral-50 dark:bg-neutral-800 p-3 rounded-lg mb-3">
             <Calendar
-              size={40}
+              size={32}
               className="text-neutral-300 dark:text-neutral-600"
             />
           </div>
-          <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
             Không có video nào
           </h3>
           <p className="text-neutral-500 dark:text-neutral-400 text-sm">

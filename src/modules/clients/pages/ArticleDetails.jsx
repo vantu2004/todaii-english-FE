@@ -46,16 +46,16 @@ const ArticleDetails = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="dictionary-page"
+        key="article-details-page"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4 transition-colors duration-300"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-20 pb-10 px-4 transition-colors duration-300"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           {/* Main Content */}
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-6">
             {/* LEFT - Main Content */}
             <div className="flex-1 min-w-0">
               <ArticleHeader data={data} formatDate={formatDate} />
@@ -66,7 +66,7 @@ const ArticleDetails = () => {
 
             {/* RIGHT - Sidebar */}
             <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0">
-              <div className="lg:sticky lg:top-24 space-y-6">
+              <div className="lg:sticky lg:top-24 space-y-5">
                 <RelatedArticles articleId={id} />
                 <SavedArticleTags />
               </div>

@@ -3,10 +3,10 @@ import React from "react";
 const VideoCard = ({ videoURL, title, duration, views }) => {
   return (
     <div className="group block cursor-pointer">
-      <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-3">
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-3">
         <img
           src={videoURL}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
           alt="Video thumbnail"
         />
         {/* Play button overlay */}

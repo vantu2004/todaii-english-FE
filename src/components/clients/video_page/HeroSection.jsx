@@ -18,7 +18,7 @@ const HeroSection = ({ video, onNavigate }) => {
         <img
           src={video.thumbnail_url} // Đã sửa thành camelCase để khớp Entity Java
           alt={video.title}
-          className="w-full h-full object-cover transition-transform duration-[20s] ease-linear group-hover:scale-110 opacity-90"
+          className="w-full h-full object-cover transition-transform duration-[20s] ease-linear group-hover:scale-102 opacity-90"
         />
       </div>
 
@@ -38,13 +38,13 @@ const HeroSection = ({ video, onNavigate }) => {
       <div className="absolute z-20 bottom-20 left-4 right-4 md:bottom-16 md:left-12 md:right-auto md:max-w-4xl pr-0 md:pr-4">
         {/* Badges */}
         <div className="flex flex-wrap items-center gap-2 mb-4 animate-fade-in-up">
-          <span className="bg-yellow-500 text-black text-xs font-extrabold px-2 py-1 rounded shadow-sm">
+          <span className="bg-yellow-500 text-black text-xs font-extrabold px-2 py-1 rounded-sm shadow-sm">
             HD
           </span>
-          <span className="bg-white/10 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded border border-white/20">
+          <span className="bg-white/10 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-sm border border-white/20">
             {video.cefr_level} Level
           </span>
-          <span className="text-gray-300 text-xs font-medium flex items-center gap-1 bg-black/40 px-2 py-1 rounded border border-white/10">
+          <span className="text-gray-300 text-xs font-medium flex items-center gap-1 bg-black/40 px-2 py-1 rounded-sm border border-white/10">
             <Clock size={12} /> {formatISODate(video.created_at)}
           </span>
         </div>
@@ -56,7 +56,7 @@ const HeroSection = ({ video, onNavigate }) => {
 
         {/* Info Grid */}
         {/* Trên mobile (màn hình nhỏ) có thể ẩn bớt grid thông tin để đỡ rối, hoặc giữ lại tùy bạn. Ở đây tôi giữ lại nhưng cho flex-wrap */}
-        <div className="flex flex-wrap gap-x-4 md:gap-x-8 gap-y-2 text-xs md:text-sm text-neutral-300 mb-6 md:mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-md p-3 md:p-5 rounded-2xl border border-white/10 shadow-lg max-w-2xl">
+        <div className="flex flex-wrap gap-x-4 md:gap-x-8 gap-y-2 text-xs md:text-sm text-neutral-300 mb-6 md:mb-8 animate-fade-in-up delay-200 bg-black/30 backdrop-blur-md p-2.5 md:p-3.5 rounded-lg border border-white/10 shadow-lg max-w-2xl">
           <div className="flex items-center gap-2 font-medium">
             <User size={14} className="text-neutral-300" />
             <span className="truncate max-w-[100px] md:max-w-none">
@@ -88,7 +88,7 @@ const HeroSection = ({ video, onNavigate }) => {
         <div className="flex gap-3 md:gap-4 animate-fade-in-up delay-300">
           <RouterLink
             to={`/client/video/${video.id}`}
-            className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-100 px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold transition-all shadow-md active:scale-95 text-sm md:text-base"
+            className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-100 px-5 md:px-6 py-2 md:py-2.5 rounded-lg font-semibold transition-colors text-sm md:text-base"
           >
             <Play fill="currentColor" size={18} />
             Xem Ngay

@@ -44,7 +44,7 @@ const ArticleFilter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        key="dictionary-page"
+        key="article-filter-page"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
@@ -53,13 +53,13 @@ const ArticleFilter = () => {
       >
         {/* Header */}
         <div className="bg-white dark:bg-neutral-900/50 border-b border-neutral-100 dark:border-neutral-800 px-4 transition-colors duration-300">
-          <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto py-5 px-3 sm:px-4 lg:px-6">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               {/* --- LEFT SECTION --- */}
               <div className="flex items-start gap-4">
                 <button
                   onClick={() => window.history.back()}
-                  className="mt-1 p-2.5 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-sm dark:shadow-none group flex-shrink-0"
+                  className="mt-1 p-2 rounded-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-sm dark:shadow-none group flex-shrink-0"
                   title="Quay lại"
                 >
                   <ArrowLeft
@@ -120,8 +120,8 @@ const ArticleFilter = () => {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
-          <div className="flex flex-col lg:flex-row gap-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-3 pb-6">
+          <div className="flex flex-col lg:flex-row gap-6">
             {/* Results */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
@@ -129,7 +129,7 @@ const ArticleFilter = () => {
                 {/* Mobile Filter Toggle */}
                 <button
                   onClick={() => setShowMobileFilter(true)}
-                  className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+                  className="lg:hidden flex items-center gap-2 px-3.5 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
                 >
                   <SlidersHorizontal size={16} />
                   Bộ lọc
@@ -147,7 +147,7 @@ const ArticleFilter = () => {
                         direction: e.target.value.split("-")[1],
                       });
                     }}
-                    className="px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+                    className="px-3.5 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
                   >
                     {sortOptions.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -164,10 +164,10 @@ const ArticleFilter = () => {
                   {[1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 animate-pulse"
+                      className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 animate-pulse"
                     >
                       <div className="flex gap-5">
-                        <div className="w-52 h-36 bg-neutral-100 dark:bg-neutral-800 rounded-xl flex-shrink-0" />
+                        <div className="w-52 h-36 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex-shrink-0" />
                         <div className="flex-1 space-y-3">
                           <div className="h-4 bg-neutral-100 dark:bg-neutral-800 rounded w-16" />
                           <div className="h-5 bg-neutral-100 dark:bg-neutral-800 rounded w-3/4" />
@@ -184,10 +184,10 @@ const ArticleFilter = () => {
                   ))}
                 </div>
               ) : results.length === 0 ? (
-                <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-12 text-center border border-neutral-100 dark:border-neutral-800">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-8 text-center border border-neutral-200 dark:border-neutral-800">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-neutral-100 dark:bg-neutral-800 rounded-md flex items-center justify-center">
                     <Search
-                      size={24}
+                      size={20}
                       className="text-neutral-400 dark:text-neutral-500"
                     />
                   </div>
@@ -208,7 +208,7 @@ const ArticleFilter = () => {
 
               {/* Pagination */}
               {totalPages > 1 && !loading && (
-                <div className="mt-8">
+                <div className="mt-6">
                   <Pagination
                     currentPage={query.page}
                     totalPages={totalPages}
@@ -235,19 +235,19 @@ const ArticleFilter = () => {
               onClick={() => setShowMobileFilter(false)}
             />
             <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white dark:bg-neutral-950 overflow-y-auto">
-              <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-5 py-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <div className="sticky top-0 bg-white dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-800 px-4 py-3 flex items-center justify-between">
+                <h2 className="text-base font-semibold text-neutral-900 dark:text-white">
                   Bộ lọc
                 </h2>
                 <button
                   onClick={() => setShowMobileFilter(false)}
-                  className="w-9 h-9 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400"
+                  className="w-8 h-8 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400"
                 >
                   ✕
                 </button>
               </div>
-              <div className="p-5">
-                <ArticleFilter
+              <div className="p-4">
+                <ArticleFilterSidebar
                   query={query}
                   updateQuery={updateQuery}
                   onApply={() => setShowMobileFilter(false)}

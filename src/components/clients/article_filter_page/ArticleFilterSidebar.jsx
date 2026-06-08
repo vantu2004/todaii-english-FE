@@ -84,13 +84,9 @@ const ArticleFilterSidebar = ({
   };
 
   return (
-    <div
-      className={`bg-white dark:bg-neutral-900/60 rounded-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden ${
-        isMobile ? "" : "shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none"
-      }`}
-    >
+    <div className="bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">
           Bộ lọc
         </h2>
@@ -105,12 +101,12 @@ const ArticleFilterSidebar = ({
         )}
       </div>
 
-      <div className="p-4 space-y-1">
+      <div className="p-3 space-y-1">
         {/* Source Filter */}
-        <div className="border-b border-neutral-100 dark:border-neutral-800 pb-3">
+        <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
           <button
             onClick={() => toggleSection("source")}
-            className="w-full flex items-center justify-between py-2 text-left"
+            className="w-full flex items-center justify-between py-1.5 text-left"
           >
             <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Nguồn tin
@@ -126,7 +122,7 @@ const ArticleFilterSidebar = ({
           <div
             className={`space-y-1  overflow-y-auto transition-all duration-200 ${
               expandedSections.source
-                ? "max-h-64 opacity-100 mt-2"
+                ? "max-h-64 opacity-100 mt-1.5"
                 : "max-h-0 opacity-0"
             }`}
           >
@@ -136,7 +132,7 @@ const ArticleFilterSidebar = ({
                 onClick={() =>
                   updateQuery({ sourceName: option.value, page: 1 })
                 }
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors ${
                   query.sourceName === option.value
                     ? "bg-neutral-900 text-white"
                     : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
@@ -150,10 +146,10 @@ const ArticleFilterSidebar = ({
         </div>
 
         {/* Topic Filter */}
-        <div className="border-b border-neutral-100 dark:border-neutral-800 py-3">
+        <div className="border-b border-neutral-100 dark:border-neutral-800 py-2">
           <button
             onClick={() => toggleSection("topic")}
-            className="w-full flex items-center justify-between py-2 text-left"
+            className="w-full flex items-center justify-between py-1.5 text-left"
           >
             <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Chủ đề
@@ -169,7 +165,7 @@ const ArticleFilterSidebar = ({
           <div
             className={`space-y-1 overflow-y-auto transition-all duration-200 ${
               expandedSections.topic
-                ? "max-h-48 opacity-100 mt-2"
+                ? "max-h-48 opacity-100 mt-1.5"
                 : "max-h-0 opacity-0"
             }`}
           >
@@ -177,7 +173,7 @@ const ArticleFilterSidebar = ({
               <button
                 key={option.value}
                 onClick={() => updateQuery({ alias: option.value, page: 1 })}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm transition-all ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors ${
                   query.alias === option.value
                     ? "bg-neutral-900 text-white"
                     : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
@@ -191,10 +187,10 @@ const ArticleFilterSidebar = ({
         </div>
 
         {/* CEFR Level Filter */}
-        <div className="pt-3">
+        <div className="pt-2">
           <button
             onClick={() => toggleSection("cefr")}
-            className="w-full flex items-center justify-between py-2 text-left"
+            className="w-full flex items-center justify-between py-1.5 text-left"
           >
             <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Trình độ CEFR
@@ -210,7 +206,7 @@ const ArticleFilterSidebar = ({
           <div
             className={`overflow-hidden transition-all duration-200 ${
               expandedSections.cefr
-                ? "max-h-64 opacity-100 mt-2"
+                ? "max-h-64 opacity-100 mt-1.5"
                 : "max-h-0 opacity-0"
             }`}
           >
@@ -219,7 +215,7 @@ const ArticleFilterSidebar = ({
                 <button
                   key={level}
                   onClick={() => updateQuery({ cefrLevel: level, page: 1 })}
-                  className={`relative flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`relative flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     query.cefrLevel === level
                       ? "bg-neutral-900 text-white"
                       : "bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
@@ -240,7 +236,7 @@ const ArticleFilterSidebar = ({
             {/* Clear CEFR */}
             <button
               onClick={() => updateQuery({ cefrLevel: "", page: 1 })}
-              className={`w-full px-3 py-2.5 rounded-xl text-sm transition-all ${
+              className={`w-full px-3 py-2 rounded-md text-sm transition-colors ${
                 query.cefrLevel === ""
                   ? "bg-neutral-900 text-white"
                   : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
@@ -254,10 +250,10 @@ const ArticleFilterSidebar = ({
 
       {/* Mobile Apply Button */}
       {isMobile && (
-        <div className="p-4 border-t border-neutral-100 dark:border-neutral-800">
+        <div className="p-3 border-t border-neutral-200 dark:border-neutral-800">
           <button
             onClick={onApply}
-            className="w-full py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-medium rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
+            className="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-medium rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
           >
             Áp dụng bộ lọc
           </button>

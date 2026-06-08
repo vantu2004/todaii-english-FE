@@ -169,12 +169,12 @@ const ArticleContent = ({ paragraphs }) => {
   return (
     <div className="relative">
       {/* Sticky Audio Controls Toolbar */}
-      <div className="sticky top-24 z-30 mb-8 flex justify-end pointer-events-none">
-        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-full p-1.5 flex items-center gap-1">
+      <div className="sticky top-24 z-30 mb-6 flex justify-end pointer-events-none">
+        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-lg p-1 flex items-center gap-1">
           {!isSpeaking ? (
             <button
               onClick={() => speakParagraphs(currentParagraph)}
-              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all font-medium text-sm shadow-sm dark:shadow-none"
+              className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Play size={16} fill="currentColor" />
               <span>Đọc bài</span>
@@ -182,7 +182,7 @@ const ArticleContent = ({ paragraphs }) => {
           ) : (
             <button
               onClick={pauseSpeech}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transition-all font-medium text-sm shadow-sm dark:shadow-none"
+              className="flex items-center gap-2 px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Pause size={16} fill="currentColor" />
               <span>Tạm dừng</span>
@@ -199,7 +199,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           <button
             onClick={resumeSpeech}
-            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors"
+            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
             title="Tiếp tục"
           >
             <Play size={18} />
@@ -207,7 +207,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           <button
             onClick={stopSpeech}
-            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-full transition-colors"
+            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors"
             title="Dừng hẳn"
           >
             <Square size={18} fill="currentColor" />
@@ -216,15 +216,15 @@ const ArticleContent = ({ paragraphs }) => {
       </div>
 
       {/* Paragraphs List */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         {paragraphs?.map((p, index) => {
           const isCurrent = index === currentParagraph;
           const isTranslated = showTranslations[index];
 
           // Style highlights container
           const containerClass = isCurrent
-            ? "bg-neutral-50 dark:bg-neutral-800/50 border-l-4 border-neutral-900 dark:border-neutral-400 pl-6 py-4 pr-4 rounded-r-2xl shadow-sm dark:shadow-none"
-            : "bg-transparent border-l-4 border-transparent pl-4 py-0 pr-0";
+            ? "bg-neutral-50 dark:bg-neutral-800/50 border-l-2 border-neutral-900 dark:border-neutral-400 pl-4 py-3 pr-3 rounded-r-lg shadow-sm dark:shadow-none"
+            : "bg-transparent border-l-2 border-transparent pl-3 py-0 pr-0";
 
           return (
             <div
@@ -286,7 +286,7 @@ const ArticleContent = ({ paragraphs }) => {
                 <button
                   onClick={() => toggleTranslation(index)}
                   className={`
-                    flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all
+                    flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wide transition-colors
                     ${
                       isTranslated
                         ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
