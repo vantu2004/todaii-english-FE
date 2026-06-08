@@ -55,11 +55,11 @@ const TagAnalysisSection = ({
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap gap-1 p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg max-w-2xl overflow-x-auto border border-neutral-200 dark:border-neutral-700">
+      <div className="flex flex-wrap gap-1 p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-md max-w-2xl overflow-x-auto border border-neutral-200 dark:border-neutral-700">
         <button
           type="button"
           onClick={() => setActivePartTab("overview")}
-          className={`px-2.5 py-1 text-[11px] font-bold rounded transition-all whitespace-nowrap cursor-pointer ${
+          className={`px-2 py-0.5 text-[11px] font-bold rounded-sm transition-all whitespace-nowrap cursor-pointer ${
             activePartTab === "overview"
               ? "bg-brand-500 text-white shadow-none"
               : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700"
@@ -73,7 +73,7 @@ const TagAnalysisSection = ({
             key={part}
             type="button"
             onClick={() => setActivePartTab(String(part))}
-            className={`px-2.5 py-1 text-[11px] font-bold rounded transition-all whitespace-nowrap cursor-pointer ${
+            className={`px-2 py-0.5 text-[11px] font-bold rounded-sm transition-all whitespace-nowrap cursor-pointer ${
               activePartTab === String(part)
                 ? "bg-brand-500 text-white shadow-none"
                 : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700"

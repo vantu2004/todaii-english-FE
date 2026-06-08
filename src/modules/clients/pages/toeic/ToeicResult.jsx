@@ -239,7 +239,7 @@ const ToeicResult = () => {
 
   return (
     <div className="w-full min-h-screen bg-surface-primary dark:bg-neutral-950 pt-[68px]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-3">
         {/* Header */}
         <ResultHeader
           test={resultData.test}

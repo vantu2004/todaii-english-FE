@@ -38,13 +38,13 @@ const PassageGroup = ({
 
   const renderMediaColumn = () => {
     return (
-      <div className="space-y-3 w-full min-w-0">
+      <div className="space-y-2 w-full min-w-0">
         {images.map((imgUrl, i) => (
           <img
             key={i}
             src={imgUrl}
             alt="Passage Illustration"
-            className="w-full rounded-xl object-contain border border-neutral-100 dark:border-neutral-800"
+            className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-800"
           />
         ))}
         {showAudio && (
@@ -52,7 +52,7 @@ const PassageGroup = ({
         )}
         {showText && (
           <div
-            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed p-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-sm whitespace-pre-wrap break-words"
+            className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed p-3.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg whitespace-pre-wrap break-words"
             dangerouslySetInnerHTML={{ __html: passage.passage_text }}
           />
         )}
@@ -61,7 +61,7 @@ const PassageGroup = ({
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-3">
       {/* Passage Header */}
       <div className="mb-1.5 px-1 text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
         Câu {startNumber}
@@ -70,14 +70,14 @@ const PassageGroup = ({
 
       <div
         className={
-          hasMedia ? "grid grid-cols-1 lg:grid-cols-2 gap-4" : "space-y-3"
+          hasMedia ? "grid grid-cols-1 lg:grid-cols-2 gap-3" : "space-y-2.5"
         }
       >
         {/* Left column: Passage Media (sticky) */}
         {hasMedia && renderMediaColumn()}
 
         {/* Right column: Questions list */}
-        <div className="space-y-3 min-w-0">
+        <div className="space-y-2.5 min-w-0">
           {questions.map((q, qIndex) => (
             <QuestionItem
               key={q.id}

@@ -32,49 +32,47 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
-        <div className="h-32 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
-        <div className="h-32 bg-neutral-100 dark:bg-neutral-850 rounded-3xl"></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
+        <div className="h-28 bg-neutral-100 dark:bg-neutral-850 rounded-lg"></div>
+        <div className="h-28 bg-neutral-100 dark:bg-neutral-850 rounded-lg"></div>
       </div>
     );
   }
 
   return (
     <div
-      className={`grid grid-cols-1 ${stats?.best ? "md:grid-cols-2" : ""} gap-6`}
+      className={`grid grid-cols-1 ${stats?.best ? "md:grid-cols-2" : ""} gap-4`}
     >
       {/* Overview Stats */}
-      <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 shadow-sm">
-        <h3 className="font-semibold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100/80 dark:border-neutral-800 flex items-center gap-2">
-          <BarChart3 className="text-brand-500" size={18} />
-          <span>Thống kê luyện tập</span>
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
+        <h3 className="font-semibold text-neutral-900 dark:text-white mb-3 pb-1.5 border-b border-neutral-200 dark:border-neutral-800 flex items-center gap-2">
+          <BarChart3 className="text-brand-500" size={16} />
+          <span className="text-sm">Thống kê luyện tập</span>
         </h3>
 
         {stats ? (
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500">Số lần làm bài:</span>
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 px-2.5 py-0.5 rounded-lg">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-neutral-500">Số lần làm bài:</span>
+              <span className="font-bold text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded">
                 {stats.totalAttempts} lần
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500">Đúng trung bình:</span>
-              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-450 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100/50 dark:border-emerald-900/20 px-2.5 py-0.5 rounded-lg">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-neutral-500">Đúng trung bình:</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-450 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100/50 dark:border-emerald-900/20 px-2 py-0.5 rounded">
                 {stats.avgCorrect} câu
               </span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-neutral-500">
-                Thời gian trung bình:
-              </span>
-              <span className="text-sm font-bold text-brand-600 dark:text-brand-450 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2.5 py-0.5 rounded-lg">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-neutral-500">Thời gian trung bình:</span>
+              <span className="font-bold text-brand-600 dark:text-brand-450 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2 py-0.5 rounded">
                 {stats.avgTime} phút
               </span>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-neutral-400 dark:text-neutral-500 py-2">
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 py-1">
             Bạn chưa có dữ liệu làm bài.
           </p>
         )}
@@ -82,16 +80,16 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
 
       {/* Best Attempt Details */}
       {stats?.best && (
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 shadow-sm">
-          <h3 className="font-semibold text-neutral-900 dark:text-white mb-4 pb-2 border-b border-neutral-100/80 dark:border-neutral-800 flex items-center gap-2">
-            <Award className="text-brand-500" size={18} />
-            <span>Lần làm cao nhất</span>
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-4">
+          <h3 className="font-semibold text-neutral-900 dark:text-white mb-3 pb-1.5 border-b border-neutral-200 dark:border-neutral-800 flex items-center gap-2">
+            <Award className="text-brand-500" size={16} />
+            <span className="text-sm">Lần làm cao nhất</span>
           </h3>
 
-          <div className="space-y-3.5">
-            <div className="flex items-center justify-between text-sm">
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-neutral-500 flex items-center gap-1.5">
-                <Calendar size={14} className="text-neutral-400" />
+                <Calendar size={13} className="text-neutral-400" />
                 Ngày làm:
               </span>
               <span className="font-semibold text-neutral-800 dark:text-neutral-200">
@@ -99,9 +97,9 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-neutral-500 flex items-center gap-1.5">
-                <CheckCircle2 size={14} className="text-neutral-400" />
+                <CheckCircle2 size={13} className="text-neutral-400" />
                 Đúng:
               </span>
               <span className="font-bold text-emerald-600 dark:text-emerald-450">
@@ -110,9 +108,9 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-neutral-500 flex items-center gap-1.5">
-                <Award size={14} className="text-neutral-400" />
+                <Award size={13} className="text-neutral-400" />
                 Điểm số:
               </span>
               <span className="font-bold text-brand-600 dark:text-brand-450">
@@ -120,9 +118,9 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-neutral-500 flex items-center gap-1.5">
-                <Clock size={14} className="text-neutral-400" />
+                <Clock size={13} className="text-neutral-400" />
                 Thời gian (phút):
               </span>
               <span className="font-semibold text-neutral-850 dark:text-neutral-200">
@@ -130,7 +128,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-neutral-500">Chế độ:</span>
               <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                 {stats.best.mode === "FULL_TEST"

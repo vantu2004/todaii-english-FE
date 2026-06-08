@@ -83,10 +83,10 @@ const PracticeTab = ({
   }, [tags]);
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="p-4 border border-brand-100 dark:border-brand-900/30 bg-brand-50/30 dark:bg-brand-900/5 rounded-2xl flex items-start gap-3">
-        <Sparkles className="text-brand-500 shrink-0 mt-0.5" size={18} />
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+    <div className="space-y-4 animate-fade-in">
+      <div className="p-3 border border-brand-100 dark:border-brand-900/30 bg-brand-50/30 dark:bg-brand-900/5 rounded-lg flex items-start gap-3">
+        <Sparkles className="text-brand-500 shrink-0 mt-0.5" size={16} />
+        <p className="text-xs text-neutral-600 dark:text-neutral-400">
           <strong className="text-brand-600 dark:text-brand-400">
             Pro tip:
           </strong>{" "}
@@ -95,12 +95,12 @@ const PracticeTab = ({
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+          <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
             Chọn phần thi
           </h3>
-          <div className="flex gap-4 text-sm font-medium">
+          <div className="flex gap-3 text-xs font-medium">
             <button
               type="button"
               onClick={onSelectAll}
@@ -119,7 +119,7 @@ const PracticeTab = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-2.5">
           {PARTS_METADATA.map((part) => {
             const isSelected = selectedParts.includes(part.id);
             const partTags = tagsByPart[part.id] || [];
@@ -127,7 +127,7 @@ const PracticeTab = ({
             return (
               <label
                 key={part.id}
-                className={`flex items-start gap-3.5 p-5 rounded-2xl border cursor-pointer transition-all duration-300 ${
+                className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all duration-150 ${
                   isSelected
                     ? "border-brand-500 bg-brand-50/20 dark:bg-brand-500/5 ring-1 ring-brand-500/30"
                     : "border-neutral-200 dark:border-neutral-800/80 hover:bg-neutral-50/50 dark:hover:bg-neutral-900/40"
@@ -137,37 +137,37 @@ const PracticeTab = ({
                   type="checkbox"
                   checked={isSelected}
                   onChange={() => onTogglePart(part.id)}
-                  className="mt-1 w-4.5 h-4.5 text-brand-500 border-neutral-300 dark:border-neutral-700 rounded focus:ring-brand-500/20 dark:bg-neutral-800"
+                  className="mt-1 w-4 h-4 text-brand-500 border-neutral-300 dark:border-neutral-700 rounded focus:ring-brand-500/20 dark:bg-neutral-800"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="font-semibold text-neutral-900 dark:text-white">
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <span className="font-semibold text-sm text-neutral-900 dark:text-white">
                       {part.name}
                     </span>
-                    <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md shrink-0">
+                    <span className="text-[10px] font-semibold text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded shrink-0">
                       {part.questions} câu
                     </span>
                   </div>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3 truncate">
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mb-1.5 truncate">
                     {part.fullName}
                   </p>
 
                   {/* Tags from BE */}
                   {partTags.length > 0 ? (
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1">
                       {partTags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/20 dark:border-neutral-700/30"
+                          className="text-[10px] font-medium px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-250/30 dark:border-neutral-700/30"
                         >
                           #{tag.name}
                         </span>
                       ))}
                     </div>
                   ) : loadingTags ? (
-                    <div className="flex gap-1.5 animate-pulse">
-                      <div className="h-4 w-12 bg-neutral-100 dark:bg-neutral-800 rounded"></div>
-                      <div className="h-4 w-16 bg-neutral-100 dark:bg-neutral-800 rounded"></div>
+                    <div className="flex gap-1 animate-pulse">
+                      <div className="h-3.5 w-10 bg-neutral-100 dark:bg-neutral-800 rounded"></div>
+                      <div className="h-3.5 w-14 bg-neutral-100 dark:bg-neutral-800 rounded"></div>
                     </div>
                   ) : null}
                 </div>
@@ -178,14 +178,14 @@ const PracticeTab = ({
       </div>
 
       {/* Time Selection */}
-      <div className="space-y-2 pt-2">
-        <label className="block text-sm font-semibold text-neutral-900 dark:text-white">
+      <div className="space-y-1.5 pt-1">
+        <label className="block text-xs font-semibold text-neutral-900 dark:text-white">
           Thời gian làm bài
         </label>
         <select
           value={duration}
           onChange={(e) => setDuration(Number(e.target.value))}
-          className="w-full sm:w-64 px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl text-sm font-semibold text-neutral-700 dark:text-neutral-350 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+          className="w-full sm:w-60 px-3 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-md text-xs font-semibold text-neutral-700 dark:text-neutral-350 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
         >
           <option value={10}>10 phút</option>
           <option value={20}>20 phút</option>
@@ -198,14 +198,14 @@ const PracticeTab = ({
       </div>
 
       {/* Start Button */}
-      <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800/80">
+      <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800/80">
         {selectedParts.length === 0 ? (
           <button
             type="button"
             onClick={() => toast.error("Please select at least one part!")}
-            className="flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 rounded-xl font-bold cursor-not-allowed transition-colors"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto py-2.5 px-6 bg-neutral-200 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 rounded-lg font-bold cursor-not-allowed transition-colors text-xs"
           >
-            <Play size={18} className="fill-neutral-400 text-neutral-400" />
+            <Play size={16} className="fill-neutral-400 text-neutral-400" />
             <span>Bắt đầu luyện tập</span>
           </button>
         ) : (
@@ -219,12 +219,12 @@ const PracticeTab = ({
                 duration,
               })
             }
-            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-3.5 px-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-xl font-semibold shadow-sm transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto py-2.5 px-6 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 rounded-lg font-semibold shadow-sm transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed text-xs"
           >
             {startingSession ? (
-              <div className="w-[18px] h-[18px] border-2 border-white/30 border-t-white dark:border-neutral-900/30 dark:border-t-neutral-900 rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white dark:border-neutral-900/30 dark:border-t-neutral-900 rounded-full animate-spin" />
             ) : (
-              <Play size={18} className="fill-current" />
+              <Play size={16} className="fill-current" />
             )}
             <span>
               {startingSession ? "Đang khởi tạo..." : "Bắt đầu luyện tập"}

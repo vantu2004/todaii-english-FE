@@ -71,7 +71,7 @@ const QuickAnswerList = ({ flatQuestions, answersMap, onQuestionClick }) => {
                       key={q.id}
                       type="button"
                       onClick={() => onQuestionClick && onQuestionClick(q.id)}
-                      className={`inline-flex items-center justify-center gap-0.5 px-2 py-0.5 rounded border border-gray-300 text-[10px] font-bold cursor-pointer hover:scale-105 active:scale-95 transition-all ${cardStyle}`}
+                      className={`inline-flex items-center justify-center gap-0.5 px-2 py-0.5 rounded border text-[10px] font-semibold cursor-pointer hover:opacity-90 transition-all ${cardStyle}`}
                       title={`Câu ${q.questionNumber}: Đáp án đúng ${correctAns}. Click để xem chi tiết.`}
                     >
                       <span className="opacity-80 text-[8.5px]">

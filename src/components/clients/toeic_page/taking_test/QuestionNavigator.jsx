@@ -81,9 +81,9 @@ const QuestionNavigator = ({
                   let btnClass =
                     "bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400";
                   if (isMarkd) {
-                    btnClass = "bg-amber-500 text-white shadow-sm";
+                    btnClass = "bg-amber-500 text-white";
                   } else if (isAnswered) {
-                    btnClass = "bg-brand-500 text-white shadow-sm";
+                    btnClass = "bg-brand-500 text-white";
                   }
 
                   return (
@@ -91,7 +91,7 @@ const QuestionNavigator = ({
                       key={q.id}
                       type="button"
                       onClick={() => onNavigateToQuestion(q.id)}
-                      className={`w-full aspect-square rounded-md text-[10px] sm:text-xs font-bold flex items-center justify-center transition-all hover:scale-105 ${btnClass}`}
+                      className={`w-full aspect-square rounded text-[10px] sm:text-xs font-semibold flex items-center justify-center transition-all hover:opacity-90 ${btnClass}`}
                       title={`Câu ${q.questionNumber}${isMarkd ? " (đánh dấu)" : ""}${isAnswered ? " (đã làm)" : ""}`}
                     >
                       {q.questionNumber}
@@ -127,7 +127,7 @@ const QuestionNavigator = ({
             type="button"
             onClick={onSave}
             disabled={saving}
-            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-md text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50"
           >
             <Save size={14} />
             <span>{saving ? "Đang lưu..." : "Lưu bài"}</span>
@@ -136,7 +136,7 @@ const QuestionNavigator = ({
             type="button"
             onClick={onSubmit}
             disabled={submitting}
-            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg text-xs sm:text-sm font-bold transition-colors disabled:opacity-50 shadow-sm"
+            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-md text-xs sm:text-sm font-bold transition-colors disabled:opacity-50"
           >
             <Send size={14} />
             <span>{submitting ? "Đang nộp..." : "Nộp bài"}</span>

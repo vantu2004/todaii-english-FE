@@ -61,7 +61,7 @@ const TagAnalysisTable = ({
   return (
     <div className="overflow-x-auto w-full">
       <div className="inline-block min-w-full align-middle">
-        <div className="overflow-hidden border border-neutral-200 dark:border-neutral-800 rounded-lg bg-white dark:bg-neutral-900">
+        <div className="overflow-hidden border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-900">
           <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800">
             <thead className="bg-neutral-100 dark:bg-neutral-800">
               <tr>
@@ -140,7 +140,7 @@ const TagAnalysisTable = ({
 
                     {/* Accuracy */}
                     <td className="px-2.5 py-1.5 whitespace-nowrap text-center">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10.5px] font-bold bg-amber-500 text-white border border-amber-600">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[10.5px] font-bold bg-amber-500 text-white border border-amber-600">
                         {accuracy}%
                       </span>
                     </td>
@@ -175,7 +175,7 @@ const TagAnalysisTable = ({
                               onClick={() =>
                                 onQuestionClick && onQuestionClick(qId)
                               }
-                              className={`inline-flex items-center justify-center w-5.5 h-5.5 text-[9.5px] font-bold rounded border cursor-pointer hover:scale-105 active:scale-95 transition-all ${badgeStyle}`}
+                              className={`inline-flex items-center justify-center w-5.5 h-5.5 text-[9.5px] font-bold rounded-sm border cursor-pointer hover:border-neutral-450 dark:hover:border-neutral-600 transition-colors duration-150 ${badgeStyle}`}
                               title={`Click để xem câu ${qNum}`}
                             >
                               {qNum}

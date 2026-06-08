@@ -153,43 +153,43 @@ const ToeicTestOverview = () => {
 
   return (
     <div className="w-full min-h-screen bg-surface-primary dark:bg-neutral-950 pt-[68px]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Back Link */}
         <Link
           to="/client/toeic"
-          className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors mb-6 font-medium"
+          className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors mb-4 font-medium"
         >
-          <ArrowLeft size={18} />
-          <span>Quay lại danh sách</span>
+          <ArrowLeft size={16} />
+          <span className="text-sm">Quay lại danh sách</span>
         </Link>
 
         {/* Test Header Block */}
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 md:p-8 shadow-sm mb-8">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-lg p-4 mb-4">
           <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-            <div className="space-y-3">
+            <div className="space-y-2">
               {test.collection?.name && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/30 dark:border-neutral-700/50">
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/30 dark:border-neutral-700/50 animate-none">
                   {test.collection.name}
                 </span>
               )}
-              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-neutral-900 dark:text-white leading-tight">
+              <h1 className="text-xl md:text-2xl font-semibold tracking-tight text-neutral-900 dark:text-white leading-tight">
                 {test.title}
               </h1>
-              <div className="flex flex-wrap items-center gap-5 text-neutral-500 dark:text-neutral-400 text-sm">
-                <div className="flex items-center gap-1.5">
-                  <Clock size={16} className="text-neutral-400" />
+              <div className="flex flex-wrap items-center gap-4 text-neutral-500 dark:text-neutral-400 text-xs">
+                <div className="flex items-center gap-1">
+                  <Clock size={14} className="text-neutral-400" />
                   <span className="font-medium text-neutral-700 dark:text-neutral-300">
                     {test.duration || 120} phút
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <BookOpen size={16} className="text-neutral-400" />
+                <div className="flex items-center gap-1">
+                  <BookOpen size={14} className="text-neutral-400" />
                   <span className="font-medium text-neutral-700 dark:text-neutral-300">
                     7 phần thi
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Award size={16} className="text-neutral-400" />
+                <div className="flex items-center gap-1">
+                  <Award size={14} className="text-neutral-400" />
                   <span className="font-medium text-neutral-700 dark:text-neutral-300">
                     200 câu hỏi
                   </span>
@@ -200,18 +200,18 @@ const ToeicTestOverview = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="w-full space-y-8">
+        <div className="w-full space-y-4">
           {/* Stats & Latest Attempt */}
           <TestDetailSidebar sessions={sessions} loading={loadingSessions} />
 
           {/* Test Action Tabs */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Tab Switched Header */}
-            <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-neutral-800/80 rounded-xl max-w-md">
+            <div className="flex gap-1.5 p-1 bg-neutral-100 dark:bg-neutral-800/80 rounded-md max-w-sm">
               <button
                 type="button"
                 onClick={() => setActiveTab("info")}
-                className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
+                className={`flex-1 py-1.5 px-2 text-xs font-semibold rounded-md transition-all ${
                   activeTab === "info"
                     ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
@@ -222,7 +222,7 @@ const ToeicTestOverview = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab("practice")}
-                className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
+                className={`flex-1 py-1.5 px-2 text-xs font-semibold rounded-md transition-all ${
                   activeTab === "practice"
                     ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
@@ -233,7 +233,7 @@ const ToeicTestOverview = () => {
               <button
                 type="button"
                 onClick={() => setActiveTab("fulltest")}
-                className={`flex-1 py-2 px-3 text-sm font-semibold rounded-lg transition-all ${
+                className={`flex-1 py-1.5 px-2 text-xs font-semibold rounded-md transition-all ${
                   activeTab === "fulltest"
                     ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300"
@@ -244,7 +244,7 @@ const ToeicTestOverview = () => {
             </div>
 
             {/* Tab Rendering */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800/80 rounded-3xl p-6 md:p-8 shadow-sm">
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-lg p-4">
               {activeTab === "info" && (
                 <TestInfoTab
                   test={test}

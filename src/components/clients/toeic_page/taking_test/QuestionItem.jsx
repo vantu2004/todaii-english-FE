@@ -36,16 +36,16 @@ const QuestionItem = forwardRef(
       <div
         ref={ref}
         id={`question-${question.id}`}
-        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border-neutral-150 dark:border-neutral-800 shadow-sm transition-colors"
+        className="mb-3 p-3 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 transition-colors"
       >
         <div
           className={
-            hasMedia ? "grid grid-cols-1 md:grid-cols-2 gap-4" : "space-y-2.5"
+            hasMedia ? "grid grid-cols-1 md:grid-cols-2 gap-3" : "space-y-2.5"
           }
         >
           {/* Media Column (Left) */}
           {hasMedia && (
-            <div className="flex flex-col gap-2.5 justify-center min-w-0">
+            <div className="flex flex-col gap-2 justify-center min-w-0">
               {getImages(question.image_url).map((imgUrl, i) => (
                 <img
                   key={i}
@@ -106,9 +106,9 @@ const QuestionItem = forwardRef(
                 return (
                   <label
                     key={opt}
-                    className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg border cursor-pointer transition-all text-xs sm:text-sm ${
+                    className={`flex items-center gap-2 py-1 px-2.5 rounded-md border cursor-pointer transition-all text-xs sm:text-sm ${
                       isSelected
-                        ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10 shadow-sm"
+                        ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
                         : "border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800"
                     }`}
                   >

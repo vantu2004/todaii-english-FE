@@ -70,7 +70,7 @@ const QuestionDetailsModal = ({
           </span>
           <button
             onClick={onClose}
-            className="p-1 text-neutral-500 hover:text-neutral-800 dark:hover:text-white rounded-lg transition-colors cursor-pointer"
+            className="p-1 text-neutral-500 hover:text-neutral-800 dark:hover:text-white rounded transition-colors cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -87,7 +87,7 @@ const QuestionDetailsModal = ({
           >
             {/* Passage Column (Part 3, 4, 6, 7) */}
             {hasPassage && (
-              <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-3 bg-neutral-50/50 dark:bg-neutral-950/40 space-y-3 md:h-full md:max-h-[75vh] md:overflow-y-auto animate-fade-in">
+              <div className="border border-neutral-200 dark:border-neutral-800 rounded-md p-2.5 bg-neutral-50/50 dark:bg-neutral-950/40 space-y-3 md:h-full md:max-h-[75vh] md:overflow-y-auto animate-fade-in">
                 <div className="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-1.5 shrink-0">
                   <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-450 uppercase tracking-wider block">
                     Đoạn văn / Bài đọc (Passage)
@@ -246,7 +246,7 @@ const QuestionDetailsModal = ({
               {/* Explanation & Transcript Section */}
               {hasExplanation &&
                 (showExplanation ? (
-                  <div className="border border-neutral-200 dark:border-neutral-800 rounded-lg p-2.5 bg-neutral-50/30 dark:bg-neutral-900/20 space-y-2.5 overflow-x-hidden animate-fade-in">
+                  <div className="border border-neutral-200 dark:border-neutral-800 rounded-md p-2 bg-neutral-50/30 dark:bg-neutral-900/20 space-y-2.5 overflow-x-hidden animate-fade-in">
                     <div className="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-1">
                       <div className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-500 dark:text-neutral-450 uppercase tracking-wider">
                         <AlertCircle size={12} className="text-neutral-400" />
@@ -292,7 +292,7 @@ const QuestionDetailsModal = ({
                   <div className="flex justify-center py-0.5">
                     <button
                       onClick={() => setShowExplanation(true)}
-                      className="px-4 py-2 border border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-700 dark:text-brand-400 rounded-lg text-xs font-bold hover:bg-brand-100 dark:hover:bg-brand-900/40 transition-all cursor-pointer w-full text-center"
+                      className="px-3 py-1.5 border border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-700 dark:text-brand-400 rounded-md text-xs font-bold hover:bg-brand-100 dark:hover:bg-brand-900/40 transition-all cursor-pointer w-full text-center"
                     >
                       Xem giải thích chi tiết & transcript
                     </button>
@@ -306,7 +306,7 @@ const QuestionDetailsModal = ({
         <div className="px-3.5 py-2 border-t border-neutral-200 dark:border-neutral-850 flex justify-end shrink-0 bg-neutral-100 dark:bg-neutral-800">
           <button
             onClick={onClose}
-            className="bg-neutral-900 hover:bg-black dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 rounded-lg px-4 py-1.5 text-xs font-bold cursor-pointer transition-all border border-neutral-950 dark:border-white"
+            className="bg-neutral-900 hover:bg-black dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 rounded-md px-3.5 py-1 text-xs font-bold cursor-pointer transition-all border border-neutral-950 dark:border-white"
           >
             Đóng
           </button>

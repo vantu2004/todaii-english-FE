@@ -64,7 +64,7 @@ const ResultHeader = ({ test, session, incorrectCount = 0 }) => {
                 "Tính năng xem chi tiết đáp án sẽ được cập nhật trong phase sau!",
               );
             }}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-lg font-bold text-xs hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all border border-neutral-950 dark:border-white shadow-none cursor-pointer"
+            className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-lg font-semibold text-xs hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all border border-neutral-950 dark:border-white cursor-pointer"
           >
             <Eye size={13} />
             <span>Xem chi tiết đáp án</span>
@@ -74,9 +74,9 @@ const ResultHeader = ({ test, session, incorrectCount = 0 }) => {
             type="button"
             onClick={handleRedoIncorrect}
             disabled={incorrectCount === 0}
-            className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg font-bold text-xs transition-all border ${
+            className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg font-semibold text-xs transition-all border ${
               incorrectCount > 0
-                ? "border-rose-200 dark:border-rose-900/40 bg-rose-50/70 dark:bg-rose-955/10 text-rose-700 dark:text-rose-400 hover:bg-rose-100/80 cursor-pointer"
+                ? "border-rose-250 dark:border-rose-900/40 bg-rose-50/70 dark:bg-rose-955/10 text-rose-700 dark:text-rose-400 hover:bg-rose-100/80 cursor-pointer"
                 : "border-neutral-200 dark:border-neutral-750 text-neutral-450 dark:text-neutral-500 bg-neutral-100/50 dark:bg-neutral-800/30 cursor-not-allowed"
             }`}
           >
