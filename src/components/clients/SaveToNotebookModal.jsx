@@ -18,7 +18,6 @@ import {
   deleteNotebook,
 } from "@/api/clients/notebookApi";
 import { addWordToNotebook } from "@/api/clients/noteDictApi";
-import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
 import toast from "react-hot-toast";
 
 // Helper recursive flattening of nodes of type "NOTE"
@@ -36,13 +35,12 @@ const getNotesOnly = (nodes) => {
   return list;
 };
 
-const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
+const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
   const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // CRUD states
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [newDeckName, setNewDeckName] = useState("");
   const [editingNoteId, setEditingNoteId] = useState(null);
@@ -74,28 +72,17 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
 
   const handleSelectNote = async (note) => {
     if (isSaving || editingNoteId) return;
+
+    if (!word?.trim()) {
+      toast.error("Không tìm thấy từ vựng để lưu.");
+      return;
+    }
+
     setIsSaving(true);
 
     try {
-      let finalEntryId = entryId;
+      await addWordToNotebook(note.id, word.trim());
 
-      // Nếu không có entryId, cần tra cứu ID từ Todaii Dictionary bằng từ vựng
-      if (!finalEntryId && word) {
-        const todaiiRes = await searchByTodaiiDictionary(word.trim(), 1, 1);
-        if (todaiiRes?.result?.length > 0) {
-          finalEntryId = todaiiRes.result[0].id;
-        }
-      }
-
-      if (!finalEntryId) {
-        toast.error(
-          `Từ "${word}" không tồn tại trong từ điển Todaii để lưu vào sổ tay.`,
-        );
-        setIsSaving(false);
-        return;
-      }
-
-      await addWordToNotebook(note.id, finalEntryId);
       toast.success(`Đã thêm từ "${word}" vào bộ từ vựng "${note.name}"`);
       onClose();
     } catch (err) {
@@ -111,12 +98,14 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
       toast.error("Vui lòng nhập tên bộ từ vựng.");
       return;
     }
+
     try {
       await createNotebook({
         name: newDeckName.trim(),
         type: "NOTE",
         parentId: null,
       });
+
       toast.success(`Đã tạo bộ từ vựng "${newDeckName}"`);
       setNewDeckName("");
       setIsCreatingNew(false);
@@ -132,8 +121,10 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
       toast.error("Tên bộ từ vựng không được để trống.");
       return;
     }
+
     try {
       await renameNotebook(id, editName.trim());
+
       toast.success("Đã đổi tên bộ từ vựng.");
       setEditingNoteId(null);
       setEditName("");
@@ -152,6 +143,7 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
     ) {
       return;
     }
+
     try {
       await deleteNotebook(id);
       toast.success("Đã xóa bộ từ vựng.");
@@ -170,7 +162,6 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -179,7 +170,6 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
             className="absolute inset-0 bg-neutral-950/40 backdrop-blur-sm"
           />
 
-          {/* Modal Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -188,12 +178,12 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
             className="relative w-full max-w-md max-h-[80vh] flex flex-col bg-white dark:bg-neutral-900 
               border border-neutral-100 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl z-10 m-4 overflow-hidden"
           >
-            {/* Header */}
             <div className="flex items-center justify-between border-b border-neutral-100 dark:border-neutral-800 pb-4 mb-4">
               <h3 className="text-base font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-brand-500" />
                 <span>Lưu từ vựng vào Sổ tay</span>
               </h3>
+
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
@@ -203,24 +193,24 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
               </button>
             </div>
 
-            {/* Target Word Info */}
             <div className="mb-4 p-3 bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100/50 dark:border-brand-900/30 rounded-2xl flex items-center justify-between">
               <div>
                 <p className="text-[10px] text-neutral-400 dark:text-neutral-500">
                   Từ vựng đang chọn:
                 </p>
+
                 <p className="text-base font-bold text-brand-600 dark:text-brand-400 font-serif mt-0.5 select-all">
                   {word}
                 </p>
               </div>
             </div>
 
-            {/* Search Input & Quick Create Toggle */}
             <div className="space-y-3 mb-4">
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
                   <Search className="w-4 h-4" />
                 </span>
+
                 <input
                   type="text"
                   value={searchQuery}
@@ -231,7 +221,6 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
                 />
               </div>
 
-              {/* Quick Create Section */}
               {isCreatingNew ? (
                 <div className="flex gap-2 p-2 bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 rounded-2xl animate-in slide-in-from-top-1 duration-200">
                   <input
@@ -245,12 +234,14 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
                     className="flex-1 px-3 py-1.5 border border-neutral-200 dark:border-neutral-800 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-xs focus:outline-none"
                     autoFocus
                   />
+
                   <button
                     onClick={handleCreateDeck}
                     className="px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-xs font-semibold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
                   >
                     Tạo
                   </button>
+
                   <button
                     onClick={() => setIsCreatingNew(false)}
                     className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full text-neutral-400"
@@ -269,7 +260,6 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Notebook Decks List */}
             <div className="flex-1 overflow-y-auto min-h-0 space-y-2 pr-1 -mr-2">
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-12">
@@ -300,17 +290,17 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
                           className="flex-1 px-2 py-1.5 border border-neutral-200 dark:border-neutral-800 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white text-xs focus:outline-none"
                           autoFocus
                         />
+
                         <button
                           onClick={() => handleRenameDeck(note.id)}
                           className="p-1.5 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/20 rounded-full"
-                          title="Lưu"
                         >
                           <Check className="w-4 h-4" />
                         </button>
+
                         <button
                           onClick={() => setEditingNoteId(null)}
                           className="p-1.5 text-neutral-450 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full"
-                          title="Hủy"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -321,14 +311,13 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
                           <p className="text-xs font-semibold text-neutral-880 dark:text-neutral-200 truncate">
                             {note.name}
                           </p>
+
                           <p className="text-[10px] text-neutral-450 dark:text-neutral-500 mt-0.5">
                             Nhấp để thêm từ vựng
                           </p>
                         </div>
 
-                        {/* Actions wrapper */}
                         <div className="flex items-center gap-1 ml-2">
-                          {/* Desktop only group-hover actions, mobile friendly spacing */}
                           <div
                             className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
                             onClick={(e) => e.stopPropagation()}
@@ -339,14 +328,13 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
                                 setEditName(note.name);
                               }}
                               className="p-1 hover:bg-neutral-150 dark:hover:bg-neutral-800 rounded text-neutral-450 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
-                              title="Đổi tên"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
+
                             <button
                               onClick={() => handleDeleteDeck(note.id)}
                               className="p-1 hover:bg-red-50 dark:hover:bg-red-950/25 rounded text-red-500 transition-colors"
-                              title="Xóa bộ từ vựng"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -370,7 +358,6 @@ const SaveToNotebookModal = ({ word, entryId, isOpen, onClose }) => {
               )}
             </div>
 
-            {/* Loading Overlay */}
             {isSaving && (
               <div className="absolute inset-0 bg-white/70 dark:bg-neutral-900/70 z-20 flex items-center justify-center">
                 <div className="flex items-center gap-2">

@@ -127,16 +127,16 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
   const handleAddWord = async () => {
     if (!searchState.result.length || !note) return;
+
     const entry = searchState.result[0];
     const headword = entry.word || entry.headword;
 
-    // đảm bảo lưu 1 lần
     if (savedWords.some((w) => (w.headword || w.word) === headword)) {
       return;
     }
 
     const newWord = {
-      id: entry.id || Date.now(), // Temp ID nếu là free
+      id: entry.id || Date.now(),
       headword,
       ipa: entry.pronounce?.us || entry.phonetic || "",
       definition:
@@ -144,12 +144,13 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
         entry.meanings?.[0]?.definitions?.[0]?.definition ||
         "",
     };
+
     setSavedWords([newWord, ...savedWords]);
 
     try {
-      // chỉ lưu khi từ có trong DB (todaii)
-      if (searchState.type === "todaii")
-        await addWordToNotebook(note.id, entry.id);
+      if (searchState.type === "todaii") {
+        await addWordToNotebook(note.id, headword);
+      }
     } catch (error) {
       console.error(error);
 
@@ -318,7 +319,7 @@ const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
               <div className="min-w-0">
                 <div className="flex items-baseline gap-2">
                   <h3
-                    className={`text-base font-bold truncate ${
+                    className={`text-base truncate ${
                       isActive
                         ? "text-neutral-900 dark:text-white"
                         : "text-neutral-700 dark:text-neutral-300"
