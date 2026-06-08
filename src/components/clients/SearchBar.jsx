@@ -56,11 +56,11 @@ const SearchBar = ({
         className={`
           w-full pl-12 
           ${!onChangeSearch ? "pr-14" : "pr-10"} 
-          py-3.5 
+          py-2.5 
           bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700
-          rounded-full shadow-sm
+          rounded-lg
           text-neutral-900 dark:text-white text-sm font-medium placeholder:text-neutral-400 dark:placeholder:text-neutral-500
-          transition-all duration-200 ease-in-out
+          transition-all duration-150 ease-in-out
           
           focus:outline-none 
           focus:border-brand-500 
@@ -76,7 +76,7 @@ const SearchBar = ({
         {inputValue && (
           <button
             onClick={handleClear}
-            className="p-1.5 rounded-full text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+            className="p-1.5 rounded text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
             title="Xóa tìm kiếm"
           >
             <X size={16} />
@@ -87,7 +87,7 @@ const SearchBar = ({
         {!onChangeSearch && (
           <button
             onClick={() => onSearch?.(inputValue)}
-            className="w-9 h-9 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center hover:bg-neutral-800 dark:hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all shadow-sm"
+            className="w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
             title="Tìm kiếm"
           >
             <ArrowRight size={16} />

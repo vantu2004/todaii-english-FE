@@ -65,19 +65,19 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
 
   if (isFirstLoad && loading) {
     return (
-      <div className="bg-white dark:bg-neutral-900/50 rounded-3xl p-6 sm:p-8 border border-neutral-100 dark:border-neutral-850/80 shadow-sm mt-8 transition-colors duration-300">
-        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-neutral-100 dark:border-neutral-800 animate-pulse">
-          <div className="w-9 h-9 bg-neutral-100 dark:bg-neutral-800 rounded-xl" />
+      <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-850/80 shadow-sm mt-6 transition-colors duration-300">
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-150 dark:border-neutral-800 animate-pulse">
+          <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-md" />
           <div className="space-y-2 flex-1">
-            <div className="h-5 w-32 bg-neutral-100 dark:bg-neutral-800 rounded" />
+            <div className="h-4 w-32 bg-neutral-100 dark:bg-neutral-800 rounded" />
             <div className="h-3 w-48 bg-neutral-100 dark:bg-neutral-800 rounded" />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-16 bg-neutral-50/50 dark:bg-neutral-900/30 rounded-2xl animate-pulse border border-neutral-100/50 dark:border-neutral-800/50"
+              className="h-14 bg-neutral-50/50 dark:bg-neutral-900/30 rounded-lg animate-pulse border border-neutral-100/50 dark:border-neutral-800/50"
             />
           ))}
         </div>
@@ -88,25 +88,25 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
   if (!loading && words.length === 0) return null;
 
   return (
-    <div className="bg-white dark:bg-neutral-900/50 rounded-3xl p-6 sm:p-8 border border-neutral-100 dark:border-neutral-850/80 shadow-sm mt-8 transition-colors duration-300">
+    <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-850/80 shadow-sm mt-6 transition-colors duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-neutral-100 dark:border-neutral-800">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-150 dark:border-neutral-800">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-500 dark:text-indigo-400 rounded-xl">
-            <Languages size={20} />
+          <div className="p-1.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-500 dark:text-indigo-400 rounded-md">
+            <Languages size={18} />
           </div>
           <div>
-            <h3 className="font-semibold text-neutral-900 dark:text-white text-base sm:text-lg tracking-tight">
+            <h3 className="font-semibold text-neutral-900 dark:text-white text-sm sm:text-base tracking-tight">
               Từ vựng quan trọng
             </h3>
-            <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">
+            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">
               Từ vựng chính xuất hiện trong nội dung bài học
             </p>
           </div>
         </div>
 
         {/* Total Badge */}
-        <span className="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50">
+        <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50">
           Tổng số: {words.length} từ
         </span>
       </div>
@@ -116,9 +116,9 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
         {words.map((entry, index) => (
           <div
             key={entry.id}
-            className="flex items-center justify-between p-4 rounded-2xl bg-neutral-50/30 dark:bg-neutral-900/20 
-              border border-neutral-100/80 dark:border-neutral-800/80 hover:bg-white dark:hover:bg-neutral-900 
-              hover:border-brand-500/20 dark:hover:border-brand-500/20 hover:shadow-sm transition-all duration-300 group"
+            className="flex items-center justify-between p-3 rounded-lg bg-neutral-50/30 dark:bg-neutral-900/20 
+              border border-neutral-150 dark:border-neutral-800 hover:bg-white dark:hover:bg-neutral-900 
+              hover:border-brand-500/20 dark:hover:border-brand-500/20 transition-colors duration-150 group"
           >
             {/* LEFT: Index & Word */}
             <div className="flex items-center gap-3">
@@ -137,12 +137,12 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
                   e.stopPropagation();
                   handleSpeak(entry.word, "");
                 }}
-                className="w-8 h-8 rounded-full bg-white dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 
+                className="w-7 h-7 rounded bg-white dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 
                   flex items-center justify-center border border-neutral-200/50 dark:border-neutral-700/50 
-                  hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-100 dark:hover:border-brand-900 transition-all"
+                  hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-100 dark:hover:border-brand-900 transition-colors"
                 title="Nghe phát âm"
               >
-                <Volume2 size={14} />
+                <Volume2 size={13} />
               </button>
 
               <button
@@ -167,12 +167,12 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
 
       {/* Load More Button */}
       {hasMore && (
-        <div className="mt-6 pt-2 flex justify-center">
+        <div className="mt-4 pt-1 flex justify-center">
           <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2 text-xs font-bold text-neutral-600 dark:text-neutral-300 
-              bg-neutral-50 dark:bg-neutral-850 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full 
+            className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-300 
+              bg-neutral-50 dark:bg-neutral-850 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md 
               border border-neutral-200 dark:border-neutral-700 disabled:opacity-70 transition-colors"
           >
             {loading ? (

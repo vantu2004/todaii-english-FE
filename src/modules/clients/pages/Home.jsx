@@ -103,7 +103,7 @@ const Home = () => {
               </div>
 
               {articlesLoading ? (
-                <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 sm:h-96 rounded-2xl" />
+                <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 sm:h-96 rounded-lg" />
               ) : latestArticles.length > 0 ? (
                 <BigArticleCard {...latestArticles[0]} />
               ) : null}
@@ -125,13 +125,13 @@ const Home = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={prevSlide}
-                      className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 hover:shadow-sm"
+                      className="w-8 h-8 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
                     >
                       <ChevronLeft size={16} />
                     </button>
                     <button
                       onClick={nextSlide}
-                      className="w-8 h-8 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 hover:shadow-sm"
+                      className="w-8 h-8 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
                     >
                       <ChevronRight size={16} />
                     </button>
@@ -140,7 +140,7 @@ const Home = () => {
               </div>
 
               {/* Carousel */}
-              <div className="overflow-hidden rounded-2xl">
+              <div className="overflow-hidden rounded-lg">
                 <div
                   className="flex transition-transform duration-500 ease-out"
                   style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -153,7 +153,7 @@ const Home = () => {
                           .map((_, i) => (
                             <div
                               key={i}
-                              className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-52 rounded-xl"
+                              className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-52 rounded-md"
                             />
                           ))}
                       </div>
@@ -237,15 +237,15 @@ const Home = () => {
               <SavedArticleTags />
 
               {/* Video Section */}
-              <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 border border-neutral-100 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-none">
-                <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 mb-4">
+              <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 border border-neutral-200 dark:border-neutral-800">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500 mb-3">
                   Video học tiếng Anh
                 </h3>
                 <SidebarVideos />
               </div>
 
               {/* Social Stats */}
-              <div className="bg-white dark:bg-neutral-900/60 rounded-2xl p-5 border border-neutral-100 dark:border-neutral-800 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-none">
+              <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 border border-neutral-200 dark:border-neutral-800">
                 <SocialStats />
               </div>
             </div>
