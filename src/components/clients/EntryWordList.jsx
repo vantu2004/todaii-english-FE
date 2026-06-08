@@ -111,8 +111,8 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
         </span>
       </div>
 
-      {/* Word Grid (2 Columns on Medium/Large screens) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Word List (Each word on one row) */}
+      <div className="grid grid-cols-1 gap-2">
         {words.map((entry, index) => (
           <div
             key={entry.id}
