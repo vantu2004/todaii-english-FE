@@ -19,6 +19,7 @@ import {
 } from "@/api/clients/notebookApi";
 import { addWordToNotebook } from "@/api/clients/noteDictApi";
 import toast from "react-hot-toast";
+import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
 
 // Helper recursive flattening of nodes of type "NOTE"
 const getNotesOnly = (nodes) => {
@@ -81,9 +82,25 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
     setIsSaving(true);
 
     try {
-      await addWordToNotebook(note.id, word.trim());
+      let wordToSave = word.trim();
 
-      toast.success(`Đã thêm từ "${word}" vào bộ từ vựng "${note.name}"`);
+      // 1. Chuẩn hóa từ vựng: Lấy base word (headword) từ API giống như bên NoteEditor
+      try {
+        const apiResult = await searchByTodaiiDictionary(wordToSave, 1, 1);
+        if (apiResult?.result?.length > 0) {
+          const entry = apiResult.result[0];
+          // Ưu tiên lấy từ gốc do API trả về, nếu không có thì giữ nguyên từ ban đầu
+          wordToSave = entry.word || entry.headword || wordToSave;
+        }
+      } catch (apiErr) {
+        console.warn("Lỗi khi tìm từ nguyên mẫu, sẽ lưu từ gốc:", apiErr);
+        // Fallback: Vẫn tiếp tục chạy để lưu từ gốc nếu API lỗi
+      }
+
+      // 2. Lưu từ đã được chuẩn hóa vào sổ tay
+      await addWordToNotebook(note.id, wordToSave);
+
+      toast.success(`Đã thêm từ "${wordToSave}" vào bộ từ vựng "${note.name}"`);
       onClose();
     } catch (err) {
       console.error("Error saving word to notebook:", err);
