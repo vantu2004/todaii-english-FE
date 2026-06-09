@@ -199,7 +199,6 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
 
       <SaveToNotebookModal
         word={saveWord}
-        entryId={saveEntryId}
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
       />

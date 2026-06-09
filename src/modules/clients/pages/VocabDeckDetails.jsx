@@ -17,6 +17,7 @@ import {
   Keyboard,
   BookOpen,
   Calendar,
+  BookMarked,
 } from "lucide-react";
 import { getVocabDeckById } from "@/api/clients/vocabDeckApi";
 import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
@@ -26,6 +27,8 @@ import { formatISODate } from "@/utils/FormatDate";
 import TypingGame from "@/components/clients/vocab_deck_details_page/TypingGame";
 import SpeedRoundGame from "@/components/clients/vocab_deck_details_page/SpeedRoundGame";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
+import DictionaryModal from "@/components/clients/DictionaryModal";
+import SaveToNotebookModal from "@/components/clients/SaveToNotebookModal";
 
 // ─── Helper: parse json_data string → flat word object ───────────────────────
 const parseJsonData = (jsonDataStr) => {
@@ -109,6 +112,23 @@ const VocabDeckDetails = () => {
   const [fetchingIds, setFetchingIds] = useState({});
   // Track từng từ fetch thất bại: { [wordId]: boolean }
   const [errorIds, setErrorIds] = useState({});
+
+  const [activeWord, setActiveWord] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saveWord, setSaveWord] = useState(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+  const handleOpenModal = (word) => {
+    if (word) {
+      setActiveWord(word);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleOpenSaveModal = (word) => {
+    setSaveWord(word);
+    setIsSaveModalOpen(true);
+  };
 
   useEffect(() => {
     loadVoices();
@@ -477,9 +497,22 @@ const VocabDeckDetails = () => {
               </div>
 
               {/* Option Menu */}
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="p-2 text-neutral-300 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-400">
-                  <MoreHorizontal size={16} />
+              {/* RIGHT: Speak Audio & View Details Link */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleOpenModal(item.word)}
+                  className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
+                >
+                  Chi tiết
+                </button>
+
+                <button
+                  onClick={() => handleOpenSaveModal(item.word)}
+                  className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors border-l border-neutral-200 dark:border-neutral-700 pl-2"
+                >
+                  Lưu sổ tay
                 </button>
               </div>
             </div>
@@ -496,6 +529,18 @@ const VocabDeckDetails = () => {
           </div>
         )}
       </div>
+
+      <DictionaryModal
+        word={activeWord}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      <SaveToNotebookModal
+        word={saveWord}
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+      />
     </div>
   );
 };

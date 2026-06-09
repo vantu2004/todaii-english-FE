@@ -198,7 +198,6 @@ const DictionaryModal = ({ word, isOpen, onClose }) => {
 
           <SaveToNotebookModal
             word={localWord}
-            entryId={apiSource === "todaii" ? data?.result?.[0]?.id : null}
             isOpen={isSaveModalOpen}
             onClose={() => setIsSaveModalOpen(false)}
           />
