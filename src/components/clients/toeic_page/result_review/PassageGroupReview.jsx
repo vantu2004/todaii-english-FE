@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import QuestionItemReview from "./QuestionItemReview";
 
 const getImages = (urlStr) => {
@@ -9,37 +10,33 @@ const getImages = (urlStr) => {
     .filter(Boolean);
 };
 
-// answers shape: { [qId]: { user_choice, correct_ans, is_marked, status } }
 const PassageGroupReview = ({
-  passage, // ToeicPassageDTO
-  questions, // ToeicQuestionDTO[] — questions trong passage
+  passage,
+  questions,
   startNumber,
   answers,
   questionRefs,
   partNumber,
 }) => {
+  // State để quản lý ẩn/hiện text và dịch của passage
+  const [isPassageOpen, setIsPassageOpen] = useState(false);
+  const [isTransOpen, setIsTransOpen] = useState(false);
+
   const images = getImages(passage.image_url);
   const hasImages = images.length > 0;
+
+  // Logic hiển thị media: Part 3, 4, 6, 7 luôn ưu tiên hiện ảnh/audio
   const showAudio = passage.audio_url && ![6, 7].includes(partNumber);
+  const hasMedia = hasImages || showAudio || !!passage.passage_text;
 
-  let showText = false;
-  if ([6, 7].includes(partNumber)) {
-    showText = !hasImages && !!passage.passage_text;
-  } else if (![3, 4].includes(partNumber)) {
-    showText = !!passage.passage_text;
-  }
-
-  const hasMedia = hasImages || showAudio || showText;
-
-  // Đếm đúng trong group — dựa vào status (1=đúng)
   const correctInGroup = questions.filter(
     (q) => answers[q.id]?.status === 1,
   ).length;
 
   return (
-    <div className="mb-3">
+    <div className="mb-6 p-4 bg-neutral-50/50 dark:bg-neutral-900/30 rounded-xl border border-neutral-200 dark:border-neutral-800">
       {/* Header */}
-      <div className="mb-1.5 px-1 flex items-center justify-between">
+      <div className="mb-3 px-1 flex items-center justify-between">
         <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
           Câu {startNumber}
           {questions.length > 1
@@ -51,52 +48,74 @@ const PassageGroupReview = ({
         </span>
       </div>
 
-      <div
-        className={
-          hasMedia ? "grid grid-cols-1 lg:grid-cols-2 gap-3" : "space-y-2.5"
-        }
-      >
-        {/* Passage media — sticky trên desktop */}
-        {hasMedia && (
-          <div className="space-y-2 w-full min-w-0 lg:sticky lg:top-4 self-start">
-            {images.map((imgUrl, i) => (
-              <img
-                key={i}
-                src={imgUrl}
-                alt="Passage"
-                className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-800"
-              />
-            ))}
-            {showAudio && (
-              <audio controls className="w-full" src={passage.audio_url} />
-            )}
-            {showText && (
-              <>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Passage media & Text */}
+        <div className="space-y-3 w-full min-w-0 self-start">
+          {images.map((imgUrl, i) => (
+            <img
+              key={i}
+              src={imgUrl}
+              alt="Passage"
+              className="w-full rounded-lg object-contain border border-neutral-200 dark:border-neutral-800"
+            />
+          ))}
+          {showAudio && (
+            <audio controls className="w-full" src={passage.audio_url} />
+          )}
+
+          {/* Passage Text Toggle */}
+          {passage.passage_text && (
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+              <button
+                onClick={() => setIsPassageOpen(!isPassageOpen)}
+                className="flex items-center justify-between w-full p-3 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-700"
+              >
+                <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">
+                  Nội dung bài đọc
+                </span>
+                {isPassageOpen ? (
+                  <ChevronUp size={14} />
+                ) : (
+                  <ChevronDown size={14} />
+                )}
+              </button>
+              {isPassageOpen && (
                 <div
-                  className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200 text-sm leading-relaxed p-3.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg whitespace-pre-wrap break-words"
+                  className="p-3 text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed whitespace-pre-wrap break-words"
                   dangerouslySetInnerHTML={{ __html: passage.passage_text }}
                 />
-                {/* Dịch passage nếu có */}
-                {passage.passage_trans && (
-                  <details className="mt-1">
-                    <summary className="text-xs font-semibold text-neutral-400 cursor-pointer hover:text-neutral-600 dark:hover:text-neutral-300 select-none">
-                      Xem bản dịch
-                    </summary>
-                    <div
-                      className="mt-1.5 prose dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-400 text-xs leading-relaxed p-3 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg whitespace-pre-wrap"
-                      dangerouslySetInnerHTML={{
-                        __html: passage.passage_trans,
-                      }}
-                    />
-                  </details>
+              )}
+            </div>
+          )}
+
+          {/* Translation Toggle */}
+          {passage.passage_trans && (
+            <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+              <button
+                onClick={() => setIsTransOpen(!isTransOpen)}
+                className="flex items-center justify-between w-full p-3 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-neutral-700"
+              >
+                <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase">
+                  Bản dịch
+                </span>
+                {isTransOpen ? (
+                  <ChevronUp size={14} />
+                ) : (
+                  <ChevronDown size={14} />
                 )}
-              </>
-            )}
-          </div>
-        )}
+              </button>
+              {isTransOpen && (
+                <div
+                  className="p-3 text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed whitespace-pre-wrap break-words"
+                  dangerouslySetInnerHTML={{ __html: passage.passage_trans }}
+                />
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Questions */}
-        <div className="space-y-2.5 min-w-0">
+        <div className="space-y-3 min-w-0">
           {questions.map((q, qIndex) => {
             const ans = answers[q.id] || {};
             return (
