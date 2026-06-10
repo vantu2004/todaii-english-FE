@@ -5,19 +5,19 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { X, Trophy, Heart, Zap, ArrowRight } from "lucide-react";
+import { X, Trophy, Heart, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const INITIAL_LIVES = 3;
-const INITIAL_SPEED = 14; // giây để rơi hết màn hình
-const SPEED_INCREMENT = 0.8; // nhân tốc độ sau mỗi 5 câu đúng
-const MIN_SPEED = 5; // tốc độ tối đa (giây)
+const INITIAL_DURATION = 14;
+const SPEED_FACTOR = 0.82;
+const MIN_DURATION = 4.5;
 const OPTION_COUNT = 4;
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-// ─── Sub: Lives display ───────────────────────────────────────────────────────
+// ─── Sub: Lives ───────────────────────────────────────────────────────────────
 const Lives = ({ count }) => (
   <div className="flex items-center gap-1">
     {Array.from({ length: INITIAL_LIVES }).map((_, i) => (
@@ -25,10 +25,10 @@ const Lives = ({ count }) => (
         key={i}
         animate={
           i >= count
-            ? { scale: [1, 1.3, 0.8], opacity: 0.25 }
+            ? { scale: [1, 1.4, 0.7], opacity: 0.2 }
             : { scale: 1, opacity: 1 }
         }
-        transition={{ duration: 0.35 }}
+        transition={{ duration: 0.3 }}
       >
         <Heart
           size={20}
@@ -43,39 +43,9 @@ const Lives = ({ count }) => (
   </div>
 );
 
-// ─── Sub: Falling word card ───────────────────────────────────────────────────
-const FallingWord = ({ word, ipa, duration, onAnimationEnd }) => (
-  <motion.div
-    className="absolute left-1/2 -translate-x-1/2 top-0 z-10"
-    initial={{ y: -80 }}
-    animate={{ y: "calc(100vh - 220px)" }}
-    transition={{ duration, ease: "linear" }}
-    onAnimationComplete={onAnimationEnd}
-  >
-    <div className="bg-white dark:bg-neutral-900 border-2 border-neutral-900 dark:border-white px-6 py-3 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)] dark:shadow-[0_4px_20px_rgba(255,255,255,0.06)] text-center min-w-[140px]">
-      <p className="text-xl font-bold text-neutral-900 dark:text-white tracking-tight">
-        {word}
-      </p>
-      {ipa && (
-        <p className="text-xs font-mono text-neutral-400 dark:text-neutral-500 mt-0.5">
-          {ipa}
-        </p>
-      )}
-    </div>
-    {/* Shadow "danger" line indicator */}
-    <motion.div
-      className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-neutral-900 dark:bg-white opacity-20"
-      animate={{ scale: [1, 1.5, 1] }}
-      transition={{ repeat: Infinity, duration: 1 }}
-    />
-  </motion.div>
-);
-
 // ─── Main ─────────────────────────────────────────────────────────────────────
 const SpeedRoundGame = ({ words, onClose }) => {
   const validWords = useMemo(() => words.filter((w) => w.meaning), [words]);
-
-  // Queue câu hỏi (shuffle một lần)
   const questionQueue = useMemo(() => shuffle(validWords), [validWords]);
 
   const [qIndex, setQIndex] = useState(0);
@@ -83,101 +53,168 @@ const SpeedRoundGame = ({ words, onClose }) => {
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
-  const [speedLevel, setSpeedLevel] = useState(0); // số lần tăng tốc
-  const [fallingKey, setFallingKey] = useState(0); // key để reset animation
-  const [status, setStatus] = useState("playing"); // 'playing' | 'correct' | 'wrong' | 'missed' | 'finished'
-  const [flashResult, setFlashResult] = useState(null); // 'correct' | 'wrong'
-  const [isFinished, setIsFinished] = useState(false);
+  const [speedLevel, setSpeedLevel] = useState(0);
+  const [fallingKey, setFallingKey] = useState(0);
   const [answered, setAnswered] = useState(false);
+  const [flashResult, setFlashResult] = useState(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const answeredRef = useRef(false);
+  const livesRef = useRef(INITIAL_LIVES);
+  const missTimer = useRef(null);
 
   const currentWord = questionQueue[qIndex];
 
-  // Tạo options cho câu hỏi hiện tại
+  const getDuration = useCallback(
+    (level) =>
+      Math.max(MIN_DURATION, INITIAL_DURATION * Math.pow(SPEED_FACTOR, level)),
+    [],
+  );
+
   const options = useMemo(() => {
     if (!currentWord) return [];
-    const others = validWords
-      .filter((w) => w.id !== currentWord.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, OPTION_COUNT - 1);
+    const others = shuffle(
+      validWords.filter((w) => w.id !== currentWord.id),
+    ).slice(0, OPTION_COUNT - 1);
     return shuffle([currentWord, ...others]);
   }, [currentWord, validWords]);
 
-  // Tốc độ hiện tại (giây)
-  const currentDuration = Math.max(
-    MIN_SPEED,
-    INITIAL_SPEED * Math.pow(SPEED_INCREMENT, speedLevel),
+  useEffect(() => {
+    answeredRef.current = answered;
+  }, [answered]);
+  useEffect(() => {
+    livesRef.current = lives;
+  }, [lives]);
+
+  // goNext và handleMiss dùng useRef để tránh stale closure
+  const speedLevelRef = useRef(0);
+  useEffect(() => {
+    speedLevelRef.current = speedLevel;
+  }, [speedLevel]);
+
+  const goNext = useCallback(
+    (nextQIdx, nextSpeedLevel) => {
+      clearTimeout(missTimer.current);
+      if (nextQIdx >= questionQueue.length) {
+        setIsFinished(true);
+        return;
+      }
+      setQIndex(nextQIdx);
+      setAnswered(false);
+      answeredRef.current = false;
+      setFallingKey((k) => k + 1);
+
+      const dur = Math.max(
+        MIN_DURATION,
+        INITIAL_DURATION * Math.pow(SPEED_FACTOR, nextSpeedLevel),
+      );
+      missTimer.current = setTimeout(
+        () => {
+          if (!answeredRef.current) {
+            // miss
+            setAnswered(true);
+            answeredRef.current = true;
+            setFlashResult("wrong");
+            setCombo(0);
+            const newLives = livesRef.current - 1;
+            setLives(newLives);
+            livesRef.current = newLives;
+            setTimeout(() => {
+              setFlashResult(null);
+              if (newLives <= 0) {
+                setIsFinished(true);
+                return;
+              }
+              goNext(nextQIdx + 1, speedLevelRef.current);
+            }, 600);
+          }
+        },
+        dur * 1000 + 80,
+      );
+    },
+    [questionQueue.length],
   );
 
-  // ── Khi từ chạm đáy (missed) ──────────────────────────────────────────────
-  const handleMissed = useCallback(() => {
-    if (answered) return;
-    setFlashResult("wrong");
-    setCombo(0);
-    const newLives = lives - 1;
-    setLives(newLives);
+  // Start first question
+  useEffect(() => {
+    if (validWords.length < OPTION_COUNT) return;
+    const dur = getDuration(0);
+    missTimer.current = setTimeout(
+      () => {
+        if (!answeredRef.current) {
+          setAnswered(true);
+          answeredRef.current = true;
+          setFlashResult("wrong");
+          setCombo(0);
+          const newLives = livesRef.current - 1;
+          setLives(newLives);
+          livesRef.current = newLives;
+          setTimeout(() => {
+            setFlashResult(null);
+            if (newLives <= 0) {
+              setIsFinished(true);
+              return;
+            }
+            goNext(1, 0);
+          }, 600);
+        }
+      },
+      dur * 1000 + 80,
+    );
+    return () => clearTimeout(missTimer.current);
+  }, []); // eslint-disable-line
 
-    setTimeout(() => {
-      setFlashResult(null);
-      if (newLives <= 0) {
-        setIsFinished(true);
-      } else {
-        goNext();
-      }
-    }, 600);
-  }, [answered, lives]);
-
-  // ── Chọn đáp án ───────────────────────────────────────────────────────────
   const handleAnswer = useCallback(
     (option) => {
       if (answered) return;
+      clearTimeout(missTimer.current);
       setAnswered(true);
+      answeredRef.current = true;
 
       const isCorrect = option.id === currentWord.id;
       setFlashResult(isCorrect ? "correct" : "wrong");
 
+      let nextLives = livesRef.current;
+      let nextCombo = combo;
+      let nextSpeedLevel = speedLevelRef.current;
+
       if (isCorrect) {
-        const newCombo = combo + 1;
-        setCombo(newCombo);
-        if (newCombo > maxCombo) setMaxCombo(newCombo);
-        const bonus = newCombo >= 3 ? 2 : 1; // combo bonus
-        setScore((p) => p + bonus);
-        // Tăng tốc mỗi 5 đúng liên tiếp
-        if (newCombo > 0 && newCombo % 5 === 0) {
-          setSpeedLevel((p) => p + 1);
+        nextCombo = combo + 1;
+        const pts = nextCombo >= 3 ? 2 : 1;
+        setScore((p) => p + pts);
+        setCombo(nextCombo);
+        if (nextCombo > maxCombo) setMaxCombo(nextCombo);
+        if (nextCombo > 0 && nextCombo % 5 === 0) {
+          nextSpeedLevel = Math.min(5, speedLevelRef.current + 1);
+          setSpeedLevel(nextSpeedLevel);
+          speedLevelRef.current = nextSpeedLevel;
         }
       } else {
+        nextCombo = 0;
+        nextLives = livesRef.current - 1;
         setCombo(0);
-        const newLives = lives - 1;
-        setLives(newLives);
-        if (newLives <= 0) {
-          setTimeout(() => setIsFinished(true), 700);
-          return;
-        }
+        setLives(nextLives);
+        livesRef.current = nextLives;
       }
 
       setTimeout(() => {
         setFlashResult(null);
-        goNext();
-      }, 600);
+        if (!isCorrect && nextLives <= 0) {
+          setIsFinished(true);
+          return;
+        }
+        goNext(qIndex + 1, nextSpeedLevel);
+      }, 650);
     },
-    [answered, combo, currentWord, lives, maxCombo],
+    [answered, currentWord, combo, maxCombo, qIndex, goNext],
   );
 
-  const goNext = useCallback(() => {
-    const nextIdx = qIndex + 1;
-    if (nextIdx >= questionQueue.length) {
-      setIsFinished(true);
-      return;
-    }
-    setQIndex(nextIdx);
-    setAnswered(false);
-    setFallingKey((k) => k + 1);
-  }, [qIndex, questionQueue.length]);
+  useEffect(() => () => clearTimeout(missTimer.current), []);
 
-  // ── Not enough words ───────────────────────────────────────────────────────
+  // ── Not enough words ──────────────────────────────────────────────────────
   if (validWords.length < OPTION_COUNT) {
     return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-neutral-950">
         <div className="bg-white dark:bg-neutral-900 p-8 rounded-3xl text-center max-w-sm border border-neutral-200 dark:border-neutral-800">
           <p className="text-neutral-600 dark:text-neutral-400 mb-4">
             Cần ít nhất {OPTION_COUNT} từ vựng có dữ liệu để chơi.
@@ -193,15 +230,8 @@ const SpeedRoundGame = ({ words, onClose }) => {
     );
   }
 
-  // ── Finish Screen ──────────────────────────────────────────────────────────
+  // ── Finish Screen ─────────────────────────────────────────────────────────
   if (isFinished) {
-    const accuracy =
-      questionQueue.length > 0
-        ? Math.round(
-            (score / Math.max(score + (INITIAL_LIVES - lives), 1)) * 100,
-          )
-        : 0;
-
     return (
       <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-neutral-950 animate-in fade-in">
         <div className="bg-white dark:bg-neutral-900 p-10 rounded-[2.5rem] shadow-2xl text-center max-w-md w-full border border-neutral-100 dark:border-neutral-800 mx-4">
@@ -214,7 +244,6 @@ const SpeedRoundGame = ({ words, onClose }) => {
           <p className="text-neutral-400 dark:text-neutral-500 text-sm mb-8">
             {lives > 0 ? "Đã hoàn thành tất cả từ vựng 🎉" : "Hết tim rồi!"}
           </p>
-
           <div className="grid grid-cols-3 gap-3 mb-8">
             <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4">
               <div className="text-2xl font-bold text-neutral-900 dark:text-white mb-0.5">
@@ -226,11 +255,11 @@ const SpeedRoundGame = ({ words, onClose }) => {
             </div>
             <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4">
               <div className="text-2xl font-bold text-neutral-900 dark:text-white mb-0.5 flex items-center justify-center gap-1">
-                <Zap size={18} className="text-amber-400" />
+                <Zap size={16} className="text-amber-400" />
                 {maxCombo}x
               </div>
               <div className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide">
-                Max combo
+                Combo
               </div>
             </div>
             <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4">
@@ -242,10 +271,9 @@ const SpeedRoundGame = ({ words, onClose }) => {
               </div>
             </div>
           </div>
-
           <button
             onClick={onClose}
-            className="w-full py-4 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-xl hover:-translate-y-1"
+            className="w-full py-4 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all hover:-translate-y-1"
           >
             Quay lại danh sách
           </button>
@@ -254,19 +282,19 @@ const SpeedRoundGame = ({ words, onClose }) => {
     );
   }
 
-  // ── Flash overlay màu khi đúng/sai ────────────────────────────────────────
-  const overlayColor =
+  const duration = getDuration(speedLevel);
+  const overlayBg =
     flashResult === "correct"
-      ? "bg-green-400/10 dark:bg-green-400/10"
+      ? "bg-green-400/10"
       : flashResult === "wrong"
-        ? "bg-red-400/10 dark:bg-red-400/10"
-        : "bg-transparent";
+        ? "bg-red-400/10"
+        : "";
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col bg-white dark:bg-neutral-950 transition-colors duration-150 ${overlayColor}`}
+      className={`fixed inset-0 z-[9999] flex flex-col bg-white dark:bg-neutral-950 transition-colors duration-150 ${overlayBg}`}
     >
-      {/* ── Header ── */}
+      {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
         <button
           onClick={onClose}
@@ -275,25 +303,27 @@ const SpeedRoundGame = ({ words, onClose }) => {
           <X size={24} />
         </button>
 
-        {/* Center: speed indicator */}
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+        <div className="flex flex-col items-center gap-1.5">
+          <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
             Tốc độ
           </span>
-          <div className="flex gap-1">
-            {Array.from({ length: Math.min(speedLevel + 1, 6) }).map((_, i) => (
+          <div className="flex gap-1.5">
+            {Array.from({ length: 6 }).map((_, i) => (
               <motion.div
                 key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
+                animate={
+                  i <= speedLevel
+                    ? { scale: 1, opacity: 1 }
+                    : { scale: 0.7, opacity: 0.15 }
+                }
+                transition={{ duration: 0.3 }}
                 className="w-2 h-2 rounded-full bg-neutral-900 dark:bg-white"
               />
             ))}
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          {/* Combo badge */}
+        <div className="flex items-center gap-3">
           <AnimatePresence>
             {combo >= 2 && (
               <motion.div
@@ -306,87 +336,82 @@ const SpeedRoundGame = ({ words, onClose }) => {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Score */}
           <span className="text-base font-bold text-neutral-900 dark:text-white tabular-nums">
             {score}
           </span>
-
-          {/* Lives */}
           <Lives count={lives} />
         </div>
       </div>
 
-      {/* ── Falling zone ── */}
-      <div className="relative flex-1 overflow-hidden">
-        {/* Danger zone line ở đáy */}
-        <div className="absolute bottom-[160px] left-0 right-0 border-t-2 border-dashed border-red-300/50 dark:border-red-800/50 z-0" />
-        <div className="absolute bottom-[150px] left-4 text-[10px] font-bold text-red-400/60 dark:text-red-700/60 uppercase tracking-widest">
+      {/* Fall zone */}
+      <div className="relative flex-1 overflow-hidden bg-white dark:bg-neutral-950">
+        <div className="absolute bottom-[164px] left-0 right-0 border-t-2 border-dashed border-red-300/60 dark:border-red-800/60 pointer-events-none" />
+        <span className="absolute bottom-[148px] left-5 text-[10px] font-bold text-red-400/70 dark:text-red-700/70 uppercase tracking-widest pointer-events-none">
           Vùng nguy hiểm
-        </div>
+        </span>
 
-        {/* Falling word */}
         {currentWord && (
-          <FallingWord
+          <motion.div
             key={fallingKey}
-            word={currentWord.word}
-            ipa={currentWord.ipa}
-            duration={currentDuration}
-            onAnimationEnd={handleMissed}
-          />
+            className="absolute left-1/2 -translate-x-1/2"
+            initial={{ y: -80 }}
+            animate={{ y: "calc(100vh - 230px)" }}
+            transition={{ duration, ease: "linear" }}
+          >
+            <div className="bg-white dark:bg-neutral-900 border-2 border-neutral-900 dark:border-white px-6 py-3 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)] text-center min-w-[150px]">
+              <p className="text-xl font-bold text-neutral-900 dark:text-white tracking-tight">
+                {currentWord.word}
+              </p>
+              {currentWord.ipa && (
+                <p className="text-xs font-mono text-neutral-400 dark:text-neutral-500 mt-0.5">
+                  {currentWord.ipa}
+                </p>
+              )}
+            </div>
+          </motion.div>
         )}
 
-        {/* Result flash text */}
         <AnimatePresence>
           {flashResult && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.7, y: 20 }}
+              initial={{ opacity: 0, scale: 0.6, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.5, y: -30 }}
+              exit={{ opacity: 0, scale: 0.5, y: -40 }}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
             >
               <span
-                className={`text-3xl font-black ${
-                  flashResult === "correct" ? "text-green-500" : "text-red-500"
-                }`}
+                className={`text-4xl font-black ${flashResult === "correct" ? "text-green-500" : "text-red-500"}`}
               >
-                {flashResult === "correct"
-                  ? combo >= 3
-                    ? `+${combo >= 3 ? 2 : 1} 🔥`
-                    : "+1"
-                  : "✕"}
+                {flashResult === "correct" ? (combo >= 3 ? "+2" : "+1") : "✕"}
               </span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* ── Answer options (fixed bottom) ── */}
-      <div className="shrink-0 p-4 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border-t border-neutral-200 dark:border-neutral-800">
+      {/* Options */}
+      <div className="shrink-0 p-4 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
         <div className="grid grid-cols-2 gap-2.5 max-w-xl mx-auto">
           {options.map((option) => {
-            let btnClass =
+            let cls =
               "w-full px-4 py-3.5 rounded-2xl border-2 text-sm font-semibold text-left leading-snug transition-all duration-150 active:scale-[0.97]";
-
             if (flashResult && answered) {
-              if (option.id === currentWord.id) {
-                btnClass +=
+              if (option.id === currentWord.id)
+                cls +=
                   " bg-green-50 dark:bg-green-900/30 border-green-400 dark:border-green-600 text-green-800 dark:text-green-300";
-              } else {
-                btnClass +=
+              else
+                cls +=
                   " bg-neutral-50 dark:bg-neutral-800 border-neutral-100 dark:border-neutral-800 text-neutral-300 dark:text-neutral-700 opacity-50";
-              }
             } else {
-              btnClass +=
-                " bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-900 dark:hover:border-white hover:shadow-md hover:-translate-y-0.5";
+              cls +=
+                " bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-900 dark:hover:border-white hover:shadow-md hover:-translate-y-0.5 cursor-pointer";
             }
-
             return (
               <button
                 key={option.id}
                 onClick={() => handleAnswer(option)}
                 disabled={answered}
-                className={btnClass}
+                className={cls}
               >
                 {option.meaning}
               </button>

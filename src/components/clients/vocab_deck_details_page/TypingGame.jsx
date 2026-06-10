@@ -11,23 +11,19 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const normalize = (str) => str.trim().toLowerCase();
 
-// Tạo gợi ý: hiện chữ cái đầu + dấu _ cho các chữ còn lại
-// Ví dụ: "adventure" + hintLevel 0 → "a________"
-//                    + hintLevel 1 → "ad_______"
-const buildHint = (word, hintLevel) => {
-  if (!word) return "";
-  const chars = word.split("");
-  return chars
+// Gợi ý: mở dần từng ký tự từ trái → "a _ _ _ _ _ _ _ _"
+const buildHint = (word, hintLevel) =>
+  word
+    .split("")
     .map((c, i) => (i <= hintLevel ? c : c === " " ? " " : "_"))
     .join(" ");
-};
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-// ─── Sub: Animated character diff display ────────────────────────────────────
+// ─── CharDiff: chỉ show sau khi submit sai ───────────────────────────────────
 const CharDiff = ({ input, target }) => {
   if (!input) return null;
   return (
@@ -39,7 +35,7 @@ const CharDiff = ({ input, target }) => {
         return (
           <span
             key={i}
-            className={`text-lg font-mono font-bold px-0.5 transition-colors ${
+            className={`text-lg font-mono font-bold px-0.5 ${
               isMissing
                 ? "text-neutral-300 dark:text-neutral-700"
                 : isCorrect
@@ -51,7 +47,6 @@ const CharDiff = ({ input, target }) => {
           </span>
         );
       })}
-      {/* Extra ký tự thừa */}
       {input.length > target.length &&
         input
           .slice(target.length)
@@ -59,7 +54,7 @@ const CharDiff = ({ input, target }) => {
           .map((c, i) => (
             <span
               key={`extra-${i}`}
-              className="text-lg font-mono font-bold px-0.5 text-red-400 dark:text-red-500 line-through"
+              className="text-lg font-mono font-bold px-0.5 text-red-400 line-through"
             >
               {c}
             </span>
@@ -68,7 +63,7 @@ const CharDiff = ({ input, target }) => {
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Main ─────────────────────────────────────────────────────────────────────
 const TypingGame = ({ words, onClose }) => {
   const validWords = useMemo(
     () => shuffle(words.filter((w) => w.meaning)),
@@ -77,26 +72,25 @@ const TypingGame = ({ words, onClose }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [input, setInput] = useState("");
-  const [status, setStatus] = useState("idle"); // 'idle' | 'correct' | 'wrong' | 'revealed'
-  const [hintLevel, setHintLevel] = useState(-1); // -1 = chưa hint, 0 = chữ đầu, 1,2,... mở dần
+  // 'idle' | 'correct' | 'wrong' | 'revealed'
+  const [status, setStatus] = useState("idle");
+  const [hintLevel, setHintLevel] = useState(-1);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
-  const [score, setScore] = useState(0); // +2 đúng không hint, +1 đúng có hint, 0 nếu reveal
+  const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [showStreakBurst, setShowStreakBurst] = useState(false);
+  // Chỉ show CharDiff khi đã submit sai
+  const [showDiff, setShowDiff] = useState(false);
 
   const inputRef = useRef(null);
   const currentWord = validWords[currentIndex];
 
-  // Focus input khi chuyển câu
   useEffect(() => {
-    if (!isFinished) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (!isFinished) setTimeout(() => inputRef.current?.focus(), 100);
   }, [currentIndex, isFinished]);
 
-  // Keyboard shortcut: Enter để next/submit, Escape để close
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -119,6 +113,7 @@ const TypingGame = ({ words, onClose }) => {
       const points = hintLevel === -1 ? 2 : 1;
       setScore((p) => p + points);
       setStatus("correct");
+      setShowDiff(false);
       const newStreak = streak + 1;
       setStreak(newStreak);
       if (newStreak > maxStreak) setMaxStreak(newStreak);
@@ -130,30 +125,34 @@ const TypingGame = ({ words, onClose }) => {
         setTimeout(() => new Audio(currentWord.audio_url).play(), 150);
       }
     } else {
+      // Sai: show diff, reset status về idle để cho gõ lại
+      setShowDiff(true);
       setStatus("wrong");
       setStreak(0);
+      // Shake rồi về idle để gõ lại (không block)
+      setTimeout(() => setStatus("idle"), 700);
     }
   };
 
   // ── Hint ──────────────────────────────────────────────────────────────────
   const handleHint = () => {
-    if (status !== "idle") return;
+    if (status === "correct" || status === "revealed") return;
     const nextLevel = hintLevel + 1;
     if (nextLevel < currentWord.word.length - 1) {
       setHintLevel(nextLevel);
       setHintsUsed((p) => p + 1);
-      // Pre-fill input với hint
-      const hinted = currentWord.word.slice(0, nextLevel + 1);
-      setInput(hinted);
+      setInput(currentWord.word.slice(0, nextLevel + 1));
+      setShowDiff(false);
       inputRef.current?.focus();
     }
   };
 
-  // ── Reveal (skip) ─────────────────────────────────────────────────────────
+  // ── Reveal ────────────────────────────────────────────────────────────────
   const handleReveal = () => {
-    if (status !== "idle" && status !== "wrong") return;
+    if (status === "correct" || status === "revealed") return;
     setStatus("revealed");
     setStreak(0);
+    setShowDiff(false);
     setInput(currentWord.word);
   };
 
@@ -167,6 +166,7 @@ const TypingGame = ({ words, onClose }) => {
     setInput("");
     setStatus("idle");
     setHintLevel(-1);
+    setShowDiff(false);
   };
 
   const playAudio = () => {
@@ -203,7 +203,7 @@ const TypingGame = ({ words, onClose }) => {
       grade = { label: "Cần luyện thêm 📖", color: "text-neutral-500" };
 
     return (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface-primary dark:bg-neutral-950 animate-in fade-in">
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-neutral-950 animate-in fade-in">
         <div className="bg-white dark:bg-neutral-900 p-10 rounded-[2.5rem] shadow-2xl text-center max-w-md w-full border border-neutral-100 dark:border-neutral-800 mx-4">
           <div className="w-24 h-24 bg-amber-50 dark:bg-amber-900/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-100 dark:border-amber-800">
             <Trophy size={48} className="text-amber-500" strokeWidth={1.5} />
@@ -214,7 +214,6 @@ const TypingGame = ({ words, onClose }) => {
           <p className={`text-lg font-bold mb-6 ${grade.color}`}>
             {grade.label}
           </p>
-
           <div className="grid grid-cols-3 gap-3 mb-8">
             <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-4">
               <div className="text-2xl font-bold text-neutral-900 dark:text-white mb-0.5">
@@ -244,7 +243,6 @@ const TypingGame = ({ words, onClose }) => {
               </div>
             </div>
           </div>
-
           <button
             onClick={onClose}
             className="w-full py-4 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-xl hover:-translate-y-1"
@@ -260,7 +258,7 @@ const TypingGame = ({ words, onClose }) => {
   const hintAvailable = hintLevel < currentWord.word.length - 2;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col bg-surface-primary dark:bg-neutral-950 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[9999] flex flex-col bg-white dark:bg-neutral-950 animate-in fade-in duration-200">
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
         <button
@@ -270,7 +268,6 @@ const TypingGame = ({ words, onClose }) => {
           <X size={24} />
         </button>
 
-        {/* Progress */}
         <div className="flex-1 mx-6 h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-neutral-900 dark:bg-white rounded-full"
@@ -282,7 +279,6 @@ const TypingGame = ({ words, onClose }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Streak */}
           {streak >= 2 && (
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -298,7 +294,7 @@ const TypingGame = ({ words, onClose }) => {
         </div>
       </div>
 
-      {/* Streak burst overlay */}
+      {/* Streak burst */}
       <AnimatePresence>
         {showStreakBurst && (
           <motion.div
@@ -312,14 +308,13 @@ const TypingGame = ({ words, onClose }) => {
         )}
       </AnimatePresence>
 
-      {/* Main area */}
+      {/* Main */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-2xl mx-auto">
-        {/* Counter */}
         <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-8">
           {currentIndex + 1} / {validWords.length}
         </span>
 
-        {/* Card: hiển thị nghĩa, pos */}
+        {/* Card */}
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0, y: 20 }}
@@ -327,19 +322,14 @@ const TypingGame = ({ words, onClose }) => {
           transition={{ duration: 0.3 }}
           className="w-full bg-white dark:bg-neutral-900 rounded-[2rem] border border-neutral-100 dark:border-neutral-800 shadow-xl p-8 mb-8 text-center"
         >
-          {/* POS badge */}
           {currentWord.pos && (
             <span className="inline-block mb-4 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
               {currentWord.pos}
             </span>
           )}
-
-          {/* Meaning */}
           <p className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-white leading-snug mb-4">
             {currentWord.meaning}
           </p>
-
-          {/* Example */}
           {currentWord.example && (
             <p className="text-sm text-neutral-400 dark:text-neutral-500 italic border-t border-neutral-100 dark:border-neutral-800 pt-4 mt-4">
               "
@@ -351,12 +341,10 @@ const TypingGame = ({ words, onClose }) => {
             </p>
           )}
 
-          {/* Hint display */}
-          {hintLevel >= 0 && status === "idle" && (
+          {/* Hint hiển thị trong card */}
+          {hintLevel >= 0 && !isAnswered && (
             <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800">
-              <p className="text-xs text-neutral-400 dark:text-neutral-500 mb-1 font-medium">
-                Gợi ý
-              </p>
+              <p className="text-xs text-neutral-400 mb-1 font-medium">Gợi ý</p>
               <p className="text-lg font-mono font-bold tracking-[0.2em] text-neutral-600 dark:text-neutral-400">
                 {buildHint(currentWord.word, hintLevel)}
               </p>
@@ -364,7 +352,7 @@ const TypingGame = ({ words, onClose }) => {
           )}
         </motion.div>
 
-        {/* Input / Result area */}
+        {/* Input / Result */}
         <div className="w-full">
           <AnimatePresence mode="wait">
             {!isAnswered ? (
@@ -383,7 +371,8 @@ const TypingGame = ({ words, onClose }) => {
                     value={input}
                     onChange={(e) => {
                       setInput(e.target.value);
-                      if (status === "wrong") setStatus("idle");
+                      // Khi người dùng bắt đầu gõ lại sau khi sai → ẩn diff
+                      if (showDiff) setShowDiff(false);
                     }}
                     placeholder="Nhập từ tiếng Anh..."
                     autoComplete="off"
@@ -392,15 +381,17 @@ const TypingGame = ({ words, onClose }) => {
                     spellCheck="false"
                     className={`w-full text-center text-lg font-bold tracking-wide px-5 py-4 rounded-2xl border-2 bg-white dark:bg-neutral-900 outline-none transition-all duration-200 ${
                       status === "wrong"
-                        ? "border-red-400 dark:border-red-600 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 animate-[shake_0.3s_ease-in-out]"
+                        ? "border-red-400 dark:border-red-600 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20"
                         : "border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-white focus:border-neutral-900 dark:focus:border-white"
                     }`}
                   />
-                  {/* Live char diff khi đang gõ */}
-                  {status === "idle" && input.length > 0 && (
+
+                  {/* Diff chỉ hiện SAU KHI submit sai */}
+                  {showDiff && status !== "idle" && (
                     <CharDiff input={input} target={currentWord.word} />
                   )}
-                  {/* Wrong message */}
+
+                  {/* Wrong hint text */}
                   {status === "wrong" && (
                     <motion.p
                       initial={{ opacity: 0, y: -4 }}
@@ -414,13 +405,12 @@ const TypingGame = ({ words, onClose }) => {
 
                 <button
                   type="submit"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || status === "wrong"}
                   className="px-10 py-3.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-base font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:-translate-y-0.5"
                 >
                   Kiểm tra
                 </button>
 
-                {/* Auxiliary buttons */}
                 <div className="flex items-center gap-4 mt-1">
                   {currentWord.audio_url && (
                     <button
@@ -457,7 +447,6 @@ const TypingGame = ({ words, onClose }) => {
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center gap-5"
               >
-                {/* Result banner */}
                 <div
                   className={`flex items-center gap-3 px-6 py-3.5 rounded-2xl font-bold text-base ${
                     status === "correct"
@@ -486,7 +475,6 @@ const TypingGame = ({ words, onClose }) => {
                   )}
                 </div>
 
-                {/* Audio button on result */}
                 {currentWord.audio_url && (
                   <button
                     onClick={playAudio}
@@ -496,7 +484,6 @@ const TypingGame = ({ words, onClose }) => {
                   </button>
                 )}
 
-                {/* Next button */}
                 <button
                   onClick={handleNext}
                   className="flex items-center gap-3 px-10 py-4 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-base font-bold rounded-full shadow-[0_4px_24px_rgba(0,0,0,0.15)] hover:bg-neutral-800 dark:hover:bg-neutral-100 hover:-translate-y-1 transition-all"
@@ -511,18 +498,6 @@ const TypingGame = ({ words, onClose }) => {
           </AnimatePresence>
         </div>
       </div>
-
-      {/* Shake animation */}
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20% { transform: translateX(-6px); }
-          40% { transform: translateX(6px); }
-          60% { transform: translateX(-4px); }
-          80% { transform: translateX(4px); }
-        }
-        .animate-\\[shake_0\\.3s_ease-in-out\\] { animation: shake 0.3s ease-in-out; }
-      `}</style>
     </div>
   );
 };
