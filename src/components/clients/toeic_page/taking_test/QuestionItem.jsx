@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Bookmark, BookmarkCheck } from "lucide-react";
+import { Bookmark, BookmarkCheck, CheckCircle2, XCircle } from "lucide-react";
 
 const getImages = (urlStr) => {
   if (!urlStr) return [];
@@ -21,6 +21,7 @@ const QuestionItem = forwardRef(
       optionCount = 4,
       mode,
       partNumber,
+      isResultMode = false,
     },
     ref,
   ) => {
@@ -79,22 +80,24 @@ const QuestionItem = forwardRef(
               </div>
 
               {/* Bookmark button */}
-              <button
-                type="button"
-                onClick={() => onToggleMark(question.id)}
-                className={`shrink-0 p-1 rounded-md transition-all ${
-                  isMarked
-                    ? "text-amber-500 bg-amber-50 dark:bg-amber-500/10 hover:bg-amber-100"
-                    : "text-neutral-300 dark:text-neutral-600 hover:text-amber-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                }`}
-                title={isMarked ? "Bỏ đánh dấu" : "Đánh dấu để xem lại"}
-              >
-                {isMarked ? (
-                  <BookmarkCheck size={14} />
-                ) : (
-                  <Bookmark size={14} />
-                )}
-              </button>
+              {!isResultMode && (
+                <button
+                  type="button"
+                  onClick={() => onToggleMark(question.id)}
+                  className={`shrink-0 p-1 rounded-md transition-all ${
+                    isMarked
+                      ? "text-amber-500 bg-amber-50 dark:bg-amber-500/10 hover:bg-amber-100"
+                      : "text-neutral-300 dark:text-neutral-600 hover:text-amber-400 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                  }`}
+                  title={isMarked ? "Bỏ đánh dấu" : "Đánh dấu để xem lại"}
+                >
+                  {isMarked ? (
+                    <BookmarkCheck size={14} />
+                  ) : (
+                    <Bookmark size={14} />
+                  )}
+                </button>
+              )}
             </div>
 
             {/* Options */}
@@ -102,29 +105,50 @@ const QuestionItem = forwardRef(
               {options.map((opt) => {
                 const optionText = question[`option_${opt.toLowerCase()}`];
                 const isSelected = selectedAnswer === opt;
+                const isCorrectAnswer = question.correct_answer === opt;
+
+                let optionClass =
+                  "border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800";
+
+                if (isResultMode) {
+                  if (isCorrectAnswer) {
+                    optionClass =
+                      "border-green-500 bg-green-50 dark:bg-green-500/10 text-green-700 dark:text-green-400";
+                  } else if (isSelected && !isCorrectAnswer) {
+                    optionClass =
+                      "border-red-500 bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-400";
+                  } else {
+                    optionClass =
+                      "border-neutral-200 dark:border-neutral-800 opacity-60";
+                  }
+                } else if (isSelected) {
+                  optionClass =
+                    "border-brand-500 bg-brand-50 dark:bg-brand-500/10";
+                }
 
                 return (
                   <label
                     key={opt}
-                    className={`flex items-center gap-2 py-1 px-2.5 rounded-md border cursor-pointer transition-all text-xs sm:text-sm ${
-                      isSelected
-                        ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
-                        : "border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                    }`}
+                    className={`flex items-center gap-2 py-1 px-2.5 rounded-md border transition-all text-xs sm:text-sm ${
+                      isResultMode ? "cursor-default" : "cursor-pointer"
+                    } ${optionClass}`}
                   >
                     <input
                       type="radio"
                       name={`question_${question.id}`}
                       value={opt}
                       checked={isSelected}
-                      onChange={() => onSelectAnswer(question.id, opt)}
-                      className="w-3.5 h-3.5 text-brand-500 border-neutral-300 dark:border-neutral-600 focus:ring-brand-500"
+                      disabled={isResultMode}
+                      onChange={() =>
+                        !isResultMode && onSelectAnswer(question.id, opt)
+                      }
+                      className="w-3.5 h-3.5 text-brand-500 border-neutral-300 dark:border-neutral-600 focus:ring-brand-500 disabled:opacity-50"
                     />
                     <span
                       className={`font-semibold w-4 ${
-                        isSelected
+                        !isResultMode && isSelected
                           ? "text-brand-600 dark:text-brand-400"
-                          : "text-neutral-700 dark:text-neutral-300"
+                          : ""
                       }`}
                     >
                       {opt}.
@@ -132,18 +156,45 @@ const QuestionItem = forwardRef(
                     {optionText && (
                       <span
                         className={
-                          isSelected
+                          !isResultMode && isSelected
                             ? "text-brand-700 dark:text-brand-300"
-                            : "text-neutral-600 dark:text-neutral-400"
+                            : ""
                         }
                       >
                         {optionText}
                       </span>
                     )}
+
+                    {isResultMode && isCorrectAnswer && (
+                      <CheckCircle2
+                        size={16}
+                        className="ml-auto text-green-500 shrink-0"
+                      />
+                    )}
+                    {isResultMode && isSelected && !isCorrectAnswer && (
+                      <XCircle
+                        size={16}
+                        className="ml-auto text-red-500 shrink-0"
+                      />
+                    )}
                   </label>
                 );
               })}
             </div>
+
+            {isResultMode && question.explanation && (
+              <div
+                className={`mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-100 dark:border-blue-900/30 ${hasMedia ? "ml-0" : "ml-8.5"}`}
+              >
+                <p className="text-xs sm:text-sm font-semibold text-blue-800 dark:text-blue-300 mb-1">
+                  Giải thích chi tiết:
+                </p>
+                <div
+                  className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 prose prose-sm max-w-none whitespace-pre-wrap break-words"
+                  dangerouslySetInnerHTML={{ __html: question.explanation }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

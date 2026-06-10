@@ -20,13 +20,13 @@ const PassageGroup = ({
   questionRefs,
   partNumber,
   mode,
+  isResultMode = false,
 }) => {
   const images = getImages(passage.image_url);
   const hasImages = images.length > 0;
   const showAudio =
     passage.audio_url && mode !== "FULL_TEST" && ![6, 7].includes(partNumber);
 
-  // Prioritize images over text for parts 6 and 7; hide text entirely for parts 3 and 4.
   let showText = false;
   if ([6, 7].includes(partNumber)) {
     showText = !hasImages && !!passage.passage_text;
@@ -62,7 +62,6 @@ const PassageGroup = ({
 
   return (
     <div className="mb-3">
-      {/* Passage Header */}
       <div className="mb-1.5 px-1 text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
         Câu {startNumber}
         {questions.length > 1 ? ` – ${startNumber + questions.length - 1}` : ""}
@@ -73,10 +72,8 @@ const PassageGroup = ({
           hasMedia ? "grid grid-cols-1 lg:grid-cols-2 gap-3" : "space-y-2.5"
         }
       >
-        {/* Left column: Passage Media (sticky) */}
         {hasMedia && renderMediaColumn()}
 
-        {/* Right column: Questions list */}
         <div className="space-y-2.5 min-w-0">
           {questions.map((q, qIndex) => (
             <QuestionItem
@@ -93,6 +90,7 @@ const PassageGroup = ({
               optionCount={optionCount}
               mode={mode}
               partNumber={partNumber}
+              isResultMode={isResultMode}
             />
           ))}
         </div>

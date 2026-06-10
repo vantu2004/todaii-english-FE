@@ -29,6 +29,7 @@ import ToeicHome from "@/modules/clients/pages/toeic/ToeicHome";
 import ToeicTestOverview from "@/modules/clients/pages/toeic/ToeicTestOverview";
 import ToeicTakingTest from "@/modules/clients/pages/toeic/ToeicTakingTest";
 import ToeicResult from "@/modules/clients/pages/toeic/ToeicResult";
+import ToeicResultReview from "@/modules/clients/pages/toeic/ToeicResultReview";
 
 export default function ClientRoutes() {
   return (
@@ -119,6 +120,14 @@ export default function ClientRoutes() {
             element={
               <ClientProtectRoutes>
                 <ToeicResult />
+              </ClientProtectRoutes>
+            }
+          ></Route>
+          <Route
+            path="/toeic/result-detail/:sessionId"
+            element={
+              <ClientProtectRoutes>
+                <ToeicResultReview />
               </ClientProtectRoutes>
             }
           ></Route>

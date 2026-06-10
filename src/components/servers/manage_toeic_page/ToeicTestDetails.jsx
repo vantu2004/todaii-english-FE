@@ -102,12 +102,13 @@ const ToeicTestDetails = ({ test }) => {
             <div>
               <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
               <div
-                className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-medium rounded-md ${test.status === "PUBLISHED"
-                  ? "bg-green-100 text-green-700"
-                  : test.status === "ARCHIVED"
-                    ? "bg-gray-100 text-gray-700"
-                    : "bg-yellow-100 text-yellow-700"
-                  }`}
+                className={`inline-flex items-center gap-2 px-2 py-1 text-xs font-medium rounded-md ${
+                  test.status === "PUBLISHED"
+                    ? "bg-green-100 text-green-700"
+                    : test.status === "ARCHIVED"
+                      ? "bg-gray-100 text-gray-700"
+                      : "bg-yellow-100 text-yellow-700"
+                }`}
               >
                 {test.status}
               </div>
@@ -134,9 +135,7 @@ const ToeicTestDetails = ({ test }) => {
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
           <p className="text-xs font-medium text-gray-500 mb-1">Created By</p>
-          <p
-            className="text-sm text-gray-900 font-medium truncate"
-          >
+          <p className="text-sm text-gray-900 font-medium truncate">
             {test.created_by && typeof test.created_by === "object"
               ? test.created_by.display_name || test.created_by.id
               : test.created_by || "SUPER ADMIN"}
@@ -146,15 +145,13 @@ const ToeicTestDetails = ({ test }) => {
           <p className="text-xs font-bold text-teal-700 mb-2 uppercase tracking-wide">
             Updated By
           </p>
-          <p
-            className="text-sm text-gray-900 font-semibold truncate"
-          >
+          <p className="text-sm text-gray-900 font-semibold truncate">
             {test.updated_by && typeof test.updated_by === "object"
               ? test.updated_by.display_name || test.updated_by.id
               : test.updated_by ||
-              test.updatedBy?.display_name ||
-              test.updatedBy ||
-              "SUPER ADMIN"}
+                test.updatedBy?.display_name ||
+                test.updatedBy ||
+                "SUPER ADMIN"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
@@ -172,25 +169,25 @@ const ToeicTestDetails = ({ test }) => {
         test.passages_count !== undefined ||
         test.questions?.length !== undefined ||
         test.passages?.length !== undefined) && (
-          <div className="mt-6 flex justify-center gap-6">
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-              <span className="font-medium text-sm">
-                {test.passages_count !== undefined
-                  ? test.passages_count
-                  : test.passages?.length || 0}{" "}
-                Passages
-              </span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-              <span className="font-medium text-sm">
-                {test.questions_count !== undefined
-                  ? test.questions_count
-                  : test.questions?.length || 0}{" "}
-                Questions
-              </span>
-            </div>
+        <div className="mt-6 flex justify-center gap-6">
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+            <span className="font-medium text-sm">
+              {test.passages_count !== undefined
+                ? test.passages_count
+                : test.passages?.length || 0}{" "}
+              Passages
+            </span>
           </div>
-        )}
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+            <span className="font-medium text-sm">
+              {test.questions_count !== undefined
+                ? test.questions_count
+                : test.questions?.length || 0}{" "}
+              Questions
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
