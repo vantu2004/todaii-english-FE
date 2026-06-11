@@ -7,6 +7,7 @@ const ToggleBookmarkButton = ({
   itemId,
   checkSavedFn,
   toggleSavedFn,
+  onToggle,
   className = "",
 }) => {
   const { isLoggedIn } = useClientAuthContext();
@@ -47,10 +48,14 @@ const ToggleBookmarkButton = ({
       }
 
       const previousState = saved;
-      setSaved(!saved);
+      const nextState = !saved;
+      setSaved(nextState);
 
       try {
         await toggleSavedFn(itemId);
+        if (onToggle) {
+          onToggle(itemId, nextState);
+        }
       } catch (apiErr) {
         setSaved(previousState);
         throw apiErr;

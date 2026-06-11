@@ -47,6 +47,15 @@ export const getTestById = async (testId) => {
   }
 };
 
+export const getSavedTestsByUser = async () => {
+  try {
+    const response = await clientInstance.get("/toeic/test/saved");
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const isSavedTest = async (testId) => {
   try {
     const response = await clientInstance.get(`/toeic/test/${testId}/is-saved`);

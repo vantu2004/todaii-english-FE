@@ -15,6 +15,7 @@ const LongArticleCard = ({
   views,
   published_at,
   updated_at,
+  onToggle,
 }) => {
   const getLevelStyle = (level) => {
     const styles = {
@@ -72,6 +73,7 @@ const LongArticleCard = ({
                 itemId={id}
                 checkSavedFn={isSavedArticle}
                 toggleSavedFn={toggleSavedArticle}
+                onToggle={onToggle}
               />
             </div>
           </div>

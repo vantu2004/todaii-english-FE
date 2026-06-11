@@ -5,7 +5,7 @@ import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
 import { isSavedTest } from "@/api/clients/toeicTestApi";
 import { toggleSavedTest } from "@/api/clients/userApi";
 
-const TestCard = ({ test }) => {
+const TestCard = ({ test, onToggle }) => {
   const imageUrl = test.image_url;
 
   return (
@@ -39,6 +39,7 @@ const TestCard = ({ test }) => {
             itemId={test.id}
             checkSavedFn={isSavedTest}
             toggleSavedFn={toggleSavedTest}
+            onToggle={onToggle}
           />
         </div>
       </div>

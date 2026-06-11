@@ -5,7 +5,7 @@ import { isSavedVideo } from "@/api/clients/videoApi";
 import { toggleSavedVideo } from "@/api/clients/userApi";
 import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
 
-const VideoCard = ({ video }) => {
+const VideoCard = ({ video, onToggle }) => {
   return (
     <Link
       to={`/client/video/${video.id}`}
@@ -49,6 +49,7 @@ const VideoCard = ({ video }) => {
             itemId={video.id}
             checkSavedFn={isSavedVideo}
             toggleSavedFn={toggleSavedVideo}
+            onToggle={onToggle}
           />
         </div>
 

@@ -30,6 +30,7 @@ import ToeicTestOverview from "@/modules/clients/pages/toeic/ToeicTestOverview";
 import ToeicTakingTest from "@/modules/clients/pages/toeic/ToeicTakingTest";
 import ToeicResult from "@/modules/clients/pages/toeic/ToeicResult";
 import ToeicResultReview from "@/modules/clients/pages/toeic/ToeicResultReview";
+import SavedItems from "@/modules/clients/pages/SavedItems";
 
 export default function ClientRoutes() {
   return (
@@ -146,6 +147,15 @@ export default function ClientRoutes() {
             element={
               <ClientProtectRoutes>
                 <Profile />
+              </ClientProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/saved-articles"
+            element={
+              <ClientProtectRoutes>
+                <SavedItems />
               </ClientProtectRoutes>
             }
           />
