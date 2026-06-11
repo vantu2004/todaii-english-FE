@@ -35,14 +35,14 @@ const SavedWordsList = ({
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* Banner fetch all */}
       {missingCount > 0 && (
-        <div className="mx-3 mt-3 flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 shrink-0">
+        <div className="mx-3 mt-3 flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 shrink-0">
           <span className="text-[11px] text-amber-700 dark:text-amber-400 font-medium leading-snug">
             <span className="font-bold">{missingCount} từ</span> chưa có dữ liệu
           </span>
           <button
             onClick={onFetchAll}
             disabled={isFetchingAny}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[11px] font-bold transition-colors shrink-0"
+            className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[11px] font-bold transition-colors shrink-0"
           >
             {isFetchingAny ? (
               <Loader2 size={11} className="animate-spin" />
@@ -66,11 +66,11 @@ const SavedWordsList = ({
               key={word.id}
               onClick={() => onSelect(word)}
               className={`
-                group p-3.5 rounded-xl border cursor-pointer transition-all relative
+                group p-3.5 rounded-lg border cursor-pointer transition-colors relative
                 ${
                   isActive
-                    ? "bg-white border-neutral-900 shadow-sm ring-1 ring-neutral-900/5 dark:bg-neutral-800 dark:border-white dark:ring-white/10"
-                    : "bg-white border-neutral-200 hover:border-neutral-300 hover:shadow-sm dark:bg-neutral-800/50 dark:border-neutral-700 dark:hover:border-neutral-600"
+                    ? "bg-white border-neutral-900 dark:bg-neutral-800 dark:border-white"
+                    : "bg-white border-neutral-200 hover:border-neutral-300 dark:bg-neutral-800/50 dark:border-neutral-700 dark:hover:border-neutral-600"
                 }
               `}
             >
@@ -79,7 +79,7 @@ const SavedWordsList = ({
                   {/* Word + IPA */}
                   <div className="flex items-baseline gap-2 flex-wrap">
                     <h3
-                      className={`text-base font-semibold truncate ${
+                      className={`text-sm font-semibold truncate ${
                         isActive
                           ? "text-neutral-900 dark:text-white"
                           : "text-neutral-700 dark:text-neutral-300"
@@ -88,7 +88,7 @@ const SavedWordsList = ({
                       {word.word}
                     </h3>
                     {word.ipa && (
-                      <span className="text-[10px] text-neutral-500 font-mono bg-neutral-100 px-1.5 py-0.5 rounded dark:text-neutral-400 dark:bg-neutral-700">
+                      <span className="text-[10px] text-neutral-500 font-mono bg-neutral-100 px-1.5 py-0.5 rounded-sm dark:text-neutral-400 dark:bg-neutral-700">
                         {word.ipa}
                       </span>
                     )}
@@ -114,7 +114,7 @@ const SavedWordsList = ({
                       ) : (
                         <button
                           onClick={() => onFetchWord(word)}
-                          className="flex items-center gap-1 text-[11px] font-bold border border-dashed border-neutral-300 dark:border-neutral-600 text-neutral-400 dark:text-neutral-500 hover:border-neutral-500 dark:hover:border-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 px-2 py-0.5 rounded-lg transition-all"
+                          className="flex items-center gap-1 text-[11px] font-bold border border-dashed border-neutral-300 dark:border-neutral-600 text-neutral-400 dark:text-neutral-500 hover:border-neutral-500 dark:hover:border-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 px-2 py-0.5 rounded-md transition-all"
                         >
                           <Download size={10} /> Tải dữ liệu
                         </button>

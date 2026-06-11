@@ -348,7 +348,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* ── LEFT COLUMN: SAVED LIST ── */}
-      <div className="w-[35%] min-w-[300px] max-w-[400px] border-r border-neutral-200 bg-neutral-50 flex flex-col h-full dark:bg-neutral-900/50 dark:border-neutral-800">
+      <div className="w-80 border-r border-neutral-200 bg-neutral-50 flex flex-col h-full dark:bg-neutral-900/50 dark:border-neutral-800">
         {/* Header */}
         <div className="h-14 border-b border-neutral-200 bg-white flex items-center justify-between px-4 shrink-0 dark:bg-neutral-900 dark:border-neutral-800 relative z-20">
           <div className="flex items-center gap-3 min-w-0 pr-2">
@@ -392,7 +392,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
             </button>
 
             {showGameMenu && (
-              <div className="absolute top-full right-0 mt-2 w-52 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg overflow-hidden py-1">
+              <div className="absolute top-full right-0 mt-2 w-52 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-lg shadow-md overflow-hidden py-1">
                 <div className="px-3 py-2 text-[10px] font-bold text-neutral-400 uppercase tracking-wider border-b border-neutral-100 dark:border-neutral-800">
                   Chọn chế độ
                 </div>
@@ -475,7 +475,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 placeholder="Nhập từ vựng mới để thêm vào sổ tay..."
               />
             </div>
-            <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl shadow-inner shrink-0">
+            <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-inner shrink-0">
               {[
                 { key: "todaii", label: "Todaii API" },
                 { key: "free", label: "Free API" },

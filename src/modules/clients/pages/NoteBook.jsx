@@ -96,7 +96,7 @@ const Notebook = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="flex h-[calc(100vh-72px)] w-full max-w-[1920px] mx-auto mt-[72px] bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 overflow-hidden font-sans text-sm"
+        className="flex h-[calc(100vh-72px)] w-full max-w-full mx-auto mt-[72px] bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 overflow-hidden font-sans text-sm"
       >
         {/* LEFT SIDEBAR: TREE */}
         <div

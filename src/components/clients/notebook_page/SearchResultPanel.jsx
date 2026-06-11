@@ -23,7 +23,7 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
 
   if (state.error === "SERVER_ERROR")
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
+      <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="w-14 h-14 bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 rounded-full flex items-center justify-center mb-4">
           <AlertTriangle className="w-7 h-7" />
         </div>
@@ -39,7 +39,7 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
 
   if (state.error)
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-red-50/50 rounded-3xl border border-red-100 dark:bg-red-900/20 dark:border-red-800 animate-in fade-in duration-200">
+      <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-red-50/50 rounded-lg border border-red-100 dark:bg-red-900/20 dark:border-red-800 animate-in fade-in duration-200">
         <p className="text-red-600 font-semibold mb-1 dark:text-red-400 text-sm sm:text-base">
           Không tìm thấy từ vựng
         </p>
@@ -58,7 +58,7 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
       {/* Action Bar */}
-      <div className="flex justify-between items-center bg-neutral-900 text-white p-4 rounded-2xl shadow-lg dark:bg-neutral-850">
+      <div className="flex justify-between items-center bg-neutral-900 text-white p-4 rounded-lg shadow-md dark:bg-neutral-850">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
             <Sparkles size={16} className="text-white" />
@@ -74,7 +74,7 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
         {state.type === "todaii" ? (
           <button
             onClick={onAdd}
-            className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-200 px-5 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm active:scale-95 dark:hover:bg-neutral-100"
+            className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-200 px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-sm dark:hover:bg-neutral-100"
           >
             <Plus size={16} />
             Lưu vào sổ tay
