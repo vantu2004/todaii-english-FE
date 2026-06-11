@@ -321,38 +321,38 @@ const VocabDeckDetails = () => {
             </div>
 
             {/* Phần Action Buttons */}
-            <div className="w-full xl:w-auto flex flex-wrap gap-3">
+            <div className="w-full xl:w-auto flex flex-wrap gap-2">
               {/* Nút Primary */}
               <button
                 onClick={() => setMode("flashcard")}
                 disabled={words.filter((w) => w.hasData).length === 0}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <PlayCircle size={18} /> Flashcard
+                <PlayCircle size={16} /> Flashcard
               </button>
 
               {/* Các nút Secondary */}
-              <div className="w-full sm:w-auto flex grid grid-cols-2 sm:flex sm:flex-row gap-3">
+              <div className="w-full sm:w-auto flex grid grid-cols-2 sm:flex sm:flex-row gap-2">
                 <button
                   onClick={() => setMode("quiz")}
                   disabled={words.filter((w) => w.hasData).length < 4}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Gamepad2 size={18} /> Trắc nghiệm
+                  <Gamepad2 size={16} /> Trắc nghiệm
                 </button>
                 <button
                   onClick={() => setMode("speed")}
                   disabled={words.filter((w) => w.hasData).length < 4}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Zap size={18} /> Tốc độ
+                  <Zap size={16} /> Tốc độ
                 </button>
                 <button
                   onClick={() => setMode("typing")}
                   disabled={words.filter((w) => w.hasData).length < 4}
-                  className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Keyboard size={18} /> Gõ nhanh
+                  <Keyboard size={16} /> Gõ nhanh
                 </button>
               </div>
             </div>
@@ -361,9 +361,9 @@ const VocabDeckDetails = () => {
 
         {/* ── Banner: tải hàng loạt ── */}
         {missingCount > 0 && (
-          <div className="mb-5 flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
-            <div className="flex items-center gap-2.5 text-sm text-amber-700 dark:text-amber-400">
-              <AlertCircle size={16} className="shrink-0" />
+          <div className="mb-4 flex items-center justify-between gap-4 px-4 py-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
+            <div className="flex items-center gap-2 text-sm text-amber-700 dark:text-amber-400">
+              <AlertCircle size={14} className="shrink-0" />
               <span>
                 <span className="font-bold">{missingCount} từ</span> chưa có dữ
                 liệu từ điển. Tải để dùng được Flashcard &amp; Trắc nghiệm.
@@ -372,12 +372,12 @@ const VocabDeckDetails = () => {
             <button
               onClick={handleFetchAll}
               disabled={isFetchingAny}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-colors shrink-0"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold transition-colors shrink-0"
             >
               {isFetchingAny ? (
-                <Loader2 size={13} className="animate-spin" />
+                <Loader2 size={12} className="animate-spin" />
               ) : (
-                <RefreshCw size={13} />
+                <RefreshCw size={12} />
               )}
               Tải tất cả
             </button>
@@ -385,66 +385,66 @@ const VocabDeckDetails = () => {
         )}
 
         {/* ── List Controls (Sticky) ── */}
-        <div className="sticky top-24 z-10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md p-2 rounded-2xl border border-neutral-200 dark:border-neutral-800 shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2 px-2">
+        <div className="sticky top-20 z-10 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md p-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 mb-4 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 px-1">
             <button
               onClick={() => setShowWord(!showWord)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold border transition-all ${
                 showWord
                   ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white"
                   : "bg-transparent text-neutral-500 dark:text-neutral-400 border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600"
               }`}
             >
-              {showWord ? <Eye size={14} /> : <EyeOff size={14} />} Từ vựng
+              {showWord ? <Eye size={12} /> : <EyeOff size={12} />} Từ vựng
             </button>
             <button
               onClick={() => setShowMeaning(!showMeaning)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold border transition-all ${
                 showMeaning
                   ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white"
                   : "bg-transparent text-neutral-500 dark:text-neutral-400 border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600"
               }`}
             >
-              {showMeaning ? <Eye size={14} /> : <EyeOff size={14} />} Định
+              {showMeaning ? <Eye size={12} /> : <EyeOff size={12} />} Định
               nghĩa
             </button>
           </div>
 
           <button
             onClick={handleShuffle}
-            className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors mr-2"
+            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors mr-1"
           >
-            <Shuffle size={14} /> Trộn danh sách
+            <Shuffle size={12} /> Trộn danh sách
           </button>
         </div>
 
         {/* ── Word List ── */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           {words.map((item) => (
             <div
               key={item.id}
-              className="group bg-white dark:bg-neutral-900/60 p-5 rounded-3xl border border-neutral-100 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-md transition-all duration-300 flex items-start sm:items-center gap-4"
+              className="group bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-neutral-150 dark:border-neutral-800/80 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all flex items-start sm:items-center gap-3"
             >
               {/* Audio Button */}
               <button
                 onClick={(e) => playAudio(e, item)}
-                className="w-10 h-10 rounded-full bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 flex items-center justify-center hover:bg-neutral-900 dark:hover:bg-white hover:text-white dark:hover:text-neutral-900 transition-all shadow-sm shrink-0"
+                className="w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 flex items-center justify-center hover:bg-neutral-900 dark:hover:bg-white hover:text-white dark:hover:text-neutral-900 transition-all shrink-0"
               >
-                <Volume2 size={18} />
+                <Volume2 size={16} />
               </button>
 
               {/* Content Grid */}
-              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-8 min-w-0">
+              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-6 min-w-0">
                 {/* Col 1: Word */}
                 <div
-                  className={`transition-all duration-500 ${
+                  className={`transition-all duration-300 ${
                     showWord
                       ? "opacity-100 translate-x-0"
                       : "opacity-0 -translate-x-2 blur-sm select-none"
                   }`}
                 >
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <h4 className="text-lg font-bold text-neutral-900 dark:text-white">
+                    <h4 className="text-base font-semibold text-neutral-900 dark:text-white">
                       {item.word}
                     </h4>
                     {item.ipa && (
@@ -454,7 +454,7 @@ const VocabDeckDetails = () => {
                     )}
                   </div>
                   {item.pos && (
-                    <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 px-1.5 py-0.5 rounded">
+                    <span className="inline-block mt-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 bg-neutral-50 dark:bg-neutral-800 px-1.5 py-0.5 rounded-sm">
                       {item.pos}
                     </span>
                   )}
@@ -462,7 +462,7 @@ const VocabDeckDetails = () => {
 
                 {/* Col 2: Meaning hoặc nút fetch */}
                 <div
-                  className={`transition-all duration-500 ${
+                  className={`transition-all duration-300 ${
                     showMeaning
                       ? "opacity-100 translate-x-0"
                       : "opacity-0 translate-x-2 blur-sm select-none"
@@ -470,7 +470,7 @@ const VocabDeckDetails = () => {
                 >
                   {item.hasData ? (
                     <>
-                      <p className="font-medium text-neutral-800 dark:text-neutral-200 leading-snug mb-1">
+                      <p className="font-medium text-neutral-800 dark:text-neutral-200 leading-snug mb-0.5 text-sm">
                         {item.meaning}
                       </p>
                       {item.example && (
@@ -480,14 +480,14 @@ const VocabDeckDetails = () => {
                       )}
                     </>
                   ) : (
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-col gap-1">
                       <FetchDataButton
                         wordText={item.word}
                         isFetching={!!fetchingIds[item.id]}
                         onFetched={() => handleFetchWordData(item)}
                       />
                       {errorIds[item.id] && (
-                        <span className="text-[11px] text-red-400 dark:text-red-500 font-medium">
+                        <span className="text-[10px] text-red-400 dark:text-red-500 font-medium">
                           Không tìm thấy dữ liệu
                         </span>
                       )}
@@ -498,7 +498,7 @@ const VocabDeckDetails = () => {
 
               {/* Option Menu */}
               {/* RIGHT: Speak Audio & View Details Link */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => handleOpenModal(item.word)}
                   className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
@@ -512,7 +512,7 @@ const VocabDeckDetails = () => {
                   className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
                   hover:text-brand-500 dark:hover:text-brand-400 transition-colors border-l border-neutral-200 dark:border-neutral-700 pl-2"
                 >
-                  Lưu sổ tay
+                  Lưu
                 </button>
               </div>
             </div>
@@ -521,9 +521,9 @@ const VocabDeckDetails = () => {
 
         {/* Empty State */}
         {words.length === 0 && (
-          <div className="text-center py-20">
-            <BookOpen className="mx-auto h-12 w-12 text-neutral-300 dark:text-neutral-700 mb-3" />
-            <p className="text-neutral-500 dark:text-neutral-400 font-medium">
+          <div className="text-center py-16">
+            <BookOpen className="mx-auto h-10 w-10 text-neutral-300 dark:text-neutral-700 mb-2" />
+            <p className="text-neutral-500 dark:text-neutral-400 font-medium text-sm">
               Bộ từ vựng này chưa có từ nào.
             </p>
           </div>

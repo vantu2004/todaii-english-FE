@@ -9,7 +9,7 @@ const SearchHistory = ({
   if (!history || history.length === 0) return null;
 
   return (
-    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4 mb-4">
+    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
           <History className="w-4 h-4" />
