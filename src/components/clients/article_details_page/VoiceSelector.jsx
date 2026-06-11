@@ -22,17 +22,20 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
       {/* Trigger */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 px-3 py-2 rounded-full bg-white/80 backdrop-blur border border-neutral-200 hover:bg-neutral-50 transition-all text-sm shadow-sm"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all text-xs sm:text-sm shadow-sm"
       >
-        <Volume2 size={16} className="text-neutral-500" />
+        <Volume2
+          size={14}
+          className="text-neutral-500 dark:text-neutral-400 flex-shrink-0"
+        />
 
-        <span className="break-words text-left">
+        <span className="text-left max-w-[80px] sm:max-w-[150px] truncate text-neutral-700 dark:text-neutral-300">
           {selectedVoice?.name || "Voice"}
         </span>
 
         <ChevronDown
-          size={14}
-          className={`transition-transform duration-200 ${
+          size={12}
+          className={`transition-transform duration-200 flex-shrink-0 text-neutral-500 dark:text-neutral-400 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -40,13 +43,13 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 max-h-72 overflow-y-auto bg-white border border-neutral-200 rounded-2xl shadow-xl z-[999]">
-          <div className="px-4 py-2 text-xs font-semibold text-neutral-400 border-b">
+        <div className="absolute right-0 mt-2 w-72 sm:w-96 max-h-72 overflow-y-auto bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-xl z-[999] scrollbar-thin">
+          <div className="px-4 py-2 text-xs font-semibold text-neutral-400 dark:text-neutral-500 border-b border-neutral-100 dark:border-neutral-850">
             Select Voice
           </div>
 
           {voices.length === 0 ? (
-            <div className="p-4 text-sm text-neutral-400">
+            <div className="p-4 text-sm text-neutral-400 dark:text-neutral-500">
               Loading voices...
             </div>
           ) : (
@@ -61,14 +64,16 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
                     setIsOpen(false);
                   }}
                   className={`w-full text-left px-4 py-2 text-sm flex flex-col transition-all
-                    hover:bg-neutral-100
-                    ${isActive ? "bg-neutral-100 font-medium" : ""}
+                    hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300
+                    ${isActive ? "bg-neutral-50 dark:bg-neutral-800 font-medium text-neutral-900 dark:text-white" : ""}
                   `}
                 >
                   <span className="break-words whitespace-normal text-left leading-tight">
                     {voice.name}
                   </span>
-                  <span className="text-xs text-neutral-400">{voice.lang}</span>
+                  <span className="text-xs text-neutral-400 dark:text-neutral-500">
+                    {voice.lang}
+                  </span>
                 </button>
               );
             })

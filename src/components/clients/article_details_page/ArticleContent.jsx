@@ -11,7 +11,7 @@ import {
 import VoiceSelector from "./VoiceSelector";
 import DictionaryModal from "@/components/clients/DictionaryModal";
 
-const ArticleContent = ({ paragraphs }) => {
+const ArticleContent = ({ paragraphs, audioUrl }) => {
   const [voices, setVoices] = useState([]);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -21,6 +21,63 @@ const ArticleContent = ({ paragraphs }) => {
   const utteranceRef = useRef(null);
   const [lookupWord, setLookupWord] = useState("");
   const [isLookupOpen, setIsLookupOpen] = useState(false);
+
+  const [audioMode, setAudioMode] = useState("browser"); // "browser" | "ai"
+  const [aiAudio, setAiAudio] = useState(null);
+  const [isPlayingAi, setIsPlayingAi] = useState(false);
+
+  const playAiVoice = () => {
+    if (!audioUrl) return;
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+
+    if (aiAudio) {
+      aiAudio
+        .play()
+        .then(() => {
+          setIsPlayingAi(true);
+        })
+        .catch((err) => {
+          console.error("AI Audio playback failed", err);
+        });
+    } else {
+      const audio = new Audio(audioUrl);
+      audio
+        .play()
+        .then(() => {
+          setIsPlayingAi(true);
+        })
+        .catch((err) => {
+          console.error("AI Audio playback failed", err);
+        });
+      audio.onended = () => {
+        setIsPlayingAi(false);
+      };
+      setAiAudio(audio);
+    }
+  };
+
+  const pauseAiVoice = () => {
+    if (aiAudio) {
+      aiAudio.pause();
+      setIsPlayingAi(false);
+    }
+  };
+
+  const stopAiVoice = () => {
+    if (aiAudio) {
+      aiAudio.pause();
+      aiAudio.currentTime = 0;
+      setIsPlayingAi(false);
+    }
+  };
+
+  const handleModeChange = (mode) => {
+    stopSpeech();
+    stopAiVoice();
+    setAudioMode(mode);
+  };
 
   const handleWordClick = (word) => {
     const cleaned = word.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "");
@@ -90,8 +147,19 @@ const ArticleContent = ({ paragraphs }) => {
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
+      if (aiAudio) {
+        aiAudio.pause();
+      }
     };
-  }, []);
+  }, [aiAudio]);
+
+  useEffect(() => {
+    if (aiAudio) {
+      aiAudio.pause();
+      setAiAudio(null);
+      setIsPlayingAi(false);
+    }
+  }, [audioUrl]);
 
   const toggleTranslation = (index) => {
     setShowTranslations((prev) => ({
@@ -166,51 +234,94 @@ const ArticleContent = ({ paragraphs }) => {
     currentWordIndexRef.current = 0;
   };
 
+  const activePlaying = audioMode === "ai" ? isPlayingAi : isSpeaking;
+
   return (
     <div className="relative">
       {/* Sticky Audio Controls Toolbar */}
       <div className="sticky top-24 z-30 mb-6 flex justify-end pointer-events-none">
-        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-lg p-1 flex items-center gap-1">
-          {!isSpeaking ? (
-            <button
-              onClick={() => speakParagraphs(currentParagraph)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
+        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-lg p-1 flex items-center gap-0.5 sm:gap-1">
+          {audioUrl && (
+            <select
+              value={audioMode}
+              onChange={(e) => handleModeChange(e.target.value)}
+              className="px-1.5 sm:px-2 py-1 sm:py-1.5 text-[10px] sm:text-xs border border-neutral-200 dark:border-neutral-700 rounded-md bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 focus:outline-none focus:ring-1 focus:ring-brand-500 mr-0.5 sm:mr-1 cursor-pointer font-medium max-w-[90px] sm:max-w-none flex-shrink-0"
             >
-              <Play size={16} fill="currentColor" />
-              <span>Đọc bài</span>
+              <option value="browser">Hệ thống</option>
+              <option value="ai">AI Voice</option>
+            </select>
+          )}
+
+          {!activePlaying ? (
+            <button
+              onClick={() => {
+                if (audioMode === "ai") {
+                  playAiVoice();
+                } else {
+                  speakParagraphs(currentParagraph);
+                }
+              }}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors font-medium text-xs sm:text-sm shadow-sm dark:shadow-none flex-shrink-0"
+            >
+              <Play size={14} className="sm:w-4 sm:h-4" fill="currentColor" />
+              <span className="hidden sm:inline">Đọc bài</span>
             </button>
           ) : (
             <button
-              onClick={pauseSpeech}
-              className="flex items-center gap-2 px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
+              onClick={() => {
+                if (audioMode === "ai") {
+                  pauseAiVoice();
+                } else {
+                  pauseSpeech();
+                }
+              }}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors font-medium text-xs sm:text-sm shadow-sm dark:shadow-none flex-shrink-0"
             >
-              <Pause size={16} fill="currentColor" />
-              <span>Tạm dừng</span>
+              <Pause size={14} className="sm:w-4 sm:h-4" fill="currentColor" />
+              <span className="hidden sm:inline">Tạm dừng</span>
             </button>
           )}
 
-          <VoiceSelector
-            voices={voices}
-            selectedVoice={selectedVoice}
-            onChange={setSelectedVoice}
-          />
+          {audioMode === "browser" && (
+            <VoiceSelector
+              voices={voices}
+              selectedVoice={selectedVoice}
+              onChange={setSelectedVoice}
+            />
+          )}
 
-          <div className="w-px h-6 bg-neutral-200 mx-1"></div>
+          <div className="w-px h-6 bg-neutral-200 mx-1 flex-shrink-0"></div>
 
           <button
-            onClick={resumeSpeech}
-            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
+            onClick={() => {
+              if (audioMode === "ai") {
+                playAiVoice();
+              } else {
+                resumeSpeech();
+              }
+            }}
+            className="p-1 sm:p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors flex-shrink-0"
             title="Tiếp tục"
           >
-            <Play size={18} />
+            <Play size={16} className="sm:w-[18px] sm:h-[18px]" />
           </button>
 
           <button
-            onClick={stopSpeech}
-            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors"
+            onClick={() => {
+              if (audioMode === "ai") {
+                stopAiVoice();
+              } else {
+                stopSpeech();
+              }
+            }}
+            className="p-1 sm:p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors flex-shrink-0"
             title="Dừng hẳn"
           >
-            <Square size={18} fill="currentColor" />
+            <Square
+              size={16}
+              className="sm:w-[18px] sm:h-[18px]"
+              fill="currentColor"
+            />
           </button>
         </div>
       </div>
@@ -311,9 +422,13 @@ const ArticleContent = ({ paragraphs }) => {
       {/* Audio Status Footer */}
       <div className="mt-6 flex items-center gap-2 text-xs text-neutral-400 dark:text-neutral-500 font-medium border-t border-neutral-100 dark:border-neutral-800 pt-4">
         <Volume2 size={14} />
-        {paragraphs && paragraphs[currentParagraph]
-          ? `Đang đọc đoạn ${currentParagraph + 1} / ${paragraphs.length}`
-          : "Sẵn sàng đọc"}
+        {audioMode === "ai"
+          ? isPlayingAi
+            ? "Đang phát giọng đọc AI"
+            : "Giọng đọc AI sẵn sàng"
+          : paragraphs && paragraphs[currentParagraph]
+            ? `Đang đọc đoạn ${currentParagraph + 1} / ${paragraphs.length}`
+            : "Sẵn sàng đọc"}
       </div>
 
       <DictionaryModal

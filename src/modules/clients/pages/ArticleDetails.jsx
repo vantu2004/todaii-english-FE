@@ -34,6 +34,7 @@ const ArticleDetails = () => {
     topics: article.topics,
     paragraphs: article.paragraphs,
     words: article.words,
+    audioUrl: article.audio_url,
   };
 
   const formatDate = (d) =>
@@ -60,7 +61,10 @@ const ArticleDetails = () => {
             <div className="flex-1 min-w-0">
               <ArticleHeader data={data} formatDate={formatDate} />
               <ArticleImage src={data.image} title={data.title} />
-              <ArticleContent paragraphs={data.paragraphs} />
+              <ArticleContent
+                paragraphs={data.paragraphs}
+                audioUrl={data.audioUrl}
+              />
               <EntryWordList id={data.id} fetchApi={getEntriesByArticleId} />
             </div>
 

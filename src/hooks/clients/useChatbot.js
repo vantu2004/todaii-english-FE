@@ -155,10 +155,10 @@ export const useChatbot = () => {
             prev.map((msg) =>
               msg.id === botMsgId
                 ? {
-                  ...msg,
-                  content: accumulatedText,
-                  isStreaming: true,
-                }
+                    ...msg,
+                    content: accumulatedText,
+                    isStreaming: true,
+                  }
                 : msg,
             ),
           );
@@ -169,10 +169,10 @@ export const useChatbot = () => {
           prev.map((msg) =>
             msg.id === botMsgId
               ? {
-                ...msg,
-                content: accumulatedText,
-                isStreaming: false,
-              }
+                  ...msg,
+                  content: accumulatedText,
+                  isStreaming: false,
+                }
               : msg,
           ),
         );
