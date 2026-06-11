@@ -8,7 +8,7 @@ const ClientLayout = () => {
   const isTakingTest = location.pathname.includes("/toeic/exam");
   const isResultReview = location.pathname.includes("/toeic/result-detail");
   const isNotebook = location.pathname.includes("/notebook");
-  const hideFooterAndChatbot = isTakingTest || isResultReview || isNotebook;
+  const hideFooter = isTakingTest || isResultReview || isNotebook;
 
   return (
     <div className="font-inter min-h-screen bg-surface-primary dark:bg-neutral-950 flex flex-col">
@@ -18,10 +18,9 @@ const ClientLayout = () => {
         <Outlet />
       </main>
 
-      {!hideFooterAndChatbot && <Footer />}
+      {!hideFooter && <Footer />}
 
-      {/* Floating AI Assistant */}
-      {!hideFooterAndChatbot && <FloatingChatbot />}
+      <FloatingChatbot />
     </div>
   );
 };

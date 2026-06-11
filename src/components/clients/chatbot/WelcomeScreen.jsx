@@ -24,13 +24,6 @@ const fadeUp = (delay = 0) => ({
 const WelcomeScreen = ({ onLoadHistory, isHistoryLoading }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full px-5 py-6 text-center">
-      {/* Brand logo avatar instead of glow particles */}
-      <motion.div {...fadeUp(0)} className="relative mb-5">
-        <div className="w-16 h-16 rounded-2xl bg-zinc-900 text-white flex items-center justify-center font-bold text-2xl shadow-sm select-none">
-          T
-        </div>
-      </motion.div>
-
       <motion.h3
         {...fadeUp(0.05)}
         className="text-[16px] font-bold text-zinc-900 mb-1.5 tracking-tight"

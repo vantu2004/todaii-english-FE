@@ -17,8 +17,12 @@ const ChatHeader = ({
       {/* Brand */}
       <div className="flex items-center gap-2.5">
         {/* Logo mark - Warm Zinc "T" instead of Snowflake/AI particles */}
-        <div className="w-8 h-8 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-sm select-none">
-          T
+        <div className="w-8 h-8 rounded-xl ">
+          <img
+            src="/chatbot.png"
+            alt="Todaii AI"
+            className="w-full h-full object-cover"
+          />
         </div>
         <div>
           <h3 className="text-[13.5px] font-bold tracking-tight text-zinc-900 leading-none">
