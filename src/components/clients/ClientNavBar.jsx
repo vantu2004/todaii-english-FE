@@ -219,7 +219,7 @@ const ClientNavBar = () => {
                           className="text-neutral-500 dark:text-neutral-400"
                         />
                       </div>
-                      <span className="font-medium">Bài viết đã lưu</span>
+                      <span className="font-medium">Đã lưu</span>
                     </Link>
                     <Link
                       to="/client/dashboard"

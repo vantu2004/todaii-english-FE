@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { GraduationCap, Clock, BookOpen } from "lucide-react";
+import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
+import { isSavedTest } from "@/api/clients/toeicTestApi";
+import { toggleSavedTest } from "@/api/clients/userApi";
 
 const TestCard = ({ test }) => {
   const imageUrl = test.image_url;
@@ -29,6 +32,15 @@ const TestCard = ({ test }) => {
             {test.collection.name}
           </span>
         )}
+
+        {/* Bookmark Button */}
+        <div className="absolute top-3 right-3 z-10">
+          <ToggleBookmarkButton
+            itemId={test.id}
+            checkSavedFn={isSavedTest}
+            toggleSavedFn={toggleSavedTest}
+          />
+        </div>
       </div>
 
       {/* Card Body */}

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getTestById } from "@/api/clients/toeicTestApi";
+import { getTestById, isSavedTest } from "@/api/clients/toeicTestApi";
 import { getSessionHistory, startSession } from "@/api/clients/toeicSessionApi";
 import { findAllTagsByTestId } from "@/api/clients/toeicTagApi";
 import { ArrowLeft, BookOpen, Clock, Award } from "lucide-react";
 import toast from "react-hot-toast";
+import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
+import { toggleSavedTest } from "@/api/clients/userApi";
 
 // Sub-components
 import TestInfoTab from "@/components/clients/toeic_page/overview/TestInfoTab";
@@ -166,7 +168,7 @@ const ToeicTestOverview = () => {
         {/* Test Header Block */}
         <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-lg p-4 mb-4">
           <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-            <div className="space-y-2">
+            <div className="space-y-2 flex-1">
               {test.collection?.name && (
                 <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/30 dark:border-neutral-700/50 animate-none">
                   {test.collection.name}
@@ -195,6 +197,15 @@ const ToeicTestOverview = () => {
                   </span>
                 </div>
               </div>
+            </div>
+
+            {/* Bookmark button */}
+            <div className="flex-shrink-0 self-start md:self-center">
+              <ToggleBookmarkButton
+                itemId={test.id}
+                checkSavedFn={isSavedTest}
+                toggleSavedFn={toggleSavedTest}
+              />
             </div>
           </div>
         </div>

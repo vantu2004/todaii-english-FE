@@ -46,3 +46,12 @@ export const getTestById = async (testId) => {
     throw err;
   }
 };
+
+export const isSavedTest = async (testId) => {
+  try {
+    const response = await clientInstance.get(`/toeic/test/${testId}/is-saved`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
