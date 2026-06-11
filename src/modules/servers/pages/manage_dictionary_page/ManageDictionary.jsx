@@ -1,85 +1,54 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import {
-  createDictionaryEntry,
-  createDictionaryEntryByGemini,
-  fetchDictionary,
-} from "@/api/servers/dictionaryApi";
+import { useEffect, useState, useRef, useCallback } from "react";
 import ToolBar from "@/components/servers/ToolBar";
 import Pagination from "@/components/servers/Pagination";
 import DictionaryTable from "@/components/servers/manage_dictionary_page/DictionaryTable";
 import DictionaryFormModal from "@/components/servers/manage_dictionary_page/DictionaryFormModal";
-import { Sparkles, Loader } from "lucide-react";
 import DictionaryViewModal from "@/components/servers/manage_dictionary_page/DictionaryViewModal";
-import { motion } from "framer-motion";
-import { logError } from "@/utils/LogError";
+import Modal from "@/components/servers/Modal";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
+import { useDictionaryTable } from "@/hooks/servers/dictionary/useDictionaryTable";
+import { useDictionaryCursor } from "@/hooks/servers/dictionary/useDictionaryCursor";
+import {
+  createWord as createWordApi,
+  updateWord as updateWordApi,
+  deleteWord as deleteWordApi,
+} from "@/api/servers/dictionaryApi";
+import toast from "react-hot-toast";
 
 const ManageDictionary = () => {
   const { setHeader } = useHeaderContext();
 
-  const [dictionary, setDictionary] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  // Hook cho Search & Pagination
+  const {
+    data: tableData,
+    pagination,
+    query,
+    setQuery,
+    loading: tableLoading,
+    handleCreate: tableCreate,
+    handleDelete: tableDelete,
+  } = useDictionaryTable();
+
+  // Hook cho Infinite Scroll
+  const {
+    items: cursorData,
+    setItems: setCursorItems,
+    loadMore,
+    loading: cursorLoading,
+    hasMore,
+  } = useDictionaryCursor(50);
+
+  // Trạng thái chung
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [showInput, setShowInput] = useState(false);
-  const [newWord, setNewWord] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
-  const [createdWordByGemini, setCreatedWordByGemini] = useState({});
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // State chung cho phân trang, sort, search
-  const [query, setQuery] = useState({
-    page: 1,
-    size: 20,
-    sortBy: "headword",
-    direction: "asc",
-    keyword: "",
-  });
+  const [selectedDictionary, setSelectedDictionary] = useState(null);
 
-  // State metadata từ API
-  const [pagination, setPagination] = useState({
-    totalElements: 0,
-    totalPages: 0,
-    first: true,
-    last: true,
-  });
-
-  const columns = [
-    { key: "id", label: "ID", sortField: "id" },
-    { key: "headword", label: "Headword", sortField: "headword" },
-    { key: "ipa", label: "IPA", sortField: "ipa" },
-    { key: "audioUrl", label: "Audio", sortField: "audioUrl" },
-    { key: "updatedAt", label: "Updated At", sortField: "updatedAt" },
-    { key: "actions", label: "Actions" },
-  ];
-
-  const reloadDictionary = async () => {
-    try {
-      setLoading(true);
-
-      const data = await fetchDictionary(
-        query.page,
-        query.size,
-        query.sortBy,
-        query.direction,
-        query.keyword,
-      );
-
-      setDictionary(data.content || []);
-
-      // Lưu metadata cho pagination component
-      setPagination({
-        totalElements: data.total_elements,
-        totalPages: data.total_pages,
-        first: data.first,
-        last: data.last,
-      });
-    } catch (err) {
-      logError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Cờ kiểm tra đang ở chế độ nào
+  const isSearchMode = query.keyword && query.keyword.trim() !== "";
+  const currentData = isSearchMode ? tableData : cursorData;
+  const currentLoading = isSearchMode ? tableLoading : cursorLoading;
 
   useEffect(() => {
     setHeader({
@@ -89,190 +58,177 @@ const ManageDictionary = () => {
         { label: "Manage Dictionary" },
       ],
     });
-  }, []);
-
-  useEffect(() => {
-    reloadDictionary();
-  }, [query]); // tự động reload khi query thay đổi
-
-  const updateQuery = (newValues) => {
-    setQuery((prev) => ({ ...prev, ...newValues }));
-  };
-
-  const handleConfirmCreate = async (data) => {
-    try {
-      await createDictionaryEntry(data);
-      await reloadDictionary();
-
-      setIsCreateModalOpen(false);
-      toast.success("Dictionary entry created successfully");
-    } catch (error) {
-      logError(error);
+    // Khởi tạo load dữ liệu cuộn vô tận lần đầu tiên
+    if (!isSearchMode && cursorData.length === 0) {
+      loadMore();
     }
-  };
+  }, [setHeader, isSearchMode]);
 
-  const handleKeyPress = async (e) => {
-    if (e.key === "Enter" && newWord.trim() !== "" && !isCreating) {
-      setIsCreating(true);
+  // Observer cho Infinite Scroll
+  const observer = useRef();
+  const lastElementRef = useCallback(
+    (node) => {
+      if (currentLoading || isSearchMode) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [currentLoading, hasMore, isSearchMode, loadMore],
+  );
+
+  // Handler TẠO TỪ
+  const handleConfirmCreate = async (word) => {
+    if (isSearchMode) {
+      await tableCreate(word);
+    } else {
+      // Logic add vào cursor data
       try {
-        const response = await createDictionaryEntryByGemini(newWord);
-        await reloadDictionary();
-
-        // kết quả trả về là list nên lấy phần tử đầu tiên
-        setCreatedWordByGemini(response[0]);
-        setIsViewModalOpen(true);
-        setNewWord("");
-        setShowInput(false);
-
-        toast.success("Dictionary entry created successfully");
-      } catch (error) {
-        toast.error("Failed to create dictionary entry");
-      } finally {
-        setIsCreating(false);
+        const res = await createWordApi(word);
+        setCursorItems((prev) => [res, ...prev]); // Đẩy lên đầu danh sách
+        toast.success("Created successfully");
+      } catch (e) {
+        console.error(e);
       }
     }
+    setIsCreateModalOpen(false);
+  };
 
-    if (e.key === "Escape") {
-      setShowInput(false);
-      setNewWord("");
-      setIsCreating(false);
+  // Handler CẬP NHẬT TRỰC TIẾP TRÊN ROW (Inline Edit)
+  const handleInlineUpdate = async (id, newWord) => {
+    try {
+      const res = await updateWordApi(id, newWord);
+      if (isSearchMode) {
+        // Cập nhật state table (giả sử bạn có handleUpdate trong hook, hoặc tự map lại data)
+        setQuery({ ...query }); // trick re-fetch
+      } else {
+        setCursorItems((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, word: newWord } : item,
+          ),
+        );
+      }
+      toast.success("Updated successfully");
+    } catch (e) {
+      console.error(e);
+      throw e; // Để Table component biết mà ko đóng mode edit
     }
+  };
+
+  // Handler XÓA TỪ
+  const handleConfirmDelete = async () => {
+    if (!selectedDictionary) return;
+    if (isSearchMode) {
+      await tableDelete(selectedDictionary.id);
+    } else {
+      try {
+        await deleteWordApi(selectedDictionary.id);
+        setCursorItems((prev) =>
+          prev.filter((item) => item.id !== selectedDictionary.id),
+        );
+        toast.success("Deleted successfully");
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setIsDeleteModalOpen(false);
+    setSelectedDictionary(null);
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-none">
-        <ToolBar
-          updateQuery={updateQuery}
-          setIsModalOpen={setIsCreateModalOpen}
-        />
+    <div className="flex flex-col h-full bg-gray-50/30">
+      <ToolBar
+        updateQuery={(newQ) => setQuery((prev) => ({ ...prev, ...newQ }))}
+        setIsModalOpen={setIsCreateModalOpen}
+      />
 
-        <div className="mt-6 mb-6">
-          {/* Input Section */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            {/* AI Create Button */}
-            <button
-              onClick={() => setShowInput(true)}
-              disabled={isCreating || showInput}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg 
-          bg-gray-900 text-white font-medium
-          hover:bg-gray-800 disabled:bg-gray-400
-          transition-all duration-200 flex-shrink-0"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">AI Create</span>
-            </button>
-
-            {/* Input or Loading State */}
-            <div className="flex-1 relative">
-              {!isCreating ? (
-                showInput ? (
-                  <div className="relative">
-                    <input
-                      type="text"
-                      autoFocus
-                      value={newWord}
-                      onChange={(e) => setNewWord(e.target.value)}
-                      onKeyDown={handleKeyPress}
-                      placeholder="Enter new word..."
-                      disabled={isCreating}
-                      className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 
-                  rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100
-                  placeholder:text-gray-400 dark:placeholder:text-gray-500
-                  focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10
-                  transition-all duration-200"
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                      <kbd className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-mono">
-                        Enter
-                      </kbd>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="px-4 py-2.5 text-gray-500 dark:text-gray-400 text-sm italic">
-                    Click the AI Create button to add a new word
-                  </div>
-                )
-              ) : (
-                <div className="flex items-center gap-3 px-4 py-2.5">
-                  <Loader className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
-                  <span className="text-gray-600 dark:text-gray-300 font-medium">
-                    Creating entry...
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Cancel Button (show when input is open) */}
-            {showInput && !isCreating && (
-              <button
-                onClick={() => {
-                  setShowInput(false);
-                  setNewWord("");
-                }}
-                className="px-4 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 
-            border border-gray-200 dark:border-gray-700
-            hover:bg-gray-50 dark:hover:bg-gray-800/50
-            transition-all duration-200"
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-
-          {/* Helper Text */}
-          {showInput && !isCreating && (
-            <p className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
-              Type a word and press Enter to create a new dictionary entry
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Vùng bảng cuộn riêng */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 10 }}
-        transition={{ duration: 0.5 }}
-        className="flex-1 overflow-hidden border border-gray-200 rounded-lg"
-      >
+      <div className="flex-1 overflow-hidden border border-gray-200 rounded-lg bg-white flex flex-col">
         <DictionaryTable
-          columns={columns}
-          dictionary={dictionary}
-          reloadDictionary={reloadDictionary}
-          query={query}
-          updateQuery={updateQuery}
-        />
-      </motion.div>
-
-      {/* Pagination */}
-      <div className="flex-none mt-4">
-        <Pagination
-          query={query}
-          updateQuery={updateQuery}
-          pagination={pagination}
+          dictionary={currentData}
+          lastElementRef={lastElementRef}
+          onViewClick={(item) => {
+            setSelectedDictionary(item);
+            setIsViewModalOpen(true);
+          }}
+          onDeleteClick={(item) => {
+            setSelectedDictionary(item);
+            setIsDeleteModalOpen(true);
+          }}
+          onInlineUpdate={handleInlineUpdate}
+          loading={currentLoading}
         />
       </div>
 
-      {/* View Modal */}
-      {createdWordByGemini && (
-        <DictionaryViewModal
-          isOpen={isViewModalOpen}
-          onClose={() => setIsViewModalOpen(false)}
-          dictionary={createdWordByGemini}
-        />
+      {isSearchMode && (
+        <div className="flex-none mt-4">
+          <Pagination
+            query={query}
+            updateQuery={(newQ) => setQuery((prev) => ({ ...prev, ...newQ }))}
+            pagination={pagination}
+          />
+        </div>
       )}
 
-      {/* Modal */}
+      {/* VIEW MODAL */}
+      <DictionaryViewModal
+        isOpen={isViewModalOpen}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setSelectedDictionary(null);
+        }}
+        dictionary={selectedDictionary}
+      />
+
+      {/* CREATE MODAL */}
       {isCreateModalOpen && (
         <DictionaryFormModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          mode="create"
-          initialData={{}}
           onSubmit={handleConfirmCreate}
         />
+      )}
+
+      {/* DELETE MODAL */}
+      {selectedDictionary && (
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          title={
+            <h2 className="text-lg font-semibold text-gray-900">
+              Delete Entry
+            </h2>
+          }
+          footer={
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          }
+        >
+          <p className="text-gray-700">
+            Are you sure you want to delete the word{" "}
+            <strong className="text-gray-900">
+              "{selectedDictionary.word}"
+            </strong>
+            ?
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            This action is permanent and cannot be undone.
+          </p>
+        </Modal>
       )}
     </div>
   );

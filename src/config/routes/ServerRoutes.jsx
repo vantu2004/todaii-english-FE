@@ -79,7 +79,7 @@ export default function ServerRoutes() {
 
             {/* Admins: chỉ SUPER_ADMIN */}
             <Route
-              path="/admin"
+              path="admin"
               element={
                 <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <ManageAdmins />
@@ -88,7 +88,7 @@ export default function ServerRoutes() {
             />
 
             <Route
-              path="/admin/:id/dashboard"
+              path="admin/:id/dashboard"
               element={
                 <ServerProtectRoutes rolesAllowed={["SUPER_ADMIN"]}>
                   <AdminDashboard />
@@ -98,7 +98,7 @@ export default function ServerRoutes() {
 
             {/* Users: SUPER_ADMIN + USER_MANAGER */}
             <Route
-              path="/user"
+              path="user"
               element={
                 <ServerProtectRoutes
                   rolesAllowed={["SUPER_ADMIN", "USER_MANAGER"]}
@@ -109,7 +109,7 @@ export default function ServerRoutes() {
             />
 
             <Route
-              path="/user/:id/dashboard"
+              path="user/:id/dashboard"
               element={
                 <ServerProtectRoutes
                   rolesAllowed={["SUPER_ADMIN", "USER_MANAGER"]}
@@ -468,7 +468,7 @@ export default function ServerRoutes() {
 
             {/* Profile: tất cả user */}
             <Route
-              path="/profile"
+              path="profile"
               element={
                 <ServerProtectRoutes
                   rolesAllowed={[
@@ -483,7 +483,7 @@ export default function ServerRoutes() {
             />
 
             <Route
-              path="/my-dashboard"
+              path="my-dashboard"
               element={
                 <ServerProtectRoutes
                   rolesAllowed={[

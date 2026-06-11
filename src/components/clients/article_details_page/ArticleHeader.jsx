@@ -22,7 +22,7 @@ const ArticleHeader = ({ data, formatDate }) => {
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-transform duration-200"
+          className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Quay lại</span>
@@ -33,16 +33,16 @@ const ArticleHeader = ({ data, formatDate }) => {
             <button
               key={t}
               onClick={() => handleNavigate(null, t.alias)}
-              className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full text-xs font-bold uppercase tracking-wider border border-neutral-200 dark:border-neutral-700
-                hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white hover:scale-105 transition-all duration-200"
+              className="px-2.5 py-0.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-md text-xs font-semibold uppercase tracking-wide border border-neutral-200 dark:border-neutral-700
+                hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200"
             >
               {t.name}
             </button>
           ))}
           <button
             onClick={() => handleNavigate(data.cefr)}
-            className="px-3 py-1 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full text-xs font-bold uppercase tracking-wider
-              hover:bg-neutral-800 dark:hover:bg-neutral-200 hover:scale-105 transition-all duration-200"
+            className="px-2.5 py-0.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-md text-xs font-semibold uppercase tracking-wide
+              hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors duration-200"
           >
             {data.cefr}
           </button>

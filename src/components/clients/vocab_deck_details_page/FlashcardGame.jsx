@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight, RotateCw, Volume2, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 
 const FlashcardGame = ({ words, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
   const currentWord = words[currentIndex];
+
+  useEffect(() => {
+    loadVoices();
+
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
 
   // Reset trạng thái lật khi chuyển từ
   useEffect(() => {
@@ -37,8 +50,8 @@ const FlashcardGame = ({ words, onClose }) => {
 
   const playAudio = (e) => {
     e.stopPropagation();
-    if (currentWord?.audio_url) {
-      new Audio(currentWord.audio_url).play();
+    if (currentWord) {
+      handleSpeak(currentWord.word, currentWord.audio_url);
     }
   };
 
@@ -95,15 +108,13 @@ const FlashcardGame = ({ words, onClose }) => {
                     {currentWord.ipa}
                   </span>
                 )}
-                {currentWord.audio_url && (
-                  <button
-                    onClick={playAudio}
-                    className="w-10 h-10 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:bg-neutral-800 dark:hover:bg-neutral-100"
-                    title="Nghe phát âm"
-                  >
-                    <Volume2 size={20} />
-                  </button>
-                )}
+                <button
+                  onClick={playAudio}
+                  className="w-10 h-10 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center hover:scale-110 transition-transform shadow-lg hover:bg-neutral-800 dark:hover:bg-neutral-100"
+                  title="Nghe phát âm"
+                >
+                  <Volume2 size={20} />
+                </button>
               </div>
 
               <p className="mt-auto text-neutral-300 dark:text-neutral-700 text-xs flex items-center gap-2 font-medium">

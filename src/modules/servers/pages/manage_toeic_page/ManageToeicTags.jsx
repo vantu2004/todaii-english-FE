@@ -25,13 +25,14 @@ const ManageToeicTags = () => {
     keyword: "",
     sortBy: "id",
     direction: "desc",
+    partFilter: "",
   });
 
   const columns = [
     { key: "id", label: "ID", sortField: "id" },
     { key: "name", label: "Tag Name", sortField: "name" },
     { key: "alias", label: "Alias", sortField: "alias" },
-    { key: "part_number", label: "Part Number", sortField: "part_number" },
+    { key: "partNumbers", label: "Part Numbers", sortField: "partNumbers" },
     { key: "actions", label: "Actions" },
   ];
 
@@ -71,9 +72,9 @@ const ManageToeicTags = () => {
     setEditingTag(null);
   };
 
-  const handleSubmit = async (name, partNumber) => {
+  const handleSubmit = async (name, partNumbers) => {
     try {
-      await createToeicTag(name, partNumber);
+      await createToeicTag(name, partNumbers);
       toast.success("Tag created successfully");
       await reloadTags();
       handleCloseModal();
@@ -82,9 +83,9 @@ const ManageToeicTags = () => {
     }
   };
 
-  const handleSaveEdit = async (id, newName, newPartNumber) => {
+  const handleSaveEdit = async (id, newName, newPartNumbers) => {
     try {
-      await updateToeicTag(id, newName, newPartNumber);
+      await updateToeicTag(id, newName, newPartNumbers);
       toast.success("Tag updated successfully");
       await reloadTags();
     } catch (error) {
@@ -92,9 +93,20 @@ const ManageToeicTags = () => {
     }
   };
 
-  let filteredTags = tags.filter((t) =>
-    t.name.toLowerCase().includes(query.keyword.toLowerCase()),
-  );
+  let filteredTags = tags.filter((t) => {
+    const matchesKeyword = t.name
+      .toLowerCase()
+      .includes(query.keyword.toLowerCase());
+    const partNumbersStr =
+      t.partNumbers || t.part_numbers || t.partNumber || t.part_number || "";
+    const matchesPart =
+      !query.partFilter ||
+      partNumbersStr
+        .split(",")
+        .map((p) => p.trim())
+        .includes(String(query.partFilter));
+    return matchesKeyword && matchesPart;
+  });
 
   if (query.sortBy) {
     filteredTags.sort((a, b) => {
@@ -116,7 +128,22 @@ const ManageToeicTags = () => {
         <ToolBar
           updateQuery={updateQuery}
           setIsModalOpen={() => handleOpenModal()}
-        />
+        >
+          <select
+            value={query.partFilter}
+            onChange={(e) => updateQuery({ partFilter: e.target.value })}
+            className="px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-400 dark:text-white"
+          >
+            <option value="">All Parts</option>
+            <option value="1">Part 1</option>
+            <option value="2">Part 2</option>
+            <option value="3">Part 3</option>
+            <option value="4">Part 4</option>
+            <option value="5">Part 5</option>
+            <option value="6">Part 6</option>
+            <option value="7">Part 7</option>
+          </select>
+        </ToolBar>
 
         <motion.div
           initial={{ opacity: 0, y: -10 }}

@@ -4,12 +4,12 @@ const ArticleImage = ({ src, title }) => {
   if (!src) return null;
 
   return (
-    <div className="relative w-full mb-10 group">
-      <div className="aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
+    <div className="relative w-full mb-6 group">
+      <div className="aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
         <img
           src={src}
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 dark:brightness-90"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102 dark:brightness-90"
         />
       </div>
       {/* Optional Caption Overlay or Bottom text */}

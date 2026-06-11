@@ -10,9 +10,13 @@ export const getWords = async (noteId) => {
   }
 };
 
-export const addWordToNotebook = async (noteId, entryId) => {
+export const addWordToNotebook = async (noteId, word) => {
   try {
-    await clientInstance.put(`/notebook/${noteId}/word/${entryId}`);
+    await clientInstance.put(`/notebook/${noteId}/word`, null, {
+      params: {
+        word,
+      },
+    });
   } catch (err) {
     console.log(err);
     throw err;

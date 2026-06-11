@@ -4,6 +4,7 @@ import {
   addWordToArticle,
   deleteWordFromArticle,
   deleteAllWordsFromArticle,
+  vocabExtractionArticle,
 } from "@/api/servers/articleApi";
 
 const ManageVocabsInArticle = () => {
@@ -13,7 +14,7 @@ const ManageVocabsInArticle = () => {
       addApi={addWordToArticle}
       deleteApi={deleteWordFromArticle}
       clearApi={deleteAllWordsFromArticle}
-      onAutoGenerate={null}
+      onVocabExtract={vocabExtractionArticle}
       title="ARTICLE"
     />
   );

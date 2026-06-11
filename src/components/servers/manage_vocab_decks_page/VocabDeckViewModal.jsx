@@ -116,81 +116,8 @@ const VocabDeckViewModal = ({ isOpen, onClose, deck }) => {
                   {/* Headword */}
                   <div className="flex items-center justify-between">
                     <h4 className="text-lg font-semibold text-gray-900">
-                      {word.headword}
+                      {word.word}
                     </h4>
-                    {word.ipa && (
-                      <span className="text-gray-500 italic">{word.ipa}</span>
-                    )}
-                  </div>
-
-                  {/* Audio */}
-                  {word.audio_url && (
-                    <audio
-                      controls
-                      className="mt-3 w-full"
-                      src={word.audio_url}
-                    />
-                  )}
-
-                  {/* Senses */}
-                  <div className="mt-4 space-y-4">
-                    {word.senses.map((s) => (
-                      <div key={s.id} className="p-4 rounded-lg bg-gray-50">
-                        <p className="text-xs font-medium text-gray-500 mb-1">
-                          {s.pos}
-                        </p>
-                        <p className="font-semibold text-gray-800">
-                          {s.meaning}
-                        </p>
-                        <p className="text-gray-600 text-sm mt-1">
-                          {s.definition}
-                        </p>
-
-                        {s.example && (
-                          <p className="mt-2 text-sm text-gray-700 italic">
-                            “{s.example}”
-                          </p>
-                        )}
-
-                        {/* synonyms */}
-                        {s.synonyms?.length > 0 && (
-                          <div className="mt-3">
-                            <p className="text-xs font-medium text-gray-500">
-                              Synonyms
-                            </p>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {s.synonyms.map((syn, i) => (
-                                <span
-                                  key={i}
-                                  className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium"
-                                >
-                                  {syn}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Collocations */}
-                        {s.collocations?.length > 0 && (
-                          <div className="mt-3">
-                            <p className="text-xs font-medium text-gray-500">
-                              Collocations
-                            </p>
-                            <div className="flex flex-wrap gap-2 mt-1">
-                              {s.collocations.map((col, i) => (
-                                <span
-                                  key={i}
-                                  className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 text-xs font-medium"
-                                >
-                                  {col}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
                   </div>
                 </div>
               ))}

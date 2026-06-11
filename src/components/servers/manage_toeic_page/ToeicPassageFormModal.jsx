@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Modal from "@/components/servers/Modal";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -34,16 +34,42 @@ const ToeicPassageFormModal = ({
   const [isDeletingAudio, setIsDeletingAudio] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isSavedRef = useRef(false);
+  const uploadedUrlsRef = useRef({ image: "", audio: "" });
+  const initialUrlsRef = useRef({ image: "", audio: "" });
+
+  useEffect(() => {
+    return () => {
+      if (!isSavedRef.current) {
+        const { image, audio } = uploadedUrlsRef.current;
+        if (image && image.includes("cloudinary")) {
+          deleteToeicTestFile(image).catch((err) =>
+            console.error("Error cleaning up image:", err),
+          );
+        }
+        if (audio && audio.includes("cloudinary")) {
+          deleteToeicTestFile(audio).catch((err) =>
+            console.error("Error cleaning up audio:", err),
+          );
+        }
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (initialData) {
+      const img = initialData.uploaded_image || initialData.image_url || "";
+      const aud = initialData.uploaded_audio || initialData.audio_url || "";
+      initialUrlsRef.current = { image: img, audio: aud };
       setFormData({
         passageText: initialData.passageText || initialData.passage_text || "",
         passageTrans:
           initialData.passageTrans || initialData.passage_trans || "",
-        imageUrl: initialData.uploaded_image || initialData.image_url || "",
-        audioUrl: initialData.uploaded_audio || initialData.audio_url || "",
+        imageUrl: img,
+        audioUrl: aud,
       });
     } else {
+      initialUrlsRef.current = { image: "", audio: "" };
       setFormData({
         passageText: "",
         passageTrans: "",
@@ -66,6 +92,7 @@ const ToeicPassageFormModal = ({
         ...prev,
         [type === "image" ? "imageUrl" : "audioUrl"]: url,
       }));
+      uploadedUrlsRef.current[type] = url;
       toast.success(
         `${type === "image" ? "Image" : "Audio"} uploaded successfully!`,
       );
@@ -87,8 +114,12 @@ const ToeicPassageFormModal = ({
     else setIsDeletingAudio(true);
 
     try {
-      if (url.includes("cloudinary")) {
-        await deleteToeicTestFile(url);
+      // Only delete from Cloudinary immediately if it was newly uploaded in this session
+      if (url === uploadedUrlsRef.current[type]) {
+        if (url.includes("cloudinary")) {
+          await deleteToeicTestFile(url);
+        }
+        uploadedUrlsRef.current[type] = "";
       }
       setFormData((prev) => ({
         ...prev,
@@ -117,20 +148,24 @@ const ToeicPassageFormModal = ({
       passage_text: formData.passageText,
       passage_trans: formData.passageTrans,
       image_request: {
-        uploaded_image: formData.imageUrl?.includes("cloudinary")
-          ? formData.imageUrl
-          : "",
-        image_url: !formData.imageUrl?.includes("cloudinary")
-          ? formData.imageUrl
-          : "",
+        uploaded_image:
+          formData.imageUrl && formData.imageUrl.includes("cloudinary")
+            ? formData.imageUrl
+            : null,
+        image_url:
+          formData.imageUrl && !formData.imageUrl.includes("cloudinary")
+            ? formData.imageUrl
+            : null,
       },
       audio_request: {
-        uploaded_audio: formData.audioUrl?.includes("cloudinary")
-          ? formData.audioUrl
-          : "",
-        audio_url: !formData.audioUrl?.includes("cloudinary")
-          ? formData.audioUrl
-          : "",
+        uploaded_audio:
+          formData.audioUrl && formData.audioUrl.includes("cloudinary")
+            ? formData.audioUrl
+            : null,
+        audio_url:
+          formData.audioUrl && !formData.audioUrl.includes("cloudinary")
+            ? formData.audioUrl
+            : null,
       },
     };
 
@@ -141,6 +176,27 @@ const ToeicPassageFormModal = ({
       } else {
         await createPassage(testId, partNumber, payload);
         toast.success("Passage created successfully");
+      }
+      isSavedRef.current = true;
+      const { image: initialImage, audio: initialAudio } =
+        initialUrlsRef.current;
+      if (
+        initialImage &&
+        initialImage !== formData.imageUrl &&
+        initialImage.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialImage).catch((err) =>
+          console.error("Error deleting old image:", err),
+        );
+      }
+      if (
+        initialAudio &&
+        initialAudio !== formData.audioUrl &&
+        initialAudio.includes("cloudinary")
+      ) {
+        deleteToeicTestFile(initialAudio).catch((err) =>
+          console.error("Error deleting old audio:", err),
+        );
       }
       onSuccess();
     } catch (err) {
@@ -212,18 +268,19 @@ const ToeicPassageFormModal = ({
                 Image URL
               </label>
               <div className="flex gap-2 items-center">
-                <label
-                  className={`cursor-pointer px-3 py-1 bg-white text-gray-700 rounded text-xs font-medium border border-gray-200 hover:bg-gray-50 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
-                >
-                  {isUploadingImage ? "Uploading..." : "Upload Image"}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handleUploadFile(e, "image")}
-                  />
-                </label>
-                {formData.imageUrl?.includes("cloudinary") && (
+                {!formData.imageUrl?.includes("cloudinary") ? (
+                  <label
+                    className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
+                  >
+                    {isUploadingImage ? "Uploading..." : "Upload Image"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleUploadFile(e, "image")}
+                    />
+                  </label>
+                ) : (
                   <button
                     type="button"
                     onClick={() => handleDeleteFile("image")}
@@ -256,54 +313,54 @@ const ToeicPassageFormModal = ({
             )}
           </div>
 
-          <div className="md:col-span-2">
-            <div className="flex items-center justify-between mb-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                Audio URL{" "}
-                {(partNumber === 3 || partNumber === 4) && (
-                  <span className="text-red-500">*</span>
-                )}
-              </label>
-              <div className="flex gap-2 items-center">
-                <label
-                  className={`cursor-pointer px-3 py-1 bg-white text-gray-700 rounded text-xs font-medium border border-gray-200 hover:bg-gray-50 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
-                >
-                  {isUploadingAudio ? "Uploading..." : "Upload Audio"}
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    className="hidden"
-                    onChange={(e) => handleUploadFile(e, "audio")}
-                  />
+          {(partNumber === 3 || partNumber === 4) && (
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Audio URL <span className="text-red-500">*</span>
                 </label>
-                {formData.audioUrl?.includes("cloudinary") && (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFile("audio")}
-                    disabled={isDeletingAudio}
-                    className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
-                  >
-                    {isDeletingAudio ? "Removing..." : "Remove Uploaded"}
-                  </button>
-                )}
+                <div className="flex gap-2 items-center">
+                  {!formData.audioUrl?.includes("cloudinary") ? (
+                    <label
+                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
+                    >
+                      {isUploadingAudio ? "Uploading..." : "Upload Audio"}
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        className="hidden"
+                        onChange={(e) => handleUploadFile(e, "audio")}
+                      />
+                    </label>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteFile("audio")}
+                      disabled={isDeletingAudio}
+                      className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
+                    >
+                      {isDeletingAudio ? "Removing..." : "Remove Uploaded"}
+                    </button>
+                  )}
+                </div>
               </div>
+              <input
+                type="text"
+                name="audioUrl"
+                value={formData.audioUrl}
+                onChange={handleChange}
+                placeholder="https://example.com/audio.mp3"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
+                disabled={formData.audioUrl?.includes("cloudinary")}
+                required
+              />
+              {formData.audioUrl && (
+                <audio controls className="w-full" src={formData.audioUrl}>
+                  Your browser does not support the audio element.
+                </audio>
+              )}
             </div>
-            <input
-              type="text"
-              name="audioUrl"
-              value={formData.audioUrl}
-              onChange={handleChange}
-              placeholder="https://example.com/audio.mp3"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
-              disabled={formData.audioUrl?.includes("cloudinary")}
-              required={partNumber === 3 || partNumber === 4}
-            />
-            {formData.audioUrl && (
-              <audio controls className="w-full" src={formData.audioUrl}>
-                Your browser does not support the audio element.
-              </audio>
-            )}
-          </div>
+          )}
         </div>
       </form>
     </Modal>

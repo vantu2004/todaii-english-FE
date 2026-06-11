@@ -1,64 +1,211 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   getWords,
   addWordToNotebook,
   removeWordFromNotebook,
 } from "@/api/clients/noteDictApi";
 import {
-  getWordByHeadword,
-  getRawWord,
-  getWordByGemini,
+  searchByFreeDictionaryApi,
+  searchByTodaiiDictionary,
 } from "@/api/clients/dictionaryApi";
 import {
-  Plus,
-  Sparkles,
-  Trash2,
-  Loader2,
-  BookDashed,
-  BookOpen,
   Sidebar,
-  Search,
+  Gamepad2,
+  PlayCircle,
+  Zap,
+  Keyboard,
+  ChevronDown,
 } from "lucide-react";
 import SearchBar from "@/components/clients/SearchBar";
-import DictDetailWord from "@/components/clients/dictionary_page/DictDetailWord";
-import RawDetailWord from "@/components/clients/dictionary_page/RawDetailWord";
-import RelatedWords from "@/components/clients/dictionary_page/RelatedWords";
 import { logError } from "@/utils/LogError";
+import SearchResultPanel from "./SearchResultPanel";
+import SavedWordsList from "./SavedWordsList";
+import EmptyNoteState from "./EmptyNoteState";
+import FlashcardGame from "../vocab_deck_details_page/FlashcardGame";
+import QuizGame from "../vocab_deck_details_page/QuizGame";
+import SpeedRoundGame from "../vocab_deck_details_page/SpeedRoundGame";
+import TypingGame from "../vocab_deck_details_page/TypingGame";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// BE mới trả về DictionaryWord: { id, word, json_data }
+// json_data là JSON string từ Todaii dict, có thể null nếu chưa có dữ liệu
+//
+// Cấu trúc json_data sau khi parse:
+// { found, total, result: [{ id, word, pronounce, content, ... }] }
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Parse json_data string → flat fields cần cho UI và games
+const parseJsonData = (jsonDataStr) => {
+  if (!jsonDataStr) return null;
+  try {
+    const parsed =
+      typeof jsonDataStr === "string" ? JSON.parse(jsonDataStr) : jsonDataStr;
+    if (!parsed?.found || !parsed?.result?.length) return null;
+
+    // Tìm exact result theo word (result[] có thể chứa các dạng liên quan)
+    // Nếu không có exact match thì lấy result[0]
+    const result = parsed.result[0];
+
+    const ipa =
+      result.pronounce?.gb ||
+      result.pronounce?.us ||
+      result.pronounce?.base ||
+      null;
+
+    // Ưu tiên content phổ thông (không có field chuyên ngành)
+    const mainContent =
+      result.content?.find((c) => !c.field) ?? result.content?.[0];
+
+    const pos = mainContent?.kind || null;
+    const meaning = mainContent?.means?.[0]?.mean || null;
+    const example =
+      mainContent?.means?.[0]?.examples?.[0]?.e ||
+      mainContent?.means?.[1]?.examples?.[0]?.e ||
+      null;
+
+    return { ipa, pos, meaning, example };
+  } catch {
+    return null;
+  }
+};
+
+// Map DictionaryWord từ BE → object chuẩn cho UI + games
+// BE: { id, word, json_data }
+const mapDictionaryWord = (w) => {
+  const parsed = parseJsonData(w.json_data);
+  return {
+    id: w.id,
+    word: w.word, // field chuẩn cho games
+    ipa: parsed?.ipa || null,
+    pos: parsed?.pos || null,
+    meaning: parsed?.meaning || null, // field chuẩn cho games
+    example: parsed?.example || null,
+    audio_url: w.audio_url || null,
+    hasData: !!parsed?.meaning, // chỉ true khi parse được nghĩa
+  };
+};
+
+// Tìm exact-match result trong result[] của Todaii API
+// API thường trả về nhiều kết quả liên quan (map → mapping, mapped...)
+const findExactResult = (results, word) => {
+  if (!results?.length) return null;
+  const normalized = word.trim().toLowerCase();
+  return (
+    results.find((r) => r.word?.toLowerCase() === normalized) ?? results[0]
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const [savedWords, setSavedWords] = useState([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
+  const [apiSource, setApiSource] = useState("todaii");
+  const [showGameMenu, setShowGameMenu] = useState(false);
+  const [mode, setMode] = useState("list");
+
+  // Per-word fetch state
+  const [fetchingIds, setFetchingIds] = useState({});
+  const [errorIds, setErrorIds] = useState({});
+
+  const dropdownRef = useRef(null);
 
   const [searchState, setSearchState] = useState({
     term: "",
     result: [],
-    type: null, // 'db' | 'raw'
+    type: null, // 'todaii' | 'free'
     isSearching: false,
     error: null,
   });
 
-  // Load Saved Words khi Note thay đổi
+  // Đóng game menu khi click ngoài
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setShowGameMenu(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Load words khi note thay đổi
   useEffect(() => {
     if (!note?.id) return;
-
     const fetchWords = async () => {
       setLoadingSaved(true);
-      setSearchState({ term: "", result: [], error: null });
-
+      setSearchState({
+        term: "",
+        result: [],
+        error: null,
+        type: null,
+        isSearching: false,
+      });
+      setFetchingIds({});
+      setErrorIds({});
       try {
+        // BE trả về List<DictionaryWord>: [{ id, word, json_data }]
         const words = await getWords(note.id);
-        setSavedWords(words);
+        setSavedWords((words || []).map(mapDictionaryWord));
       } catch (error) {
         logError(error);
       } finally {
         setLoadingSaved(false);
       }
     };
-
     fetchWords();
   }, [note?.id]);
 
-  const handleSearch = async (term) => {
+  // ── Fetch dict data cho 1 từ chưa có json_data ───────────────────────────
+  const handleFetchWordData = useCallback(async (wordItem) => {
+    setFetchingIds((prev) => ({ ...prev, [wordItem.id]: true }));
+    setErrorIds((prev) => ({ ...prev, [wordItem.id]: false }));
+    try {
+      // size=5 để tăng khả năng có exact match
+      const res = await searchByTodaiiDictionary(wordItem.word, 0, 5);
+      const exactResult = findExactResult(res?.result, wordItem.word);
+      const parsed = parseJsonData(
+        JSON.stringify({
+          found: true,
+          total: 1,
+          result: exactResult ? [exactResult] : [],
+        }),
+      );
+
+      if (parsed?.meaning) {
+        setSavedWords((prev) =>
+          prev.map((w) =>
+            w.id === wordItem.id
+              ? {
+                  ...w,
+                  ipa: parsed.ipa ?? w.ipa,
+                  pos: parsed.pos ?? w.pos,
+                  meaning: parsed.meaning,
+                  example: parsed.example ?? w.example,
+                  hasData: true,
+                }
+              : w,
+          ),
+        );
+      } else {
+        setErrorIds((prev) => ({ ...prev, [wordItem.id]: true }));
+      }
+    } catch (err) {
+      logError(err);
+      setErrorIds((prev) => ({ ...prev, [wordItem.id]: true }));
+    } finally {
+      setFetchingIds((prev) => ({ ...prev, [wordItem.id]: false }));
+    }
+  }, []);
+
+  // ── Fetch tất cả từ chưa có data (tuần tự) ───────────────────────────────
+  const handleFetchAll = useCallback(async () => {
+    const missing = savedWords.filter((w) => !w.hasData);
+    for (const w of missing) {
+      await handleFetchWordData(w);
+    }
+  }, [savedWords, handleFetchWordData]);
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  const handleSearch = async (term, source = apiSource) => {
     const wordToSearch = term || searchState.term;
     if (!wordToSearch.trim()) return;
 
@@ -71,102 +218,144 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     }));
 
     try {
-      // Ưu tiên tìm trong DB
-      const dbRes = await getWordByHeadword(wordToSearch);
-      if (dbRes?.length) {
-        setSearchState((prev) => ({ ...prev, result: dbRes, type: "db" }));
+      if (source === "free") {
+        const result = await searchByFreeDictionaryApi(wordToSearch);
+        if (result?.length) {
+          setSearchState((prev) => ({
+            ...prev,
+            term: wordToSearch,
+            result,
+            type: "free",
+          }));
+        } else {
+          setSearchState((prev) => ({
+            ...prev,
+            term: wordToSearch,
+            error: "NOT_FOUND",
+          }));
+        }
       } else {
-        // Fallback sang Raw API
-        const rawRes = await getRawWord(wordToSearch);
-        if (rawRes?.length) {
-          setSearchState((prev) => ({ ...prev, result: rawRes, type: "raw" }));
+        const res = await searchByTodaiiDictionary(wordToSearch, 1, 20);
+        if (res?.result?.length) {
+          setSearchState((prev) => ({
+            ...prev,
+            term: wordToSearch,
+            result: res.result, // result[] items trực tiếp
+            type: "todaii",
+          }));
+        } else {
+          setSearchState((prev) => ({
+            ...prev,
+            term: wordToSearch,
+            error: "NOT_FOUND",
+          }));
         }
       }
     } catch (error) {
-      console.error(error);
-
+      const is404 = error.response?.status === 404;
       setSearchState((prev) => ({
         ...prev,
-        error: "Không tìm thấy từ.",
+        term: wordToSearch,
+        error: is404 ? "NOT_FOUND" : "SERVER_ERROR",
       }));
     } finally {
       setSearchState((prev) => ({ ...prev, isSearching: false }));
     }
   };
 
+  // Re-search khi đổi nguồn API
+  useEffect(() => {
+    if (searchState.term) handleSearch(searchState.term, apiSource);
+  }, [apiSource]); // eslint-disable-line
+
+  // ── Add word vào notebook ─────────────────────────────────────────────────
   const handleAddWord = async () => {
     if (!searchState.result.length || !note) return;
-    const entry = searchState.result[0];
-    const headword = entry.headword || entry.word;
 
-    // đảm bảo lưu 1 lần
-    if (savedWords.some((w) => (w.headword || w.word) === headword)) {
-      return;
-    }
+    // Với todaii: tìm exact match để add đúng từ
+    const entry =
+      searchState.type === "todaii"
+        ? (findExactResult(searchState.result, searchState.term) ??
+          searchState.result[0])
+        : searchState.result[0];
 
-    const newWord = {
-      id: entry.id || Date.now(), // Temp ID nếu là raw
-      headword,
-      ipa: entry.ipa || entry.phonetic,
-      definition:
-        entry.senses?.[0]?.meaning ||
-        entry.meanings?.[0]?.definitions?.[0]?.definition,
+    const wordText = entry.word || entry.headword;
+
+    if (savedWords.some((w) => w.word === wordText)) return;
+
+    // Parse ngay để hiển thị data trong list trước khi BE confirm
+    const parsed =
+      searchState.type === "todaii"
+        ? parseJsonData(
+            JSON.stringify({
+              found: true,
+              total: 1,
+              result: [entry],
+            }),
+          )
+        : null;
+
+    const optimisticWord = {
+      id: entry.id || Date.now(),
+      word: wordText,
+      ipa: parsed?.ipa || entry.pronounce?.gb || entry.pronounce?.us || null,
+      pos: parsed?.pos || null,
+      meaning:
+        parsed?.meaning ||
+        entry.meanings?.[0]?.definitions?.[0]?.definition ||
+        null,
+      example: parsed?.example || null,
+      audio_url: null,
+      hasData: !!parsed?.meaning,
     };
-    setSavedWords([newWord, ...savedWords]);
+
+    setSavedWords([optimisticWord, ...savedWords]);
 
     try {
-      // chỉ lưu khi từ có trong DB
-      if (searchState.type === "db") await addWordToNotebook(note.id, entry.id);
+      if (searchState.type === "todaii") {
+        await addWordToNotebook(note.id, wordText);
+      }
     } catch (error) {
-      console.error(error);
-
-      setSavedWords((prev) =>
-        prev.filter((w) => (w.headword || w.word) !== headword),
-      );
+      logError(error);
+      setSavedWords((prev) => prev.filter((w) => w.word !== wordText));
     }
   };
 
+  // ── Remove word ───────────────────────────────────────────────────────────
   const handleRemoveWord = async (entryId, e) => {
     e.stopPropagation();
-
     const prev = [...savedWords];
     setSavedWords(savedWords.filter((w) => w.id !== entryId));
-
     try {
       await removeWordFromNotebook(note.id, entryId);
     } catch (error) {
-      console.error(error);
-
+      logError(error);
       setSavedWords(prev);
     }
   };
 
-  const handleRequestAI = async (word) => {
-    setSearchState((prev) => ({ ...prev, isSearching: true }));
-    try {
-      const res = await getWordByGemini(word);
-      if (res?.length)
-        setSearchState((prev) => ({ ...prev, result: res, type: "db" }));
-    } catch (error) {
-      logError(error);
-    } finally {
-      setSearchState((prev) => ({ ...prev, isSearching: false }));
-    }
+  const handlePlayGame = (gameMode) => {
+    setShowGameMenu(false);
+    setMode(gameMode);
   };
+
+  // Words đủ điều kiện cho games (đã có meaning)
+  const wordsWithData = savedWords.filter((w) => w.hasData);
+  const missingCount = savedWords.filter((w) => !w.hasData).length;
 
   if (!note) return <EmptyNoteState />;
 
   return (
     <div className="flex h-full w-full overflow-hidden">
-      {/* LEFT COLUMN: SAVED LIST (35% Width) */}
+      {/* ── LEFT COLUMN: SAVED LIST ── */}
       <div className="w-[35%] min-w-[300px] max-w-[400px] border-r border-neutral-200 bg-neutral-50 flex flex-col h-full dark:bg-neutral-900/50 dark:border-neutral-800">
         {/* Header */}
-        <div className="h-14 border-b border-neutral-200 bg-white flex items-center justify-between px-4 shrink-0 dark:bg-neutral-900 dark:border-neutral-800">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className="h-14 border-b border-neutral-200 bg-white flex items-center justify-between px-4 shrink-0 dark:bg-neutral-900 dark:border-neutral-800 relative z-20">
+          <div className="flex items-center gap-3 min-w-0 pr-2">
             <button
               onClick={onToggleSidebar}
-              className="text-neutral-400 hover:text-neutral-900 transition-colors dark:text-neutral-500 dark:hover:text-white"
-              title={isSidebarOpen ? "Đóng Sidebar" : "Mở Sidebar"}
+              className="text-neutral-400 hover:text-neutral-900 transition-colors dark:text-neutral-500 dark:hover:text-white shrink-0"
+              title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
             >
               <Sidebar size={18} />
             </button>
@@ -178,216 +367,159 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 {note.name}
               </h2>
               <p className="text-xs text-neutral-500 font-medium dark:text-neutral-400">
-                {savedWords.length} từ vựng
+                {savedWords.length} words
+                {missingCount > 0 && (
+                  <span className="text-amber-500 ml-1">
+                    · {missingCount} chưa có data
+                  </span>
+                )}
               </p>
+            </div>
+          </div>
+
+          {/* Game Dropdown */}
+          <div className="relative shrink-0" ref={dropdownRef}>
+            <button
+              onClick={() => setShowGameMenu(!showGameMenu)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-xs font-bold"
+            >
+              <Gamepad2 size={16} />
+              <span className="hidden xl:inline">Luyện tập</span>
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${showGameMenu ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {showGameMenu && (
+              <div className="absolute top-full right-0 mt-2 w-52 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg overflow-hidden py-1">
+                <div className="px-3 py-2 text-[10px] font-bold text-neutral-400 uppercase tracking-wider border-b border-neutral-100 dark:border-neutral-800">
+                  Chọn chế độ
+                </div>
+                {[
+                  {
+                    key: "flashcard",
+                    icon: PlayCircle,
+                    label: "Flashcard",
+                    color: "text-blue-500",
+                    min: 1,
+                  },
+                  {
+                    key: "quiz",
+                    icon: Gamepad2,
+                    label: "Trắc nghiệm",
+                    color: "text-emerald-500",
+                    min: 4,
+                  },
+                  {
+                    key: "speed",
+                    icon: Zap,
+                    label: "Tốc độ",
+                    color: "text-amber-500",
+                    min: 4,
+                  },
+                  {
+                    key: "typing",
+                    icon: Keyboard,
+                    label: "Gõ nhanh",
+                    color: "text-purple-500",
+                    min: 1,
+                  },
+                ].map(({ key, icon: Icon, label, color, min }) => (
+                  <button
+                    key={key}
+                    onClick={() => handlePlayGame(key)}
+                    disabled={wordsWithData.length < min}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-left"
+                  >
+                    <Icon size={16} className={color} />
+                    {label}
+                  </button>
+                ))}
+                {wordsWithData.length < 4 && (
+                  <p className="px-3 py-2 mt-1 bg-amber-50 dark:bg-amber-900/20 text-[10px] text-amber-600 dark:text-amber-400 text-center">
+                    Cần ít nhất 4 từ có dữ liệu để mở khóa tất cả chế độ
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* List */}
+        <SavedWordsList
+          words={savedWords}
+          loading={loadingSaved}
+          activeWord={
+            searchState.type === "todaii"
+              ? findExactResult(searchState.result, searchState.term)?.word
+              : searchState.result[0]?.word
+          }
+          onSelect={(w) => handleSearch(w.word)}
+          onRemove={handleRemoveWord}
+          onFetchWord={handleFetchWordData}
+          onFetchAll={handleFetchAll}
+          fetchingIds={fetchingIds}
+          errorIds={errorIds}
+        />
+      </div>
+
+      {/* ── RIGHT COLUMN: SEARCH & DETAIL ── */}
+      <div className="flex-1 bg-white flex flex-col h-full overflow-hidden relative dark:bg-neutral-950">
+        <div className="p-4 border-b border-neutral-100 shrink-0 z-10 w-full dark:border-neutral-800">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="relative flex-1">
+              <SearchBar
+                value={searchState.term}
+                onSearch={(term) => handleSearch(term, apiSource)}
+                placeholder="Nhập từ vựng mới để thêm vào sổ tay..."
+              />
+            </div>
+            <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl shadow-inner shrink-0">
+              {[
+                { key: "todaii", label: "Todaii API" },
+                { key: "free", label: "Free API" },
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setApiSource(key)}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${
+                    apiSource === key
+                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* List Content */}
-        <SavedWordsList
-          words={savedWords}
-          loading={loadingSaved}
-          activeWord={searchState.result[0]?.headword}
-          onSelect={(w) => handleSearch(w.headword || w.word)}
-          onRemove={handleRemoveWord}
-        />
-      </div>
-
-      {/* RIGHT COLUMN: SEARCH & DETAIL (Flex-1) */}
-      <div className="flex-1 bg-white flex flex-col h-full overflow-hidden relative dark:bg-neutral-950">
-        {/* Search Bar Header */}
-        <div className="p-4 border-b border-neutral-100 shrink-0 z-10 w-full dark:border-neutral-800">
-          <SearchBar
-            value={searchState.term}
-            onSearch={handleSearch}
-            placeholder="Nhập từ vựng mới để thêm vào bộ..."
-          />
-        </div>
-
-        {/* Detail Content Area */}
         <div className="flex-1 overflow-y-auto bg-white p-6 w-full dark:bg-neutral-950">
           <SearchResultPanel
             state={searchState}
             onAdd={handleAddWord}
-            onRequestAI={handleRequestAI}
+            onWordClick={(w) => handleSearch(w, apiSource)}
           />
         </div>
-
-        {/* Footer: Related Words (Chỉ hiện khi có content) */}
-        {(searchState.result.length > 0 || savedWords.length > 0) && (
-          <div className="h-40 border-t border-neutral-100 bg-neutral-50/50 shrink-0 overflow-hidden p-4 w-full dark:border-neutral-800 dark:bg-neutral-900/30">
-            <RelatedWords
-              word={
-                searchState.result[0]?.headword ||
-                savedWords[0]?.headword ||
-                "learn"
-              }
-              onSelectWord={handleSearch}
-            />
-          </div>
-        )}
       </div>
+
+      {/* ── Games ── */}
+      {mode === "flashcard" && (
+        <FlashcardGame words={wordsWithData} onClose={() => setMode("list")} />
+      )}
+      {mode === "quiz" && (
+        <QuizGame words={wordsWithData} onClose={() => setMode("list")} />
+      )}
+      {mode === "speed" && (
+        <SpeedRoundGame words={wordsWithData} onClose={() => setMode("list")} />
+      )}
+      {mode === "typing" && (
+        <TypingGame words={wordsWithData} onClose={() => setMode("list")} />
+      )}
     </div>
   );
 };
 
 export default NoteEditor;
-
-const EmptyNoteState = () => (
-  <div className="h-full flex flex-col items-center justify-center text-neutral-300 bg-white select-none dark:bg-neutral-950 dark:text-neutral-600">
-    <div className="w-20 h-20 bg-neutral-50 rounded-full flex items-center justify-center mb-4 dark:bg-neutral-800">
-      <BookOpen size={32} className="opacity-50" />
-    </div>
-    <p className="text-lg font-medium text-neutral-400 dark:text-neutral-500">
-      Chọn một bộ từ vựng để bắt đầu
-    </p>
-    <p className="text-sm text-neutral-300 dark:text-neutral-600">
-      Hoặc tạo mới từ thanh bên trái
-    </p>
-  </div>
-);
-
-const SavedWordsList = ({ words, loading, onSelect, onRemove, activeWord }) => {
-  if (loading)
-    return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin text-neutral-400 dark:text-neutral-500" />
-      </div>
-    );
-  if (!words.length)
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-neutral-400 opacity-60 select-none dark:text-neutral-500">
-        <BookDashed size={40} className="mb-3" />
-        <p className="text-sm">Danh sách trống</p>
-      </div>
-    );
-
-  return (
-    <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar">
-      {words.map((word) => {
-        const isActive = activeWord === (word.headword || word.word);
-        return (
-          <div
-            key={word.id}
-            onClick={() => onSelect(word)}
-            className={`
-              group p-3.5 rounded-xl border cursor-pointer transition-all relative
-              ${
-                isActive
-                  ? "bg-white border-neutral-900 shadow-sm ring-1 ring-neutral-900/5 dark:bg-neutral-800 dark:border-white dark:ring-white/10"
-                  : "bg-white border-neutral-200 hover:border-neutral-300 hover:shadow-sm dark:bg-neutral-800/50 dark:border-neutral-700 dark:hover:border-neutral-600"
-              }
-            `}
-          >
-            <div className="flex justify-between items-start gap-2">
-              <div className="min-w-0">
-                <div className="flex items-baseline gap-2">
-                  <h3
-                    className={`text-base font-bold truncate ${
-                      isActive
-                        ? "text-neutral-900 dark:text-white"
-                        : "text-neutral-700 dark:text-neutral-300"
-                    }`}
-                  >
-                    {word.headword || word.word}
-                  </h3>
-                  {word.ipa && (
-                    <span className="text-[10px] text-neutral-500 font-mono bg-neutral-100 px-1.5 py-0.5 rounded dark:text-neutral-400 dark:bg-neutral-700">
-                      {word.ipa}
-                    </span>
-                  )}
-                </div>
-                {word.definition && (
-                  <p className="text-xs text-neutral-500 mt-1 line-clamp-2 leading-relaxed dark:text-neutral-400">
-                    {word.definition}
-                  </p>
-                )}
-              </div>
-
-              <button
-                onClick={(e) => onRemove(word.id, e)}
-                className="p-1.5 rounded-md text-neutral-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all shrink-0 dark:text-neutral-600 dark:hover:text-red-400 dark:hover:bg-red-900/20"
-                title="Xóa từ"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
-
-const SearchResultPanel = ({ state, onAdd, onRequestAI }) => {
-  if (state.isSearching)
-    return (
-      <div className="flex flex-col items-center justify-center h-64">
-        <Loader2
-          className="animate-spin text-neutral-400 mb-2 dark:text-neutral-500"
-          size={32}
-        />
-        <p className="text-sm text-neutral-400 animate-pulse dark:text-neutral-500">
-          Đang tra cứu...
-        </p>
-      </div>
-    );
-
-  if (state.error)
-    return (
-      <div className="flex flex-col items-center justify-center h-64 text-center p-6 bg-red-50 rounded-3xl border border-red-100 dark:bg-red-900/20 dark:border-red-800">
-        <p className="text-red-600 font-medium mb-1 dark:text-red-400">
-          Không tìm thấy kết quả
-        </p>
-        <p className="text-xs text-red-400 dark:text-red-500">{state.error}</p>
-      </div>
-    );
-
-  if (!state.result.length)
-    return (
-      <div className="flex flex-col items-center justify-center h-64 text-neutral-300 select-none dark:text-neutral-600">
-        <Search size={48} className="mb-4 opacity-20" />
-        <p className="text-sm">Nhập từ khóa để xem chi tiết</p>
-      </div>
-    );
-
-  return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
-      {/* Action Bar */}
-      <div className="flex justify-between items-center bg-neutral-900 text-white p-4 rounded-2xl shadow-lg dark:bg-neutral-800">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
-            <Sparkles size={16} className="text-white" />
-          </div>
-          <div>
-            <p className="text-xs font-medium text-neutral-300 uppercase tracking-wider dark:text-neutral-400">
-              Kết quả cho
-            </p>
-            <p className="text-sm font-bold dark:text-white">"{state.term}"</p>
-          </div>
-        </div>
-        <button
-          onClick={onAdd}
-          className="flex items-center gap-2 bg-white text-neutral-900 hover:bg-neutral-200 px-5 py-2 rounded-xl text-sm font-bold transition-colors shadow-sm active:scale-95 dark:hover:bg-neutral-100"
-        >
-          <Plus size={16} />
-          Lưu vào bộ từ
-        </button>
-      </div>
-
-      {/* Detail View */}
-      <div>
-        {state.type === "db" ? (
-          <DictDetailWord data={state.result} />
-        ) : (
-          <RawDetailWord
-            data={state.result}
-            onRequestAI={onRequestAI}
-            showAIButton={true}
-          />
-        )}
-      </div>
-    </div>
-  );
-};

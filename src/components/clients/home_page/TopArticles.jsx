@@ -5,7 +5,7 @@ import { ArrowRight, Clock, Eye, Zap } from "lucide-react";
 const TopArticles = ({ topArticles = [] }) => {
   // Helper component cho Badge
   const TopicBadge = ({ name }) => (
-    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-white/20 text-white backdrop-blur-md border border-white/10">
+    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-white/20 text-white backdrop-blur-md border border-white/10">
       {name || "NEWS"}
     </span>
   );
@@ -14,14 +14,14 @@ const TopArticles = ({ topArticles = [] }) => {
   const MetaInfo = ({ date, views, author }) => (
     <div className="flex items-center flex-wrap gap-3 text-neutral-300 text-xs font-medium mt-2">
       <span>{author}</span>
-      <div className="w-1 h-1 rounded-full bg-neutral-500" />
+      <div className="w-1 h-1 rounded bg-neutral-500" />
       <div className="flex items-center gap-1">
         <Clock size={12} />
         <span>{new Date(date).toLocaleDateString("vi-VN")}</span>
       </div>
       {views && (
         <>
-          <div className="w-1 h-1 rounded-full bg-neutral-500" />
+          <div className="w-1 h-1 rounded bg-neutral-500" />
           <div className="flex items-center gap-1">
             <Eye size={12} />
             <span>{views}</span>
@@ -44,25 +44,25 @@ const TopArticles = ({ topArticles = [] }) => {
         {mainArticle && (
           <Link
             to={`/client/article/${mainArticle.id}`}
-            className="group relative w-full h-80 lg:h-full rounded-3xl overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none dark:hover:shadow-none hover:-translate-y-0.5 transition-all duration-300"
+            className="group relative w-full h-80 lg:h-full rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150"
           >
             {/* Image Background */}
             <img
               src={mainArticle.image_url}
               alt={mainArticle.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
             />
 
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
             {/* Content */}
-            <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8">
-              <div className="mb-3">
+            <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5">
+              <div className="mb-2.5">
                 <TopicBadge name={mainArticle.topics?.[0]?.name} />
               </div>
 
-              <h3 className="text-white text-2xl sm:text-3xl font-bold leading-tight mb-2 line-clamp-3 group-hover:text-neutral-100 transition-colors">
+              <h3 className="text-white text-xl sm:text-2xl font-bold leading-tight mb-2 line-clamp-3 group-hover:text-neutral-100 transition-colors">
                 <span className="bg-left-bottom bg-gradient-to-r from-white to-white bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out pb-1">
                   {mainArticle.title}
                 </span>
@@ -83,20 +83,20 @@ const TopArticles = ({ topArticles = [] }) => {
             <Link
               key={article.id}
               to={`/client/article/${article.id}`}
-              className="group relative flex-1 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none dark:hover:shadow-none hover:-translate-y-0.5 transition-all duration-300 min-h-[200px]"
+              className="group relative flex-1 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150 min-h-[200px]"
             >
               {/* Image Background */}
               <img
                 src={article.image_url || null}
                 alt={article.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
               />
 
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 w-full p-5 sm:p-6">
+              <div className="absolute bottom-0 left-0 w-full p-4">
                 <div className="mb-2">
                   <TopicBadge name={article.topics?.[0]?.name} />
                 </div>

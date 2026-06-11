@@ -16,10 +16,11 @@ import {
 import ArticleDetails from "@/modules/clients/pages/ArticleDetails";
 import PageNotFound from "@/pages/PageNotFound";
 import Profile from "@/modules/clients/pages/Profile";
+import Dashboard from "@/modules/clients/pages/Dashboard";
 import Video from "@/modules/clients/pages/Video";
 import VideoFilter from "@/modules/clients/pages/VideoFilter";
 import VideoDetails from "@/modules/clients/pages/VideoDetails";
-import Dictionary from "@/modules/clients/pages/Dictionary";
+import Dictionary from "@/modules/clients/pages/dictionary/Dictionary";
 import GGTranslate from "@/modules/clients/pages/GGTranslate";
 import Notebook from "@/modules/clients/pages/NoteBook";
 import VocabularyFilter from "@/modules/clients/pages/VocabularyFilter";
@@ -28,6 +29,7 @@ import ToeicHome from "@/modules/clients/pages/toeic/ToeicHome";
 import ToeicTestOverview from "@/modules/clients/pages/toeic/ToeicTestOverview";
 import ToeicTakingTest from "@/modules/clients/pages/toeic/ToeicTakingTest";
 import ToeicResult from "@/modules/clients/pages/toeic/ToeicResult";
+import ToeicResultReview from "@/modules/clients/pages/toeic/ToeicResultReview";
 
 export default function ClientRoutes() {
   return (
@@ -97,12 +99,38 @@ export default function ClientRoutes() {
 
           {/* TOEIC */}
           <Route path="/toeic" element={<ToeicHome />}></Route>
-          <Route path="/toeic/:testId" element={<ToeicTestOverview />}></Route>
           <Route
-            path="/toeic/:testId/take"
-            element={<ToeicTakingTest />}
+            path="/toeic/:testId"
+            element={
+              <ClientProtectRoutes>
+                <ToeicTestOverview />
+              </ClientProtectRoutes>
+            }
           ></Route>
-          <Route path="/toeic/:testId/result" element={<ToeicResult />}></Route>
+          <Route
+            path="/toeic/exam/:sessionId"
+            element={
+              <ClientProtectRoutes>
+                <ToeicTakingTest />
+              </ClientProtectRoutes>
+            }
+          ></Route>
+          <Route
+            path="/toeic/result/:sessionId"
+            element={
+              <ClientProtectRoutes>
+                <ToeicResult />
+              </ClientProtectRoutes>
+            }
+          ></Route>
+          <Route
+            path="/toeic/result-detail/:sessionId"
+            element={
+              <ClientProtectRoutes>
+                <ToeicResultReview />
+              </ClientProtectRoutes>
+            }
+          ></Route>
 
           <Route
             path="/notebook"
@@ -118,6 +146,15 @@ export default function ClientRoutes() {
             element={
               <ClientProtectRoutes>
                 <Profile />
+              </ClientProtectRoutes>
+            }
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ClientProtectRoutes>
+                <Dashboard />
               </ClientProtectRoutes>
             }
           />

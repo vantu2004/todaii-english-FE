@@ -9,6 +9,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import VoiceSelector from "./VoiceSelector";
+import DictionaryModal from "@/components/clients/DictionaryModal";
 
 const ArticleContent = ({ paragraphs }) => {
   const [voices, setVoices] = useState([]);
@@ -18,33 +19,69 @@ const ArticleContent = ({ paragraphs }) => {
   const currentWordIndexRef = useRef(0);
   const [, forceRender] = useState(0);
   const utteranceRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const [lookupWord, setLookupWord] = useState("");
+  const [isLookupOpen, setIsLookupOpen] = useState(false);
+
+  const handleWordClick = (word) => {
+    const cleaned = word.replace(/^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$/g, "");
+    if (cleaned) {
+      setLookupWord(cleaned);
+      setIsLookupOpen(true);
+    }
+  };
 
   useEffect(() => {
     const loadVoices = () => {
       const allVoices = window.speechSynthesis
         .getVoices()
-        .filter((v) => v.localService);
-      setVoices(allVoices);
+        .filter((v) => v.lang.startsWith("en"));
 
-      const enVoice = allVoices.find((v) => v.lang.startsWith("en"));
-      setSelectedVoice(enVoice || allVoices[0]);
+      const preferredVoices = [
+        "Microsoft Aria",
+        "Microsoft Davis",
+        "Microsoft Guy",
+        "Microsoft Jenny",
+        "Google US English",
+        "Google UK English Female",
+      ];
+
+      let filteredVoices = allVoices.filter(
+        (v) =>
+          preferredVoices.some((prefName) => v.name.includes(prefName)) &&
+          !v.name.toLowerCase().includes("multilingual"),
+      );
+
+      // Fallback to all English voices if no preferred premium voice is available
+      if (filteredVoices.length === 0) {
+        filteredVoices = allVoices;
+      }
+
+      setVoices(filteredVoices);
+
+      let defaultVoice = null;
+      for (const name of preferredVoices) {
+        const found = filteredVoices.find((v) => v.name.includes(name));
+        if (found) {
+          defaultVoice = found;
+          break;
+        }
+      }
+
+      setSelectedVoice((prev) => {
+        if (prev && filteredVoices.some((v) => v.name === prev.name)) {
+          return prev;
+        }
+        return (
+          defaultVoice ||
+          filteredVoices.find((v) => v.lang.startsWith("en-US")) ||
+          filteredVoices[0]
+        );
+      });
     };
 
     loadVoices();
 
     window.speechSynthesis.onvoiceschanged = loadVoices;
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsVoiceOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // State quản lý việc ẩn/hiện dịch của từng đoạn (key: index, value: boolean)
@@ -66,6 +103,7 @@ const ArticleContent = ({ paragraphs }) => {
   // --- LOGIC TTS (Giữ nguyên) ---
   const speakParagraphs = (startIndex = 0) => {
     if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
     setIsSpeaking(true);
     setCurrentParagraph(startIndex);
@@ -80,7 +118,12 @@ const ArticleContent = ({ paragraphs }) => {
       const utterance = new SpeechSynthesisUtterance(p.text_en);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = "en-US";
       }
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
       utteranceRef.current = utterance;
 
       utterance.onstart = () => {
@@ -106,20 +149,17 @@ const ArticleContent = ({ paragraphs }) => {
   };
 
   const pauseSpeech = () => {
-    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-      window.speechSynthesis.pause();
-      setIsSpeaking(false);
-    }
+    window.speechSynthesis.pause();
+    setIsSpeaking(false);
   };
 
   const resumeSpeech = () => {
-    if (window.speechSynthesis.paused) {
-      window.speechSynthesis.resume();
-      setIsSpeaking(true);
-    }
+    window.speechSynthesis.resume();
+    setIsSpeaking(true);
   };
 
   const stopSpeech = () => {
+    window.speechSynthesis.resume();
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
     setCurrentParagraph(0);
@@ -129,12 +169,12 @@ const ArticleContent = ({ paragraphs }) => {
   return (
     <div className="relative">
       {/* Sticky Audio Controls Toolbar */}
-      <div className="sticky top-24 z-30 mb-8 flex justify-end pointer-events-none">
-        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-full p-1.5 flex items-center gap-1">
+      <div className="sticky top-24 z-30 mb-6 flex justify-end pointer-events-none">
+        <div className="pointer-events-auto bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border border-neutral-200 dark:border-neutral-700 shadow-lg dark:shadow-none rounded-lg p-1 flex items-center gap-1">
           {!isSpeaking ? (
             <button
               onClick={() => speakParagraphs(currentParagraph)}
-              className="flex items-center gap-2 px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-full hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all font-medium text-sm shadow-sm dark:shadow-none"
+              className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-md hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Play size={16} fill="currentColor" />
               <span>Đọc bài</span>
@@ -142,7 +182,7 @@ const ArticleContent = ({ paragraphs }) => {
           ) : (
             <button
               onClick={pauseSpeech}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transition-all font-medium text-sm shadow-sm dark:shadow-none"
+              className="flex items-center gap-2 px-3 py-1.5 bg-amber-500 text-white rounded-md hover:bg-amber-600 transition-colors font-medium text-sm shadow-sm dark:shadow-none"
             >
               <Pause size={16} fill="currentColor" />
               <span>Tạm dừng</span>
@@ -159,7 +199,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           <button
             onClick={resumeSpeech}
-            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors"
+            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
             title="Tiếp tục"
           >
             <Play size={18} />
@@ -167,7 +207,7 @@ const ArticleContent = ({ paragraphs }) => {
 
           <button
             onClick={stopSpeech}
-            className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-full transition-colors"
+            className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-md transition-colors"
             title="Dừng hẳn"
           >
             <Square size={18} fill="currentColor" />
@@ -176,15 +216,15 @@ const ArticleContent = ({ paragraphs }) => {
       </div>
 
       {/* Paragraphs List */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         {paragraphs?.map((p, index) => {
           const isCurrent = index === currentParagraph;
           const isTranslated = showTranslations[index];
 
           // Style highlights container
           const containerClass = isCurrent
-            ? "bg-neutral-50 dark:bg-neutral-800/50 border-l-4 border-neutral-900 dark:border-neutral-400 pl-6 py-4 pr-4 rounded-r-2xl shadow-sm dark:shadow-none"
-            : "bg-transparent border-l-4 border-transparent pl-4 py-0 pr-0";
+            ? "bg-neutral-50 dark:bg-neutral-800/50 border-l-2 border-neutral-900 dark:border-neutral-400 pl-4 py-3 pr-3 rounded-r-lg shadow-sm dark:shadow-none"
+            : "bg-transparent border-l-2 border-transparent pl-3 py-0 pr-0";
 
           return (
             <div
@@ -194,12 +234,13 @@ const ArticleContent = ({ paragraphs }) => {
               {/* ENGLISH TEXT */}
               <p className="text-lg md:text-xl text-neutral-900 dark:text-neutral-100 leading-loose font-serif mb-3">
                 {isCurrent
-                  ? // Active Paragraph Rendering (Highlight word)
-                    p.text_en.split(/\s+/).map((word, i) => (
+                  ? // Active Paragraph Rendering (Highlight word + Clickable)
+                    p.text_en?.split(/\s+/).map((word, i) => (
                       <span
                         key={i}
+                        onClick={() => handleWordClick(word)}
                         className={`
-                          transition-colors duration-150 rounded px-0.5
+                          cursor-pointer hover:text-brand-500 dark:hover:text-brand-400 transition-colors duration-150 rounded px-0.5
                           ${
                             i === currentWordIndexRef.current
                               ? "bg-yellow-200 dark:bg-yellow-500/30 text-neutral-900 dark:text-white font-medium"
@@ -210,8 +251,16 @@ const ArticleContent = ({ paragraphs }) => {
                         {word}{" "}
                       </span>
                     ))
-                  : // Inactive Paragraph
-                    p.text_en}
+                  : // Inactive Paragraph (Clickable)
+                    p.text_en?.split(/\s+/).map((word, i) => (
+                      <span
+                        key={i}
+                        onClick={() => handleWordClick(word)}
+                        className="cursor-pointer hover:text-brand-500 dark:hover:text-brand-400 transition-colors duration-150 rounded px-0.5"
+                      >
+                        {word}{" "}
+                      </span>
+                    ))}
               </p>
 
               {/* VIETNAMESE TRANSLATION (Collapsible) */}
@@ -237,7 +286,7 @@ const ArticleContent = ({ paragraphs }) => {
                 <button
                   onClick={() => toggleTranslation(index)}
                   className={`
-                    flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all
+                    flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wide transition-colors
                     ${
                       isTranslated
                         ? "bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700"
@@ -266,6 +315,12 @@ const ArticleContent = ({ paragraphs }) => {
           ? `Đang đọc đoạn ${currentParagraph + 1} / ${paragraphs.length}`
           : "Sẵn sàng đọc"}
       </div>
+
+      <DictionaryModal
+        word={lookupWord}
+        isOpen={isLookupOpen}
+        onClose={() => setIsLookupOpen(false)}
+      />
     </div>
   );
 };

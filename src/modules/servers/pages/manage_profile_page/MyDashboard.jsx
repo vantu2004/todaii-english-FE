@@ -1,121 +1,85 @@
-import { useState, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
-import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
-
-import AdminSection from "@/components/servers/manage_dashboard_page/AdminSection";
-import { logError } from "@/utils/LogError";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
-import { formatDate } from "@/utils/FormatDate";
 import { getMyChart } from "@/api/servers/dashboardApi";
+import { formatDate } from "@/utils/FormatDate";
+import { logError } from "@/utils/LogError";
+import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
+import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-);
+const getRangeForDays = (days) => {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - (days - 1));
+  return {
+    startDate: formatDate(start),
+    endDate: formatDate(end),
+  };
+};
 
 const MyDashboard = () => {
   const { setHeader } = useHeaderContext();
 
-  const [myData, setMyData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // Date picker states
+  const [preset, setPreset] = useState("7");
+  const [dates, setDates] = useState(() => getRangeForDays(7));
 
-  const [dateRange, setDateRange] = useState({
-    startDate: formatDate(new Date().setDate(new Date().getDate() - 30)),
-    endDate: formatDate(new Date()),
-  });
+  // Chart data states
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    setLoading(true);
+  // Setup header
+  useEffect(() => {
+    setHeader({
+      title: "My Dashboard",
+      breadcrumb: [{ label: "Home", to: "/server" }, { label: "My Dashboard" }],
+    });
+  }, []);
+
+  // Fetch charts data
+  const fetchMyChartData = async () => {
     try {
-      const myRes = await getMyChart(dateRange.startDate, dateRange.endDate);
-
-      setMyData(myRes);
+      setLoading(true);
+      const data = await getMyChart(dates.startDate, dates.endDate);
+      setChartData(data);
     } catch (error) {
       logError(error);
+      toast.error("Failed to fetch dashboard data");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    setHeader({
-      title: "My Dashboard",
-      breadcrumb: [{ label: "My Dashboard" }],
-    });
-  }, []);
+    fetchMyChartData();
+  }, [dates]);
 
-  useEffect(() => {
-    fetchData();
-  }, [dateRange]);
+  const handleRangeChange = (start, end) => {
+    setDates({ startDate: start, endDate: end });
+  };
 
   return (
-    <>
-      {/* Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div className="flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
-            <CalendarIcon size={16} className="text-gray-400 mr-2" />
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
-              value={dateRange.startDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, startDate: e.target.value })
-              }
-            />
-          </div>
-          <span className="self-center text-gray-400">-</span>
-          <div className="flex items-center px-3 border border-gray-200 dark:border-gray-700 rounded-md">
-            <input
-              type="date"
-              className="text-sm bg-transparent border-none focus:ring-0 text-gray-700 dark:text-gray-200 py-2 outline-none"
-              value={dateRange.endDate}
-              onChange={(e) =>
-                setDateRange({ ...dateRange, endDate: e.target.value })
-              }
-            />
-          </div>
-          <button
-            onClick={fetchData}
-            className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
-            title="Refresh Data"
-          >
-            <RefreshCcw size={18} className={loading ? "animate-spin" : ""} />
-          </button>
-        </div>
-      </div>
+    <div className="flex flex-col space-y-6 min-h-full pb-10">
+      {/* Date Filter & Controls */}
+      <DateRangePicker
+        startDate={dates.startDate}
+        endDate={dates.endDate}
+        onRangeChange={handleRangeChange}
+        preset={preset}
+        setPreset={setPreset}
+        onRefresh={fetchMyChartData}
+        loading={loading}
+      />
 
-      {/* Content Sections */}
-      {loading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-500"></div>
-        </div>
-      ) : (
-        <>
-          <AdminSection data={myData} />
-        </>
-      )}
-    </>
+      {/* Render Charts */}
+      <div className="flex-1">
+        <DashboardCharts
+          chartData={chartData}
+          loading={loading}
+          activeTab="my-chart"
+        />
+      </div>
+    </div>
   );
 };
 

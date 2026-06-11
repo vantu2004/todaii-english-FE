@@ -24,7 +24,7 @@ const SidebarVideos = () => {
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="w-full aspect-video bg-neutral-200 dark:bg-neutral-800 rounded-xl"></div>
+        <div className="w-full aspect-video bg-neutral-200 dark:bg-neutral-800 rounded-lg"></div>
         <div className="space-y-2">
           <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
           <div className="h-3 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2"></div>
@@ -44,10 +44,10 @@ const SidebarVideos = () => {
         to={`/client/video/${firstVideo.id}`}
         className="group block cursor-pointer"
       >
-        <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-3 bg-neutral-200 dark:bg-neutral-800">
+        <div className="relative w-full aspect-video rounded-lg overflow-hidden mb-3 bg-neutral-200 dark:bg-neutral-800">
           <img
             src={firstVideo.thumbnail_url}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
             alt={firstVideo.title}
           />
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -88,7 +88,7 @@ const SidebarVideos = () => {
               <div className="relative w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-200 dark:bg-neutral-800">
                 <img
                   src={video.thumbnail_url}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
                   alt={video.title}
                 />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors flex items-center justify-center">

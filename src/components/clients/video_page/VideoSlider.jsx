@@ -24,10 +24,10 @@ const VideoSlider = ({ title, videos, onVideoClick, onNavigate }) => {
   if (!videos || videos.length === 0) return null;
 
   return (
-    <section className="px-6 md:px-12 py-8 bg-white dark:bg-neutral-900/50 border-b border-neutral-100 dark:border-neutral-800">
+    <section className="px-4 md:px-8 py-6 bg-white dark:bg-neutral-900/50 border-b border-neutral-200 dark:border-neutral-800">
       <div className="flex items-center justify-between mb-6">
         <div className="flex flex-col">
-          <h3 className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
             {title}
           </h3>
           <div
@@ -41,15 +41,15 @@ const VideoSlider = ({ title, videos, onVideoClick, onNavigate }) => {
         <div className="flex gap-2">
           <button
             onClick={() => scroll("left")}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 shadow-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all active:scale-95"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 shadow-sm hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-all active:scale-95"
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@ const VideoSlider = ({ title, videos, onVideoClick, onNavigate }) => {
       {/* Slider Container */}
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory pt-1"
+        className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory pt-1"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {videos.map((video) => (

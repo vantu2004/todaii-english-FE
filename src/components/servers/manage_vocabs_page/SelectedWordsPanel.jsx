@@ -41,7 +41,7 @@ const SelectedWordsPanel = ({
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2 sm:space-y-2.5 md:space-y-3 mb-4 sm:mb-5 md:mb-6">
               {selectedWords.map((word, index) => (
                 <SelectedWordCard
-                  key={word.id}
+                  key={word.id || word.word_id || index}
                   word={word}
                   index={index}
                   onViewWord={onViewWord}
