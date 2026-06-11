@@ -109,6 +109,16 @@ const ArticleDetails = ({ article }) => {
               Content ({article.paragraphs.length} paragraphs)
             </h4>
           </div>
+
+          {article.audio_url && (
+            <div className="bg-white rounded-lg p-3 border border-gray-100">
+              <audio controls preload="metadata" className="w-full">
+                <source src={article.audio_url} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          )}
+
           <div className="space-y-4 pr-3 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
             {article.paragraphs.map((p, idx) => (
               <div
@@ -119,10 +129,12 @@ const ArticleDetails = ({ article }) => {
                   <span className="flex-shrink-0 inline-flex items-center justify-center w-6 h-6 rounded-md bg-gray-100 text-gray-600 text-xs font-semibold">
                     {idx + 1}
                   </span>
+
                   <div className="flex-1 break-all">
                     <p className="text-gray-700 text-sm leading-relaxed mb-2">
                       {p.text_en}
                     </p>
+
                     <p className="text-gray-500 text-xs italic bg-gray-50 p-2 rounded-lg border border-gray-100">
                       {p.text_vi_system}
                     </p>
