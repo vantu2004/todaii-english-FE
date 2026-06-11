@@ -37,22 +37,22 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
             opacity: 1,
             y: 0,
           }}
-          className="rounded-3xl bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800/80 p-6 sm:p-8 mb-5 shadow-sm"
+          className="rounded-lg bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800/80 p-4 sm:p-5 mb-4 shadow-sm"
         >
           {/* HEADER */}
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
                 {entry.word}
               </h2>
 
-              <div className="mt-2 space-y-1 text-sm font-mono text-neutral-550 dark:text-neutral-400">
+              <div className="mt-1.5 space-y-1 text-sm font-mono text-neutral-550 dark:text-neutral-400">
                 {entry.pronounce?.us && <p>US: /{entry.pronounce.us}/</p>}
                 {entry.pronounce?.gb && <p>UK: /{entry.pronounce.gb}/</p>}
               </div>
 
               {entry.level_word?.toeic && (
-                <div className="mt-4 inline-flex items-center rounded-lg bg-neutral-100 dark:bg-neutral-800/80 px-3 py-1 text-xs font-bold text-neutral-700 dark:text-neutral-300 border border-neutral-200/50 dark:border-neutral-700">
+                <div className="mt-3 inline-flex items-center rounded-sm bg-neutral-100 dark:bg-neutral-800/80 px-2 py-0.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 border border-neutral-200/50 dark:border-neutral-700">
                   TOEIC {entry.level_word.toeic}
                 </div>
               )}
@@ -63,7 +63,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
               {onSaveToNotebook && (
                 <button
                   onClick={() => onSaveToNotebook(entry.word, entry.id)}
-                  className="flex items-center gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-750 dark:text-neutral-300 shadow-sm active:scale-95"
+                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-750 dark:text-neutral-300 shadow-sm"
                 >
                   <Plus className="w-4 h-4 text-brand-500" />
                   <span className="text-xs font-semibold">Lưu sổ tay</span>
@@ -71,7 +71,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
               )}
               <button
                 onClick={() => handleSpeak(entry.word, "")}
-                className="flex items-center gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
+                className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
               >
                 <Volume2 className="w-4 h-4 text-brand-500" />
                 <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
@@ -82,33 +82,33 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
           </div>
 
           {/* CONTENT */}
-          <div className="mt-8 space-y-8">
+          <div className="mt-6 space-y-6">
             {entry.content?.map((contentBlock, cIdx) => (
               <div key={cIdx}>
                 {(contentBlock.kind || contentBlock.field) && (
-                  <h3 className="mb-4 text-sm font-bold text-brand-650 dark:text-brand-400 capitalize tracking-wide">
+                  <h3 className="mb-3 text-sm font-semibold text-brand-650 dark:text-brand-400 capitalize tracking-wide">
                     {contentBlock.kind}
                     {contentBlock.field && ` • ${contentBlock.field}`}
                   </h3>
                 )}
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {contentBlock.means?.map((mean, mIdx) => (
                     <div
                       key={mIdx}
-                      className="border-l-2 border-brand-200 dark:border-brand-850 pl-4"
+                      className="border-l-2 border-brand-200 dark:border-brand-850 pl-3"
                     >
-                      <p className="text-base text-neutral-800 dark:text-neutral-200 font-medium">
+                      <p className="text-sm text-neutral-800 dark:text-neutral-200">
                         {mean.mean}
                       </p>
 
                       {/* EXAMPLES */}
                       {mean.examples?.length > 0 && (
-                        <div className="mt-4 space-y-3">
+                        <div className="mt-3 space-y-2.5">
                           {mean.examples.map((ex, eIdx) => (
                             <div
                               key={eIdx}
-                              className="rounded-2xl bg-neutral-50 dark:bg-neutral-900/30 p-4 border border-neutral-100 dark:border-neutral-800"
+                              className="rounded-lg bg-neutral-50 dark:bg-neutral-900/30 p-3 border border-neutral-100 dark:border-neutral-800"
                             >
                               <div className="flex items-start justify-between gap-4">
                                 <p className="italic text-neutral-600 dark:text-neutral-400 text-sm">
@@ -124,7 +124,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                               </div>
 
                               {ex.m && (
-                                <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-500">
+                                <p className="mt-1.5 text-sm text-neutral-500 dark:text-neutral-500">
                                   {ex.m}
                                 </p>
                               )}
@@ -141,8 +141,8 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
 
           {/* WORD FAMILY */}
           {entry.word_family?.length > 0 && (
-            <div className="mt-8">
-              <h3 className="mb-4 text-sm font-bold text-neutral-500 dark:text-neutral-400">
+            <div className="mt-6">
+              <h3 className="mb-3 text-sm font-semibold text-neutral-500 dark:text-neutral-400">
                 Từ liên quan (Word Family)
               </h3>
 
@@ -152,7 +152,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                     <button
                       key={`${wfIdx}-${wIdx}`}
                       onClick={() => onWordClick?.(word)}
-                      className="px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-brand-500 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white text-xs font-semibold text-neutral-705 dark:text-neutral-300 transition-all"
+                      className="px-2.5 py-1 rounded-md bg-neutral-100 dark:bg-neutral-800 hover:bg-brand-500 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white text-xs font-semibold text-neutral-705 dark:text-neutral-300 transition-all"
                     >
                       {word}
                     </button>

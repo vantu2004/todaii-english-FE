@@ -45,7 +45,7 @@ const TopWordsList = ({ onWordClick }) => {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded-xl animate-pulse"
+              className="h-9 bg-neutral-100 dark:bg-neutral-800 rounded-md animate-pulse"
               style={{ width: `${100 - i * 12}%` }}
             />
           ))}
@@ -56,7 +56,7 @@ const TopWordsList = ({ onWordClick }) => {
 
   if (error) {
     return (
-      <div className="pt-6">
+      <div className="pt-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
             <Flame className="w-4 h-4" />
@@ -78,7 +78,7 @@ const TopWordsList = ({ onWordClick }) => {
 
   if (words.length === 0) {
     return (
-      <div className="pt-6">
+      <div className="pt-4">
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400 mb-3">
           <Flame className="w-4 h-4" />
           <h3 className="text-sm font-semibold">Tra cứu nhiều nhất</h3>
@@ -91,7 +91,7 @@ const TopWordsList = ({ onWordClick }) => {
   }
 
   return (
-    <div className="pt-6 pb-2">
+    <div className="pt-4 pb-2">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
@@ -117,7 +117,7 @@ const TopWordsList = ({ onWordClick }) => {
             <button
               key={item.word}
               onClick={() => onWordClick?.(item.word)}
-              className="w-full group flex items-center gap-2.5 px-2.5 py-2 rounded-xl
+              className="w-full group flex items-center gap-2.5 px-2.5 py-2 rounded-md
                 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-all text-left"
             >
               {/* Rank badge */}
@@ -139,9 +139,9 @@ const TopWordsList = ({ onWordClick }) => {
                   </span>
                 </div>
                 {/* Progress bar */}
-                <div className="h-1 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                <div className="h-1 bg-neutral-100 dark:bg-neutral-800 rounded-md overflow-hidden">
                   <div
-                    className={`h-full rounded-full transition-all duration-500 ${
+                    className={`h-full rounded-md transition-all duration-500 ${
                       isTop3
                         ? "bg-neutral-900 dark:bg-white"
                         : "bg-neutral-300 dark:bg-neutral-600"

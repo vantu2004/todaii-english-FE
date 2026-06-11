@@ -9,7 +9,7 @@ const SearchHistory = ({
   if (!history || history.length === 0) return null;
 
   return (
-    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-5 mb-5">
+    <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4 mb-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
           <History className="w-4 h-4" />
@@ -27,9 +27,9 @@ const SearchHistory = ({
         {history.map((word, idx) => (
           <div
             key={idx}
-            className="group flex items-center gap-1.5 px-3 py-1.5 bg-neutral-50 dark:bg-neutral-800/40 
-              border border-neutral-200 dark:border-neutral-750 rounded-xl hover:border-brand-500 
-              dark:hover:border-brand-500 transition-all shadow-sm"
+            className="group flex items-center gap-1.5 px-3 py-1 bg-neutral-50 dark:bg-neutral-800/40 
+              border border-neutral-200 dark:border-neutral-750 rounded-md hover:border-brand-500 
+              dark:hover:border-brand-500 transition-all"
           >
             <button
               onClick={() => onHistoryClick(word)}

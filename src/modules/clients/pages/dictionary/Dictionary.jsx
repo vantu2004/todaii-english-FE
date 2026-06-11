@@ -52,9 +52,9 @@ const Dictionary = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-24 pb-12 px-4"
+        className="min-h-screen flex-1 flex flex-col bg-surface-primary dark:bg-neutral-950 pt-20 pb-10 px-4"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col gap-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 w-full flex-1 flex flex-col gap-4">
           {/* ─── Top Section: Full Width Search Header ─── */}
           <div className="w-full">
             <SearchHeader
@@ -67,10 +67,10 @@ const Dictionary = () => {
           </div>
 
           {/* ─── Bottom Section: 2 Columns (History & Results) ─── */}
-          <div className="flex flex-col lg:flex-row gap-6 flex-1 min-w-0">
+          <div className="flex flex-col lg:flex-row gap-5 flex-1 min-w-0">
             {/* Left Sidebar: Search History & Top Words (Desktop Only) */}
             <aside className="hidden lg:flex flex-col w-64 flex-shrink-0">
-              <div className="sticky top-28 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-5 max-h-[calc(100vh-14rem)] overflow-y-auto shadow-sm">
+              <div className="sticky top-28 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-lg p-4 max-h-[calc(100vh-14rem)] overflow-y-auto shadow-sm">
                 {searchHistory && searchHistory.length > 0 && (
                   <SearchHistory
                     history={searchHistory}
@@ -86,7 +86,7 @@ const Dictionary = () => {
             {/* Main Content Area: Results */}
             <div className="flex-1 min-w-0 flex flex-col">
               {/* Mobile-only History */}
-              <div className="lg:hidden mb-6 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-3xl p-5 shadow-sm">
+              <div className="lg:hidden mb-4 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-lg p-4 shadow-sm">
                 {searchHistory && searchHistory.length > 0 && (
                   <SearchHistory
                     history={searchHistory}
@@ -110,11 +110,11 @@ const Dictionary = () => {
                 )}
 
                 {error === "SERVER_ERROR" && (
-                  <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
-                    <div className="w-14 h-14 bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 rounded-full flex items-center justify-center mb-4">
-                      <AlertTriangle className="w-7 h-7" />
+                  <div className="flex flex-col items-center justify-center py-10 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                    <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 rounded-md flex items-center justify-center mb-3">
+                      <AlertTriangle className="w-6 h-6" />
                     </div>
-                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                    <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
                       Đã xảy ra lỗi kết nối
                     </h3>
                     <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-sm">
@@ -141,11 +141,11 @@ const Dictionary = () => {
                 )}
 
                 {isEmptyState && (
-                  <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
-                    <div className="w-20 h-20 bg-neutral-50 dark:bg-neutral-800/50 text-neutral-355 dark:text-neutral-500 rounded-full flex items-center justify-center mb-6">
-                      <BookOpen className="w-10 h-10 text-neutral-300 dark:text-neutral-600" />
+                  <div className="flex flex-col items-center justify-center py-12 px-3 text-center bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-100 dark:border-neutral-800 shadow-sm animate-in fade-in zoom-in-95 duration-200">
+                    <div className="w-12 h-12 bg-neutral-50 dark:bg-neutral-800/50 text-neutral-355 dark:text-neutral-500 rounded-md flex items-center justify-center mb-4">
+                      <BookOpen className="w-6 h-6 text-neutral-300 dark:text-neutral-600" />
                     </div>
-                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2">
+                    <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
                       Tra cứu từ điển trực tuyến
                     </h3>
                     <p className="text-sm text-neutral-400 dark:text-neutral-500 max-w-xs mx-auto">

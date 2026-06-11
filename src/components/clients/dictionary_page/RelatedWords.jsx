@@ -37,9 +37,9 @@ const RelatedWords = ({ word, onSelectWord }) => {
   }, [word]);
 
   return (
-    <div className="bg-white dark:bg-neutral-900/60 p-4 rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-sm">
-      <div className="flex items-center gap-2 mb-3 text-neutral-700 dark:text-white font-bold pb-2 border-b border-neutral-100 dark:border-neutral-800">
-        <Hash size={18} />
+    <div className="bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-neutral-100 dark:border-neutral-800 shadow-sm">
+      <div className="flex items-center gap-2 mb-3 text-neutral-700 dark:text-white font-semibold pb-2 border-b border-neutral-100 dark:border-neutral-800">
+        <Hash size={16} />
         <h3>Từ gợi ý</h3>
       </div>
 
@@ -62,7 +62,7 @@ const RelatedWords = ({ word, onSelectWord }) => {
             <span
               key={idx}
               onClick={() => onSelectWord(relatedWord)}
-              className="text-xs bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded cursor-pointer hover:bg-brand-100 dark:hover:bg-brand-900/40 font-semibold"
+              className="text-xs bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded-sm cursor-pointer hover:bg-brand-100 dark:hover:bg-brand-900/40 font-semibold"
             >
               {relatedWord}
             </span>
