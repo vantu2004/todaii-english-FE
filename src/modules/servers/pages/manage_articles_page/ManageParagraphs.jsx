@@ -5,6 +5,7 @@ import { fetchArticle } from "@/api/servers/articleApi";
 import { motion } from "framer-motion";
 import ArticleDetails from "@/components/servers/manage_articles_page/ArticleDetails";
 import ListParagraphs from "@/components/servers/manage_articles_page/ListParagraphs";
+import ArticleAudioManage from "@/components/servers/manage_articles_page/ArticleAudioManage";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { logError } from "@/utils/LogError";
 import { useHeaderContext } from "@/hooks/servers/useHeaderContext";
@@ -90,8 +91,12 @@ const ManageParagraphs = () => {
             <ArticleDetails article={article} />
           </div>
 
-          {/* Column 2: Paragraph Form */}
-          <div className="overflow-auto max-h-[calc(100vh-150px)]">
+          {/* Column 2: Audio & Paragraph Form */}
+          <div className="overflow-auto max-h-[calc(100vh-150px)] space-y-6">
+            <ArticleAudioManage
+              article={article}
+              onRefresh={handleFetchArticle}
+            />
             <ListParagraphs
               articleId={article.id}
               paragraphs={article.paragraphs}

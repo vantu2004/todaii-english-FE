@@ -35,11 +35,11 @@ const GenericArticleList = ({ title, fetchApi }) => {
   const columns = [
     { key: "id", label: "ID", sortField: "id" },
     { key: "source_name", label: "Source Name", sortField: "sourceName" },
-    { key: "author", label: "Author", sortField: "author" },
     { key: "title", label: "Title", sortField: "title" },
     { key: "views", label: "Views", sortField: "views" },
     { key: "publishedAt", label: "Published At", sortField: "publishedAt" },
     { key: "paragraph", label: "Paragraphs" },
+    { key: "gen_audio", label: "Generate Audio" },
     { key: "vocabulary", label: "Vocabularies" },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
