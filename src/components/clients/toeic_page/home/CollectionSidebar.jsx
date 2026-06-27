@@ -1,5 +1,6 @@
 import React from "react";
 import { BookOpen, ChevronRight } from "lucide-react";
+import UserLearningProfileWidget from "@/components/clients/UserLearningProfileWidget";
 
 const CollectionSidebar = ({
   collections = [],
@@ -38,42 +39,46 @@ const CollectionSidebar = ({
   return (
     <aside className="w-full lg:w-72 flex-shrink-0">
       {/* Desktop Sidebar */}
-      <div className="hidden lg:block bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800 sticky top-20">
-        <h2 className="text-base font-bold text-neutral-900 dark:text-white mb-3 px-1 flex items-center gap-2">
-          <BookOpen className="text-brand-500" size={18} />
-          Bộ Đề Thi
-        </h2>
+      <div className="hidden lg:block space-y-4 sticky top-20">
+        <div className="bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800">
+          <h2 className="text-base font-bold text-neutral-900 dark:text-white mb-3 px-1 flex items-center gap-2">
+            <BookOpen className="text-brand-500" size={18} />
+            Bộ Đề Thi
+          </h2>
 
-        <div className="flex flex-col gap-1 max-h-[500px] overflow-y-auto custom-scrollbar pr-1">
-          <button
-            onClick={onSelectAll}
-            className={`w-full flex items-center justify-between px-3 py-2 rounded-md transition-all duration-150 ${
-              selectedCollection === null
-                ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold"
-                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white font-medium"
-            }`}
-          >
-            <span className="truncate text-sm">Tất cả đề thi</span>
-            {selectedCollection === null && <ChevronRight size={14} />}
-          </button>
-
-          {collections.map((collection) => (
+          <div className="flex flex-col gap-1 max-h-[500px] overflow-y-auto custom-scrollbar pr-1">
             <button
-              key={collection.id}
-              onClick={() => onSelectCollection(collection)}
+              onClick={onSelectAll}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-md transition-all duration-150 ${
-                selectedCollection?.id === collection.id
+                selectedCollection === null
                   ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold"
                   : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white font-medium"
               }`}
             >
-              <span className="truncate text-sm">{collection.name}</span>
-              {selectedCollection?.id === collection.id && (
-                <ChevronRight size={14} />
-              )}
+              <span className="truncate text-sm">Tất cả đề thi</span>
+              {selectedCollection === null && <ChevronRight size={14} />}
             </button>
-          ))}
+
+            {collections.map((collection) => (
+              <button
+                key={collection.id}
+                onClick={() => onSelectCollection(collection)}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-md transition-all duration-150 ${
+                  selectedCollection?.id === collection.id
+                    ? "bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold"
+                    : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white font-medium"
+                }`}
+              >
+                <span className="truncate text-sm">{collection.name}</span>
+                {selectedCollection?.id === collection.id && (
+                  <ChevronRight size={14} />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
+
+        <UserLearningProfileWidget />
       </div>
 
       {/* Mobile Horizontal Scroll Tabs */}

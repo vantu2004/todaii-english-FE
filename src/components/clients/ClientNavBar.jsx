@@ -112,12 +112,14 @@ const ClientNavBar = () => {
     return () => document.removeEventListener("mousedown", closeOnOutside);
   }, []);
 
-  const formatStudyTime = (seconds) => {
-    if (!seconds) return "0 phút";
-    const minutes = Math.floor(seconds / 60);
+  const formatStudyTime = (minutes) => {
+    if (!minutes) return "0 phút";
+
     if (minutes < 60) return `${minutes} phút`;
+
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
+
     return `${hours} giờ ${remainingMinutes} phút`;
   };
 
@@ -267,7 +269,10 @@ const ClientNavBar = () => {
                         <div className="flex justify-between py-1">
                           <span className="text-neutral-500">Học hôm nay</span>
                           <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                            {formatStudyTime(streakInfo?.today_study_time || 0)}
+                            {formatStudyTime(
+                              streakInfo?.daily_study_log
+                                ?.total_study_minutes || 0,
+                            )}
                           </span>
                         </div>
                       </div>
@@ -446,7 +451,7 @@ const ClientNavBar = () => {
                             className="text-neutral-500 dark:text-neutral-400"
                           />
                         </div>
-                        <span className="font-medium">Thống kê hoạt động</span>
+                        <span className="font-medium">Lộ trình & Thống kê</span>
                       </Link>
                     </div>
 

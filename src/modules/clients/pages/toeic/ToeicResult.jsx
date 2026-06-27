@@ -75,10 +75,10 @@ const ToeicResult = () => {
         const partsDoneStr = sessionData.parts_done || "";
         const partsDone = partsDoneStr
           ? partsDoneStr
-            .split(",")
-            .map((p) => p.trim())
-            .filter(Boolean)
-            .map(Number)
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean)
+              .map(Number)
           : [];
 
         // Fetch questions and passages for each completed part in parallel to build QuickAnswerList and Passage details
@@ -164,7 +164,7 @@ const ToeicResult = () => {
             Math.floor(
               (new Date(completedAt).getTime() -
                 new Date(startedAt).getTime()) /
-              1000,
+                1000,
             ),
           );
         }
