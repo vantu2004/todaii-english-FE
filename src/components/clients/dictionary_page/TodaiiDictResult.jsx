@@ -46,7 +46,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                 {entry.word}
               </h2>
 
-              <div className="mt-1.5 space-y-1 text-sm font-mono text-neutral-550 dark:text-neutral-400">
+              <div className="mt-1.5 space-y-1 text-sm font-mono text-neutral-600 dark:text-neutral-400">
                 {entry.pronounce?.us && <p>US: /{entry.pronounce.us}/</p>}
                 {entry.pronounce?.gb && <p>UK: /{entry.pronounce.gb}/</p>}
               </div>
@@ -63,7 +63,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
               {onSaveToNotebook && (
                 <button
                   onClick={() => onSaveToNotebook(entry.word, entry.id)}
-                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-750 dark:text-neutral-300 shadow-sm"
+                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-800 dark:text-neutral-300 shadow-sm"
                 >
                   <Plus className="w-4 h-4 text-brand-500" />
                   <span className="text-xs font-semibold">Lưu sổ tay</span>
@@ -71,7 +71,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
               )}
               <button
                 onClick={() => handleSpeak(entry.word, "")}
-                className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
+                className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
               >
                 <Volume2 className="w-4 h-4 text-brand-500" />
                 <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
@@ -86,7 +86,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
             {entry.content?.map((contentBlock, cIdx) => (
               <div key={cIdx}>
                 {(contentBlock.kind || contentBlock.field) && (
-                  <h3 className="mb-3 text-sm font-semibold text-brand-650 dark:text-brand-400 capitalize tracking-wide">
+                  <h3 className="mb-3 text-sm font-semibold text-brand-700 dark:text-brand-400 capitalize tracking-wide">
                     {contentBlock.kind}
                     {contentBlock.field && ` • ${contentBlock.field}`}
                   </h3>
@@ -96,7 +96,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                   {contentBlock.means?.map((mean, mIdx) => (
                     <div
                       key={mIdx}
-                      className="border-l-2 border-brand-200 dark:border-brand-850 pl-3"
+                      className="border-l-2 border-brand-200 dark:border-brand-900 pl-3"
                     >
                       <p className="text-sm text-neutral-800 dark:text-neutral-200">
                         {mean.mean}
@@ -117,7 +117,7 @@ const TodaiiDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
 
                                 <button
                                   onClick={() => handleSpeak(ex.e, "")}
-                                  className="shrink-0 text-neutral-450 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
+                                  className="shrink-0 text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                                 >
                                   <Volume2 className="w-4 h-4" />
                                 </button>

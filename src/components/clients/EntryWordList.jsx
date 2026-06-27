@@ -65,8 +65,8 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
 
   if (isFirstLoad && loading) {
     return (
-      <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-850/80 shadow-sm mt-6 transition-colors duration-300">
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-150 dark:border-neutral-800 animate-pulse">
+      <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-900/80 shadow-sm mt-6 transition-colors duration-300">
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-800 animate-pulse">
           <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-md" />
           <div className="space-y-2 flex-1">
             <div className="h-4 w-32 bg-neutral-100 dark:bg-neutral-800 rounded" />
@@ -88,9 +88,9 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
   if (!loading && words.length === 0) return null;
 
   return (
-    <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-850/80 shadow-sm mt-6 transition-colors duration-300">
+    <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-900/80 shadow-sm mt-6 transition-colors duration-300">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-150 dark:border-neutral-800">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center gap-3">
           <div className="p-1.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-500 dark:text-indigo-400 rounded-md">
             <Languages size={18} />
@@ -117,15 +117,15 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
           <div
             key={entry.id}
             className="flex items-center justify-between p-3 rounded-lg bg-neutral-50/30 dark:bg-neutral-900/20 
-              border border-neutral-150 dark:border-neutral-800 hover:bg-white dark:hover:bg-neutral-900 
-              hover:border-brand-500/20 dark:hover:border-brand-500/20 transition-colors duration-150 group"
+              border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-neutral-900 
+              hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-150 group"
           >
             {/* LEFT: Index & Word */}
             <div className="flex items-center gap-3">
               <span className="text-xs font-mono text-neutral-400 dark:text-neutral-500 select-none">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="font-medium text-neutral-850 dark:text-neutral-200 select-all font-serif group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">
+              <span className="font-medium text-neutral-900 dark:text-neutral-200 select-all font-serif group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">
                 {entry.word}
               </span>
             </div>
@@ -172,7 +172,7 @@ const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
             onClick={handleLoadMore}
             disabled={loading}
             className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-300 
-              bg-neutral-50 dark:bg-neutral-850 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md 
+              bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md 
               border border-neutral-200 dark:border-neutral-700 disabled:opacity-70 transition-colors"
           >
             {loading ? (

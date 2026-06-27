@@ -33,8 +33,8 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
-        <div className="h-28 bg-neutral-100 dark:bg-neutral-850 rounded-lg"></div>
-        <div className="h-28 bg-neutral-100 dark:bg-neutral-850 rounded-lg"></div>
+        <div className="h-28 bg-neutral-100 dark:bg-neutral-900 rounded-lg"></div>
+        <div className="h-28 bg-neutral-100 dark:bg-neutral-900 rounded-lg"></div>
       </div>
     );
   }
@@ -60,13 +60,13 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-neutral-500">Đúng trung bình:</span>
-              <span className="font-bold text-emerald-600 dark:text-emerald-450 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100/50 dark:border-emerald-900/20 px-2 py-0.5 rounded">
+              <span className="font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100/50 dark:border-emerald-900/20 px-2 py-0.5 rounded">
                 {stats.avgCorrect} câu
               </span>
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-neutral-500">Thời gian trung bình:</span>
-              <span className="font-bold text-brand-600 dark:text-brand-450 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2 py-0.5 rounded">
+              <span className="font-bold text-brand-600 dark:text-brand-500 bg-brand-50 dark:bg-brand-950/30 border border-brand-100/50 dark:border-brand-900/20 px-2 py-0.5 rounded">
                 {stats.avgTime} phút
               </span>
             </div>
@@ -102,7 +102,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 <CheckCircle2 size={13} className="text-neutral-400" />
                 Đúng:
               </span>
-              <span className="font-bold text-emerald-600 dark:text-emerald-450">
+              <span className="font-bold text-emerald-600 dark:text-emerald-500">
                 {stats.best.correct_count ?? 0} /{" "}
                 {stats.best.total_questions ?? 200} câu
               </span>
@@ -113,7 +113,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 <Award size={13} className="text-neutral-400" />
                 Điểm số:
               </span>
-              <span className="font-bold text-brand-600 dark:text-brand-450">
+              <span className="font-bold text-brand-600 dark:text-brand-500">
                 {stats.best.total_score}
               </span>
             </div>
@@ -123,7 +123,7 @@ const TestDetailSidebar = ({ sessions = [], loading = false }) => {
                 <Clock size={13} className="text-neutral-400" />
                 Thời gian (phút):
               </span>
-              <span className="font-semibold text-neutral-850 dark:text-neutral-200">
+              <span className="font-semibold text-neutral-900 dark:text-neutral-200">
                 {stats.best.time_spent}
               </span>
             </div>

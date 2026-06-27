@@ -75,10 +75,10 @@ const ToeicResult = () => {
         const partsDoneStr = sessionData.parts_done || "";
         const partsDone = partsDoneStr
           ? partsDoneStr
-              .split(",")
-              .map((p) => p.trim())
-              .filter(Boolean)
-              .map(Number)
+            .split(",")
+            .map((p) => p.trim())
+            .filter(Boolean)
+            .map(Number)
           : [];
 
         // Fetch questions and passages for each completed part in parallel to build QuickAnswerList and Passage details
@@ -164,7 +164,7 @@ const ToeicResult = () => {
             Math.floor(
               (new Date(completedAt).getTime() -
                 new Date(startedAt).getTime()) /
-                1000,
+              1000,
             ),
           );
         }
@@ -263,7 +263,7 @@ const ToeicResult = () => {
         {/* Warning / Notes */}
         <div className="p-2.5 border border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 rounded-lg flex items-start gap-2">
           <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={14} />
-          <p className="text-[10px] text-neutral-800 dark:text-neutral-350 leading-normal font-medium">
+          <p className="text-[10px] text-neutral-800 dark:text-neutral-400 leading-normal font-medium">
             Đây là kết quả mang tính chất tham khảo. Kết quả thi thật có thể dao
             động tùy thuộc vào thang điểm chuẩn của ETS tại từng thời điểm.
           </p>

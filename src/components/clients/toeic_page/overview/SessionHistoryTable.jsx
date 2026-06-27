@@ -86,7 +86,7 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-150 dark:divide-neutral-800 bg-white dark:bg-neutral-900">
+            <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 bg-white dark:bg-neutral-900">
               {sessions.map((session) => {
                 const parts = session.parts_done
                   ? session.parts_done.split(",")
@@ -104,11 +104,11 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                     </td>
                     <td className="px-4 py-2.5 whitespace-nowrap text-sm">
                       {isInProgress ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 dark:bg-amber-955/30 text-amber-700 dark:text-amber-400 border border-amber-100/55 dark:border-amber-900/20">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 border border-amber-100/55 dark:border-amber-900/20">
                           Đang làm
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-450 border border-emerald-100/55 dark:border-emerald-900/20">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-500 border border-emerald-100/55 dark:border-emerald-900/20">
                           Đã hoàn thành
                         </span>
                       )}
@@ -126,13 +126,13 @@ const SessionHistoryTable = ({ sessions = [], loading = false }) => {
                     </td>
                     <td className="px-4 py-2.5 whitespace-nowrap text-sm">
                       <div className="flex flex-col gap-0.5 text-xs font-medium">
-                        <span className="text-emerald-650 dark:text-emerald-450">
+                        <span className="text-emerald-700 dark:text-emerald-500">
                           Đúng: {session.correct_count ?? 0}
                         </span>
-                        <span className="text-red-650 dark:text-red-400">
+                        <span className="text-red-700 dark:text-red-400">
                           Sai: {session.incorrect_count ?? 0}
                         </span>
-                        <span className="text-neutral-500 dark:text-neutral-450">
+                        <span className="text-neutral-500 dark:text-neutral-500">
                           Bỏ qua: {session.skipped_count ?? 0}
                         </span>
                       </div>

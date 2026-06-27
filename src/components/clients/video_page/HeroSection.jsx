@@ -97,8 +97,8 @@ const HeroSection = ({ videos = [], video, onNavigate }) => {
           {/* Badges */}
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {videos && videos.length > 0 && (
-              <span className="bg-brand-500 text-white text-[11px] font-semibold px-2.5 py-1 rounded-sm border border-brand-400/30 flex items-center gap-1.5 shadow-sm">
-                <Sparkles size={12} className="animate-pulse" /> Đề xuất nổi bật
+              <span className="bg-brand-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-sm flex items-center gap-1.5 shadow-sm">
+                Đề xuất nổi bật
               </span>
             )}
             <span className="bg-yellow-500 text-black text-[11px] font-extrabold px-2.5 py-1 rounded-sm shadow-sm">

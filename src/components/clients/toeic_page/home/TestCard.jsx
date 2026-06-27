@@ -9,9 +9,9 @@ const TestCard = ({ test, onToggle }) => {
   const imageUrl = test.image_url;
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 flex flex-col hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150 group overflow-hidden h-full">
+    <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 flex flex-col hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150 group overflow-hidden h-full">
       {/* Card Banner */}
-      <div className="relative aspect-[16/9] w-full bg-neutral-50 dark:bg-neutral-800/50 flex items-center justify-center border-b border-neutral-150 dark:border-neutral-850 overflow-hidden">
+      <div className="relative aspect-[16/9] w-full bg-neutral-50 dark:bg-neutral-800/50 flex items-center justify-center border border-gray-200 dark:border-gray-700 overflow-hidden">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -28,7 +28,7 @@ const TestCard = ({ test, onToggle }) => {
 
         {/* Test Type / Collection Badge */}
         {test.collection?.name && (
-          <span className="absolute top-3 left-3 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md text-[9px] font-bold tracking-wider uppercase text-neutral-700 dark:text-neutral-300 px-2 py-0.5 rounded border border-neutral-150/50 dark:border-neutral-700/50">
+          <span className="absolute top-3 left-3 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md text-[9px] font-bold tracking-wider uppercase text-neutral-700 dark:text-neutral-300 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700">
             {test.collection.name}
           </span>
         )}

@@ -69,8 +69,8 @@ const ResultHeader = ({ test, session, incorrectCount = 0 }) => {
             onClick={handleRedoIncorrect}
             disabled={incorrectCount === 0}
             className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg font-semibold text-xs transition-all border ${incorrectCount > 0
-              ? "border-rose-250 dark:border-rose-900/40 bg-rose-50/70 dark:bg-rose-955/10 text-rose-700 dark:text-rose-400 hover:bg-rose-100/80 cursor-pointer"
-              : "border-neutral-200 dark:border-neutral-750 text-neutral-450 dark:text-neutral-500 bg-neutral-100/50 dark:bg-neutral-800/30 cursor-not-allowed"
+              ? "border-rose-300 dark:border-rose-900/40 bg-rose-50/70 dark:bg-rose-950/10 text-rose-700 dark:text-rose-400 hover:bg-rose-100/80 cursor-pointer"
+              : "border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-500 bg-neutral-100/50 dark:bg-neutral-800/30 cursor-not-allowed"
               }`}
           >
             <RefreshCw size={13} />

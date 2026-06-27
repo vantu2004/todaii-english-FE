@@ -146,7 +146,7 @@ const ToeicTagsTable = ({
               return (
                 <tr
                   key={i}
-                  className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                  className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                   <td className="px-4 py-3 text-sm font-medium">
@@ -195,7 +195,7 @@ const ToeicTagsTable = ({
                               className={`w-6 h-6 flex items-center justify-center rounded-full border text-xs font-semibold transition-all ${
                                 isSelected
                                   ? "bg-gray-900 border-gray-900 text-white dark:bg-white dark:text-gray-900 dark:border-white"
-                                  : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 dark:bg-gray-850 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-750"
+                                  : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                               }`}
                               title={`Part ${num}`}
                             >

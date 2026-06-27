@@ -52,7 +52,7 @@ const TagAnalysisTable = ({
 
   if (tagStats.length === 0) {
     return (
-      <div className="py-2 text-center text-neutral-500 dark:text-neutral-450 italic text-[11px]">
+      <div className="py-2 text-center text-neutral-500 dark:text-neutral-500 italic text-[11px]">
         Không có dữ liệu phân tích tag cho phần thi này.
       </div>
     );
@@ -124,7 +124,7 @@ const TagAnalysisTable = ({
                     </td>
 
                     {/* Correct */}
-                    <td className="px-2.5 py-1.5 whitespace-nowrap text-center text-xs text-emerald-600 dark:text-emerald-450 font-bold">
+                    <td className="px-2.5 py-1.5 whitespace-nowrap text-center text-xs text-emerald-600 dark:text-emerald-500 font-bold">
                       {correct}
                     </td>
 
@@ -157,15 +157,15 @@ const TagAnalysisTable = ({
                           if (status === 1) {
                             // Correct
                             badgeStyle =
-                              "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-350";
+                              "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-400";
                           } else if (status === 0) {
                             // Incorrect
                             badgeStyle =
-                              "bg-rose-50 dark:bg-rose-955/20 border-rose-300 dark:border-rose-800/40 text-rose-800 dark:text-rose-350";
+                              "bg-rose-50 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800/40 text-rose-800 dark:text-rose-400";
                           } else {
                             // Skipped
                             badgeStyle =
-                              "bg-neutral-50 dark:bg-neutral-800/30 border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400";
+                              "bg-neutral-50 dark:bg-neutral-800/30 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400";
                           }
 
                           return (
@@ -175,7 +175,7 @@ const TagAnalysisTable = ({
                               onClick={() =>
                                 onQuestionClick && onQuestionClick(qId)
                               }
-                              className={`inline-flex items-center justify-center w-5.5 h-5.5 text-[9.5px] font-bold rounded-sm border cursor-pointer hover:border-neutral-450 dark:hover:border-neutral-600 transition-colors duration-150 ${badgeStyle}`}
+                              className={`inline-flex items-center justify-center w-5.5 h-5.5 text-[9.5px] font-bold rounded-sm border cursor-pointer hover:border-neutral-500 dark:hover:border-neutral-600 transition-colors duration-150 ${badgeStyle}`}
                               title={`Click để xem câu ${qNum}`}
                             >
                               {qNum}

@@ -21,7 +21,7 @@ const SelectedWordCard = ({ word: item, index, onViewWord, onRemove }) => {
             {word.ipa && (
               <>
                 <span>&bull;</span>
-                <span className="truncate text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-750 px-1.5 py-0.5 rounded text-[10px]">
+                <span className="truncate text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-[10px]">
                   /{word.ipa}/
                 </span>
               </>

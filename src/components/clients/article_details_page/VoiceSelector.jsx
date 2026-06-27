@@ -44,7 +44,7 @@ const VoiceSelector = ({ voices, selectedVoice, onChange }) => {
       {/* Dropdown */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-72 sm:w-96 max-h-72 overflow-y-auto bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-xl z-[999] scrollbar-thin">
-          <div className="px-4 py-2 text-xs font-semibold text-neutral-400 dark:text-neutral-500 border-b border-neutral-100 dark:border-neutral-850">
+          <div className="px-4 py-2 text-xs font-semibold text-neutral-400 dark:text-neutral-500 border-b border-neutral-100 dark:border-neutral-900">
             Select Voice
           </div>
 

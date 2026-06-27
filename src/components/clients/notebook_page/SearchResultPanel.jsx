@@ -9,7 +9,7 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
     return (
       <div className="flex flex-col items-center justify-center h-64 animate-in fade-in duration-200">
         <Loader2
-          className="animate-spin text-neutral-450 mb-2 dark:text-neutral-500"
+          className="animate-spin text-neutral-500 mb-2 dark:text-neutral-500"
           size={32}
         />
         <p className="text-sm text-neutral-400 animate-pulse dark:text-neutral-500">
@@ -58,13 +58,13 @@ const SearchResultPanel = ({ state, onAdd, onWordClick }) => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
       {/* Action Bar */}
-      <div className="flex justify-between items-center bg-neutral-900 text-white p-4 rounded-lg shadow-md dark:bg-neutral-850">
+      <div className="flex justify-between items-center bg-neutral-900 text-white p-4 rounded-lg shadow-md dark:bg-neutral-900">
         <div className="flex items-center gap-2">
           <div className="p-1.5 bg-white/20 rounded-lg backdrop-blur-sm">
             <Sparkles size={16} className="text-white" />
           </div>
           <div>
-            <p className="text-[10px] font-semibold text-neutral-350 uppercase tracking-wider dark:text-neutral-400">
+            <p className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider dark:text-neutral-400">
               Kết quả tra cứu cho
             </p>
             <p className="text-sm font-bold dark:text-white">"{state.term}"</p>

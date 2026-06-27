@@ -46,7 +46,7 @@ const FreeDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
               {onSaveToNotebook && (
                 <button
                   onClick={() => onSaveToNotebook(entry.word, null)}
-                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-750 dark:text-neutral-300 shadow-sm animate-in fade-in duration-200"
+                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition text-neutral-800 dark:text-neutral-300 shadow-sm animate-in fade-in duration-200"
                 >
                   <Plus className="w-4 h-4 text-brand-500" />
                   <span className="text-xs font-semibold">Lưu sổ tay</span>
@@ -56,7 +56,7 @@ const FreeDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                 <button
                   key={i}
                   onClick={() => handleSpeak(entry.word, p.audio)}
-                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-150 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
+                  className="flex items-center gap-2 rounded-md bg-neutral-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-neutral-700 px-3 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-brand-500 transition"
                 >
                   <Volume2 className="w-4 h-4 text-brand-500" />
                   <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
@@ -71,7 +71,7 @@ const FreeDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
           <div className="mt-6 space-y-6">
             {entry.meanings?.map((meaning, mIdx) => (
               <div key={mIdx}>
-                <h3 className="text-sm font-semibold text-brand-650 dark:text-brand-400 mb-3 capitalize tracking-wide">
+                <h3 className="text-sm font-semibold text-brand-700 dark:text-brand-400 mb-3 capitalize tracking-wide">
                   {meaning.partOfSpeech}
                 </h3>
 
@@ -123,7 +123,7 @@ const FreeDictResult = ({ data, onWordClick, onSaveToNotebook }) => {
                             <button
                               key={aIdx}
                               onClick={() => onWordClick(ant)}
-                              className="px-2.5 py-1 rounded-md border border-neutral-205 dark:border-neutral-750 hover:bg-brand-500 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white text-xs font-semibold text-neutral-700 dark:text-neutral-300 transition"
+                              className="px-2.5 py-1 rounded-md border border-neutral-205 dark:border-neutral-800 hover:bg-brand-500 dark:hover:bg-brand-500 hover:text-white dark:hover:text-white text-xs font-semibold text-neutral-700 dark:text-neutral-300 transition"
                             >
                               {ant}
                             </button>

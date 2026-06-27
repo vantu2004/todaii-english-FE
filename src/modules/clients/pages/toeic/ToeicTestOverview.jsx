@@ -166,7 +166,7 @@ const ToeicTestOverview = () => {
         </Link>
 
         {/* Test Header Block */}
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-lg p-4 mb-4">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-900 rounded-lg p-4 mb-4">
           <div className="flex flex-col md:flex-row justify-between items-start gap-4">
             <div className="space-y-2 flex-1">
               {test.collection?.name && (
@@ -255,7 +255,7 @@ const ToeicTestOverview = () => {
             </div>
 
             {/* Tab Rendering */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-850 rounded-lg p-4">
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-900 rounded-lg p-4">
               {activeTab === "info" && (
                 <TestInfoTab
                   test={test}

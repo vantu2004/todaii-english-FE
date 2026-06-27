@@ -158,7 +158,7 @@ const PracticeTab = ({
                       {partTags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="text-[10px] font-medium px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-250/30 dark:border-neutral-700/30"
+                          className="text-[10px] font-medium px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-300/30 dark:border-neutral-700/30"
                         >
                           #{tag.name}
                         </span>
@@ -185,7 +185,7 @@ const PracticeTab = ({
         <select
           value={duration}
           onChange={(e) => setDuration(Number(e.target.value))}
-          className="w-full sm:w-60 px-3 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-md text-xs font-semibold text-neutral-700 dark:text-neutral-350 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+          className="w-full sm:w-60 px-3 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-md text-xs font-semibold text-neutral-700 dark:text-neutral-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
         >
           <option value={10}>10 phút</option>
           <option value={20}>20 phút</option>

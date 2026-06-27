@@ -36,7 +36,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
   return (
     <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-2">
       {/* Metadata Grid */}
-      <div className="bg-gradient-to-br from-slate-50 to-indigo-50/50 dark:from-gray-800 dark:to-gray-750 p-6 rounded-2xl border border-indigo-100 dark:border-gray-700 shadow-sm">
+      <div className="bg-gradient-to-br from-slate-50 to-indigo-50/50 dark:from-gray-800 dark:to-gray-800 p-6 rounded-2xl border border-indigo-100 dark:border-gray-700 shadow-sm">
         <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-indigo-200/50 pb-2">
           <Info size={16} /> Question Metadata
         </h3>
@@ -168,7 +168,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
           <FileText size={14} /> Question Text
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-150 p-4 rounded-xl bg-gray-50/50"
+          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.question ||
@@ -233,7 +233,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
           <FileText size={14} /> Transcript
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-150 p-4 rounded-xl bg-gray-50/50"
+          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.transcript ||
@@ -249,7 +249,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
           <FileText size={14} /> Explanation
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-150 p-4 rounded-xl bg-gray-50/50"
+          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.explanation ||

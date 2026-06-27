@@ -118,7 +118,7 @@ const DictionaryModal = ({ word, isOpen, onClose }) => {
               </h3>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-450 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
+                className="p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
                 title="Đóng"
               >
                 <X className="w-5 h-5" />

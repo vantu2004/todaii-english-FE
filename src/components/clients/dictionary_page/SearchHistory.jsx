@@ -28,7 +28,7 @@ const SearchHistory = ({
           <div
             key={idx}
             className="group flex items-center gap-1.5 px-3 py-1 bg-neutral-50 dark:bg-neutral-800/40 
-              border border-neutral-200 dark:border-neutral-750 rounded-md hover:border-brand-500 
+              border border-neutral-200 dark:border-neutral-800 rounded-md hover:border-brand-500 
               dark:hover:border-brand-500 transition-all"
           >
             <button

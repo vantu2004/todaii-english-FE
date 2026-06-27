@@ -134,7 +134,7 @@ const ArticlesByDate = ({
             <button
               onClick={loadMoreArticles}
               disabled={loading}
-              className="px-6 py-2 bg-white dark:bg-neutral-900/60 border border-neutral-250 dark:border-neutral-800 rounded-lg text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 mx-auto"
+              className="px-6 py-2 bg-white dark:bg-neutral-900/60 border border-neutral-300 dark:border-neutral-800 rounded-lg text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 mx-auto"
             >
               {loading ? (
                 <>

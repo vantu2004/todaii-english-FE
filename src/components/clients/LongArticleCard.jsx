@@ -33,7 +33,7 @@ const LongArticleCard = ({
   };
 
   return (
-    <div className="group block bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150 overflow-hidden">
+    <div className="group block bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150 overflow-hidden">
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
         <div className="relative sm:w-56 lg:w-64 flex-shrink-0 overflow-hidden">

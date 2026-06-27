@@ -50,7 +50,7 @@ const RelatedWords = ({ word, onSelectWord }) => {
             .map((_, idx) => (
               <span
                 key={idx}
-                className="w-16 h-5 bg-neutral-250 dark:bg-neutral-800 rounded animate-pulse"
+                className="w-16 h-5 bg-neutral-300 dark:bg-neutral-800 rounded animate-pulse"
               />
             ))
         ) : relatedWords.length === 0 ? (

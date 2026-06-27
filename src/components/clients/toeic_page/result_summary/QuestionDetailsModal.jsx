@@ -64,7 +64,7 @@ const QuestionDetailsModal = ({
     <div className="fixed inset-0 bg-neutral-900/60 dark:bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 overflow-y-auto">
       <div className="bg-white dark:bg-neutral-900 rounded-lg w-full max-w-6xl border border-neutral-200 dark:border-neutral-800 shadow-xl overflow-hidden relative flex flex-col max-h-[95vh] animate-fade-in">
         {/* Header */}
-        <div className="flex justify-between items-center px-3.5 py-2 border-b border-neutral-200 dark:border-neutral-850 shrink-0 bg-neutral-100 dark:bg-neutral-800">
+        <div className="flex justify-between items-center px-3.5 py-2 border-b border-neutral-200 dark:border-neutral-900 shrink-0 bg-neutral-100 dark:bg-neutral-800">
           <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
             Chi tiết câu hỏi {questionNumber} (Part {partNumber})
           </span>
@@ -89,13 +89,13 @@ const QuestionDetailsModal = ({
             {hasPassage && (
               <div className="border border-neutral-200 dark:border-neutral-800 rounded-md p-2.5 bg-neutral-50/50 dark:bg-neutral-950/40 space-y-3 md:h-full md:max-h-[75vh] md:overflow-y-auto animate-fade-in">
                 <div className="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-1.5 shrink-0">
-                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-450 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-neutral-500 dark:text-neutral-500 uppercase tracking-wider block">
                     Đoạn văn / Bài đọc (Passage)
                   </span>
                   {showPassageText && (
                     <button
                       onClick={() => setShowPassage(!showPassage)}
-                      className="text-[10px] font-bold text-brand-650 dark:text-brand-400 hover:underline cursor-pointer"
+                      className="text-[10px] font-bold text-brand-700 dark:text-brand-400 hover:underline cursor-pointer"
                     >
                       {showPassage ? "Ẩn văn bản" : "Hiện văn bản & dịch"}
                     </button>
@@ -120,7 +120,7 @@ const QuestionDetailsModal = ({
                 {/* Passage Text (Only visible when showPassage is true) */}
                 {showPassage && showPassageText && (
                   <div
-                    className="prose dark:prose-invert max-w-none text-neutral-850 dark:text-neutral-200 text-xs leading-relaxed whitespace-pre-wrap break-words animate-fade-in"
+                    className="prose dark:prose-invert max-w-none text-neutral-900 dark:text-neutral-200 text-xs leading-relaxed whitespace-pre-wrap break-words animate-fade-in"
                     dangerouslySetInnerHTML={{ __html: pText }}
                   />
                 )}
@@ -201,7 +201,7 @@ const QuestionDetailsModal = ({
                   if (showExplanation) {
                     if (isCorrect) {
                       optionStyle =
-                        "border-2 border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-350 font-bold";
+                        "border-2 border-emerald-600 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 font-bold";
                       iconComponent = (
                         <Check
                           size={13}
@@ -210,7 +210,7 @@ const QuestionDetailsModal = ({
                       );
                     } else if (isUserSelected) {
                       optionStyle =
-                        "border-2 border-rose-600 bg-rose-50 dark:bg-rose-955/20 text-rose-850 dark:text-rose-350 font-bold";
+                        "border-2 border-rose-600 bg-rose-50 dark:bg-rose-950/20 text-rose-900 dark:text-rose-400 font-bold";
                       iconComponent = (
                         <X
                           size={13}
@@ -248,13 +248,13 @@ const QuestionDetailsModal = ({
                 (showExplanation ? (
                   <div className="border border-neutral-200 dark:border-neutral-800 rounded-md p-2 bg-neutral-50/30 dark:bg-neutral-900/20 space-y-2.5 overflow-x-hidden animate-fade-in">
                     <div className="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-1">
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-500 dark:text-neutral-450 uppercase tracking-wider">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-neutral-500 dark:text-neutral-500 uppercase tracking-wider">
                         <AlertCircle size={12} className="text-neutral-400" />
                         <span>Giải thích chi tiết & Transcript</span>
                       </div>
                       <button
                         onClick={() => setShowExplanation(false)}
-                        className="text-[10px] font-bold text-rose-600 dark:text-rose-455 hover:underline cursor-pointer"
+                        className="text-[10px] font-bold text-rose-600 dark:text-rose-500 hover:underline cursor-pointer"
                       >
                         Ẩn giải thích
                       </button>
@@ -266,7 +266,7 @@ const QuestionDetailsModal = ({
                           Transcript / Lời thoại:
                         </span>
                         <div
-                          className="text-[11px] text-neutral-850 dark:text-neutral-300 leading-relaxed font-medium break-words whitespace-normal overflow-x-hidden [&_*]:whitespace-normal [&_*]:break-words"
+                          className="text-[11px] text-neutral-900 dark:text-neutral-300 leading-relaxed font-medium break-words whitespace-normal overflow-x-hidden [&_*]:whitespace-normal [&_*]:break-words"
                           dangerouslySetInnerHTML={{
                             __html: question.transcript,
                           }}
@@ -280,7 +280,7 @@ const QuestionDetailsModal = ({
                           Giải thích đáp án:
                         </span>
                         <div
-                          className="text-[11px] text-neutral-850 dark:text-neutral-300 leading-relaxed font-medium break-words whitespace-normal overflow-x-hidden [&_*]:whitespace-normal [&_*]:break-words"
+                          className="text-[11px] text-neutral-900 dark:text-neutral-300 leading-relaxed font-medium break-words whitespace-normal overflow-x-hidden [&_*]:whitespace-normal [&_*]:break-words"
                           dangerouslySetInnerHTML={{
                             __html: question.explanation,
                           }}
@@ -303,7 +303,7 @@ const QuestionDetailsModal = ({
         </div>
 
         {/* Footer */}
-        <div className="px-3.5 py-2 border-t border-neutral-200 dark:border-neutral-850 flex justify-end shrink-0 bg-neutral-100 dark:bg-neutral-800">
+        <div className="px-3.5 py-2 border-t border-neutral-200 dark:border-neutral-900 flex justify-end shrink-0 bg-neutral-100 dark:bg-neutral-800">
           <button
             onClick={onClose}
             className="bg-neutral-900 hover:bg-black dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-900 rounded-md px-3.5 py-1 text-xs font-bold cursor-pointer transition-all border border-neutral-950 dark:border-white"

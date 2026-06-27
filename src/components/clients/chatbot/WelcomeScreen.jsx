@@ -62,7 +62,7 @@ const WelcomeScreen = ({ onLoadHistory, isHistoryLoading }) => {
             key={s.id}
             className="w-full flex items-center gap-3 px-4 py-2.5 text-left
               rounded-xl border border-zinc-200/60 bg-white
-              hover:border-zinc-350 hover:bg-zinc-50/50 hover:shadow-sm
+              hover:border-zinc-400 hover:bg-zinc-50/50 hover:shadow-sm
               transition-all duration-150 group"
           >
             <span className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-zinc-100 text-zinc-500 transition-colors">

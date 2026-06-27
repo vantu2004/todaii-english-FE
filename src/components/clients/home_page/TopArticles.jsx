@@ -44,7 +44,7 @@ const TopArticles = ({ topArticles = [] }) => {
         {mainArticle && (
           <Link
             to={`/client/article/${mainArticle.id}`}
-            className="group relative w-full h-80 lg:h-full rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150"
+            className="group relative w-full h-80 lg:h-full rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150"
           >
             {/* Image Background */}
             <img
@@ -83,7 +83,7 @@ const TopArticles = ({ topArticles = [] }) => {
             <Link
               key={article.id}
               to={`/client/article/${article.id}`}
-              className="group relative flex-1 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150 min-h-[200px]"
+              className="group relative flex-1 rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150 min-h-[200px]"
             >
               {/* Image Background */}
               <img

@@ -67,7 +67,7 @@ const NotebookTree = ({ data, onSelectNote, onRename, onDelete, onCreate }) => {
               style={{ top: menu.y, left: menu.x }}
               onClick={(e) => e.stopPropagation()} // Chặn click xuyên qua menu
             >
-              <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-150 mb-1 truncate bg-neutral-50/50 select-none dark:text-neutral-500 dark:border-neutral-800/80 dark:bg-neutral-800/50">
+              <div className="px-4 py-1.5 text-xs font-bold text-neutral-400 border-b border-neutral-200 mb-1 truncate bg-neutral-50/50 select-none dark:text-neutral-500 dark:border-neutral-800/80 dark:bg-neutral-800/50">
                 {menu.node.data.name}
               </div>
 

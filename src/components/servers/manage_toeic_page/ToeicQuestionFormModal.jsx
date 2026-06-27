@@ -514,7 +514,7 @@ const ToeicQuestionFormModal = ({
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags (Select up to 5) <span className="text-red-500">*</span>
             </label>
-            <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-750">
+            <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
               {filteredTags.map((tag) => (
                 <label
                   key={tag.id}

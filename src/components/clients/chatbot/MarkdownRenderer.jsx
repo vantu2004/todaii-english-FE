@@ -114,7 +114,7 @@ const MarkdownRenderer = ({ content, isBot }) => {
                 className={`px-1.5 py-0.5 rounded-md font-mono text-[0.88em]
                   ${
                     isBot
-                      ? "bg-zinc-150 text-zinc-800 border border-zinc-200/50"
+                      ? "bg-zinc-200 text-zinc-800 border border-zinc-200/50"
                       : "bg-white/20 text-white"
                   }`}
                 {...props}

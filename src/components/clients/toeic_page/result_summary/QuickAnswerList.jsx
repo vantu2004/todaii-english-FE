@@ -51,18 +51,18 @@ const QuickAnswerList = ({ flatQuestions, answersMap, onQuestionClick }) => {
                   if (status === 1) {
                     // Correct
                     cardStyle =
-                      "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-250 dark:border-emerald-800 text-emerald-800 dark:text-emerald-350";
+                      "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-400";
                     icon = "✓";
                   } else if (status === 0) {
                     // Incorrect
                     cardStyle =
-                      "bg-rose-50 dark:bg-rose-955/20 border-rose-250 dark:border-rose-800/40 text-rose-850 dark:text-rose-350";
+                      "bg-rose-50 dark:bg-rose-950/20 border-rose-200 dark:border-rose-800/40 text-rose-900 dark:text-rose-400";
                     icon = "×";
                     displayUserChoice = userChoice;
                   } else {
                     // Skipped
                     cardStyle =
-                      "bg-neutral-50 dark:bg-neutral-800/30 border-neutral-250 dark:border-neutral-700 text-neutral-600 dark:text-neutral-450";
+                      "bg-neutral-50 dark:bg-neutral-800/30 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-500";
                     icon = "−";
                   }
 

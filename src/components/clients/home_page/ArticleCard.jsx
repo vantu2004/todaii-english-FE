@@ -15,7 +15,7 @@ const ArticleCard = ({
   return (
     <Link
       to={`/client/article/${id}`}
-      className="group flex flex-col h-full bg-white dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:border-neutral-350 dark:hover:border-neutral-700 transition-all duration-150"
+      className="group flex flex-col h-full bg-white dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150"
     >
       {/* Image Container */}
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100 dark:bg-neutral-800">

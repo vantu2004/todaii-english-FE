@@ -432,7 +432,7 @@ const VocabDeckDetails = () => {
           {words.map((item) => (
             <div
               key={item.id}
-              className="group bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-neutral-150 dark:border-neutral-800/80 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all flex items-start sm:items-center gap-3"
+              className="group bg-white dark:bg-neutral-900/60 p-4 rounded-lg border border-gray-200 dark:border-neutral-800/80 hover:border-gray-400 dark:hover:border-neutral-600 transition-all flex items-start sm:items-center gap-3"
             >
               {/* Audio Button */}
               <button

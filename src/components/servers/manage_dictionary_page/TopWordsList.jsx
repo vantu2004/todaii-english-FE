@@ -3,7 +3,7 @@ import { Flame, RefreshCw, TrendingUp } from "lucide-react";
 import { getTopWords } from "@/api/servers/dictionaryApi";
 
 const MEDAL_COLORS = [
-  "bg-yellow-150 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800", // #1 gold
+  "bg-yellow-200 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800", // #1 gold
   "bg-gray-100 text-gray-500 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700", // #2 silver
   "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800", // #3 bronze
 ];

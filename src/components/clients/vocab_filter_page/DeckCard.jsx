@@ -70,7 +70,7 @@ const DeckCard = ({ deck }) => {
 
       {/* Card Body */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-650 dark:group-hover:text-brand-400 transition-colors">
+        <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
           {deck.name}
         </h3>
 

@@ -33,8 +33,8 @@ const ChatInput = ({ onSend, isLoading }) => {
           shadow-sm transition-all duration-200
           ${
             canSend || input.length > 0
-              ? "border-zinc-400 shadow-zinc-150/50 ring-2 ring-zinc-100"
-              : "border-slate-200 hover:border-slate-350"
+              ? "border-zinc-400 shadow-zinc-200/50 ring-2 ring-zinc-100"
+              : "border-slate-200 hover:border-slate-400"
           }`}
       >
         <TextareaAutosize

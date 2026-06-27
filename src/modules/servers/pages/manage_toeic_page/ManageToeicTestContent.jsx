@@ -227,7 +227,7 @@ const ManageToeicTestContent = () => {
             selectedPassage ? (
               /* Sub-screen: CRUD questions for a specific passage */
               <div>
-                <div className="flex items-center justify-between mb-6 bg-slate-50 dark:bg-gray-750 p-4 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm">
+                <div className="flex items-center justify-between mb-6 bg-slate-50 dark:bg-gray-800 p-4 rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm">
                   <div>
                     <button
                       onClick={() => setSelectedPassage(null)}

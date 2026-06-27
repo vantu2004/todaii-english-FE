@@ -135,7 +135,7 @@ const VocabExtractionModal = ({
           {selectableWords.length > 0 && (
             <button
               onClick={toggleAll}
-              className="text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5 transition-colors bg-white dark:bg-gray-800 border border-gray-250 dark:border-gray-700 rounded px-2.5 py-1 shadow-sm"
+              className="text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white flex items-center gap-1.5 transition-colors bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded px-2.5 py-1 shadow-sm"
               type="button"
             >
               {selectedWordIds.length === selectableWords.length ? (
@@ -168,7 +168,7 @@ const VocabExtractionModal = ({
                   isAlreadyAdded
                     ? "bg-gray-50 dark:bg-gray-800/20 border-gray-100 dark:border-gray-800 cursor-not-allowed opacity-60"
                     : isSelected
-                      ? "bg-white dark:bg-gray-850 border-gray-900 dark:border-gray-100 ring-1 ring-gray-900 dark:ring-gray-100 cursor-pointer shadow-sm"
+                      ? "bg-white dark:bg-gray-900 border-gray-900 dark:border-gray-100 ring-1 ring-gray-900 dark:ring-gray-100 cursor-pointer shadow-sm"
                       : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 cursor-pointer hover:shadow-sm"
                 }`}
               >
@@ -209,7 +209,7 @@ const VocabExtractionModal = ({
                   </div>
                 </div>
                 {isAlreadyAdded && (
-                  <span className="text-[10px] font-medium text-gray-450 dark:text-gray-500 bg-gray-100 dark:bg-gray-800/50 px-1.5 py-0.5 rounded flex-shrink-0">
+                  <span className="text-[10px] font-medium text-gray-500 dark:text-gray-500 bg-gray-100 dark:bg-gray-800/50 px-1.5 py-0.5 rounded flex-shrink-0">
                     Added
                   </span>
                 )}
@@ -218,7 +218,7 @@ const VocabExtractionModal = ({
           })}
 
           {extractedWords.length === 0 && (
-            <div className="col-span-2 text-center py-8 text-gray-500 dark:text-gray-450 text-sm">
+            <div className="col-span-2 text-center py-8 text-gray-500 dark:text-gray-500 text-sm">
               No vocabulary words found by AI.
             </div>
           )}

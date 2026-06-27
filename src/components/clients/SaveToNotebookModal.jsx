@@ -317,7 +317,7 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
 
                         <button
                           onClick={() => setEditingNoteId(null)}
-                          className="p-1.5 text-neutral-450 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full"
+                          className="p-1.5 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -329,7 +329,7 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
                             {note.name}
                           </p>
 
-                          <p className="text-[10px] text-neutral-450 dark:text-neutral-500 mt-0.5">
+                          <p className="text-[10px] text-neutral-500 dark:text-neutral-500 mt-0.5">
                             Nhấp để thêm từ vựng
                           </p>
                         </div>
@@ -344,7 +344,7 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
                                 setEditingNoteId(note.id);
                                 setEditName(note.name);
                               }}
-                              className="p-1 hover:bg-neutral-150 dark:hover:bg-neutral-800 rounded text-neutral-450 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
+                              className="p-1 hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
                             </button>
@@ -357,7 +357,7 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
                             </button>
                           </div>
 
-                          <span className="text-neutral-455 dark:text-neutral-500 flex-shrink-0">
+                          <span className="text-neutral-500 dark:text-neutral-500 flex-shrink-0">
                             <ChevronRight className="w-4 h-4" />
                           </span>
                         </div>
@@ -379,7 +379,7 @@ const SaveToNotebookModal = ({ word, isOpen, onClose }) => {
               <div className="absolute inset-0 bg-white/70 dark:bg-neutral-900/70 z-20 flex items-center justify-center">
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
-                  <span className="text-xs font-semibold text-neutral-850 dark:text-neutral-200">
+                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-200">
                     Đang thêm vào sổ tay...
                   </span>
                 </div>

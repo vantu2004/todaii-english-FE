@@ -52,7 +52,7 @@ const QuestionItem = forwardRef(
                   key={i}
                   src={imgUrl}
                   alt={`Câu ${questionNumber}`}
-                  className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-850"
+                  className="w-full rounded-lg object-contain border border-neutral-100 dark:border-neutral-900"
                 />
               ))}
               {showAudio && (

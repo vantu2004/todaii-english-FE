@@ -78,7 +78,7 @@ const ToggleBookmarkButton = ({
       onClick={handleToggle}
       className={`group w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 
       bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200/60 dark:border-neutral-800/60 
-      shadow-sm hover:shadow-md hover:bg-white dark:hover:bg-neutral-800 hover:border-neutral-350 dark:hover:border-neutral-600 
+      shadow-sm hover:shadow-md hover:bg-white dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 
       active:scale-95 ${className}`}
       title={saved ? "Bỏ lưu" : "Lưu lại"}
     >

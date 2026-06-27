@@ -59,7 +59,7 @@ const NotFoundState = ({ word, onSuggestionClick }) => {
               <button
                 key={idx}
                 onClick={() => onSuggestionClick(sug)}
-                className="px-3 py-1.5 bg-white dark:bg-neutral-850 border border-neutral-200 dark:border-neutral-750 text-neutral-700 dark:text-neutral-300 rounded-md text-sm font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-brand-500 dark:hover:border-brand-500 transition-all"
+                className="px-3 py-1.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-md text-sm font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-brand-500 dark:hover:border-brand-500 transition-all"
               >
                 {sug}
               </button>

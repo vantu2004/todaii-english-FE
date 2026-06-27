@@ -66,7 +66,7 @@ const ChatHeader = ({
         <button
           onClick={onClose}
           title="Close"
-          className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-850 border border-zinc-200/50 transition-colors ml-0.5"
+          className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 border border-zinc-200/50 transition-colors ml-0.5"
           aria-label="Close"
         >
           <X size={14} />
