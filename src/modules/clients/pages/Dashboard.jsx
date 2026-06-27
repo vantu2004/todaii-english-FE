@@ -278,10 +278,10 @@ const Dashboard = () => {
             </div>
 
             {/* Premium Tab Bar */}
-            <div className="flex items-center gap-1 p-1 rounded-2xl bg-neutral-100/60 dark:bg-neutral-800/60 backdrop-blur-sm shrink-0 self-start md:self-center">
+            <div className="flex items-center gap-1 p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 shrink-0 self-start md:self-center">
               <button
                 onClick={() => setActiveTab("coach")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-xl ${
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
                   activeTab === "coach"
                     ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
@@ -291,7 +291,7 @@ const Dashboard = () => {
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-xl ${
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
                   activeTab === "analytics"
                     ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
@@ -301,7 +301,7 @@ const Dashboard = () => {
               </button>
               <button
                 onClick={() => setActiveTab("activity")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-xl ${
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
                   activeTab === "activity"
                     ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
                     : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
@@ -325,7 +325,7 @@ const Dashboard = () => {
               {activeTab === "coach" && (
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                   {/* Left panel: Plan History */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 h-fit">
+                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-4 h-fit">
                     <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-4 flex items-center gap-1.5">
                       <Calendar size={14} />
                       Lộ trình trước đây
@@ -340,7 +340,7 @@ const Dashboard = () => {
                           <button
                             key={plan.id}
                             onClick={() => setSelectedPlan(plan)}
-                            className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${
                               selectedPlan?.id === plan.id
                                 ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
                                 : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
@@ -357,10 +357,10 @@ const Dashboard = () => {
                   </div>
 
                   {/* Right panel: Plan Content */}
-                  <div className="lg:col-span-3 bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-6 md:p-8">
+                  <div className="lg:col-span-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6">
                     {selectedPlan ? (
                       <article className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200">
-                        <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800 mb-6">
+                        <div className="flex items-center justify-between pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-6">
                           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2 m-0">
                             <Sparkles size={18} className="text-brand-500" />
                             Lộ trình học AI Coach
@@ -402,7 +402,7 @@ const Dashboard = () => {
                   {/* Left Column: Streak & Progress */}
                   <div className="lg:col-span-1 space-y-6">
                     {/* Circle Study Progress Widget */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-6 rounded-2xl flex flex-col items-center text-center shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col items-center text-center shadow-sm">
                       <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 self-start flex items-center gap-1.5">
                         <Flame size={14} className="text-orange-500" />
                         Mục tiêu học hôm nay
@@ -450,13 +450,13 @@ const Dashboard = () => {
                     </div>
 
                     {/* Streak Info Widget */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-6 rounded-2xl shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg shadow-sm">
                       <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-4 flex items-center gap-1.5">
                         <Award size={14} />
                         Thành tích Streak
                       </h3>
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-neutral-50/50 dark:bg-neutral-800/40 p-4 rounded-xl text-center border border-neutral-100/50 dark:border-neutral-700/50">
+                        <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-md text-center border border-neutral-200 dark:border-neutral-800">
                           <Flame
                             className="mx-auto text-orange-500 mb-1"
                             size={24}
@@ -468,7 +468,7 @@ const Dashboard = () => {
                             STREAK HIỆN TẠI
                           </p>
                         </div>
-                        <div className="bg-neutral-50/50 dark:bg-neutral-800/40 p-4 rounded-xl text-center border border-neutral-100/50 dark:border-neutral-700/50">
+                        <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-md text-center border border-neutral-200 dark:border-neutral-800">
                           <Award
                             className="mx-auto text-yellow-500 mb-1"
                             size={24}
@@ -485,7 +485,7 @@ const Dashboard = () => {
                   </div>
 
                   {/* Center Column: Radar Weakness Chart */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-6 rounded-2xl flex flex-col h-[380px] shadow-sm">
+                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col h-[380px] shadow-sm">
                     <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 flex items-center gap-1.5">
                       <AlertCircle size={14} />
                       Phân tích điểm yếu (Accuracy)
@@ -505,13 +505,13 @@ const Dashboard = () => {
                   </div>
 
                   {/* Right Column: Score Prediction */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-6 rounded-2xl flex flex-col justify-between shadow-sm">
+                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col justify-between shadow-sm">
                     <div>
                       <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 flex items-center gap-1.5">
                         <TrendingUp size={14} />
                         Dự đoán điểm thi thật
                       </h3>
-                      <div className="flex items-baseline gap-2 mb-4 justify-center py-4 bg-brand-500/5 dark:bg-brand-500/10 border border-brand-500/10 rounded-2xl">
+                      <div className="flex items-baseline gap-2 mb-4 justify-center py-4 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg">
                         <span className="text-5xl font-light text-neutral-900 dark:text-white">
                           {scoreData?.predicted_score || "N/A"}
                         </span>
@@ -520,19 +520,19 @@ const Dashboard = () => {
                         </span>
                       </div>
                       <div className="space-y-3 text-xs text-neutral-600 dark:text-neutral-300">
-                        <div className="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/50">
+                        <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
                           <span>Điểm trung bình (3 đề gần nhất)</span>
                           <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                             {scoreData?.avg_score || 0}
                           </span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/50">
+                        <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
                           <span>Điểm thưởng xu hướng (Trend bonus)</span>
                           <span className="font-semibold text-green-500">
                             +{scoreData?.trend_bonus || 0}
                           </span>
                         </div>
-                        <div className="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/50">
+                        <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
                           <span>Tổng số đề đã luyện</span>
                           <span className="font-semibold text-neutral-800 dark:text-neutral-200">
                             {scoreData?.total_tests_taken || 0} đề
@@ -596,9 +596,9 @@ const Dashboard = () => {
                   {/* Summary Cards Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     {/* Card 1: AI Assistant */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl flex flex-col justify-between transition-all hover:shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-xl">
+                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
                           <Cpu size={20} />
                         </div>
                         <div>
@@ -615,7 +615,7 @@ const Dashboard = () => {
                           </h3>
                         </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                         <span>Tổng số token:</span>
                         <span className="font-semibold text-neutral-700 dark:text-neutral-300">
                           {loadingActivity
@@ -626,9 +626,9 @@ const Dashboard = () => {
                     </div>
 
                     {/* Card 2: Dictionary */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl flex flex-col justify-between transition-all hover:shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-xl">
+                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
                           <BookOpen size={20} />
                         </div>
                         <div>
@@ -645,7 +645,7 @@ const Dashboard = () => {
                           </h3>
                         </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                         <span>Todaii Dict / Free API:</span>
                         <span className="font-semibold text-neutral-700 dark:text-neutral-300">
                           {loadingActivity
@@ -656,9 +656,9 @@ const Dashboard = () => {
                     </div>
 
                     {/* Card 3: Google Translation */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl flex flex-col justify-between transition-all hover:shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-xl">
+                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
                           <Languages size={20} />
                         </div>
                         <div>
@@ -675,7 +675,7 @@ const Dashboard = () => {
                           </h3>
                         </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
                         <span>Ký tự đã dịch:</span>
                         <span className="font-semibold text-neutral-700 dark:text-neutral-300">
                           {loadingActivity
@@ -686,9 +686,9 @@ const Dashboard = () => {
                     </div>
 
                     {/* Card 4: Account Activity */}
-                    <div className="bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl flex flex-col justify-between transition-all hover:shadow-sm">
+                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
                       <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-xl">
+                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
                           <LogIn size={20} />
                         </div>
                         <div>
@@ -705,7 +705,7 @@ const Dashboard = () => {
                           </h3>
                         </div>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400 gap-2">
+                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400 gap-2">
                         <span className="truncate">Thư nhận / Tải ảnh:</span>
                         <span className="font-semibold text-neutral-700 dark:text-neutral-300 shrink-0">
                           {loadingActivity
