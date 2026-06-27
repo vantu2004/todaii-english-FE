@@ -13,6 +13,7 @@ import TopicTags from "@/components/clients/home_page/sidebar/TopicTags";
 import SearchBar from "@/components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 import SavedArticleTags from "@/components/clients/home_page/sidebar/SavedArticleTags";
+import RecommendationWidget from "@/components/clients/RecommendationWidget";
 
 const Home = () => {
   // lấy 9 bài vì 1 bài nổi bật + 8 bài mới cập nhật dùng cho slide
@@ -93,6 +94,9 @@ const Home = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* LEFT - Main Content */}
           <div className="flex-1 min-w-0">
+            {/* Recommendation Section */}
+            <RecommendationWidget type="articles" />
+
             {/* Featured Article */}
             <section className="mb-10">
               <div className="flex items-center justify-between mb-5">

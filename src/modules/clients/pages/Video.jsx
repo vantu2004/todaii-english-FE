@@ -12,6 +12,7 @@ import DateFilterSection from "@/components/clients/video_page/DateFilterSection
 import { getAllTopics } from "@/api/clients/topicApi";
 import { logError } from "@/utils/LogError";
 import { AnimatePresence, motion } from "framer-motion";
+import RecommendationWidget from "@/components/clients/RecommendationWidget";
 
 const Video = () => {
   const navigate = useNavigate();
@@ -138,6 +139,10 @@ const Video = () => {
       )}
 
       <TopicSection topics={topics} onNavigate={handleNavigate} />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <RecommendationWidget type="videos" />
+      </div>
 
       <VideoSlider
         title="Video Mới Cập Nhật"

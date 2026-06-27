@@ -8,6 +8,7 @@ import CollectionSidebar from "@/components/clients/toeic_page/home/CollectionSi
 import TestGrid from "@/components/clients/toeic_page/home/TestGrid";
 import Pagination from "@/components/clients/Pagination";
 import { logError } from "@/utils/LogError";
+import RecommendationWidget from "@/components/clients/RecommendationWidget";
 
 const ToeicHome = () => {
   const [collections, setCollections] = useState([]);
@@ -115,6 +116,9 @@ const ToeicHome = () => {
             mới nhất.
           </p>
         </div>
+
+        {/* Test Recommendations */}
+        <RecommendationWidget type="tests" />
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar / Collections */}

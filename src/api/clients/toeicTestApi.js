@@ -64,3 +64,13 @@ export const isSavedTest = async (testId) => {
     throw err;
   }
 };
+
+export const getRecommendedTests = async () => {
+  try {
+    const response = await clientInstance.get("/toeic/test/recommend");
+    return response.data; // { message, weakest_part, tests }
+  } catch (err) {
+    console.error("Get recommended tests error:", err);
+    throw err;
+  }
+};

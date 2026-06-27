@@ -15,6 +15,7 @@ import { getVideoLyrics } from "@/api/clients/videoLyricApi";
 import useVideoPlayer from "@/hooks/useVideoPlayer";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import LyricsPanel from "@/components/video/LyricsPanel";
+import { incrementStudyItem } from "@/api/clients/studyLogApi";
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -23,6 +24,14 @@ const VideoDetails = () => {
   const [lyrics, setLyrics] = useState([]);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      incrementStudyItem("VIDEO").catch((err) =>
+        console.error("Increment video study item error:", err),
+      );
+    }
+  }, [id]);
 
   const {
     state,

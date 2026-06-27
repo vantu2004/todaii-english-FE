@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { getVocabDeckById } from "@/api/clients/vocabDeckApi";
 import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
+import { incrementStudyItem } from "@/api/clients/studyLogApi";
 import FlashcardGame from "@/components/clients/vocab_deck_details_page/FlashcardGame";
 import QuizGame from "@/components/clients/vocab_deck_details_page/QuizGame";
 import { formatISODate } from "@/utils/FormatDate";
@@ -143,6 +144,14 @@ const VocabDeckDetails = () => {
   }, []);
 
   // ─── Fetch deck ─────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (id) {
+      incrementStudyItem("VOCAB_DECK").catch((err) =>
+        console.error("Increment vocab deck study item error:", err),
+      );
+    }
+  }, [id]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

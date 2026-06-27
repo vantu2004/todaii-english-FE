@@ -9,10 +9,20 @@ import RelatedArticles from "@/components/clients/article_details_page/RelatedAr
 import { getEntriesByArticleId } from "@/api/clients/articleApi";
 import EntryWordList from "@/components/clients/EntryWordList";
 import PageNotFound from "@/pages/PageNotFound";
+import { incrementStudyItem } from "@/api/clients/studyLogApi";
+import { useEffect } from "react";
 
 const ArticleDetails = () => {
   const { id } = useParams();
   const { article, loading } = useArticleDetails(id);
+
+  useEffect(() => {
+    if (id) {
+      incrementStudyItem("ARTICLE").catch((err) =>
+        console.error("Increment article study item error:", err),
+      );
+    }
+  }, [id]);
 
   if (loading)
     return (
