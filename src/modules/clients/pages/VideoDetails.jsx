@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import VideoInfo from "@/components/clients/video_details_page/VideoInfo";
 import RelatedVideos from "@/components/clients/video_details_page/RelatedVideos";
+import RecommendedVideos from "@/components/clients/video_details_page/RecommendedVideos";
+
 import {
   getVideoById,
   getRelatedVideos,
@@ -123,7 +125,7 @@ const VideoDetails = () => {
             </div>
 
             {/* --- CỘT PHẢI: SIDEBAR (Chiếm 1/3) --- */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-5">
               <LyricsPanel
                 lyricLines={lyrics}
                 lyricRefs={lyricRefs}
@@ -132,6 +134,7 @@ const VideoDetails = () => {
               />
 
               <RelatedVideos videos={relatedVideos} />
+              <RecommendedVideos />
             </div>
           </div>
         </div>

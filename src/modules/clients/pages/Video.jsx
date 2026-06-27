@@ -4,6 +4,7 @@ import {
   getLatestVideos,
   getTopVideos,
   getVideosByDate,
+  getRecommendedVideos,
 } from "@/api/clients/videoApi";
 import HeroSection from "@/components/clients/video_page/HeroSection";
 import TopicSection from "@/components/clients/video_page/TopicSection";
@@ -12,12 +13,11 @@ import DateFilterSection from "@/components/clients/video_page/DateFilterSection
 import { getAllTopics } from "@/api/clients/topicApi";
 import { logError } from "@/utils/LogError";
 import { AnimatePresence, motion } from "framer-motion";
-import RecommendationWidget from "@/components/clients/RecommendationWidget";
-
 const Video = () => {
   const navigate = useNavigate();
 
   const [heroVideo, setHeroVideo] = useState(null);
+  const [recommendedVideos, setRecommendedVideos] = useState([]);
   const [topics, setTopics] = useState([]);
   const [latestVideos, setLatestVideos] = useState([]);
   const [topVideos, setTopVideos] = useState([]);
@@ -36,18 +36,24 @@ const Video = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [latestRes, topicRes, topRes] = await Promise.all([
+        const [latestRes, topicRes, topRes, recRes] = await Promise.all([
           getLatestVideos(10),
           getAllTopics("VIDEO"),
           getTopVideos(10),
+          getRecommendedVideos().catch((err) => {
+            console.error("Error fetching recommended videos:", err);
+            return [];
+          }),
         ]);
 
         const latest = latestRes || [];
         const top = topRes || [];
+        const rec = recRes || [];
 
         setLatestVideos(latest);
         setTopics(topicRes);
         setTopVideos(top);
+        setRecommendedVideos(rec);
 
         // Chọn video đầu tiên làm hero video
         if (latest.length > 0) {
@@ -134,15 +140,15 @@ const Video = () => {
 
   return (
     <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 text-neutral-900 dark:text-white font-sans selection:bg-brand-100 selection:text-brand-900">
-      {heroVideo && (
-        <HeroSection video={heroVideo} onNavigate={handleNavigate} />
+      {(heroVideo || (recommendedVideos && recommendedVideos.length > 0)) && (
+        <HeroSection
+          videos={recommendedVideos}
+          video={heroVideo}
+          onNavigate={handleNavigate}
+        />
       )}
 
       <TopicSection topics={topics} onNavigate={handleNavigate} />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <RecommendationWidget type="videos" />
-      </div>
 
       <VideoSlider
         title="Video Mới Cập Nhật"

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import BigArticleCard from "@/components/clients/home_page/BigArticleCard";
 import ArticleCard from "@/components/clients/home_page/ArticleCard";
 import ArticlesByDate from "@/components/clients/home_page/ArticlesByDate";
@@ -13,7 +13,7 @@ import TopicTags from "@/components/clients/home_page/sidebar/TopicTags";
 import SearchBar from "@/components/clients/SearchBar";
 import { AnimatePresence, motion } from "framer-motion";
 import SavedArticleTags from "@/components/clients/home_page/sidebar/SavedArticleTags";
-import RecommendationWidget from "@/components/clients/RecommendationWidget";
+import { getRecommendedArticles } from "@/api/clients/articleApi";
 
 const Home = () => {
   // lấy 9 bài vì 1 bài nổi bật + 8 bài mới cập nhật dùng cho slide
@@ -22,6 +22,37 @@ const Home = () => {
     topArticles,
     loading: articlesLoading,
   } = useArticle(9);
+
+  const [recommendedArticles, setRecommendedArticles] = useState([]);
+  const [loadingRecommended, setLoadingRecommended] = useState(true);
+  const [recIndex, setRecIndex] = useState(0);
+  const [isRecHovered, setIsRecHovered] = useState(false);
+  const recTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    const fetchRecs = async () => {
+      try {
+        setLoadingRecommended(true);
+        const data = await getRecommendedArticles();
+        setRecommendedArticles(data || []);
+      } catch (err) {
+        console.error("Error fetching recommended articles on Home:", err);
+      } finally {
+        setLoadingRecommended(false);
+      }
+    };
+    fetchRecs();
+  }, []);
+
+  // Auto slide for recommended articles
+  useEffect(() => {
+    if (loadingRecommended || recommendedArticles.length <= 1 || isRecHovered)
+      return;
+    recTimeoutRef.current = setTimeout(() => {
+      setRecIndex((prev) => (prev + 1) % recommendedArticles.length);
+    }, 4000);
+    return () => clearTimeout(recTimeoutRef.current);
+  }, [recIndex, loadingRecommended, recommendedArticles.length, isRecHovered]);
 
   const {
     articlesByDate,
@@ -94,22 +125,106 @@ const Home = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* LEFT - Main Content */}
           <div className="flex-1 min-w-0">
-            {/* Recommendation Section */}
-            <RecommendationWidget type="articles" />
+            {/* Featured Article / Recommendation Carousel */}
+            <section
+              className="mb-10"
+              onMouseEnter={() => setIsRecHovered(true)}
+              onMouseLeave={() => setIsRecHovered(false)}
+            >
+              {loadingRecommended || articlesLoading ? (
+                <>
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                      Nổi bật
+                    </h2>
+                    <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
+                  </div>
+                  <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 sm:h-96 rounded-lg" />
+                </>
+              ) : recommendedArticles.length > 0 ? (
+                <>
+                  {/* Recommended Articles Header */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xs font-semibold uppercase tracking-widest text-brand-500 flex items-center gap-1.5">
+                        <Sparkles size={14} className="animate-pulse" />
+                        Đề xuất nổi bật
+                      </h2>
+                      <span className="flex h-2 w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                      </span>
+                    </div>
+                    <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4 mr-4" />
+                    {recommendedArticles.length > 1 && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() =>
+                            setRecIndex(
+                              (prev) =>
+                                (prev - 1 + recommendedArticles.length) %
+                                recommendedArticles.length,
+                            )
+                          }
+                          className="w-8 h-8 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer"
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            setRecIndex(
+                              (prev) => (prev + 1) % recommendedArticles.length,
+                            )
+                          }
+                          className="w-8 h-8 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
 
-            {/* Featured Article */}
-            <section className="mb-10">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-                  Nổi bật
-                </h2>
-                <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
-              </div>
+                  {/* Recommendation Slider */}
+                  <div className="relative overflow-hidden rounded-lg">
+                    <div
+                      className="flex transition-transform duration-500 ease-out"
+                      style={{ transform: `translateX(-${recIndex * 100}%)` }}
+                    >
+                      {recommendedArticles.map((article) => (
+                        <div key={article.id} className="w-full flex-shrink-0">
+                          <BigArticleCard {...article} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-              {articlesLoading ? (
-                <div className="animate-pulse bg-neutral-200 dark:bg-neutral-800 h-80 sm:h-96 rounded-lg" />
+                  {/* Dots indicator */}
+                  {recommendedArticles.length > 1 && (
+                    <div className="flex justify-center items-center gap-1.5 mt-5">
+                      {recommendedArticles.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setRecIndex(idx)}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            idx === recIndex
+                              ? "bg-brand-500 w-6"
+                              : "bg-neutral-300 dark:bg-neutral-700 w-1.5 hover:bg-neutral-400 dark:hover:bg-neutral-600"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : latestArticles.length > 0 ? (
-                <BigArticleCard {...latestArticles[0]} />
+                <>
+                  <div className="flex items-center justify-between mb-5">
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+                      Nổi bật
+                    </h2>
+                    <div className="h-px flex-1 bg-neutral-200 dark:bg-neutral-800 ml-4" />
+                  </div>
+                  <BigArticleCard {...latestArticles[0]} />
+                </>
               ) : null}
             </section>
 

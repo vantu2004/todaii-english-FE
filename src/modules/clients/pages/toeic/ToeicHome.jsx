@@ -117,9 +117,6 @@ const ToeicHome = () => {
           </p>
         </div>
 
-        {/* Test Recommendations */}
-        <RecommendationWidget type="tests" />
-
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar / Collections */}
           <CollectionSidebar
@@ -132,6 +129,7 @@ const ToeicHome = () => {
 
           {/* Tests Grid */}
           <div className="flex-1 flex flex-col gap-6">
+            <RecommendationWidget type="tests" />
             <TestGrid
               tests={tests}
               selectedCollection={selectedCollection}

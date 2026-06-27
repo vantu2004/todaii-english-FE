@@ -6,6 +6,8 @@ import ArticleContent from "@/components/clients/article_details_page/ArticleCon
 import { AnimatePresence, motion } from "framer-motion";
 import SavedArticleTags from "@/components/clients/home_page/sidebar/SavedArticleTags";
 import RelatedArticles from "@/components/clients/article_details_page/RelatedArticles";
+import RecommendedArticles from "@/components/clients/article_details_page/RecommendedArticles";
+
 import { getEntriesByArticleId } from "@/api/clients/articleApi";
 import EntryWordList from "@/components/clients/EntryWordList";
 import PageNotFound from "@/pages/PageNotFound";
@@ -82,6 +84,7 @@ const ArticleDetails = () => {
             <aside className="w-full lg:w-80 xl:w-96 flex-shrink-0">
               <div className="lg:sticky lg:top-24 space-y-5">
                 <RelatedArticles articleId={id} />
+                <RecommendedArticles />
                 <SavedArticleTags />
               </div>
             </aside>
