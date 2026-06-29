@@ -24,7 +24,6 @@ import {
 import ArticleViewModal from "./ArticleViewModal";
 import { useNavigate } from "react-router-dom";
 import { logError } from "@/utils/LogError";
-import { playAudio } from "@/utils/PlayAudio";
 
 const ArticlesTable = ({
   columns,
