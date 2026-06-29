@@ -313,55 +313,54 @@ const ToeicPassageFormModal = ({
             )}
           </div>
 
-          <div className="md:col-span-2">
-            <div className="flex items-center justify-between mb-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                Audio URL{" "}
-                {(partNumber === 3 || partNumber === 4) && (
-                  <span className="text-red-500">*</span>
-                )}
-              </label>
-              <div className="flex gap-2 items-center">
-                {!formData.audioUrl?.includes("cloudinary") ? (
-                  <label
-                    className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
-                  >
-                    {isUploadingAudio ? "Uploading..." : "Upload Audio"}
-                    <input
-                      type="file"
-                      accept="audio/*"
-                      className="hidden"
-                      onChange={(e) => handleUploadFile(e, "audio")}
-                    />
-                  </label>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFile("audio")}
-                    disabled={isDeletingAudio}
-                    className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
-                  >
-                    {isDeletingAudio ? "Removing..." : "Remove Uploaded"}
-                  </button>
-                )}
+          {(partNumber === 3 || partNumber === 4) && (
+            <div className="md:col-span-2">
+              <div className="flex items-center justify-between mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Audio URL <span className="text-red-500">*</span>
+                </label>
+                <div className="flex gap-2 items-center">
+                  {!formData.audioUrl?.includes("cloudinary") ? (
+                    <label
+                      className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingAudio ? "opacity-50 pointer-events-none" : ""}`}
+                    >
+                      {isUploadingAudio ? "Uploading..." : "Upload Audio"}
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        className="hidden"
+                        onChange={(e) => handleUploadFile(e, "audio")}
+                      />
+                    </label>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteFile("audio")}
+                      disabled={isDeletingAudio}
+                      className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
+                    >
+                      {isDeletingAudio ? "Removing..." : "Remove Uploaded"}
+                    </button>
+                  )}
+                </div>
               </div>
+              <input
+                type="text"
+                name="audioUrl"
+                value={formData.audioUrl}
+                onChange={handleChange}
+                placeholder="https://example.com/audio.mp3"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
+                disabled={formData.audioUrl?.includes("cloudinary")}
+                required
+              />
+              {formData.audioUrl && (
+                <audio controls className="w-full" src={formData.audioUrl}>
+                  Your browser does not support the audio element.
+                </audio>
+              )}
             </div>
-            <input
-              type="text"
-              name="audioUrl"
-              value={formData.audioUrl}
-              onChange={handleChange}
-              placeholder="https://example.com/audio.mp3"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
-              disabled={formData.audioUrl?.includes("cloudinary")}
-              required={partNumber === 3 || partNumber === 4}
-            />
-            {formData.audioUrl && (
-              <audio controls className="w-full" src={formData.audioUrl}>
-                Your browser does not support the audio element.
-              </audio>
-            )}
-          </div>
+          )}
         </div>
       </form>
     </Modal>

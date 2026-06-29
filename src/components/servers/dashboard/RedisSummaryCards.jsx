@@ -11,12 +11,12 @@ import { formatBytes, formatNumber } from "@/utils/redisTransform";
 const RedisSummaryCard = ({ label, value, icon: Icon, loading }) => {
   if (loading) {
     return (
-      <div className="p-4 bg-white dark:bg-gray-900 border-gray-250 dark:border-gray-800 rounded-lg animate-pulse min-h-[96px] flex flex-col justify-between">
+      <div className="p-4 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-800 rounded-lg animate-pulse min-h-[96px] flex flex-col justify-between">
         <div className="flex justify-between items-center">
-          <div className="h-3 w-16 bg-gray-200 dark:bg-gray-850 rounded"></div>
-          <div className="w-5 h-5 bg-gray-200 dark:bg-gray-850 rounded"></div>
+          <div className="h-3 w-16 bg-gray-200 dark:bg-gray-900 rounded"></div>
+          <div className="w-5 h-5 bg-gray-200 dark:bg-gray-900 rounded"></div>
         </div>
-        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-850 rounded mt-2"></div>
+        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-900 rounded mt-2"></div>
       </div>
     );
   }
@@ -31,7 +31,7 @@ const RedisSummaryCard = ({ label, value, icon: Icon, loading }) => {
           {value !== undefined && value !== null ? value : "—"}
         </span>
       </div>
-      <div className="p-2 bg-gray-50 dark:bg-gray-850 rounded-lg text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center">
+      <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center">
         <Icon size={16} />
       </div>
     </div>

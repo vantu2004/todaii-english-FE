@@ -135,3 +135,13 @@ export const getEntriesByArticleId = async (articleId, page = 1, size = 10) => {
     throw err;
   }
 };
+
+export const getRecommendedArticles = async () => {
+  try {
+    const response = await clientInstance.get("/article/recommend");
+    return response.data;
+  } catch (err) {
+    console.error("Get recommended articles error:", err);
+    throw err;
+  }
+};

@@ -12,12 +12,12 @@ const GroupCard = ({ title, icon: Icon, items, loading, onNavigate }) => {
     return (
       <div className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg animate-pulse min-h-[140px] flex flex-col justify-between">
         <div className="flex justify-between items-center mb-4">
-          <div className="h-4 w-20 bg-gray-200 dark:bg-gray-850 rounded"></div>
-          <div className="w-8 h-8 bg-gray-200 dark:bg-gray-850 rounded-lg"></div>
+          <div className="h-4 w-20 bg-gray-200 dark:bg-gray-900 rounded"></div>
+          <div className="w-8 h-8 bg-gray-200 dark:bg-gray-900 rounded-lg"></div>
         </div>
         <div className="space-y-3">
-          <div className="h-6 bg-gray-200 dark:bg-gray-850 rounded w-full"></div>
-          <div className="h-6 bg-gray-200 dark:bg-gray-850 rounded w-full"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-900 rounded w-full"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-900 rounded w-full"></div>
         </div>
       </div>
     );
@@ -30,7 +30,7 @@ const GroupCard = ({ title, icon: Icon, items, loading, onNavigate }) => {
         <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
           {title}
         </h4>
-        <div className="p-2 bg-gray-50 dark:bg-gray-850 rounded-lg text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center">
+        <div className="p-2 bg-gray-50 dark:bg-gray-900 rounded-lg text-gray-400 border border-gray-100 dark:border-gray-800 flex items-center justify-center">
           <Icon size={18} />
         </div>
       </div>
@@ -41,7 +41,7 @@ const GroupCard = ({ title, icon: Icon, items, loading, onNavigate }) => {
           <div
             key={index}
             onClick={() => item.to && onNavigate(item.to)}
-            className="flex items-center justify-between py-2 px-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-850 cursor-pointer group transition-colors"
+            className="flex items-center justify-between py-2 px-3 -mx-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer group transition-colors"
           >
             <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-950 dark:group-hover:text-white transition-colors flex items-center gap-1.5">
               {item.label}

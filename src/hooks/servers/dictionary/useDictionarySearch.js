@@ -7,7 +7,7 @@ import { logError } from "@/utils/LogError";
 
 export const useDictionarySearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [apiSource, setApiSource] = useState("free"); // 'free' hoặc 'todaii'
+  const [apiSource, setApiSource] = useState("todaii"); // 'free' hoặc 'todaii'
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

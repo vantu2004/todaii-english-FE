@@ -38,7 +38,7 @@ const UploadSrtFileModal = ({ isOpen, onClose, onUpload, onCreateBatch }) => {
 
   const handleSave = () => {
     if (lines.length === 0) {
-      alert("Không có dữ liệu để lưu.");
+      alert("No data to save.");
       return;
     }
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MessageCircleMore, X } from "lucide-react";
+import { CircleX, MessageCircleMore, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import ChatPanel from "./ChatPanel";
 
 const FloatingChatbot = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isFabHide, setIsFabHide] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const chatbotRef = useRef(null);
 
@@ -19,7 +20,7 @@ const FloatingChatbot = () => {
   useEffect(() => {
     const onMouseDown = (e) => {
       if (chatbotRef.current && !chatbotRef.current.contains(e.target)) {
-        setIsOpen(false);
+        handleChatbotClose();
       }
     };
     document.addEventListener("mousedown", onMouseDown);
@@ -28,44 +29,83 @@ const FloatingChatbot = () => {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "Escape") setIsOpen(false);
+      if (e.key === "Escape") {
+        handleChatbotClose();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  const handleChatbotOpen = () => {
+    setIsChatbotOpen(true);
+    setIsFabHide(true);
+  };
+
+  const handleChatbotClose = () => {
+    setIsChatbotOpen(false);
+    setIsFabHide(false);
+  };
+
   return (
     <div className="relative z-[60]" ref={chatbotRef}>
       {/* FAB */}
       <AnimatePresence>
-        {!isOpen && (
-          <motion.button
+        {!isFabHide && (
+          <motion.div
             key="fab"
             initial={{ scale: 0, opacity: 0 }}
             animate={{
               scale: 1,
               opacity: 1,
-              transition: { type: "spring", stiffness: 300, damping: 22 },
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 22,
+              },
             }}
-            exit={{ scale: 0, opacity: 0, transition: { duration: 0.15 } }}
-            onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 w-[58px] h-[58px] rounded-2xl
-              bg-zinc-600 text-white shadow-xl shadow-zinc-950/25
-              flex items-center justify-center
-              hover:scale-105 hover:bg-zinc-700 hover:shadow-2xl hover:shadow-zinc-950/30
-              active:scale-95 transition-all duration-200
-              focus:outline-none focus:ring-4 focus:ring-zinc-500/30"
-            aria-label="Mở Todaii AI"
+            exit={{
+              scale: 0,
+              opacity: 0,
+              transition: { duration: 0.15 },
+            }}
+            className="fixed bottom-6 right-6"
           >
-            <MessageCircleMore size={26} />
-          </motion.button>
+            {/* Nút đóng */}
+            <button
+              onClick={() => setIsFabHide(true)}
+              className="absolute -top-2 -right-2 z-10"
+              aria-label="Ẩn FAB"
+            >
+              <CircleX className="text-red-400 hover:text-red-600" size={20} />
+            </button>
+
+            {/* FAB */}
+            <motion.button
+              onClick={() => handleChatbotOpen()}
+              className="
+                w-[64px] h-[64px]
+                flex items-center justify-center
+                hover:scale-105
+                active:scale-95
+                transition-all duration-200
+              "
+              aria-label="Mở Todaii AI"
+            >
+              <img
+                src="/chatbot.png"
+                alt="Todaii AI"
+                className="w-full h-full object-cover"
+              />
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* Chat Panel */}
       <AnimatePresence>
-        {isOpen && (
-          <ChatPanel onClose={() => setIsOpen(false)} isMobile={isMobile} />
+        {isChatbotOpen && (
+          <ChatPanel onClose={() => handleChatbotClose()} isMobile={isMobile} />
         )}
       </AnimatePresence>
     </div>

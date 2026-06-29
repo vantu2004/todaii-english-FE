@@ -122,3 +122,13 @@ export const isSavedVideo = async (videoId) => {
     throw err;
   }
 };
+
+export const getRecommendedVideos = async () => {
+  try {
+    const response = await clientInstance.get("/video/recommend");
+    return response.data;
+  } catch (err) {
+    console.error("Get recommended videos error:", err);
+    throw err;
+  }
+};

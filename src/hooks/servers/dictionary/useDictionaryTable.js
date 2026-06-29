@@ -37,10 +37,9 @@ export const useDictionaryTable = () => {
       const res = await searchInDb(query.keyword, query.page, query.size);
       setData(res.content || []);
 
-      // Hứng cả camelCase lẫn snake_case để an toàn tuyệt đối
       setPagination({
-        totalElements: res.totalElements ?? res.total_elements ?? 0,
-        totalPages: res.totalPages ?? res.total_pages ?? 0,
+        totalElements: res.total_elements ?? 0,
+        totalPages: res.total_pages ?? 0,
         first: res.first ?? true,
         last: res.last ?? true,
       });

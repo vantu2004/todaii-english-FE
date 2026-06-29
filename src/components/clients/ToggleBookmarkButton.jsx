@@ -7,6 +7,7 @@ const ToggleBookmarkButton = ({
   itemId,
   checkSavedFn,
   toggleSavedFn,
+  onToggle,
   className = "",
 }) => {
   const { isLoggedIn } = useClientAuthContext();
@@ -47,10 +48,14 @@ const ToggleBookmarkButton = ({
       }
 
       const previousState = saved;
-      setSaved(!saved);
+      const nextState = !saved;
+      setSaved(nextState);
 
       try {
         await toggleSavedFn(itemId);
+        if (onToggle) {
+          onToggle(itemId, nextState);
+        }
       } catch (apiErr) {
         setSaved(previousState);
         throw apiErr;
@@ -71,15 +76,17 @@ const ToggleBookmarkButton = ({
   return (
     <button
       onClick={handleToggle}
-      // Loại bỏ bg-gray-100 để tránh bị hình vuông trắng xấu xí trên nền tối
-      className={`group relative flex items-center justify-center transition-transform active:scale-95 hover:scale-110 ${className}`}
+      className={`group w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 
+      bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border border-neutral-200/60 dark:border-neutral-800/60 
+      shadow-sm hover:shadow-md hover:bg-white dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 
+      active:scale-95 ${className}`}
       title={saved ? "Bỏ lưu" : "Lưu lại"}
     >
       <Bookmark
-        className={`w-6 h-6 transition-all duration-300 ${
+        className={`w-4 h-4 transition-all duration-300 ${
           saved
-            ? "text-yellow-400 fill-yellow-400 drop-shadow-sm"
-            : "text-neutral-500 dark:text-neutral-400 group-hover:text-yellow-200 drop-shadow-md"
+            ? "text-amber-500 fill-amber-500 scale-105"
+            : "text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-800 dark:group-hover:text-neutral-200"
         }`}
         strokeWidth={2}
       />

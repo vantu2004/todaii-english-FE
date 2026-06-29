@@ -13,23 +13,23 @@ const Node = ({ node, style, dragHandle, tree }) => {
       onClick={() => node.toggle()}
       onContextMenu={(e) => tree.props.onContextMenu(e, node)}
       className={`
-        group flex items-center cursor-pointer px-3 py-1.5 mx-1 rounded-lg transition-all border border-transparent select-none
+        group flex items-center cursor-pointer px-2.5 py-1.5 mx-0.5 rounded-md transition-all border border-transparent select-none
         ${
           node.isSelected
-            ? "bg-neutral-200 border-neutral-300 text-neutral-900 font-semibold shadow-sm dark:bg-neutral-800 dark:border-neutral-700 dark:text-white"
-            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            ? "bg-neutral-200/80 border-neutral-300 text-neutral-900 font-medium dark:bg-neutral-800 dark:border-neutral-700 dark:text-white"
+            : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800/60 dark:hover:text-white"
         }
       `}
     >
       {/* Icon */}
-      <div className="mr-2.5 w-5 h-5 flex items-center justify-center shrink-0">
+      <div className="mr-2 w-4 h-4 flex items-center justify-center shrink-0">
         <Icon
-          size={18}
+          size={16}
           className={
             isFolder
               ? node.isSelected
                 ? "text-yellow-600"
-                : "text-yellow-500 fill-yellow-500/20"
+                : "text-yellow-500 fill-yellow-500/10"
               : node.isSelected
                 ? "text-neutral-700 dark:text-neutral-300"
                 : "text-neutral-400 dark:text-neutral-500"
@@ -51,10 +51,10 @@ const Node = ({ node, style, dragHandle, tree }) => {
               if (e.key === "Escape") node.reset();
             }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full px-1 py-0.5 text-sm bg-white border border-brand-500 rounded outline-none shadow-sm dark:bg-neutral-800 dark:text-white"
+            className="w-full px-1.5 py-0.5 text-xs bg-white border border-brand-500 rounded outline-none dark:bg-neutral-800 dark:text-white"
           />
         ) : (
-          <span className="text-sm">{node.data.name}</span>
+          <span className="text-xs">{node.data.name}</span>
         )}
       </div>
 
@@ -66,7 +66,7 @@ const Node = ({ node, style, dragHandle, tree }) => {
           tree.props.onContextMenu(e, node);
         }}
         className={`
-          p-1 rounded hover:bg-neutral-300 text-neutral-400 hover:text-neutral-700 transition-all dark:hover:bg-neutral-700 dark:text-neutral-500 dark:hover:text-neutral-200
+          p-1 rounded-md hover:bg-neutral-300 text-neutral-400 hover:text-neutral-700 transition-all dark:hover:bg-neutral-700 dark:text-neutral-500 dark:hover:text-neutral-200
           ${
             node.isSelected
               ? "opacity-100"
@@ -74,7 +74,7 @@ const Node = ({ node, style, dragHandle, tree }) => {
           }
         `}
       >
-        <MoreVertical size={14} />
+        <MoreVertical size={12} />
       </div>
     </div>
   );

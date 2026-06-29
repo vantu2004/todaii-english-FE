@@ -53,7 +53,7 @@ const ToeicPassageDetails = ({ passage }) => {
       {/* Passage Content & Translation side-by-side */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* English Passage Text */}
-        <div className="bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-gray-800 dark:to-gray-750 p-6 rounded-2xl border border-blue-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-gradient-to-br from-blue-50/50 to-blue-100/30 dark:from-gray-800 dark:to-gray-800 p-6 rounded-2xl border border-blue-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-2 mb-4 border-b border-blue-200/50 dark:border-gray-600 pb-2">
             <div className="p-1.5 bg-blue-100/50 rounded-lg">
               <FileText size={16} className="text-blue-600" />
@@ -75,7 +75,7 @@ const ToeicPassageDetails = ({ passage }) => {
         </div>
 
         {/* Translation */}
-        <div className="bg-gradient-to-br from-green-50/50 to-green-100/30 dark:from-gray-800 dark:to-gray-750 p-6 rounded-2xl border border-green-100 dark:border-gray-700 shadow-sm">
+        <div className="bg-gradient-to-br from-green-50/50 to-green-100/30 dark:from-gray-800 dark:to-gray-800 p-6 rounded-2xl border border-green-100 dark:border-gray-700 shadow-sm">
           <div className="flex items-center gap-2 mb-4 border-b border-green-200/50 dark:border-gray-600 pb-2">
             <div className="p-1.5 bg-green-100/50 rounded-lg">
               <Languages size={16} className="text-green-600" />

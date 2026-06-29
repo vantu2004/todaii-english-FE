@@ -59,8 +59,8 @@ const TestsInToeicCollection = () => {
 
       setTests(data.content || []);
       setPagination({
-        totalElements: data.totalElements || data.total_elements,
-        totalPages: data.totalPages || data.total_pages,
+        totalElements: data.total_elements,
+        totalPages: data.total_pages,
         first: data.first,
         last: data.last,
       });

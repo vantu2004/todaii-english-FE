@@ -1,71 +1,47 @@
 import { clientInstance } from "@/config/axios";
 
-export const getRawWord = async (word) => {
+export const searchByTodaiiDictionary = async (word, page, size) => {
   try {
-    const response = await clientInstance.get("/dictionary/raw-word", {
+    const response = await clientInstance.get("/dictionary/todaii-dict", {
+      params: { word, page, size },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const searchByFreeDictionaryApi = async (word) => {
+  try {
+    const response = await clientInstance.get("/dictionary/free-dict", {
       params: { word },
     });
     return response.data;
   } catch (err) {
-    console.error("Get raw word error:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
 
-export const getWordById = async (id) => {
+export const getAiSuggestion = async (word) => {
   try {
-    const response = await clientInstance.get(`/dictionary/${id}`);
-    return response.data;
-  } catch (err) {
-    console.error("Get word by id error:", err);
-    throw err;
-  }
-};
-
-export const getWordByHeadword = async (word) => {
-  try {
-    const response = await clientInstance.get("/dictionary/headword", {
+    const response = await clientInstance.get("/dictionary/ai-suggestion", {
       params: { word },
     });
     return response.data;
   } catch (err) {
-    console.error("Get word by headword error:", err);
+    console.error("Error:", err);
     throw err;
   }
 };
 
-export const getWordByGemini = async (word) => {
+export const getTopWords = async () => {
   try {
-    const response = await clientInstance.get("/dictionary/gemini", {
-      params: { word },
-    });
+    const response = await clientInstance.get("/dictionary/top-words");
     return response.data;
   } catch (err) {
-    console.error("Get word by gemini error:", err);
-    throw err;
-  }
-};
-
-export const getRelatedWords = async (word) => {
-  try {
-    const response = await clientInstance.get("/dictionary/related-word", {
-      params: { word },
-    });
-    return response.data;
-  } catch (err) {
-    console.error("Get related words error:", err);
-    throw err;
-  }
-};
-
-export const askGemini = async (question) => {
-  try {
-    const response = await clientInstance.get("/dictionary/ask-gemini", {
-      params: { question },
-    });
-    return response.data;
-  } catch (err) {
-    console.error("Ask gemini error:", err);
+    console.error("Error:", err);
     throw err;
   }
 };

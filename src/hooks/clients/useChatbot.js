@@ -12,7 +12,7 @@ export const useChatbot = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // waiting for FIRST chunk
   const [isStreaming, setIsStreaming] = useState(false); // actively receiving chunks
-  const [aiProvider, setAiProvider] = useState("GEMINI");
+  const [aiProvider, setAiProvider] = useState("OPENAI");
   const [historyPage, setHistoryPage] = useState(1);
   const [hasMoreHistory, setHasMoreHistory] = useState(true);
   const [isHistoryLoading, setIsHistoryLoading] = useState(false);
@@ -101,7 +101,7 @@ export const useChatbot = () => {
 
       if (trimmed.length > MAX_CHAR_LIMIT) {
         throw new Error(
-          `Câu hỏi quá dài (${trimmed.length}/${MAX_CHAR_LIMIT} ký tự).`,
+          `Question is too long (${trimmed.length}/${MAX_CHAR_LIMIT} characters).`,
         );
       }
 
@@ -187,8 +187,8 @@ export const useChatbot = () => {
               return {
                 ...msg,
                 content: accumulatedText
-                  ? accumulatedText + "\n\n*(Kết nối bị gián đoạn)*"
-                  : "Xin lỗi, hiện tại tôi không thể trả lời. Vui lòng thử lại sau.",
+                  ? accumulatedText + "\n\n*(Connection interrupted)*"
+                  : "Sorry, I cannot reply right now. Please try again later.",
                 isStreaming: false,
                 isError: !accumulatedText,
               };

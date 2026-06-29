@@ -17,8 +17,12 @@ const ChatHeader = ({
       {/* Brand */}
       <div className="flex items-center gap-2.5">
         {/* Logo mark - Warm Zinc "T" instead of Snowflake/AI particles */}
-        <div className="w-8 h-8 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-sm select-none">
-          T
+        <div className="w-8 h-8 rounded-xl ">
+          <img
+            src="/chatbot.png"
+            alt="Todaii AI"
+            className="w-full h-full object-cover"
+          />
         </div>
         <div>
           <h3 className="text-[13.5px] font-bold tracking-tight text-zinc-900 leading-none">
@@ -40,11 +44,9 @@ const ChatHeader = ({
         <button
           onClick={onLoadHistory}
           disabled={isHistoryLoading || !hasMoreHistory}
-          title={
-            !hasMoreHistory ? "Đã tải hết lịch sử" : "Xem lịch sử trò chuyện"
-          }
+          title={!hasMoreHistory ? "All history loaded" : "View chat history"}
           className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 border border-zinc-200/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          aria-label="Xem lịch sử"
+          aria-label="View history"
         >
           <History
             size={14}
@@ -54,18 +56,18 @@ const ChatHeader = ({
 
         <button
           onClick={onClear}
-          title="Xóa cuộc hội thoại"
+          title="Clear conversation"
           className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-red-50 hover:text-red-600 border border-zinc-200/50 transition-colors"
-          aria-label="Xóa cuộc hội thoại"
+          aria-label="Clear conversation"
         >
           <Trash2 size={14} />
         </button>
 
         <button
           onClick={onClose}
-          title="Đóng"
-          className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-850 border border-zinc-200/50 transition-colors ml-0.5"
-          aria-label="Đóng"
+          title="Close"
+          className="p-1.5 rounded-lg bg-zinc-50 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 border border-zinc-200/50 transition-colors ml-0.5"
+          aria-label="Close"
         >
           <X size={14} />
         </button>

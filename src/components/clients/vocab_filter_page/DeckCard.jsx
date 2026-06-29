@@ -44,18 +44,18 @@ const DeckCard = ({ deck }) => {
   return (
     <Link
       to={`/client/vocabulary/${deck.id}`}
-      className="group flex flex-col bg-white dark:bg-neutral-900/60 rounded-3xl border border-neutral-100 dark:border-neutral-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full cursor-pointer"
+      className="group flex flex-col bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-100 dark:border-neutral-800 shadow-sm hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200 overflow-hidden h-full cursor-pointer"
     >
       {/* Card Header / Abstract Pattern */}
       <div
-        className={`h-28 border-b border-neutral-100 dark:border-neutral-800 relative overflow-hidden transition-colors ${getHeaderStyle(deck.cefr_level)}`}
+        className={`h-24 border-b border-neutral-100 dark:border-neutral-800 relative overflow-hidden transition-colors ${getHeaderStyle(deck.cefr_level)}`}
       >
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
         {/* CEFR Badge */}
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-3 left-3">
           <span
-            className={`px-2.5 py-1 rounded-lg text-xs font-bold border shadow-sm ${getLevelStyle(
+            className={`px-2 py-0.5 rounded-sm text-xs font-semibold border shadow-sm ${getLevelStyle(
               deck.cefr_level,
             )}`}
           >
@@ -63,23 +63,23 @@ const DeckCard = ({ deck }) => {
           </span>
         </div>
 
-        <div className="absolute top-4 right-4 text-neutral-300 dark:text-neutral-600 group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors duration-300">
-          <BookOpen size={24} />
+        <div className="absolute top-3 right-3 text-neutral-300 dark:text-neutral-600 group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors duration-300">
+          <BookOpen size={20} />
         </div>
       </div>
 
       {/* Card Body */}
-      <div className="p-6 flex-1 flex flex-col">
-        <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+      <div className="p-4 flex-1 flex flex-col">
+        <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-2 line-clamp-2 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
           {deck.name}
         </h3>
 
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4 line-clamp-3 flex-1">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3 line-clamp-3 flex-1">
           {deck.description}
         </p>
 
         {/* Meta Info */}
-        <div className="flex items-center justify-between text-xs font-medium text-neutral-400 dark:text-neutral-500 pt-4 border-t border-neutral-50 dark:border-neutral-800">
+        <div className="flex items-center justify-between text-xs font-medium text-neutral-400 dark:text-neutral-500 pt-3 border-t border-neutral-50 dark:border-neutral-800">
           <div className="flex items-center gap-1.5">
             <Layers size={14} />
             {/* Giả sử API trả về số lượng từ trong field word_count hoặc words.length */}

@@ -45,13 +45,13 @@ const SystemIntegrations = () => {
   ];
 
   return (
-    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
+    <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-none">
       {/* Header Section (Đồng bộ với TopicTags/RelatedArticles) */}
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-neutral-50 dark:border-neutral-800">
-        <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
-          <Blocks size={20} />
+      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-50 dark:border-neutral-800">
+        <div className="p-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-md text-neutral-700 dark:text-neutral-300">
+          <Blocks size={18} />
         </div>
-        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">
+        <h3 className="font-bold text-neutral-900 dark:text-white text-base">
           Dịch vụ tích hợp
         </h3>
       </div>
@@ -65,31 +65,31 @@ const SystemIntegrations = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="
-              group relative block w-full overflow-hidden rounded-2xl h-28 
-              transition-all duration-300 hover:shadow-md hover:-translate-y-1
+              group relative block w-full overflow-hidden rounded-lg h-24 
+              transition-all duration-150
             "
           >
             {/* Background Gradient */}
             <div
-              className={`absolute inset-0 bg-gradient-to-br ${item.bgGradient} transition-transform duration-700 group-hover:scale-110`}
+              className={`absolute inset-0 bg-gradient-to-br ${item.bgGradient} transition-transform duration-350 group-hover:scale-102`}
             />
 
             {/* Texture Overlay */}
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px]" />
 
             {/* Dark Overlay */}
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-300" />
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-200" />
 
             {/* Content */}
-            <div className="relative h-full p-4 flex flex-col justify-between z-10 text-white">
+            <div className="relative h-full p-3 flex flex-col justify-between z-10 text-white">
               {/* Top Row: Icon & Link */}
               <div className="flex justify-between items-start">
-                <div className="p-1.5 bg-white/20 backdrop-blur-md rounded-lg border border-white/10 shadow-sm">
+                <div className="p-1 bg-white/20 backdrop-blur-md rounded border border-white/10 shadow-sm">
                   {item.icon}
                 </div>
 
-                <div className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                  <div className="p-1 bg-white text-neutral-900 rounded-full shadow-sm">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="p-1 bg-white text-neutral-900 rounded shadow-sm">
                     <ArrowUpRight size={12} />
                   </div>
                 </div>

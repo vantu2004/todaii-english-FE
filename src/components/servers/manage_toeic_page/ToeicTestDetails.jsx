@@ -9,6 +9,7 @@ import {
 import { formatISODate } from "@/utils/FormatDate";
 
 const ToeicTestDetails = ({ test }) => {
+  console.log(test);
   const getAudioUrl = (item) => item.audio_url;
   const getImageUrl = (item) => item.image_url;
 
@@ -134,40 +135,23 @@ const ToeicTestDetails = ({ test }) => {
         </div>
         <div className="border border-gray-200 rounded-lg p-4">
           <p className="text-xs font-medium text-gray-500 mb-1">Created By</p>
-          <p
-            className="text-sm text-gray-900 font-medium truncate"
-            title={
-              typeof test.created_by === "object"
-                ? test.created_by.display_name
-                : test.created_by || "System"
-            }
-          >
-            {typeof test.created_by === "object"
+          <p className="text-sm text-gray-900 font-medium truncate">
+            {test.created_by && typeof test.created_by === "object"
               ? test.created_by.display_name || test.created_by.id
-              : test.created_by || "System"}
+              : test.created_by || "SUPER ADMIN"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl p-4 border border-teal-200/60 hover:shadow-md transition-all">
           <p className="text-xs font-bold text-teal-700 mb-2 uppercase tracking-wide">
             Updated By
           </p>
-          <p
-            className="text-sm text-gray-900 font-semibold truncate"
-            title={
-              typeof test.updated_by === "object"
-                ? test.updated_by.display_name
-                : test.updated_by ||
-                  test.updatedBy?.display_name ||
-                  test.updatedBy ||
-                  "System"
-            }
-          >
-            {typeof test.updated_by === "object"
+          <p className="text-sm text-gray-900 font-semibold truncate">
+            {test.updated_by && typeof test.updated_by === "object"
               ? test.updated_by.display_name || test.updated_by.id
               : test.updated_by ||
                 test.updatedBy?.display_name ||
                 test.updatedBy ||
-                "System"}
+                "SUPER ADMIN"}
           </p>
         </div>
         <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">

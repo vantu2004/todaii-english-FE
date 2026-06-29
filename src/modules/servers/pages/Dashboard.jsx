@@ -146,7 +146,7 @@ const Dashboard = () => {
     <div className="flex flex-col space-y-6 min-h-full pb-10">
       {/* View switcher: Overview | Redis */}
       <div className="flex border-b border-gray-200 dark:border-gray-800 pb-3">
-        <div className="flex bg-gray-100 dark:bg-gray-850 p-1 rounded-lg">
+        <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded-lg">
           <button
             onClick={() => setDashboardView("overview")}
             className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
@@ -192,7 +192,7 @@ const Dashboard = () => {
 
             {/* Actor Tabs & Optional ID Search */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
-              <div className="flex bg-gray-100 dark:bg-gray-850 p-1 rounded-lg self-start">
+              <div className="flex bg-gray-100 dark:bg-gray-900 p-1 rounded-lg self-start">
                 <button
                   onClick={() => handleTabChange("my-chart")}
                   className={`px-4 py-2 text-xs font-medium rounded-md transition-colors ${
@@ -257,7 +257,7 @@ const Dashboard = () => {
                       <button
                         type="button"
                         onClick={handleClearSearch}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-650 dark:hover:text-gray-250"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                       >
                         <X size={14} />
                       </button>

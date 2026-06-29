@@ -14,8 +14,17 @@ import {
   Languages,
   LayoutDashboard,
   BarChart3,
+  Flame,
+  Bell,
 } from "lucide-react";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getStreakInfo } from "@/api/clients/studyLogApi";
+import {
+  getNotifications,
+  getUnreadCount,
+  markAsRead,
+} from "@/api/clients/notificationApi";
+import toast from "react-hot-toast";
 
 const navItems = [
   { label: "Trang chủ", path: "/client", icon: House, end: true },
@@ -30,10 +39,18 @@ const navItems = [
 const ClientNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isStreakOpen, setIsStreakOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const [streakInfo, setStreakInfo] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const menuRef = useRef(null);
   const profileRef = useRef(null);
+  const streakRef = useRef(null);
+  const notificationRef = useRef(null);
   const toggleBtnRef = useRef(null);
 
   const { authUser, isLoggedIn, handleLogout } = useClientAuthContext();
@@ -45,9 +62,43 @@ const ClientNavBar = () => {
   }, []);
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const fetchStreakAndNotifications = async () => {
+      try {
+        const [streakData, notifList, unread] = await Promise.all([
+          getStreakInfo(),
+          getNotifications(),
+          getUnreadCount(),
+        ]);
+        setStreakInfo(streakData);
+        setNotifications(notifList || []);
+        const count =
+          typeof unread === "object" && unread !== null
+            ? (unread.unreadCount ?? 0)
+            : unread || 0;
+        setUnreadCount(count);
+      } catch (err) {
+        console.error("Error fetching navbar data:", err);
+      }
+    };
+
+    fetchStreakAndNotifications();
+    const pollId = setInterval(fetchStreakAndNotifications, 60000);
+    return () => clearInterval(pollId);
+  }, [isLoggedIn]);
+
+  useEffect(() => {
     const closeOnOutside = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target))
         setIsProfileOpen(false);
+      if (streakRef.current && !streakRef.current.contains(e.target))
+        setIsStreakOpen(false);
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(e.target)
+      )
+        setIsNotificationOpen(false);
       if (
         menuRef.current &&
         !menuRef.current.contains(e.target) &&
@@ -60,6 +111,43 @@ const ClientNavBar = () => {
     document.addEventListener("mousedown", closeOnOutside);
     return () => document.removeEventListener("mousedown", closeOnOutside);
   }, []);
+
+  const formatStudyTime = (minutes) => {
+    if (!minutes) return "0 phút";
+
+    if (minutes < 60) return `${minutes} phút`;
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    return `${hours} giờ ${remainingMinutes} phút`;
+  };
+
+  const handleNotificationClick = async (notif) => {
+    if (!notif.is_read) {
+      try {
+        await markAsRead(notif.id);
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === notif.id ? { ...n, is_read: true } : n)),
+        );
+        setUnreadCount((c) => Math.max(0, c - 1));
+      } catch (err) {
+        console.error("Error marking notification as read:", err);
+      }
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      const unreadNotifs = notifications.filter((n) => !n.is_read);
+      await Promise.all(unreadNotifs.map((n) => markAsRead(n.id)));
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      setUnreadCount(0);
+      toast.success("Đã đọc tất cả thông báo");
+    } catch (err) {
+      console.error("Error marking all notifications as read:", err);
+    }
+  };
 
   return (
     <nav
@@ -133,123 +221,255 @@ const ClientNavBar = () => {
 
             {/* Desktop Auth */}
             {isLoggedIn ? (
-              <div className="relative hidden lg:block" ref={profileRef}>
-                <button
-                  onClick={() => setIsProfileOpen((prev) => !prev)}
-                  className="flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-2xl hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 transition-all duration-300 cursor-pointer group"
-                >
-                  {authUser?.avatar_url ? (
-                    <img
-                      src={authUser.avatar_url}
-                      alt=""
-                      className="w-8 h-8 rounded-xl object-cover ring-1 ring-neutral-200/50 dark:ring-neutral-700/50"
+              <div className="flex items-center">
+                {/* Streak Widget */}
+                <div className="relative hidden lg:block" ref={streakRef}>
+                  <button
+                    onClick={() => setIsStreakOpen((prev) => !prev)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 transition-all duration-300 cursor-pointer group"
+                  >
+                    <Flame
+                      size={18}
+                      className="text-orange-500 fill-orange-500/20 group-hover:scale-110 transition-transform duration-300"
                     />
-                  ) : (
-                    <div className="w-8 h-8 rounded-xl bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center">
-                      <User size={14} className="text-white" />
+                    <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-200">
+                      {streakInfo?.current_streak || 0}
+                    </span>
+                  </button>
+
+                  {/* Streak Dropdown */}
+                  {isStreakOpen && (
+                    <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-2xl rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)] p-4 transition-all duration-300 origin-top-right">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Flame
+                          className="text-orange-500 fill-orange-500/10"
+                          size={18}
+                        />
+                        <span className="text-sm font-semibold text-neutral-900 dark:text-white">
+                          Chuỗi ngày học tập
+                        </span>
+                      </div>
+                      <div className="space-y-3 text-xs">
+                        <div className="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/50">
+                          <span className="text-neutral-500">
+                            Streak hiện tại
+                          </span>
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                            {streakInfo?.current_streak || 0} ngày
+                          </span>
+                        </div>
+                        <div className="flex justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/50">
+                          <span className="text-neutral-500">
+                            Kỷ lục lâu nhất
+                          </span>
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                            {streakInfo?.longest_streak || 0} ngày
+                          </span>
+                        </div>
+                        <div className="flex justify-between py-1">
+                          <span className="text-neutral-500">Học hôm nay</span>
+                          <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                            {formatStudyTime(
+                              streakInfo?.daily_study_log
+                                ?.total_study_minutes || 0,
+                            )}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   )}
-                  <span className="text-[13px] font-medium text-neutral-700 dark:text-neutral-200 max-w-[100px] truncate">
-                    {authUser?.display_name || "User"}
-                  </span>
-                  <ChevronDown
-                    size={14}
-                    className={`text-neutral-400 transition-all duration-300 ${
-                      isProfileOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
+                </div>
 
-                {/* Dropdown */}
-                <div
-                  className={`absolute right-0 mt-3 w-72 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-2xl rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)] overflow-hidden transition-all duration-300 origin-top-right ${
-                    isProfileOpen
-                      ? "opacity-100 scale-100 translate-y-0"
-                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-                  }`}
-                >
-                  {/* User Info */}
-                  <div className="p-4 border-b border-neutral-100 dark:border-neutral-800">
-                    <div className="flex items-center gap-3">
-                      {authUser?.avatar_url ? (
-                        <img
-                          src={authUser.avatar_url}
-                          className="w-12 h-12 rounded-xl object-cover"
-                          alt=""
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-xl bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center">
-                          <User size={18} className="text-white" />
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
-                          {authUser?.display_name}
-                        </p>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
-                          {authUser?.email}
-                        </p>
+                {/* Notification Bell */}
+                <div className="relative hidden lg:block" ref={notificationRef}>
+                  <button
+                    onClick={() => setIsNotificationOpen((prev) => !prev)}
+                    className="relative w-10 h-10 rounded-2xl flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 transition-all duration-300 cursor-pointer"
+                  >
+                    <Bell size={18} />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse border-2 border-white dark:border-neutral-900" />
+                    )}
+                  </button>
+
+                  {/* Notification Dropdown */}
+                  {isNotificationOpen && (
+                    <div className="absolute right-0 mt-3 w-80 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-2xl rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)] overflow-hidden transition-all duration-300 origin-top-right">
+                      <div className="p-4 border-b border-neutral-100 dark:border-neutral-800 flex justify-between items-center bg-neutral-50/50 dark:bg-neutral-800/50">
+                        <span className="text-sm font-semibold text-neutral-900 dark:text-white">
+                          Thông báo ({unreadCount})
+                        </span>
+                        {unreadCount > 0 && (
+                          <button
+                            onClick={handleMarkAllAsRead}
+                            className="text-xs text-brand-500 hover:underline cursor-pointer"
+                          >
+                            Đọc tất cả
+                          </button>
+                        )}
+                      </div>
+                      <div className="max-h-64 overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800">
+                        {notifications.length === 0 ? (
+                          <div className="p-8 text-center text-xs text-neutral-400 dark:text-neutral-500">
+                            Không có thông báo mới
+                          </div>
+                        ) : (
+                          notifications.map((notif) => (
+                            <div
+                              key={notif.id}
+                              onClick={() => handleNotificationClick(notif)}
+                              className={`p-4 flex items-start gap-3 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 cursor-pointer transition-colors ${
+                                !notif.is_read
+                                  ? "bg-brand-500/5 dark:bg-brand-500/10"
+                                  : ""
+                              }`}
+                            >
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-semibold text-neutral-900 dark:text-white">
+                                  {notif.title}
+                                </p>
+                                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                                  {notif.content}
+                                </p>
+                                <span className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1 block">
+                                  {new Date(
+                                    notif.created_at,
+                                  ).toLocaleDateString("vi-VN", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </span>
+                              </div>
+                              {!notif.is_read && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-brand-500 self-center shrink-0" />
+                              )}
+                            </div>
+                          ))
+                        )}
                       </div>
                     </div>
-                  </div>
+                  )}
+                </div>
 
-                  {/* Menu Items */}
-                  <div className="p-2">
-                    <Link
-                      to="/client/profile"
-                      className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
-                        <User
-                          size={14}
-                          className="text-neutral-500 dark:text-neutral-400"
-                        />
+                {/* Profile */}
+                <div className="relative hidden lg:block" ref={profileRef}>
+                  <button
+                    onClick={() => setIsProfileOpen((prev) => !prev)}
+                    className="flex items-center gap-3 pl-1.5 pr-3 py-1.5 rounded-2xl hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 transition-all duration-300 cursor-pointer group"
+                  >
+                    {authUser?.avatar_url ? (
+                      <img
+                        src={authUser.avatar_url}
+                        alt=""
+                        className="w-8 h-8 rounded-xl object-cover ring-1 ring-neutral-200/50 dark:ring-neutral-700/50"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-xl bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center">
+                        <User size={14} className="text-white" />
                       </div>
-                      <span className="font-medium">Hồ sơ của tôi</span>
-                    </Link>
-                    <Link
-                      to="/client/saved-articles"
-                      className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
-                        <BookMarked
-                          size={14}
-                          className="text-neutral-500 dark:text-neutral-400"
-                        />
-                      </div>
-                      <span className="font-medium">Bài viết đã lưu</span>
-                    </Link>
-                    <Link
-                      to="/client/dashboard"
-                      className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
-                        <BarChart3
-                          size={14}
-                          className="text-neutral-500 dark:text-neutral-400"
-                        />
-                      </div>
-                      <span className="font-medium">Thống kê hoạt động</span>
-                    </Link>
-                  </div>
+                    )}
+                    <span className="text-[13px] font-medium text-neutral-700 dark:text-neutral-200 max-w-[100px] truncate">
+                      {authUser?.display_name || "User"}
+                    </span>
+                    <ChevronDown
+                      size={14}
+                      className={`text-neutral-400 transition-all duration-300 ${
+                        isProfileOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-                  {/* Logout */}
-                  <div className="p-2 border-t border-neutral-100 dark:border-neutral-800">
-                    <button
-                      onClick={() => handleLogout(authUser?.email)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50/80 dark:hover:bg-red-900/20 rounded-xl transition-all duration-200 cursor-pointer group"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-900/40 transition-colors">
-                        <LogOut
-                          size={14}
-                          className="text-neutral-500 dark:text-neutral-400 group-hover:text-red-500 dark:group-hover:text-red-400"
-                        />
+                  {/* Dropdown */}
+                  <div
+                    className={`absolute right-0 mt-3 w-72 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-2xl rounded-2xl border border-neutral-100 dark:border-neutral-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.12)] overflow-hidden transition-all duration-300 origin-top-right ${
+                      isProfileOpen
+                        ? "opacity-100 scale-100 translate-y-0"
+                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                    }`}
+                  >
+                    {/* User Info */}
+                    <div className="p-4 border-b border-neutral-100 dark:border-neutral-800">
+                      <div className="flex items-center gap-3">
+                        {authUser?.avatar_url ? (
+                          <img
+                            src={authUser.avatar_url}
+                            className="w-12 h-12 rounded-xl object-cover"
+                            alt=""
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-neutral-900 dark:bg-neutral-700 flex items-center justify-center">
+                            <User size={18} className="text-white" />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
+                            {authUser?.display_name}
+                          </p>
+                          <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                            {authUser?.email}
+                          </p>
+                        </div>
                       </div>
-                      <span className="font-medium">Đăng xuất</span>
-                    </button>
+                    </div>
+
+                    {/* Menu Items */}
+                    <div className="p-2">
+                      <Link
+                        to="/client/profile"
+                        className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
+                          <User
+                            size={14}
+                            className="text-neutral-500 dark:text-neutral-400"
+                          />
+                        </div>
+                        <span className="font-medium">Hồ sơ của tôi</span>
+                      </Link>
+                      <Link
+                        to="/client/saved-articles"
+                        className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
+                          <BookMarked
+                            size={14}
+                            className="text-neutral-500 dark:text-neutral-400"
+                          />
+                        </div>
+                        <span className="font-medium">Đã lưu</span>
+                      </Link>
+                      <Link
+                        to="/client/dashboard"
+                        className="flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 rounded-xl transition-all duration-200 group"
+                        onClick={() => setIsProfileOpen(false)}
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200/80 dark:group-hover:bg-neutral-700/80 transition-colors">
+                          <BarChart3
+                            size={14}
+                            className="text-neutral-500 dark:text-neutral-400"
+                          />
+                        </div>
+                        <span className="font-medium">Lộ trình & Thống kê</span>
+                      </Link>
+                    </div>
+
+                    {/* Logout */}
+                    <div className="p-2 border-t border-neutral-100 dark:border-neutral-800">
+                      <button
+                        onClick={() => handleLogout(authUser?.email)}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50/80 dark:hover:bg-red-900/20 rounded-xl transition-all duration-200 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-900/40 transition-colors">
+                          <LogOut
+                            size={14}
+                            className="text-neutral-500 dark:text-neutral-400 group-hover:text-red-500 dark:group-hover:text-red-400"
+                          />
+                        </div>
+                        <span className="font-medium">Đăng xuất</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

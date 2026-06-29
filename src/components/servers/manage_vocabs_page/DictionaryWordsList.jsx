@@ -33,7 +33,7 @@ const DictionaryWordsList = ({
             className={`p-3.5 sm:p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 group border-l-2 ${
               isSelected
                 ? "bg-gray-50 dark:bg-gray-800/40 border-gray-900 dark:border-white"
-                : "bg-white dark:bg-gray-900 border-transparent hover:bg-gray-50/50 dark:hover:bg-gray-850"
+                : "bg-white dark:bg-gray-900 border-transparent hover:bg-gray-50/50 dark:hover:bg-gray-900"
             }`}
           >
             <div className="flex items-center gap-3 min-w-0">

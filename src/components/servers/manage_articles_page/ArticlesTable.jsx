@@ -11,11 +11,20 @@ import {
   AlertTriangle,
   Pilcrow,
   BookA,
+  FileVolume,
+  Loader2,
+  Volume2,
+  Pause,
 } from "lucide-react";
-import { toggleArticle, deleteArticle } from "@/api/servers/articleApi";
+import {
+  toggleArticle,
+  deleteArticle,
+  uploadTtsFile,
+} from "@/api/servers/articleApi";
 import ArticleViewModal from "./ArticleViewModal";
 import { useNavigate } from "react-router-dom";
 import { logError } from "@/utils/LogError";
+import { playAudio } from "@/utils/PlayAudio";
 
 const ArticlesTable = ({
   columns,
@@ -30,7 +39,45 @@ const ArticlesTable = ({
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
+  const [generatingAudioId, setGeneratingAudioId] = useState(null);
+
   const navigate = useNavigate();
+
+  const [currentAudio, setCurrentAudio] = useState(null);
+  const [playingAudioUrl, setPlayingAudioUrl] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+    };
+  }, [currentAudio]);
+
+  const handlePlayAudio = (url) => {
+    if (playingAudioUrl === url) {
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+      setCurrentAudio(null);
+      setPlayingAudioUrl(null);
+    } else {
+      if (currentAudio) {
+        currentAudio.pause();
+      }
+      const audio = new Audio(url);
+      audio.play().catch((err) => {
+        console.error("Audio playback failed", err);
+        toast.error("Audio playback failed");
+      });
+      audio.onended = () => {
+        setCurrentAudio(null);
+        setPlayingAudioUrl(null);
+      };
+      setCurrentAudio(audio);
+      setPlayingAudioUrl(url);
+    }
+  };
 
   useEffect(() => {
     setStatusStates(articles.map((a) => a.enabled ?? true));
@@ -56,6 +103,20 @@ const ArticlesTable = ({
   const handleVocabClick = (index) => {
     const articleId = articles[index].id;
     navigate(`/server/article/${articleId}/vocab`);
+  };
+
+  const handleGenerateAudioFile = async (index) => {
+    const articleId = articles[index].id;
+    setGeneratingAudioId(articleId);
+
+    try {
+      await uploadTtsFile(articleId);
+      await reloadArticles();
+    } catch (error) {
+      logError(error);
+    } finally {
+      setGeneratingAudioId(null);
+    }
   };
 
   const handleParagraphClick = (index) => {
@@ -148,95 +209,135 @@ const ArticlesTable = ({
 
           {/* Body */}
           <tbody className="bg-white divide-y divide-gray-200">
-            {articles.map((a, i) => (
-              <tr key={a.id || i} className="text-gray-700">
-                <td className="px-4 py-3 text-sm">{a.id}</td>
-                <td className="px-4 py-3 text-sm">{a.source_name}</td>
-                <td className="px-4 py-3 text-sm">{a.author}</td>
-                <td className="px-4 py-3 text-sm">
-                  <a
-                    href={a.source_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-900 hover:underline line-clamp-2"
-                    title={a.title}
-                  >
-                    {a.title}
-                  </a>
-                </td>
-                <td className="px-4 py-3 text-sm">{a.views}</td>
-                <td className="px-4 py-3 text-sm">
-                  {formatISODate(a.published_at)}
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center text-sm">
-                    <button
-                      onClick={() => handleParagraphClick(i)}
-                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
-                      aria-label="Paragraph"
+            {articles.map((a, i) => {
+              const isThisGenerating = generatingAudioId === a.id;
+              return (
+                <tr key={a.id || i} className="text-gray-700">
+                  <td className="px-4 py-3 text-sm">{a.id}</td>
+                  <td className="px-4 py-3 text-sm">{a.source_name}</td>
+                  <td className="px-4 py-3 text-sm">
+                    <a
+                      href={a.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-gray-900 hover:underline line-clamp-2"
+                      title={a.title}
                     >
-                      <Pilcrow className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-                <td className="px-4 py-3">
-                  <div className="flex items-center text-sm">
-                    <button
-                      onClick={() => handleVocabClick(i)}
-                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
-                      aria-label="Vocabulary"
-                    >
-                      <BookA className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
+                      {a.title}
+                    </a>
+                  </td>
+                  <td className="px-4 py-3 text-sm">{a.views}</td>
+                  <td className="px-4 py-3 text-sm">
+                    {formatISODate(a.published_at)}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                      <button
+                        onClick={() => handleParagraphClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                        aria-label="Paragraph"
+                      >
+                        <Pilcrow className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                      {a.audio_url ? (
+                        <button
+                          onClick={() => handlePlayAudio(a.audio_url)}
+                          className={`p-1.5 transition-colors ${
+                            playingAudioUrl === a.audio_url
+                              ? "text-gray-950 hover:text-gray-900"
+                              : "text-gray-400 hover:text-gray-700"
+                          }`}
+                          aria-label={
+                            playingAudioUrl === a.audio_url
+                              ? "Pause Audio"
+                              : "Play Audio"
+                          }
+                        >
+                          {playingAudioUrl === a.audio_url ? (
+                            <Pause className="w-4 h-4 animate-pulse" />
+                          ) : (
+                            <Volume2 className="w-4 h-4" />
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleGenerateAudioFile(i)}
+                          disabled={isThisGenerating}
+                          className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                          aria-label="Generate Audio"
+                        >
+                          {isThisGenerating ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <FileVolume className="w-4 h-4" />
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                      <button
+                        onClick={() => handleVocabClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                        aria-label="Vocabulary"
+                      >
+                        <BookA className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
 
-                {/* Enable toggle */}
-                <td className="px-4 py-3 text-sm">
-                  <button
-                    onClick={() => handleToggle(i)}
-                    className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
-                      statusStates[i]
-                        ? "bg-green-400 border-green-400"
-                        : "bg-neutral-300 border-neutral-200"
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
-                        statusStates[i] ? "translate-x-5" : "translate-x-0"
+                  {/* Enable toggle */}
+                  <td className="px-4 py-3 text-sm">
+                    <button
+                      onClick={() => handleToggle(i)}
+                      className={`relative cursor-pointer w-10 h-5 rounded-full border transition-colors duration-300 ease-in-out ${
+                        statusStates[i]
+                          ? "bg-green-400 border-green-400"
+                          : "bg-neutral-300 border-neutral-200"
                       }`}
-                    ></div>
-                  </button>
-                </td>
+                    >
+                      <div
+                        className={`absolute top-1/2 left-[2px] w-4 h-4 bg-white rounded-full shadow-sm transform -translate-y-1/2 transition-transform duration-300 ease-in-out ${
+                          statusStates[i] ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      ></div>
+                    </button>
+                  </td>
 
-                <td className="px-4 py-3">
-                  <div className="flex items-center text-sm space-x-4">
-                    <button
-                      onClick={() => handleViewClick(i)}
-                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
-                      aria-label="View"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm space-x-4">
+                      <button
+                        onClick={() => handleViewClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                        aria-label="View"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
 
-                    <button
-                      onClick={() => handleUpdateClick(i)}
-                      className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
-                      aria-label="Update"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(i)}
-                      className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
-                      aria-label="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      <button
+                        onClick={() => handleUpdateClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                        aria-label="Update"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
+                        aria-label="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

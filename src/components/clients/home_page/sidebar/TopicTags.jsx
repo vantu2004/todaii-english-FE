@@ -38,16 +38,16 @@ const TopicTags = () => {
   // Skeleton Loader (Đồng bộ style mới)
   if (loading) {
     return (
-      <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-9 h-9 bg-neutral-100 dark:bg-neutral-800 rounded-xl animate-pulse" />
+      <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-md animate-pulse" />
           <div className="h-5 w-32 bg-neutral-100 dark:bg-neutral-800 rounded animate-pulse" />
         </div>
         <div className="flex flex-wrap gap-2">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="h-9 w-24 bg-neutral-100 dark:bg-neutral-800 rounded-full animate-pulse"
+              className="h-8 w-20 bg-neutral-100 dark:bg-neutral-800 rounded-md animate-pulse"
             />
           ))}
         </div>
@@ -58,29 +58,29 @@ const TopicTags = () => {
   if (!topics.length) return null;
 
   return (
-    <div className="bg-white dark:bg-neutral-900/60 rounded-3xl p-6 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
+    <div className="bg-white dark:bg-neutral-900/60 rounded-lg p-4 border border-neutral-100 dark:border-neutral-800 shadow-sm dark:shadow-none">
       {/* Header Section */}
-      <div className="flex items-center gap-3 mb-5 pb-4 border-b border-neutral-50 dark:border-neutral-800">
-        <div className="p-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl text-neutral-700 dark:text-neutral-300">
-          <Tag size={20} />
+      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-50 dark:border-neutral-800">
+        <div className="p-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-md text-neutral-700 dark:text-neutral-300">
+          <Tag size={18} />
         </div>
-        <h3 className="font-bold text-neutral-900 dark:text-white text-lg">
+        <h3 className="font-bold text-neutral-900 dark:text-white text-base">
           Chủ đề phổ biến
         </h3>
       </div>
 
       {/* Tags Cloud */}
-      <div className="flex flex-wrap gap-2 mb-2">
+      <div className="flex flex-wrap gap-2 mb-1.5">
         {displayedTopics.map((t, i) => (
           <button
             key={i}
             onClick={() => navigate(`/client/article/filter?alias=${t.alias}`)}
             className="
-              group flex items-center gap-1.5 px-4 py-2 
-              bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-full 
-              text-sm font-medium text-neutral-600 dark:text-neutral-300
-              hover:border-neutral-900 dark:hover:border-white hover:bg-neutral-900 dark:hover:bg-white hover:text-white dark:hover:text-neutral-900 hover:shadow-md
-              transition-all duration-300 ease-out
+              group flex items-center gap-1.5 px-3 py-1.5 
+              bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md 
+              text-xs font-medium text-neutral-600 dark:text-neutral-300
+              hover:border-neutral-900 dark:hover:border-white hover:bg-neutral-900 dark:hover:bg-white hover:text-white dark:hover:text-neutral-900
+              transition-colors duration-150
             "
           >
             <Hash

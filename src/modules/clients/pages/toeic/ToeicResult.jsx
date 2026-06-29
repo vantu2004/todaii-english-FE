@@ -1,255 +1,303 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
+import { getTestById } from "@/api/clients/toeicTestApi";
+import { getSessionDetails } from "@/api/clients/toeicSessionApi";
 import {
-  ArrowLeft,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  Trophy,
-  BarChart3,
-  AlertCircle,
-} from "lucide-react";
+  findAllTagsByTestId,
+  findQuestionsByTag,
+} from "@/api/clients/toeicTagApi";
+import { getQuestionByPartNumber } from "@/api/clients/toeicQuestionApi";
+import { getPassageByPartNumber } from "@/api/clients/toeicPassageApi";
 
-// TOEIC Score Conversion Table (simplified approximation)
-// In a real app, this might be more complex or fetched from backend
-const convertListeningScore = (correctCount) => {
-  if (correctCount === 0) return 5;
-  if (correctCount >= 100) return 495;
-  // Simple linear approximation for demo purposes
-  return Math.min(495, Math.round(correctCount * 4.95) + 5);
-};
-
-const convertReadingScore = (correctCount) => {
-  if (correctCount === 0) return 5;
-  if (correctCount >= 100) return 495;
-  // Simple linear approximation for demo purposes
-  return Math.min(495, Math.round(correctCount * 4.95) + 5);
-};
+// Subcomponents
+import ResultHeader from "@/components/clients/toeic_page/result_summary/ResultHeader";
+import ScoreSummaryCards from "@/components/clients/toeic_page/result_summary/ScoreSummaryCards";
+import TagAnalysisSection from "@/components/clients/toeic_page/result_summary/TagAnalysisSection";
+import QuickAnswerList from "@/components/clients/toeic_page/result_summary/QuickAnswerList";
+import QuestionDetailsModal from "@/components/clients/toeic_page/result_summary/QuestionDetailsModal";
 
 const ToeicResult = () => {
-  const { testId } = useParams();
+  const { sessionId } = useParams();
   const navigate = useNavigate();
   const [resultData, setResultData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Modal State
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestionNumber, setSelectedQuestionNumber] = useState(1);
+  const [selectedPassage, setSelectedPassage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const data = localStorage.getItem(`toeic_result_${testId}`);
-    if (data) {
-      setResultData(JSON.parse(data));
-    } else {
-      navigate("/client/toeic");
-    }
-  }, [testId, navigate]);
+    const fetchSessionResult = async () => {
+      if (!sessionId) {
+        navigate("/client/toeic");
+        return;
+      }
 
-  const scoreDetails = useMemo(() => {
-    if (!resultData) return null;
+      try {
+        setLoading(true);
+        const sessionData = await getSessionDetails(sessionId);
 
-    let listeningCorrect = 0;
-    let listeningTotal = 0;
-    let readingCorrect = 0;
-    let readingTotal = 0;
+        // Read testId
+        const currentTestId = sessionData.test_id;
 
-    const { answers, testData } = resultData;
-    const selectedPartIds = resultData.selectedPartIds || [1, 2, 3, 4, 5, 6, 7];
+        // Fetch test info and tags in parallel
+        const [testInfo, testTags] = await Promise.all([
+          getTestById(currentTestId),
+          findAllTagsByTestId(currentTestId).catch(() => []),
+        ]);
 
-    // Process Part 1-4 (Listening)
-    for (let part = 1; part <= 4; part++) {
-      if (!selectedPartIds.includes(part)) continue;
-      const questions = testData.questions[part] || [];
-      questions.forEach((q) => {
-        listeningTotal++;
-        if (answers[q.id] === q.correct_ans) {
-          listeningCorrect++;
+        // Fetch question-to-tag mapping for each tag in parallel
+        const tagQuestionsData = {};
+        if (testTags && testTags.length > 0) {
+          await Promise.all(
+            testTags.map(async (tag) => {
+              try {
+                const questions = await findQuestionsByTag(
+                  currentTestId,
+                  tag.id,
+                );
+                tagQuestionsData[tag.id] = (questions || []).map((q) => q.id);
+              } catch (err) {
+                console.error(
+                  `Failed to load questions for tag ${tag.id}:`,
+                  err,
+                );
+                tagQuestionsData[tag.id] = [];
+              }
+            }),
+          );
         }
-      });
-    }
 
-    // Process Part 5-7 (Reading)
-    for (let part = 5; part <= 7; part++) {
-      if (!selectedPartIds.includes(part)) continue;
-      const questions = testData.questions[part] || [];
-      questions.forEach((q) => {
-        readingTotal++;
-        if (answers[q.id] === q.correct_ans) {
-          readingCorrect++;
+        // Parse parts_done from session
+        const partsDoneStr = sessionData.parts_done || "";
+        const partsDone = partsDoneStr
+          ? partsDoneStr
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean)
+              .map(Number)
+          : [];
+
+        // Fetch questions and passages for each completed part in parallel to build QuickAnswerList and Passage details
+        const partQuestionsData = {};
+        const partPassagesData = {};
+        await Promise.all(
+          partsDone.map(async (partId) => {
+            try {
+              const [questions, passages] = await Promise.all([
+                getQuestionByPartNumber(currentTestId, partId).catch(() => []),
+                getPassageByPartNumber(currentTestId, partId).catch(() => []),
+              ]);
+              partQuestionsData[partId] = questions || [];
+              partPassagesData[partId] = passages || [];
+            } catch (err) {
+              console.error(
+                `Failed to load questions/passages for part ${partId}:`,
+                err,
+              );
+              partQuestionsData[partId] = [];
+              partPassagesData[partId] = [];
+            }
+          }),
+        );
+
+        // Flatten all questions across completed parts, maintaining global numbering
+        const flatList = [];
+        const rawQuestionsList = [];
+        let qIndex = 0;
+        partsDone
+          .sort((a, b) => a - b)
+          .forEach((partId) => {
+            const questionsOfPart = partQuestionsData[partId] || [];
+            // Sort questions inside the part by id for stable sequential rendering
+            const sorted = [...questionsOfPart].sort((a, b) => a.id - b.id);
+            sorted.forEach((q) => {
+              qIndex++;
+              flatList.push({
+                id: q.id,
+                partNumber: partId,
+                questionNumber: qIndex,
+                correctAnswer: q.correct_ans || q.correctAns,
+              });
+              rawQuestionsList.push(q);
+            });
+          });
+
+        // Collect all passages in a single list
+        const rawPassagesList = [];
+        partsDone.forEach((partId) => {
+          const passagesOfPart = partPassagesData[partId] || [];
+          rawPassagesList.push(...passagesOfPart);
+        });
+
+        // Build a mapping of answers by question_id for quick lookups
+        const answersMapping = {};
+        if (sessionData.user_answers) {
+          sessionData.user_answers.forEach((ans) => {
+            const qId = ans.question_id || ans.id;
+            answersMapping[qId] = {
+              status: ans.status ?? 2, // 1: correct, 0: incorrect, 2: skipped
+              user_choice: ans.user_choice || null,
+            };
+          });
         }
-      });
-    }
 
-    const listeningScore =
-      listeningTotal > 0
-        ? convertListeningScore((listeningCorrect / listeningTotal) * 100)
-        : 0;
-    const readingScore =
-      readingTotal > 0
-        ? convertReadingScore((readingCorrect / readingTotal) * 100)
-        : 0;
-    const totalScore = listeningScore + readingScore;
-    const maxScore =
-      (listeningTotal > 0 ? 495 : 0) + (readingTotal > 0 ? 495 : 0);
+        // Scores and basic metrics
+        const scoreL = sessionData.score_l ?? 0;
+        const scoreR = sessionData.score_r ?? 0;
+        const totalScore = sessionData.total_score ?? 0;
+        const correctCount = sessionData.correct_count ?? 0;
+        const incorrectCount = sessionData.incorrect_count ?? 0;
+        const skippedCount = sessionData.skipped_count ?? 0;
+        const timeSpentMinutes = sessionData.time_spent ?? 0;
 
-    return {
-      listening: {
-        correct: listeningCorrect,
-        total: listeningTotal,
-        score: listeningScore,
-      },
-      reading: {
-        correct: readingCorrect,
-        total: readingTotal,
-        score: readingScore,
-      },
-      totalScore,
-      maxScore: maxScore || 990,
+        // Compute elapsed time from started_at → completed_at (or stopped_at) for display
+        const startedAt = sessionData.started_at;
+        const completedAt = sessionData.completed_at || sessionData.stopped_at;
+        let elapsedSeconds = timeSpentMinutes * 60; // fallback
+        if (startedAt && completedAt) {
+          elapsedSeconds = Math.max(
+            0,
+            Math.floor(
+              (new Date(completedAt).getTime() -
+                new Date(startedAt).getTime()) /
+                1000,
+            ),
+          );
+        }
+
+        const totalAnswered = correctCount + incorrectCount;
+        const totalQuestions = totalAnswered + skippedCount;
+        const mode = sessionData.mode;
+        const isFullTest = mode === "FULL_TEST";
+
+        setResultData({
+          testId: currentTestId,
+          scoreL,
+          scoreR,
+          totalScore,
+          correctCount,
+          incorrectCount,
+          skippedCount,
+          totalQuestions,
+          elapsedSeconds,
+          isFullTest,
+          session: sessionData,
+          test: testInfo,
+          tags: testTags || [],
+          tagQuestions: tagQuestionsData,
+          flatQuestions: flatList,
+          rawQuestions: rawQuestionsList,
+          rawPassages: rawPassagesList,
+          answersMap: answersMapping,
+        });
+      } catch (err) {
+        console.error("Failed to load session result:", err);
+        navigate("/client/toeic");
+      } finally {
+        setLoading(false);
+      }
     };
-  }, [resultData]);
 
-  if (!resultData || !scoreDetails) {
+    fetchSessionResult();
+  }, [sessionId, navigate]);
+
+  const handleQuestionClick = (questionId) => {
+    if (!resultData) return;
+    const questionObj = resultData.rawQuestions.find(
+      (q) => q.id === questionId,
+    );
+    if (!questionObj) return;
+
+    // Find relative question number
+    const flatQ = resultData.flatQuestions.find((q) => q.id === questionId);
+    const qNum = flatQ ? flatQ.questionNumber : 1;
+
+    let passageObj = null;
+    if (questionObj.passage_id) {
+      passageObj = resultData.rawPassages.find(
+        (p) => p.id === questionObj.passage_id,
+      );
+    }
+
+    setSelectedQuestion(questionObj);
+    setSelectedQuestionNumber(qNum);
+    setSelectedPassage(passageObj);
+    setIsModalOpen(true);
+  };
+
+  if (loading || !resultData) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] mt-[68px]">
+      <div className="flex items-center justify-center min-h-[60vh] mt-[68px] bg-surface-primary dark:bg-neutral-950">
         <div className="w-10 h-10 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
-  const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  };
-
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mt-[68px]">
-      <Link
-        to="/client/toeic"
-        className="inline-flex items-center gap-2 text-neutral-500 dark:text-neutral-400 hover:text-brand-500 dark:hover:text-brand-400 transition-colors mb-8 font-medium"
-      >
-        <ArrowLeft size={18} />
-        <span>Về danh sách đề thi</span>
-      </Link>
+    <div className="w-full min-h-screen bg-surface-primary dark:bg-neutral-950 pt-[68px]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-3">
+        {/* Header */}
+        <ResultHeader
+          test={resultData.test}
+          session={resultData.session}
+          incorrectCount={resultData.incorrectCount}
+        />
 
-      <div className="bg-white dark:bg-neutral-900 rounded-3xl p-6 md:p-10 shadow-sm border border-neutral-100 dark:border-neutral-800 mb-8">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-brand-50 dark:bg-brand-500/10 rounded-full mb-4">
-            <Trophy className="text-brand-500 w-10 h-10" />
-          </div>
-          <h1 className="text-3xl font-extrabold text-neutral-900 dark:text-white mb-2">
-            Kết Quả Bài Thi
-          </h1>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400 font-medium">
-            {resultData.testName}
-          </p>
-        </div>
+        {/* Thống kê tổng & Scores */}
+        <ScoreSummaryCards
+          correctCount={resultData.correctCount}
+          incorrectCount={resultData.incorrectCount}
+          skippedCount={resultData.skippedCount}
+          totalQuestions={resultData.totalQuestions}
+          elapsedSeconds={resultData.elapsedSeconds}
+          isFullTest={resultData.isFullTest}
+          scoreL={resultData.scoreL}
+          scoreR={resultData.scoreR}
+          totalScore={resultData.totalScore}
+        />
 
-        {/* Score Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 text-center border border-blue-100 dark:border-blue-800/30">
-            <h3 className="text-blue-600 dark:text-blue-400 font-semibold mb-2">
-              Điểm Nghe (Listening)
-            </h3>
-            <div className="text-4xl font-extrabold text-blue-700 dark:text-blue-300 mb-2">
-              {scoreDetails.listening.total === 0
-                ? "Không làm"
-                : scoreDetails.listening.score}
-            </div>
-            <p className="text-sm text-blue-600/80 dark:text-blue-400/80">
-              {scoreDetails.listening.total === 0
-                ? "—"
-                : `${scoreDetails.listening.correct} / ${scoreDetails.listening.total} câu đúng`}
-            </p>
-          </div>
-
-          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-6 text-center border border-emerald-100 dark:border-emerald-800/30">
-            <h3 className="text-emerald-600 dark:text-emerald-400 font-semibold mb-2">
-              Điểm Đọc (Reading)
-            </h3>
-            <div className="text-4xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-2">
-              {scoreDetails.reading.total === 0
-                ? "Không làm"
-                : scoreDetails.reading.score}
-            </div>
-            <p className="text-sm text-emerald-600/80 dark:text-emerald-400/80">
-              {scoreDetails.reading.total === 0
-                ? "—"
-                : `${scoreDetails.reading.correct} / ${scoreDetails.reading.total} câu đúng`}
-            </p>
-          </div>
-
-          <div className="bg-brand-50 dark:bg-brand-900/20 rounded-2xl p-6 text-center border border-brand-100 dark:border-brand-800/30 shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-brand-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
-              TỔNG ĐIỂM
-            </div>
-            <h3 className="text-brand-600 dark:text-brand-400 font-semibold mb-2">
-              Total Score
-            </h3>
-            <div className="text-5xl font-black text-brand-700 dark:text-brand-300 mb-2">
-              {scoreDetails.maxScore === 0 ? "—" : scoreDetails.totalScore}
-            </div>
-            <p className="text-sm text-brand-600/80 dark:text-brand-400/80">
-              / {scoreDetails.maxScore}
-            </p>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="flex flex-wrap justify-center gap-6 p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-2xl mb-8">
-          <div className="flex items-center gap-3">
-            <Clock className="text-neutral-500" />
-            <div>
-              <p className="text-xs text-neutral-500 font-medium">
-                Thời gian làm bài
-              </p>
-              <p className="font-bold text-neutral-900 dark:text-white">
-                {formatTime(resultData.timeSpent)}
-              </p>
-            </div>
-          </div>
-          <div className="w-px h-10 bg-neutral-200 dark:bg-neutral-700 hidden sm:block"></div>
-          <div className="flex items-center gap-3">
-            <CheckCircle2 className="text-emerald-500" />
-            <div>
-              <p className="text-xs text-neutral-500 font-medium">
-                Số câu đúng
-              </p>
-              <p className="font-bold text-neutral-900 dark:text-white">
-                {scoreDetails.listening.correct + scoreDetails.reading.correct}{" "}
-                / {scoreDetails.listening.total + scoreDetails.reading.total}
-              </p>
-            </div>
-          </div>
-          <div className="w-px h-10 bg-neutral-200 dark:bg-neutral-700 hidden sm:block"></div>
-          <div className="flex items-center gap-3">
-            <BarChart3 className="text-blue-500" />
-            <div>
-              <p className="text-xs text-neutral-500 font-medium">
-                Độ chính xác
-              </p>
-              <p className="font-bold text-neutral-900 dark:text-white">
-                {scoreDetails.listening.total + scoreDetails.reading.total > 0
-                  ? `${Math.round(((scoreDetails.listening.correct + scoreDetails.reading.correct) / (scoreDetails.listening.total + scoreDetails.reading.total)) * 100)}%`
-                  : "—"}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-4 border border-brand-100 dark:border-brand-900/30 bg-brand-50/50 dark:bg-brand-900/10 rounded-2xl flex items-start gap-3">
-          <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={18} />
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+        {/* Warning / Notes */}
+        <div className="p-2.5 border border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 rounded-lg flex items-start gap-2">
+          <AlertCircle className="text-brand-500 shrink-0 mt-0.5" size={14} />
+          <p className="text-[10px] text-neutral-800 dark:text-neutral-400 leading-normal font-medium">
             Đây là kết quả mang tính chất tham khảo. Kết quả thi thật có thể dao
-            động tùy thuộc vào thang điểm chuẩn của EST tại từng thời điểm.
+            động tùy thuộc vào thang điểm chuẩn của ETS tại từng thời điểm.
           </p>
         </div>
+
+        {/* Phân tích theo tag */}
+        <TagAnalysisSection
+          tags={resultData.tags}
+          tagQuestions={resultData.tagQuestions}
+          answersMap={resultData.answersMap}
+          flatQuestions={resultData.flatQuestions}
+          session={resultData.session}
+          onQuestionClick={handleQuestionClick}
+        />
+
+        {/* Đáp án nhanh */}
+        <QuickAnswerList
+          flatQuestions={resultData.flatQuestions}
+          answersMap={resultData.answersMap}
+          onQuestionClick={handleQuestionClick}
+        />
       </div>
 
-      {/* Detailed answers could be added here in the future */}
-      <div className="text-center">
-        <Link
-          to={`/client/toeic/${testId}`}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors"
-        >
-          Làm lại bài thi này
-        </Link>
-      </div>
+      {/* Details Popup Modal */}
+      <QuestionDetailsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        question={selectedQuestion}
+        passage={selectedPassage}
+        questionNumber={selectedQuestionNumber}
+        userAnswer={
+          selectedQuestion ? resultData.answersMap[selectedQuestion.id] : null
+        }
+      />
     </div>
   );
 };

@@ -1,13 +1,31 @@
 import { useState, useEffect } from "react";
 import { Volume2, Languages, ChevronDown, Loader2 } from "lucide-react";
 import { logError } from "@/utils/LogError";
+import { handleSpeak } from "@/utils/ReactSpeechKit";
+import DictionaryModal from "./DictionaryModal";
+import SaveToNotebookModal from "./SaveToNotebookModal";
 
-const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
+const EntryWordList = ({ id, fetchApi, pageSize = 6 }) => {
   const [words, setWords] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(false);
+
+  // States cho Dictionary Modal
+  const [activeWord, setActiveWord] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // States cho SaveToNotebook Modal
+  const [saveWord, setSaveWord] = useState("");
+  const [saveEntryId, setSaveEntryId] = useState(null);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+  const handleOpenSaveModal = (word, entryId = null) => {
+    setSaveWord(word);
+    setSaveEntryId(entryId);
+    setIsSaveModalOpen(true);
+  };
 
   useEffect(() => {
     if (id) fetchWords(1);
@@ -38,43 +56,28 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
     if (!loading && hasMore) fetchWords(page + 1);
   };
 
-  const getPosStyle = (pos) => {
-    const p = pos?.toLowerCase() || "";
-    if (p.includes("noun") || p.includes("n."))
-      return "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800";
-    if (p.includes("verb") || p.includes("v."))
-      return "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800";
-    if (p.includes("adj"))
-      return "bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-800";
-    if (p.includes("adv"))
-      return "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-800";
-    if (p.includes("pro"))
-      return "bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-800";
-    if (p.includes("det"))
-      return "bg-fuchsia-50 dark:bg-fuchsia-900/20 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-100 dark:border-fuchsia-800";
-    if (p.includes("prep"))
-      return "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-100 dark:border-cyan-800";
-    if (p.includes("conj"))
-      return "bg-lime-50 dark:bg-lime-900/20 text-lime-700 dark:text-lime-300 border-lime-100 dark:border-lime-800";
-    if (p.includes("interj"))
-      return "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-100 dark:border-rose-800";
-    if (p.includes("phrase"))
-      return "bg-gray-50 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-100 dark:border-neutral-700";
-    return "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-800";
+  const handleOpenModal = (word) => {
+    if (word) {
+      setActiveWord(word);
+      setIsModalOpen(true);
+    }
   };
 
   if (isFirstLoad && loading) {
     return (
-      <div className="mt-8 pt-6 border-t border-dashed border-indigo-100 dark:border-indigo-900/50">
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-8 h-8 bg-gray-100 dark:bg-neutral-800 rounded-lg animate-pulse" />
-          <div className="h-6 w-40 bg-gray-100 dark:bg-neutral-800 rounded animate-pulse" />
+      <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-900/80 shadow-sm mt-6 transition-colors duration-300">
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-800 animate-pulse">
+          <div className="w-8 h-8 bg-neutral-100 dark:bg-neutral-800 rounded-md" />
+          <div className="space-y-2 flex-1">
+            <div className="h-4 w-32 bg-neutral-100 dark:bg-neutral-800 rounded" />
+            <div className="h-3 w-48 bg-neutral-100 dark:bg-neutral-800 rounded" />
+          </div>
         </div>
-        <div className="flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
-              className="h-24 bg-gray-50 dark:bg-neutral-800 rounded-xl animate-pulse"
+              className="h-14 bg-neutral-50/50 dark:bg-neutral-900/30 rounded-lg animate-pulse border border-neutral-100/50 dark:border-neutral-800/50"
             />
           ))}
         </div>
@@ -85,103 +88,120 @@ const EntryWordList = ({ id, fetchApi, pageSize = 5 }) => {
   if (!loading && words.length === 0) return null;
 
   return (
-    <div className="mt-8 pt-6 border-t border-dashed border-indigo-100 dark:border-indigo-900/50">
+    <div className="bg-white dark:bg-neutral-900/50 rounded-lg p-4 border border-neutral-200 dark:border-neutral-900/80 shadow-sm mt-6 transition-colors duration-300">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-5 text-indigo-900 dark:text-indigo-200">
-        <div className="p-1.5 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg text-indigo-600 dark:text-indigo-400">
-          <Languages size={18} />
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+        <div className="flex items-center gap-3">
+          <div className="p-1.5 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-500 dark:text-indigo-400 rounded-md">
+            <Languages size={18} />
+          </div>
+          <div>
+            <h3 className="font-semibold text-neutral-900 dark:text-white text-sm sm:text-base tracking-tight">
+              Từ vựng quan trọng
+            </h3>
+            <p className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-0.5">
+              Từ vựng chính xuất hiện trong nội dung bài học
+            </p>
+          </div>
         </div>
-        <h2 className="text-lg font-bold">Từ vựng quan trọng</h2>
+
+        {/* Total Badge */}
+        <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50">
+          Tổng số: {words.length} từ
+        </span>
       </div>
 
-      <div className="flex flex-col gap-1">
-        {words.map((entry) => (
+      {/* Word List (Each word on one row) */}
+      <div className="grid grid-cols-1 gap-2">
+        {words.map((entry, index) => (
           <div
             key={entry.id}
-            className="group flex flex-col sm:flex-row gap-2 sm:gap-6 py-3 px-3 rounded-xl hover:bg-slate-100 dark:hover:bg-neutral-800/50 transition-colors duration-200 border border-transparent hover:border-slate-100 dark:hover:border-neutral-700"
+            className="flex items-center justify-between p-3 rounded-lg bg-neutral-50/30 dark:bg-neutral-900/20 
+              border border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-neutral-900 
+              hover:border-brand-500 dark:hover:border-brand-500 transition-colors duration-150 group"
           >
-            {/* LEFT */}
-            <div className="sm:w-40 flex-shrink-0 pt-0.5">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-indigo-700 dark:text-indigo-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-200 transition-colors">
-                  {entry.headword}
-                </span>
-
-                {entry.audio_url && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      new Audio(entry.audio_url).play();
-                    }}
-                    className="w-6 h-6 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 dark:text-indigo-400 flex items-center justify-center hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white dark:hover:text-white transition-all"
-                  >
-                    <Volume2 size={12} />
-                  </button>
-                )}
-              </div>
-
-              {entry.ipa && (
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-mono block mt-0.5">
-                  {entry.ipa}
-                </span>
-              )}
+            {/* LEFT: Index & Word */}
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-mono text-neutral-400 dark:text-neutral-500 select-none">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className="font-medium text-neutral-900 dark:text-neutral-200 select-all font-serif group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">
+                {entry.word}
+              </span>
             </div>
 
-            {/* RIGHT */}
-            <div className="flex-1 space-y-3">
-              {entry.senses?.map((sense) => (
-                <div key={sense.id} className="text-sm">
-                  <div className="leading-snug text-slate-800">
-                    <span
-                      className={`
-                        inline-block px-2 py-0.5 rounded-[6px] text-[10px] font-bold uppercase tracking-wide border
-                        mr-2 align-middle ${getPosStyle(sense.pos)}
-                      `}
-                    >
-                      {sense.pos}
-                    </span>
+            {/* RIGHT: Speak Audio & View Details Link */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSpeak(entry.word, "");
+                }}
+                className="w-7 h-7 rounded bg-white dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 
+                  flex items-center justify-center border border-neutral-200/50 dark:border-neutral-700/50 
+                  hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-100 dark:hover:border-brand-900 transition-colors"
+                title="Nghe phát âm"
+              >
+                <Volume2 size={13} />
+              </button>
 
-                    <span className="font-bold text-slate-900 dark:text-slate-100 mr-1.5">
-                      {sense.meaning}
-                    </span>
-                    <span className="text-slate-500 dark:text-slate-400">
-                      — {sense.definition}
-                    </span>
-                  </div>
+              <button
+                onClick={() => handleOpenModal(entry.word)}
+                className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
+              >
+                Xem nghĩa
+              </button>
 
-                  {sense.example && (
-                    <div className="mt-1.5 ml-1 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800 text-xs text-slate-600 dark:text-slate-400 italic">
-                      "{sense.example}"
-                    </div>
-                  )}
-                </div>
-              ))}
+              <button
+                onClick={() => handleOpenSaveModal(entry.word, entry.id)}
+                className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors border-l border-neutral-200 dark:border-neutral-700 pl-2"
+              >
+                Lưu sổ tay
+              </button>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Load More Button */}
       {hasMore && (
-        <div className="mt-4 pt-2 flex justify-center">
+        <div className="mt-4 pt-1 flex justify-center">
           <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="flex items-center gap-2 px-5 py-2 text-sm font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 rounded-full border border-indigo-100 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 disabled:opacity-70"
+            className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-neutral-600 dark:text-neutral-300 
+              bg-neutral-50 dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md 
+              border border-neutral-200 dark:border-neutral-700 disabled:opacity-70 transition-colors"
           >
             {loading ? (
               <>
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={14} className="animate-spin" />
                 <span>Đang tải...</span>
               </>
             ) : (
               <>
                 <span>Xem thêm từ vựng</span>
-                <ChevronDown size={16} />
+                <ChevronDown size={14} />
               </>
             )}
           </button>
         </div>
       )}
+
+      {/* Reusable Dictionary Modal */}
+      <DictionaryModal
+        word={activeWord}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      <SaveToNotebookModal
+        word={saveWord}
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+      />
     </div>
   );
 };

@@ -175,7 +175,7 @@ const ToeicCollectionsTable = ({
               return (
                 <tr
                   key={i}
-                  className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                  className="border-t border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   <td className="px-4 py-3 text-xs font-semibold">{item.id}</td>
                   <td className="px-4 py-3 text-sm font-medium whitespace-normal">

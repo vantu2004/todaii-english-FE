@@ -46,7 +46,7 @@ const ChatPanel = ({ onClose, isMobile }) => {
   const containerClass = isMobile
     ? "fixed inset-0 w-full h-[100dvh] pb-[env(safe-area-inset-bottom)] bg-white z-[70] flex flex-col"
     : [
-        "fixed bottom-[88px] right-6",
+        "fixed bottom-6 right-6",
         "w-[400px] h-[600px] max-h-[min(78vh,660px)]",
         "bg-white z-[70] flex flex-col",
         "rounded-2xl overflow-hidden",

@@ -15,6 +15,7 @@ const LongArticleCard = ({
   views,
   published_at,
   updated_at,
+  onToggle,
 }) => {
   const getLevelStyle = (level) => {
     const styles = {
@@ -32,7 +33,7 @@ const LongArticleCard = ({
   };
 
   return (
-    <div className="group block bg-white dark:bg-neutral-900/60 rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:border-neutral-200 dark:hover:border-neutral-700 transition-all duration-300 hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] dark:hover:shadow-none overflow-hidden">
+    <div className="group block bg-white dark:bg-neutral-900/60 rounded-lg border border-neutral-200 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-700 transition-all duration-150 overflow-hidden">
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
         <div className="relative sm:w-56 lg:w-64 flex-shrink-0 overflow-hidden">
@@ -40,24 +41,24 @@ const LongArticleCard = ({
             <img
               src={image_url || null}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
             />
           </div>
 
           {/* Source badge on image */}
           <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm rounded-lg text-xs font-medium text-neutral-700 dark:text-neutral-300">
+            <span className="px-2 py-0.5 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm rounded text-xs font-medium text-neutral-700 dark:text-neutral-300">
               {source_name}
             </span>
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 p-5 sm:p-6 flex flex-col">
+        <div className="flex-1 p-4 flex flex-col">
           {/* Top row: Level + Date */}
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-center gap-3 mb-2.5">
             <span
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold ring-1 ring-inset ${getLevelStyle(
+              className={`px-2 py-0.5 rounded text-xs font-semibold ring-1 ring-inset ${getLevelStyle(
                 cefr_level,
               )}`}
             >
@@ -72,6 +73,7 @@ const LongArticleCard = ({
                 itemId={id}
                 checkSavedFn={isSavedArticle}
                 toggleSavedFn={toggleSavedArticle}
+                onToggle={onToggle}
               />
             </div>
           </div>

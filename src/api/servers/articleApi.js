@@ -142,3 +142,24 @@ export const deleteAllWordsFromArticle = async (articleId) => {
     throw err;
   }
 };
+
+export const uploadTtsFile = async (articleId) => {
+  try {
+    const response = await serverInstance.get(`/article/${articleId}/tts`);
+    return response.data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+};
+
+export const deleteTtsFile = async (articleId, fileUrl) => {
+  try {
+    await serverInstance.delete(`/article/${articleId}/tts`, {
+      params: { fileUrl },
+    });
+  } catch (err) {
+    console.log("Error: ", err);
+    throw err;
+  }
+};

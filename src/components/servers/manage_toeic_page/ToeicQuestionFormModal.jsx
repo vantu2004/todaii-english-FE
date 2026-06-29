@@ -73,13 +73,15 @@ const ToeicQuestionFormModal = ({
 
   const filteredTags = useMemo(() => {
     return localTags.filter((tag) => {
-      const tagPart = tag.part_number;
-      return (
-        tagPart === null ||
-        tagPart === undefined ||
-        tagPart === "" ||
-        Number(tagPart) === Number(partNumber)
-      );
+      const partNumbersStr =
+        tag.partNumbers ||
+        tag.part_numbers ||
+        tag.partNumber ||
+        tag.part_number ||
+        "";
+      if (!partNumbersStr) return true;
+      const partsList = partNumbersStr.split(",").map((p) => p.trim());
+      return partsList.includes(String(partNumber));
     });
   }, [localTags, partNumber]);
 
@@ -512,7 +514,7 @@ const ToeicQuestionFormModal = ({
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Tags (Select up to 5) <span className="text-red-500">*</span>
             </label>
-            <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-750">
+            <div className="flex flex-wrap gap-2 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
               {filteredTags.map((tag) => (
                 <label
                   key={tag.id}
@@ -560,60 +562,59 @@ const ToeicQuestionFormModal = ({
           {/* MEDIA UPLOADS (Part 1, 2) */}
           {isPart12 && (
             <>
-              <div className="md:col-span-2">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Image URL{" "}
-                    {partNumber === 1 && (
-                      <span className="text-red-500">*</span>
-                    )}
-                  </label>
-                  <div className="flex gap-2 items-center">
-                    {!formData.imageUrl?.includes("cloudinary") ? (
-                      <label
-                        className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
-                      >
-                        {isUploadingImage ? "Uploading..." : "Upload Image"}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => handleUploadFile(e, "image")}
-                        />
-                      </label>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteFile("image")}
-                        disabled={isDeletingImage}
-                        className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
-                      >
-                        {isDeletingImage ? "Removing..." : "Remove Uploaded"}
-                      </button>
-                    )}
+              {partNumber === 1 && (
+                <div className="md:col-span-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Image URL <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-2 items-center">
+                      {!formData.imageUrl?.includes("cloudinary") ? (
+                        <label
+                          className={`cursor-pointer px-3 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium border border-blue-200 hover:bg-blue-100 transition-colors ${isUploadingImage ? "opacity-50 pointer-events-none" : ""}`}
+                        >
+                          {isUploadingImage ? "Uploading..." : "Upload Image"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleUploadFile(e, "image")}
+                          />
+                        </label>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteFile("image")}
+                          disabled={isDeletingImage}
+                          className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs font-medium border border-red-200 hover:bg-red-100 transition-colors"
+                        >
+                          {isDeletingImage ? "Removing..." : "Remove Uploaded"}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <input
-                  type="text"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleChange}
-                  placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
-                  disabled={formData.imageUrl?.includes("cloudinary")}
-                  required={partNumber === 1}
-                />
-                {formData.imageUrl && (
-                  <img
-                    src={formData.imageUrl}
-                    alt="Preview"
-                    className="w-full h-auto object-cover rounded max-h-48 border border-gray-200"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
+                  <input
+                    type="text"
+                    name="imageUrl"
+                    value={formData.imageUrl}
+                    onChange={handleChange}
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg focus:border-gray-400 focus:ring-2 focus:ring-gray-900/10 dark:bg-gray-700 dark:text-white outline-none mb-3"
+                    disabled={formData.imageUrl?.includes("cloudinary")}
+                    required
                   />
-                )}
-              </div>
+                  {formData.imageUrl && (
+                    <img
+                      src={formData.imageUrl}
+                      alt="Preview"
+                      className="w-full h-auto object-cover rounded max-h-48 border border-gray-200"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  )}
+                </div>
+              )}
 
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-2">
