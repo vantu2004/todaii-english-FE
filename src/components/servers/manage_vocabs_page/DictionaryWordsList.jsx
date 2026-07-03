@@ -30,11 +30,10 @@ const DictionaryWordsList = ({
           <div
             key={word.id}
             onClick={() => onSelectWord(word.id)}
-            className={`p-3.5 sm:p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 group border-l-2 ${
-              isSelected
-                ? "bg-gray-50 dark:bg-gray-800/40 border-gray-900 dark:border-white"
-                : "bg-white dark:bg-gray-900 border-transparent hover:bg-gray-50/50 dark:hover:bg-gray-900"
-            }`}
+            className={`p-3.5 sm:p-4 flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 group border-l-2 ${isSelected
+              ? "bg-gray-50 dark:bg-gray-800/40 border-gray-900 dark:border-white"
+              : "bg-white dark:bg-gray-900 border-transparent hover:bg-gray-50/50 dark:hover:bg-gray-900"
+              }`}
           >
             <div className="flex items-center gap-3 min-w-0">
               <div className="flex-shrink-0 min-w-[40px] text-center font-mono text-[10px] text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800/60 rounded px-1.5 py-0.5 border border-gray-100 dark:border-gray-700">
