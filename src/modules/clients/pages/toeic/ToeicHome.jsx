@@ -35,7 +35,9 @@ const ToeicHome = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      const dismissed = localStorage.getItem("todaii_dismiss_learning_profile_prompt");
+      const dismissed = localStorage.getItem(
+        "todaii_dismiss_learning_profile_prompt",
+      );
       if (dismissed !== "true") {
         checkLearningProfile();
       }

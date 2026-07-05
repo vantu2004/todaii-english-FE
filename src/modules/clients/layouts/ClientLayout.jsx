@@ -12,14 +12,16 @@ const ClientLayout = () => {
   const hideFooter = isTakingTest || isResultReview || isNotebook;
 
   // Check if current route is a study route
-  const isStudying = (
-    (location.pathname.startsWith("/client/article/") && !location.pathname.startsWith("/client/article/filter")) ||
-    (location.pathname.startsWith("/client/video/") && !location.pathname.startsWith("/client/video/filter")) ||
-    (location.pathname.startsWith("/client/vocabulary/") && location.pathname !== "/client/vocabulary") ||
+  const isStudying =
+    (location.pathname.startsWith("/client/article/") &&
+      !location.pathname.startsWith("/client/article/filter")) ||
+    (location.pathname.startsWith("/client/video/") &&
+      !location.pathname.startsWith("/client/video/filter")) ||
+    (location.pathname.startsWith("/client/vocabulary/") &&
+      location.pathname !== "/client/vocabulary") ||
     location.pathname.startsWith("/client/dictionary") ||
     location.pathname.startsWith("/client/toeic/exam") ||
-    location.pathname.startsWith("/client/notebook")
-  );
+    location.pathname.startsWith("/client/notebook");
 
   // Track study time
   useStudyTracker(isStudying);

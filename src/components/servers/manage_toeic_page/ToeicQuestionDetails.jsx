@@ -1,12 +1,3 @@
-import {
-  Image as ImageIcon,
-  FileAudio,
-  FileText,
-  CheckSquare,
-  Tags,
-  Info,
-  Calendar,
-} from "lucide-react";
 import DOMPurify from "dompurify";
 import { formatISODate } from "@/utils/FormatDate";
 
@@ -33,35 +24,38 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
     return val;
   };
 
+  const proseClass =
+    "prose prose-sm dark:prose-invert min-w-0 max-w-none break-words overflow-x-auto text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 dark:border-gray-700 p-4 rounded-lg bg-gray-50/50 dark:bg-gray-800/50";
+
   return (
-    <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-2">
+    <div className="space-y-6 min-w-0">
       {/* Metadata Grid */}
-      <div className="bg-gradient-to-br from-slate-50 to-indigo-50/50 dark:from-gray-800 dark:to-gray-800 p-6 rounded-2xl border border-indigo-100 dark:border-gray-700 shadow-sm">
-        <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-indigo-200/50 pb-2">
-          <Info size={16} /> Question Metadata
+      <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg bg-white dark:bg-gray-900">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-800 pb-2">
+          Question Metadata
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-gray-500">
               Question ID
             </span>
-            <p className="font-mono font-bold text-slate-900 dark:text-slate-100 mt-1">
+            <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">
               #{displayVal(question.id)}
             </p>
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-gray-500">
               Part Number
             </span>
-            <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
+            <p className="font-medium text-gray-900 dark:text-white mt-1">
               Part {displayVal(currentPartNum)}
             </p>
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-gray-500">
               Passage ID
             </span>
-            <p className="font-mono font-bold text-slate-900 dark:text-slate-100 mt-1">
+            <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">
               {passageId ? (
                 `#${passageId}`
               ) : (
@@ -70,21 +64,20 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
             </p>
           </div>
           <div>
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-gray-500">
               Correct Answer
             </span>
-            <p className="font-bold text-green-700 dark:text-green-400 mt-1">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-green-100 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+            <div className="mt-1">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400 border border-green-200 dark:border-green-800">
                 {displayVal(correctAns)}
               </span>
-            </p>
+            </div>
           </div>
           <div className="md:col-span-2">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+            <span className="text-xs font-medium text-gray-500">
               Created At
             </span>
-            <p className="text-slate-700 dark:text-slate-300 mt-1 flex items-center gap-1.5">
-              <Calendar size={14} className="text-slate-400" />
+            <p className="text-gray-700 dark:text-gray-300 mt-1">
               {createdTime ? (
                 formatISODate(createdTime)
               ) : (
@@ -98,12 +91,12 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       {/* Media Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Image URL Field */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-3">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2">
-            <ImageIcon size={14} /> Image URL
+        <div className="border border-gray-200 dark:border-gray-700 p-5 rounded-lg bg-white dark:bg-gray-900 space-y-3">
+          <span className="text-xs font-medium text-gray-500 block">
+            Image URL
           </span>
           <p
-            className="text-xs text-gray-500 font-mono truncate max-w-full"
+            className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate max-w-full"
             title={imageUrl || ""}
           >
             {imageUrl ? (
@@ -111,7 +104,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
                 href={imageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-gray-700 dark:text-gray-300 hover:underline hover:text-gray-900 dark:hover:text-white"
               >
                 {imageUrl}
               </a>
@@ -120,7 +113,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
             )}
           </p>
           {imageUrl && (
-            <div className="rounded-xl overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center max-h-48 mt-2">
+            <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center max-h-48 mt-2">
               <img
                 src={imageUrl}
                 alt="Preview"
@@ -131,12 +124,12 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
         </div>
 
         {/* Audio URL Field */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-3">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2">
-            <FileAudio size={14} /> Audio URL
+        <div className="border border-gray-200 dark:border-gray-700 p-5 rounded-lg bg-white dark:bg-gray-900 space-y-3">
+          <span className="text-xs font-medium text-gray-500 block">
+            Audio URL
           </span>
           <p
-            className="text-xs text-gray-500 font-mono truncate max-w-full"
+            className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate max-w-full"
             title={audioUrl || ""}
           >
             {audioUrl ? (
@@ -144,7 +137,7 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
                 href={audioUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-gray-700 dark:text-gray-300 hover:underline hover:text-gray-900 dark:hover:text-white"
               >
                 {audioUrl}
               </a>
@@ -163,12 +156,12 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       </div>
 
       {/* Question Text */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2 mb-3">
-          <FileText size={14} /> Question Text
+      <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg bg-white dark:bg-gray-900">
+        <span className="text-xs font-medium text-gray-500 block mb-3">
+          Question Text
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
+          className={proseClass}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.question ||
@@ -179,61 +172,48 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       </div>
 
       {/* Options Selection */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-wide block">
+      <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg bg-white dark:bg-gray-900 space-y-4">
+        <span className="text-xs font-medium text-gray-500 block">
           Options List
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div
-            className={`p-4 rounded-xl shadow-sm border transition-all ${correctAns === "A" ? "border-green-500 bg-green-50/50 dark:bg-green-950/20 font-bold" : "border-gray-200"}`}
-          >
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
-              Option A
-            </span>
-            <p className="text-sm">
-              {displayVal(question.option_a || question.optionA)}
-            </p>
-          </div>
-          <div
-            className={`p-4 rounded-xl shadow-sm border transition-all ${correctAns === "B" ? "border-green-500 bg-green-50/50 dark:bg-green-950/20 font-bold" : "border-gray-200"}`}
-          >
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
-              Option B
-            </span>
-            <p className="text-sm">
-              {displayVal(question.option_b || question.optionB)}
-            </p>
-          </div>
-          <div
-            className={`p-4 rounded-xl shadow-sm border transition-all ${correctAns === "C" ? "border-green-500 bg-green-50/50 dark:bg-green-950/20 font-bold" : "border-gray-200"}`}
-          >
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
-              Option C
-            </span>
-            <p className="text-sm">
-              {displayVal(question.option_c || question.optionC)}
-            </p>
-          </div>
-          <div
-            className={`p-4 rounded-xl shadow-sm border transition-all ${correctAns === "D" ? "border-green-500 bg-green-50/50 dark:bg-green-950/20 font-bold" : "border-gray-200"}`}
-          >
-            <span className="text-xs font-bold uppercase tracking-wider block mb-1">
-              Option D
-            </span>
-            <p className="text-sm">
-              {displayVal(question.option_d || question.optionD)}
-            </p>
-          </div>
+          {["A", "B", "C", "D"].map((opt) => {
+            const isCorrect = correctAns === opt;
+            const optionText =
+              opt === "A"
+                ? question.option_a || question.optionA
+                : opt === "B"
+                  ? question.option_b || question.optionB
+                  : opt === "C"
+                    ? question.option_c || question.optionC
+                    : question.option_d || question.optionD;
+
+            return (
+              <div
+                key={opt}
+                className={`p-4 rounded-lg border transition-all ${
+                  isCorrect
+                    ? "border-green-500 bg-green-50/50 dark:bg-green-950/20 text-green-900 dark:text-green-100 font-medium"
+                    : "border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
+                }`}
+              >
+                <span className="text-xs font-medium uppercase tracking-wider block mb-1 text-gray-500 dark:text-gray-400">
+                  Option {opt}
+                </span>
+                <p className="text-sm break-words">{displayVal(optionText)}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Transcript */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2 mb-3">
-          <FileText size={14} /> Transcript
+      <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg bg-white dark:bg-gray-900">
+        <span className="text-xs font-medium text-gray-500 block mb-3">
+          Transcript
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
+          className={proseClass}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.transcript ||
@@ -244,12 +224,12 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       </div>
 
       {/* Explanation */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-wide flex items-center gap-2 mb-3">
-          <FileText size={14} /> Explanation
+      <div className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg bg-white dark:bg-gray-900">
+        <span className="text-xs font-medium text-gray-500 block mb-3">
+          Explanation
         </span>
         <div
-          className="prose dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-200 min-h-[40px] leading-relaxed border border-gray-200 p-4 rounded-xl bg-gray-50/50"
+          className={proseClass}
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(
               question.explanation ||
@@ -260,23 +240,20 @@ const ToeicQuestionDetails = ({ question, partNumber }) => {
       </div>
 
       {/* Tags */}
-      <div className="flex items-center gap-3 bg-blue-50/50 dark:bg-blue-900/10 p-4 rounded-xl border border-blue-200/50">
-        <Tags className="text-blue-600 shrink-0" size={20} />
-        <div className="flex flex-wrap gap-2">
-          {question.tags?.length > 0 ? (
-            question.tags.map((tag) => (
+      {question.tags?.length > 0 && (
+        <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+          <div className="flex flex-wrap gap-2">
+            {question.tags.map((tag) => (
               <span
                 key={tag.id}
-                className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200 px-3 py-1 rounded-full text-xs font-semibold"
+                className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 px-2.5 py-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-700"
               >
                 {tag.name}
               </span>
-            ))
-          ) : (
-            <span className="text-xs text-gray-400 italic">null</span>
-          )}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

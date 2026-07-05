@@ -8,7 +8,7 @@ export const getAllDailyStudyLogs = async () => {
     console.error("Get daily study logs error:", err);
     throw err;
   }
-}
+};
 
 export const pingStudyTime = async () => {
   try {

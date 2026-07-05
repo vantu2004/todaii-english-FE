@@ -43,9 +43,7 @@ export const useToeicSync = ({
       // Increment test study item
       incrementStudyItem("TEST")
         .then(() => emitStudyEvent(STUDY_EVENTS.ITEM_INCREMENTED))
-        .catch((err) =>
-          console.error("Increment test study item error:", err),
-        );
+        .catch((err) => console.error("Increment test study item error:", err));
 
       localStorage.removeItem(`toeic_timeLeft_${sessionId}`);
       localStorage.removeItem(`toeic_lastTime_${sessionId}`);

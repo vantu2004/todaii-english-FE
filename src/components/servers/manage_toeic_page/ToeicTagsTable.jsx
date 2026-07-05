@@ -320,28 +320,20 @@ const ToeicTagsTable = ({
         <Modal
           isOpen={true}
           onClose={() => setDetailIndex(null)}
-          title={
-            <div className="flex items-center gap-3">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Tag Details
-                </h2>
-              </div>
-            </div>
-          }
+          title="Tag Details"
           footer={
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDetailIndex(null)}
-                className="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Close
               </button>
             </div>
           }
         >
-          <div className="space-y-4 border border-gray-200 rounded-lg p-6">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4 border border-gray-200 dark:border-gray-700 rounded-lg p-6 min-w-0">
+            <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-xs font-medium text-gray-500">
                   Tag ID
@@ -364,13 +356,13 @@ const ToeicTagsTable = ({
               </div>
               <div className="col-span-2">
                 <span className="text-xs font-medium text-gray-500">Name</span>
-                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1 break-words">
                   {tags[detailIndex]?.name}
                 </p>
               </div>
               <div className="col-span-2">
                 <span className="text-xs font-medium text-gray-500">Alias</span>
-                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1 break-words">
                   {tags[detailIndex]?.alias}
                 </p>
               </div>

@@ -14,28 +14,28 @@ Connects to a Spring Boot backend via REST APIs to deliver TOEIC exam preparatio
 
 ## 🛠 Tech Stack
 
-| Category | Technology | Version |
-|---|---|---|
-| **UI Library** | [React](https://react.dev/) | 19.1 |
-| **Build Tool** | [Vite](https://vitejs.dev/) | 7.1 |
-| **Language** | JavaScript (ES6+) | — |
-| **Routing** | [React Router](https://reactrouter.com/) | 7.9 |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | 4.1 |
-| **HTTP Client** | [Axios](https://axios-http.com/) | 1.13 |
-| **State Management** | [Zustand](https://zustand-demo.pmnd.rs/) | 5.0 |
-| **Animations** | [Framer Motion](https://www.framer.com/motion/) | 12.x |
-| **Icons** | [Lucide React](https://lucide.dev/) | 0.552 |
-| **Charts** | [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/) | 4.5 / 5.3 |
-| **UI Components** | [MUI (Material UI)](https://mui.com/) | 7.3 |
-| **Date Utilities** | [date-fns](https://date-fns.org/) + [Day.js](https://day.js.org/) | 4.1 / 1.11 |
-| **Video Player** | [React Player](https://github.com/cookpete/react-player) | 3.4 |
-| **Rich Text Editor** | [React Quill](https://github.com/zenoamaro/react-quill) | 3.7 |
-| **Markdown Rendering** | [react-markdown](https://github.com/remarkjs/react-markdown) | 10.1 |
-| **Carousel/Slider** | [Swiper](https://swiperjs.com/) | 12.0 |
-| **Tree View** | [React Arborist](https://github.com/brimdata/react-arborist) | 3.4 |
-| **Notifications** | [React Hot Toast](https://react-hot-toast.com/) | 2.6 |
-| **Linting** | [ESLint](https://eslint.org/) | 9.35 |
-| **Formatting** | [Prettier](https://prettier.io/) | 3.8 |
+| Category               | Technology                                                                                | Version    |
+| ---------------------- | ----------------------------------------------------------------------------------------- | ---------- |
+| **UI Library**         | [React](https://react.dev/)                                                               | 19.1       |
+| **Build Tool**         | [Vite](https://vitejs.dev/)                                                               | 7.1        |
+| **Language**           | JavaScript (ES6+)                                                                         | —          |
+| **Routing**            | [React Router](https://reactrouter.com/)                                                  | 7.9        |
+| **Styling**            | [Tailwind CSS](https://tailwindcss.com/)                                                  | 4.1        |
+| **HTTP Client**        | [Axios](https://axios-http.com/)                                                          | 1.13       |
+| **State Management**   | [Zustand](https://zustand-demo.pmnd.rs/)                                                  | 5.0        |
+| **Animations**         | [Framer Motion](https://www.framer.com/motion/)                                           | 12.x       |
+| **Icons**              | [Lucide React](https://lucide.dev/)                                                       | 0.552      |
+| **Charts**             | [Chart.js](https://www.chartjs.org/) + [react-chartjs-2](https://react-chartjs-2.js.org/) | 4.5 / 5.3  |
+| **UI Components**      | [MUI (Material UI)](https://mui.com/)                                                     | 7.3        |
+| **Date Utilities**     | [date-fns](https://date-fns.org/) + [Day.js](https://day.js.org/)                         | 4.1 / 1.11 |
+| **Video Player**       | [React Player](https://github.com/cookpete/react-player)                                  | 3.4        |
+| **Rich Text Editor**   | [React Quill](https://github.com/zenoamaro/react-quill)                                   | 3.7        |
+| **Markdown Rendering** | [react-markdown](https://github.com/remarkjs/react-markdown)                              | 10.1       |
+| **Carousel/Slider**    | [Swiper](https://swiperjs.com/)                                                           | 12.0       |
+| **Tree View**          | [React Arborist](https://github.com/brimdata/react-arborist)                              | 3.4        |
+| **Notifications**      | [React Hot Toast](https://react-hot-toast.com/)                                           | 2.6        |
+| **Linting**            | [ESLint](https://eslint.org/)                                                             | 9.35       |
+| **Formatting**         | [Prettier](https://prettier.io/)                                                          | 3.8        |
 
 ---
 
@@ -43,16 +43,16 @@ Connects to a Spring Boot backend via REST APIs to deliver TOEIC exam preparatio
 
 > Replace the placeholders below with your actual screenshots.
 
-| Page | Screenshot |
-|---|---|
-| Landing Page | ![Landing Page](public/image-1.png)|
-| Home (Articles) | ![Home Page](public/image-2.png) |
+| Page            | Screenshot                             |
+| --------------- | -------------------------------------- |
+| Landing Page    | ![Landing Page](public/image-1.png)    |
+| Home (Articles) | ![Home Page](public/image-2.png)       |
 | Article Details | ![Article Details](public/image-3.png) |
-| TOEIC Practice | ![TOEIC Practice](public/image-5.png) |
-| Dictionary | ![Dictionary](public/image-6.png) |
-| Video Learning | ![Video Learning](public/image-7.png) |
+| TOEIC Practice  | ![TOEIC Practice](public/image-5.png)  |
+| Dictionary      | ![Dictionary](public/image-6.png)      |
+| Video Learning  | ![Video Learning](public/image-7.png)  |
 | Vocabulary Deck | ![Vocabulary Deck](public/image-8.png) |
-| AI Chatbot | ![AI Chatbot](public/image-4.png) |
+| AI Chatbot      | ![AI Chatbot](public/image-4.png)      |
 | Admin Dashboard | ![Admin Dashboard](public/image-9.png) |
 
 ---
@@ -145,13 +145,13 @@ todaii-english-FE/
 │   │   ├── servers/                  # Admin-specific hooks
 │   │   ├── useThemeContext.js        # Theme hook
 │   │   └── useVideoPlayer.js         # Video player hook
-│   │ 
+│   │
 │   ├── modules/                      # Feature modules (pages + layouts)
 │   │   ├── clients/
 │   │   │   ├── layouts/
 │   │   │   └── pages/
 │   │   └── servers/
-│   │       ├── layouts/             
+│   │       ├── layouts/
 │   │       └── pages/
 │   ├── pages/                        # Top-level pages
 │   │   ├── LandingPage.jsx           # Public landing page
@@ -170,7 +170,6 @@ todaii-english-FE/
 ├── package.json                      # Dependencies & scripts
 └── README.md
 ```
-
 
 ## 🔗 Connecting to Backend
 
@@ -196,13 +195,13 @@ Update the `VITE_CLIENT_PROD_URL` and `VITE_SERVER_PROD_URL` in `.env` to point 
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start Vite development server with HMR |
-| `npm run build` | Build optimized production bundle to `dist/` |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint across the project |
-| `npm run format` | Format code with Prettier |
+| Command           | Description                                  |
+| ----------------- | -------------------------------------------- |
+| `npm run dev`     | Start Vite development server with HMR       |
+| `npm run build`   | Build optimized production bundle to `dist/` |
+| `npm run preview` | Preview the production build locally         |
+| `npm run lint`    | Run ESLint across the project                |
+| `npm run format`  | Format code with Prettier                    |
 
 <p align="center">
   <sub>Le Van Tu - Huynh Quoc Thang </sub>

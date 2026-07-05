@@ -42,8 +42,16 @@ const StudyCalendar = ({ logs = [], loading = false }) => {
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const firstDayIndex = (firstDay + 6) % 7;
 
-    const totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const totalDaysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const totalDaysInMonth = new Date(
+      currentYear,
+      currentMonth + 1,
+      0,
+    ).getDate();
+    const totalDaysInPrevMonth = new Date(
+      currentYear,
+      currentMonth,
+      0,
+    ).getDate();
 
     const cells = [];
 
@@ -123,9 +131,12 @@ const StudyCalendar = ({ logs = [], loading = false }) => {
 
   // Get color for day study time badge
   const getStudyTimeBadgeColor = (mins) => {
-    if (!mins) return "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400";
-    if (mins < 15) return "bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400";
-    if (mins < 30) return "bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300";
+    if (!mins)
+      return "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400";
+    if (mins < 15)
+      return "bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400";
+    if (mins < 30)
+      return "bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300";
     return "bg-brand-500 text-white shadow-sm";
   };
 
@@ -133,16 +144,20 @@ const StudyCalendar = ({ logs = [], loading = false }) => {
   const selectedLog = selectedDayStr ? logsMap.get(selectedDayStr) : null;
   const formattedSelectedDate = selectedDayStr
     ? new Date(selectedDayStr).toLocaleDateString("vi-VN", {
-      weekday: "long",
-      day: "numeric",
-      month: "numeric",
-      year: "numeric",
-    })
+        weekday: "long",
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      })
     : null;
 
   const todayStr = useMemo(() => {
     const today = new Date();
-    return formatDateStr(today.getFullYear(), today.getMonth(), today.getDate());
+    return formatDateStr(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
   }, []);
 
   return (
@@ -212,33 +227,37 @@ const StudyCalendar = ({ logs = [], loading = false }) => {
                         setSelectedDayStr(isSelected ? null : cell.dateStr);
                       }
                     }}
-                    className={`min-h-[85px] p-2 flex flex-col justify-between border-b border-r border-neutral-100 dark:border-neutral-850/80 transition-all ${cell.isCurrentMonth
-                      ? "bg-white dark:bg-neutral-900 cursor-pointer"
-                      : "bg-neutral-50/50 dark:bg-neutral-950/20 opacity-40 select-none cursor-default"
-                      } ${isToday
+                    className={`min-h-[85px] p-2 flex flex-col justify-between border-b border-r border-neutral-100 dark:border-neutral-850/80 transition-all ${
+                      cell.isCurrentMonth
+                        ? "bg-white dark:bg-neutral-900 cursor-pointer"
+                        : "bg-neutral-50/50 dark:bg-neutral-950/20 opacity-40 select-none cursor-default"
+                    } ${
+                      isToday
                         ? "bg-brand-500/5 dark:bg-brand-500/10 font-bold border-brand-500/30"
                         : ""
-                      } ${isSelected
+                    } ${
+                      isSelected
                         ? "ring-2 ring-brand-500 dark:ring-brand-400 z-10"
                         : "hover:bg-neutral-50 dark:hover:bg-neutral-800/40"
-                      }`}
+                    }`}
                   >
                     {/* Day Number and Mins Badge */}
                     <div className="flex justify-between items-start">
                       <span
-                        className={`text-xs ${isToday
-                          ? "text-brand-500 font-bold"
-                          : cell.isCurrentMonth
-                            ? "text-neutral-800 dark:text-neutral-200 font-medium"
-                            : "text-neutral-400 dark:text-neutral-600"
-                          }`}
+                        className={`text-xs ${
+                          isToday
+                            ? "text-brand-500 font-bold"
+                            : cell.isCurrentMonth
+                              ? "text-neutral-800 dark:text-neutral-200 font-medium"
+                              : "text-neutral-400 dark:text-neutral-600"
+                        }`}
                       >
                         {cell.day}
                       </span>
                       {hasLog && (
                         <span
                           className={`text-[9px] px-1 py-0.5 rounded font-semibold ${getStudyTimeBadgeColor(
-                            cell.log.total_study_minutes
+                            cell.log.total_study_minutes,
                           )}`}
                         >
                           {cell.log.total_study_minutes}m

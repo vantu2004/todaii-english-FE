@@ -99,7 +99,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      const dismissed = localStorage.getItem("todaii_dismiss_learning_profile_prompt");
+      const dismissed = localStorage.getItem(
+        "todaii_dismiss_learning_profile_prompt",
+      );
       if (dismissed !== "true") {
         const checkGoalSetup = async () => {
           try {
@@ -331,37 +333,41 @@ const Dashboard = () => {
             <div className="flex items-center gap-1 p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 shrink-0 self-start md:self-center">
               <button
                 onClick={() => setActiveTab("coach")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "coach"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "coach"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 AI Study Coach
               </button>
               <button
                 onClick={() => setActiveTab("calendar")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "calendar"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "calendar"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Lịch học
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "analytics"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "analytics"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Đánh giá TOEIC
               </button>
               <button
                 onClick={() => setActiveTab("activity")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "activity"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "activity"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Tương tác hệ thống
               </button>
@@ -396,10 +402,11 @@ const Dashboard = () => {
                           <button
                             key={plan.id}
                             onClick={() => setSelectedPlan(plan)}
-                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${selectedPlan?.id === plan.id
-                              ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
-                              : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
-                              }`}
+                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${
+                              selectedPlan?.id === plan.id
+                                ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                            }`}
                           >
                             Tuần ngày{" "}
                             {new Date(plan.created_at).toLocaleDateString(
@@ -412,7 +419,9 @@ const Dashboard = () => {
 
                     {/* Target Goal Section */}
                     <div className="mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-800">
-                      <UserLearningProfileWidget onProfileUpdated={fetchLearningData} />
+                      <UserLearningProfileWidget
+                        onProfileUpdated={fetchLearningData}
+                      />
                     </div>
                   </div>
 
@@ -432,7 +441,43 @@ const Dashboard = () => {
                             ).toLocaleDateString("vi-VN")}
                           </span>
                         </div>
-                        <ReactMarkdown>
+                        <ReactMarkdown
+                          components={{
+                            h1: ({ children }) => (
+                              <h1 className="text-3xl font-bold mb-5">
+                                {children}
+                              </h1>
+                            ),
+
+                            h2: ({ children }) => (
+                              <h2 className="text-2xl font-semibold mt-6 mb-3">
+                                {children}
+                              </h2>
+                            ),
+
+                            p: ({ children }) => (
+                              <p className="mb-3 leading-7">{children}</p>
+                            ),
+
+                            ul: ({ children }) => (
+                              <ul className="list-disc ml-6 space-y-2">
+                                {children}
+                              </ul>
+                            ),
+
+                            ol: ({ children }) => (
+                              <ol className="list-decimal ml-6 space-y-2">
+                                {children}
+                              </ol>
+                            ),
+
+                            li: ({ children }) => <li>{children}</li>,
+
+                            strong: ({ children }) => (
+                              <strong className="font-bold">{children}</strong>
+                            ),
+                          }}
+                        >
                           {selectedPlan.content}
                         </ReactMarkdown>
                       </article>
@@ -635,7 +680,9 @@ const Dashboard = () => {
                             </div>
                             <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
                               <span>Điểm thưởng xu hướng (Trend bonus)</span>
-                              <span className={`font-semibold ${scoreData.trend_bonus > 0 ? "text-green-500" : scoreData.trend_bonus < 0 ? "text-red-500" : "text-neutral-400"}`}>
+                              <span
+                                className={`font-semibold ${scoreData.trend_bonus > 0 ? "text-green-500" : scoreData.trend_bonus < 0 ? "text-red-500" : "text-neutral-400"}`}
+                              >
                                 {scoreData.trend_bonus || 0}
                               </span>
                             </div>
@@ -687,10 +734,10 @@ const Dashboard = () => {
                                     "STABLE",
                                     "DECLINING",
                                   ].includes(scoreData.trend)) && (
-                                    <span className="text-neutral-400">
-                                      Chưa có
-                                    </span>
-                                  )}
+                                  <span className="text-neutral-400">
+                                    Chưa có
+                                  </span>
+                                )}
                               </span>
                             </div>
                           </div>

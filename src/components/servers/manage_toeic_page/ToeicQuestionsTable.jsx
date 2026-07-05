@@ -177,26 +177,12 @@ const ToeicQuestionsTable = ({ questions, partNumber, onEdit, onDelete }) => {
           isOpen={true}
           onClose={() => setDetailQuestion(null)}
           width="sm:max-w-4xl"
-          title={
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg">
-                <Info className="text-blue-600" size={24} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Question Details
-                </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  Detailed preview of the question content
-                </p>
-              </div>
-            </div>
-          }
+          title="Question Details"
           footer={
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDetailQuestion(null)}
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Close
               </button>

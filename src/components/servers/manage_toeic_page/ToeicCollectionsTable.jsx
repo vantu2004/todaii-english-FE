@@ -351,84 +351,70 @@ const ToeicCollectionsTable = ({
         <Modal
           isOpen={true}
           onClose={() => setDetailIndex(null)}
-          title={
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-lg">
-                <Info className="text-indigo-600" size={24} />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Collection Details
-                </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  Detailed information about the collection
-                </p>
-              </div>
-            </div>
-          }
+          title="Collection Details"
           footer={
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDetailIndex(null)}
-                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+                className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Close
               </button>
             </div>
           }
         >
-          <div className="space-y-4 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-2xl p-6 border border-indigo-200/50">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4 border border-gray-200 dark:border-gray-700 rounded-lg p-6 min-w-0">
+            <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500">
                   Collection ID
                 </span>
-                <p className="text-sm font-mono font-bold text-slate-900 mt-1">
+                <p className="text-sm font-mono font-medium text-gray-900 dark:text-white mt-1">
                   #{collections[detailIndex]?.id}
                 </p>
               </div>
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500">
                   Status
                 </span>
-                <p className="text-sm font-bold text-slate-900 mt-1">
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
                   <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${collections[detailIndex]?.enabled ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                    className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
+                      collections[detailIndex]?.enabled
+                        ? "bg-green-50 text-green-700 dark:bg-green-950/20 dark:text-green-400 border border-green-200 dark:border-green-800"
+                        : "bg-red-50 text-red-700 dark:bg-red-950/20 dark:text-red-400 border border-red-200 dark:border-red-800"
+                    }`}
                   >
                     {collections[detailIndex]?.enabled ? "Enabled" : "Disabled"}
                   </span>
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                  Name
-                </span>
-                <p className="text-sm font-bold text-slate-900 mt-1">
+                <span className="text-xs font-medium text-gray-500">Name</span>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1 break-words">
                   {collections[detailIndex]?.name}
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                  Alias
-                </span>
-                <p className="text-sm font-medium text-slate-700 mt-1">
+                <span className="text-xs font-medium text-gray-500">Alias</span>
+                <p className="text-sm font-medium text-gray-900 dark:text-white mt-1 break-words">
                   {collections[detailIndex]?.alias}
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500">
                   Description
                 </span>
-                <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">
+                <p className="text-sm text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-wrap break-words">
                   {collections[detailIndex]?.description ||
                     "No description provided."}
                 </p>
               </div>
               <div className="col-span-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                <span className="text-xs font-medium text-gray-500">
                   Updated At
                 </span>
-                <p className="text-sm text-slate-700 mt-1">
+                <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
                   {formatISODate(
                     collections[detailIndex]?.updated_at ||
                       collections[detailIndex]?.updatedAt,

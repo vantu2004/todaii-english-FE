@@ -32,7 +32,12 @@ const LearningGoalModal = ({ isOpen, onClose, onSaveSuccess }) => {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
-    if (!targetScore || isNaN(targetScore) || targetScore < 10 || targetScore > 990) {
+    if (
+      !targetScore ||
+      isNaN(targetScore) ||
+      targetScore < 10 ||
+      targetScore > 990
+    ) {
       toast.error("Điểm mục tiêu phải từ 10 đến 990");
       return;
     }
@@ -76,7 +81,9 @@ const LearningGoalModal = ({ isOpen, onClose, onSaveSuccess }) => {
           Thiết lập mục tiêu học tập
         </h2>
         <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-6 leading-relaxed">
-          Chào mừng bạn đến với chuyên trang luyện thi TOEIC! Hãy thiết lập mục tiêu điểm số và ngày thi để chúng tôi có thể cá nhân hóa lộ trình học phù hợp nhất cho bạn.
+          Chào mừng bạn đến với chuyên trang luyện thi TOEIC! Hãy thiết lập mục
+          tiêu điểm số và ngày thi để chúng tôi có thể cá nhân hóa lộ trình học
+          phù hợp nhất cho bạn.
         </p>
         <form onSubmit={handleSaveProfile} className="space-y-4">
           <div>
@@ -115,7 +122,10 @@ const LearningGoalModal = ({ isOpen, onClose, onSaveSuccess }) => {
               onChange={(e) => setDontShowAgain(e.target.checked)}
               className="rounded border-neutral-300 dark:border-neutral-700 text-brand-500 focus:ring-brand-500 bg-transparent"
             />
-            <label htmlFor="dontShowAgain" className="text-xs text-neutral-500 dark:text-neutral-400 select-none cursor-pointer">
+            <label
+              htmlFor="dontShowAgain"
+              className="text-xs text-neutral-500 dark:text-neutral-400 select-none cursor-pointer"
+            >
               Không hiển thị lại thông báo này
             </label>
           </div>

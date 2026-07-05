@@ -42,4 +42,3 @@ export function useStudyTracker(isStudying = false) {
     };
   }, [isLoggedIn, isStudying]);
 }
-

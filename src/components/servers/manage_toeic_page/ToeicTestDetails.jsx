@@ -119,33 +119,37 @@ const ToeicTestDetails = ({ test }) => {
 
       {/* === Meta Information === */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl p-4 border border-blue-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-blue-700 mb-2 uppercase tracking-wide">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-900">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
             Created At
           </p>
-          <p className="text-sm text-gray-900 font-medium">
+          <p className="text-sm text-gray-900 dark:text-white font-medium">
             {formatISODate(test.created_at)}
           </p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">Last Updated</p>
-          <p className="text-sm text-gray-900 font-medium">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-900">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+            Last Updated
+          </p>
+          <p className="text-sm text-gray-900 dark:text-white font-medium">
             {formatISODate(test.updated_at)}
           </p>
         </div>
-        <div className="border border-gray-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-gray-500 mb-1">Created By</p>
-          <p className="text-sm text-gray-900 font-medium truncate">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-900">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+            Created By
+          </p>
+          <p className="text-sm text-gray-900 dark:text-white font-medium truncate">
             {test.created_by && typeof test.created_by === "object"
               ? test.created_by.display_name || test.created_by.id
               : test.created_by || "SUPER ADMIN"}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-teal-50 to-teal-100/50 rounded-xl p-4 border border-teal-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-teal-700 mb-2 uppercase tracking-wide">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-900">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
             Updated By
           </p>
-          <p className="text-sm text-gray-900 font-semibold truncate">
+          <p className="text-sm text-gray-900 dark:text-white font-medium truncate">
             {test.updated_by && typeof test.updated_by === "object"
               ? test.updated_by.display_name || test.updated_by.id
               : test.updated_by ||
@@ -154,11 +158,11 @@ const ToeicTestDetails = ({ test }) => {
                 "SUPER ADMIN"}
           </p>
         </div>
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl p-4 border border-gray-200/60 hover:shadow-md transition-all">
-          <p className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-900">
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
             Test ID
           </p>
-          <p className="text-sm text-gray-900 font-mono font-medium">
+          <p className="text-sm text-gray-900 dark:text-white font-mono font-medium">
             #{test.id}
           </p>
         </div>

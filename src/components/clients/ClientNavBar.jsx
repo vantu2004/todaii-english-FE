@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, NavLink } from "react-router-dom";
 import {
   House,
@@ -99,7 +100,10 @@ const ClientNavBar = () => {
     return () => {
       clearInterval(pollId);
       window.removeEventListener(STUDY_EVENTS.PING_SUCCESS, handleStudyUpdate);
-      window.removeEventListener(STUDY_EVENTS.ITEM_INCREMENTED, handleStudyUpdate);
+      window.removeEventListener(
+        STUDY_EVENTS.ITEM_INCREMENTED,
+        handleStudyUpdate,
+      );
     };
   }, [isLoggedIn]);
 
@@ -346,7 +350,7 @@ const ClientNavBar = () => {
                                   {notif.title}
                                 </p>
                                 <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed line-clamp-2">
-                                  {notif.content?.replace(/[#*_`~\[\]]/g, '')}
+                                  {notif.content?.replace(/[#*_`~\[\]]/g, "")}
                                 </p>
                                 <span className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-1 block">
                                   {new Date(
@@ -612,42 +616,47 @@ const ClientNavBar = () => {
       </div>
 
       {/* Center Notification Detail Modal */}
-      {selectedNotification && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-xl max-w-lg w-full max-h-[80vh] flex flex-col overflow-hidden animate-fade-in">
-            {/* Modal Header */}
-            <div className="p-5 border-b border-neutral-100 dark:border-neutral-800 flex justify-between items-start">
-              <h3 className="text-sm font-semibold text-neutral-900 dark:text-white leading-snug">
-                {selectedNotification.title}
-              </h3>
-              <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono mt-0.5 shrink-0 ml-4">
-                {new Date(selectedNotification.created_at).toLocaleDateString("vi-VN", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-              </span>
+      {selectedNotification &&
+        createPortal(
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-xl max-w-lg w-full max-h-[80vh] flex flex-col overflow-hidden animate-fade-in">
+              {/* Modal Header */}
+              <div className="p-5 border-b border-neutral-100 dark:border-neutral-800 flex justify-between items-start">
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white leading-snug">
+                  {selectedNotification.title}
+                </h3>
+                <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono mt-0.5 shrink-0 ml-4">
+                  {new Date(selectedNotification.created_at).toLocaleDateString(
+                    "vi-VN",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    },
+                  )}
+                </span>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto flex-1 prose dark:prose-invert prose-sm max-w-none text-neutral-700 dark:text-neutral-300">
+                <ReactMarkdown>{selectedNotification.content}</ReactMarkdown>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
+                <button
+                  onClick={() => setSelectedNotification(null)}
+                  className="px-4 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-xs font-semibold rounded-md hover:bg-neutral-850 dark:hover:bg-neutral-100 transition-colors"
+                >
+                  Đóng
+                </button>
+              </div>
             </div>
-            
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto flex-1 prose dark:prose-invert prose-sm max-w-none text-neutral-700 dark:text-neutral-300">
-              <ReactMarkdown>{selectedNotification.content}</ReactMarkdown>
-            </div>
-            
-            {/* Modal Footer */}
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
-              <button
-                onClick={() => setSelectedNotification(null)}
-                className="px-4 py-1.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-xs font-semibold rounded-md hover:bg-neutral-850 dark:hover:bg-neutral-100 transition-colors"
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </nav>
   );
 };
