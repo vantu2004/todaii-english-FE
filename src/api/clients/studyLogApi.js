@@ -1,5 +1,15 @@
 import { clientInstance } from "@/config/axios";
 
+export const getAllDailyStudyLogs = async () => {
+  try {
+    const response = await clientInstance.get("/study-logs");
+    return response.data;
+  } catch (err) {
+    console.error("Get daily study logs error:", err);
+    throw err;
+  }
+}
+
 export const pingStudyTime = async () => {
   try {
     const response = await clientInstance.post("/study-logs/ping");

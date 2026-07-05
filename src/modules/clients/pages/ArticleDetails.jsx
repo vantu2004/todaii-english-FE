@@ -13,6 +13,7 @@ import EntryWordList from "@/components/clients/EntryWordList";
 import PageNotFound from "@/pages/PageNotFound";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
 import { useEffect } from "react";
+import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 
 const ArticleDetails = () => {
   const { id } = useParams();
@@ -20,9 +21,13 @@ const ArticleDetails = () => {
 
   useEffect(() => {
     if (id) {
-      incrementStudyItem("ARTICLE").catch((err) =>
-        console.error("Increment article study item error:", err),
-      );
+      incrementStudyItem("ARTICLE")
+        .then(() => {
+          emitStudyEvent(STUDY_EVENTS.ITEM_INCREMENTED);
+        })
+        .catch((err) =>
+          console.error("Increment article study item error:", err),
+        );
     }
   }, [id]);
 

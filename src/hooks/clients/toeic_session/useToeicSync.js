@@ -3,6 +3,7 @@ import { saveAnswers, submitSession } from "@/api/clients/toeicSessionApi";
 import toast from "react-hot-toast";
 import { logError } from "@/utils/LogError";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
+import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 
 const buildAnswerRequests = (allQuestionsFlat, currentAnswers) =>
   allQuestionsFlat.map((q) => ({
@@ -40,9 +41,11 @@ export const useToeicSync = ({
       await submitSession(sessionId, requests);
 
       // Increment test study item
-      incrementStudyItem("TEST").catch((err) =>
-        console.error("Increment test study item error:", err),
-      );
+      incrementStudyItem("TEST")
+        .then(() => emitStudyEvent(STUDY_EVENTS.ITEM_INCREMENTED))
+        .catch((err) =>
+          console.error("Increment test study item error:", err),
+        );
 
       localStorage.removeItem(`toeic_timeLeft_${sessionId}`);
       localStorage.removeItem(`toeic_lastTime_${sessionId}`);

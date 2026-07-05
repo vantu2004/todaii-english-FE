@@ -30,7 +30,7 @@ import {
 } from "chart.js";
 
 import { getMyChart } from "@/api/clients/dashboardApi";
-import { getStreakInfo } from "@/api/clients/studyLogApi";
+import { getStreakInfo, getAllDailyStudyLogs } from "@/api/clients/studyLogApi";
 import {
   getWeaknessAnalysis,
   getScorePrediction,
@@ -44,6 +44,10 @@ import { formatDate } from "@/utils/FormatDate";
 import { logError } from "@/utils/LogError";
 import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
 import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getUserLearningProfile } from "@/api/clients/userLearningProfileApi";
+import LearningGoalModal from "@/components/clients/LearningGoalModal";
+import StudyCalendar from "@/components/clients/dashboard/StudyCalendar";
 
 // Register Radial scale for Radar chart
 ChartJS.register(
@@ -84,6 +88,52 @@ const Dashboard = () => {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [planHistory, setPlanHistory] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
+
+  // Learning Profile popup states
+  const { isLoggedIn } = useClientAuthContext();
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // Calendar states
+  const [studyLogs, setStudyLogs] = useState([]);
+  const [loadingCalendar, setLoadingCalendar] = useState(false);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const dismissed = localStorage.getItem("todaii_dismiss_learning_profile_prompt");
+      if (dismissed !== "true") {
+        const checkGoalSetup = async () => {
+          try {
+            const profile = await getUserLearningProfile();
+            if (!profile || !profile.target_score || !profile.exam_date) {
+              setShowProfileModal(true);
+            }
+          } catch (err) {
+            setShowProfileModal(true);
+          }
+        };
+        checkGoalSetup();
+      }
+    }
+  }, [isLoggedIn]);
+
+  const fetchStudyLogs = async () => {
+    try {
+      setLoadingCalendar(true);
+      const data = await getAllDailyStudyLogs();
+      setStudyLogs(data || []);
+    } catch (error) {
+      logError(error);
+      toast.error("Không thể tải lịch sử học tập");
+    } finally {
+      setLoadingCalendar(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "calendar") {
+      fetchStudyLogs();
+    }
+  }, [activeTab]);
 
   // Fetch charts data
   const fetchMyChartData = async () => {
@@ -289,6 +339,15 @@ const Dashboard = () => {
                 AI Study Coach
               </button>
               <button
+                onClick={() => setActiveTab("calendar")}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "calendar"
+                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                  }`}
+              >
+                Lịch học
+              </button>
+              <button
                 onClick={() => setActiveTab("analytics")}
                 className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "analytics"
                   ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
@@ -353,7 +412,7 @@ const Dashboard = () => {
 
                     {/* Target Goal Section */}
                     <div className="mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-800">
-                      <UserLearningProfileWidget />
+                      <UserLearningProfileWidget onProfileUpdated={fetchLearningData} />
                     </div>
                   </div>
 
@@ -395,6 +454,11 @@ const Dashboard = () => {
                     )}
                   </div>
                 </div>
+              )}
+
+              {/* TAB CALENDAR: SCHEDULE TIME-TABLE GRID */}
+              {activeTab === "calendar" && (
+                <StudyCalendar logs={studyLogs} loading={loadingCalendar} />
               )}
 
               {/* TAB 2: ANALYTICS & SCORE PREDICTION */}
@@ -571,8 +635,8 @@ const Dashboard = () => {
                             </div>
                             <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
                               <span>Điểm thưởng xu hướng (Trend bonus)</span>
-                              <span className="font-semibold text-green-500">
-                                +{scoreData.trend_bonus || 0}
+                              <span className={`font-semibold ${scoreData.trend_bonus > 0 ? "text-green-500" : scoreData.trend_bonus < 0 ? "text-red-500" : "text-neutral-400"}`}>
+                                {scoreData.trend_bonus || 0}
                               </span>
                             </div>
                             <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
@@ -788,6 +852,13 @@ const Dashboard = () => {
           )}
         </div>
       </motion.div>
+
+      {/* Learning Goal Setup Modal */}
+      <LearningGoalModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        onSaveSuccess={fetchLearningData}
+      />
     </AnimatePresence>
   );
 };

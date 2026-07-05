@@ -22,6 +22,7 @@ import {
 import { getVocabDeckById } from "@/api/clients/vocabDeckApi";
 import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
+import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 import FlashcardGame from "@/components/clients/vocab_deck_details_page/FlashcardGame";
 import QuizGame from "@/components/clients/vocab_deck_details_page/QuizGame";
 import { formatISODate } from "@/utils/FormatDate";
@@ -146,9 +147,13 @@ const VocabDeckDetails = () => {
   // ─── Fetch deck ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (id) {
-      incrementStudyItem("VOCAB_DECK").catch((err) =>
-        console.error("Increment vocab deck study item error:", err),
-      );
+      incrementStudyItem("VOCAB_DECK")
+        .then(() => {
+          emitStudyEvent(STUDY_EVENTS.ITEM_INCREMENTED);
+        })
+        .catch((err) =>
+          console.error("Increment vocab deck study item error:", err),
+        );
     }
   }, [id]);
 

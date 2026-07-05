@@ -18,6 +18,7 @@ import useVideoPlayer from "@/hooks/useVideoPlayer";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import LyricsPanel from "@/components/video/LyricsPanel";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
+import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -29,9 +30,13 @@ const VideoDetails = () => {
 
   useEffect(() => {
     if (id) {
-      incrementStudyItem("VIDEO").catch((err) =>
-        console.error("Increment video study item error:", err),
-      );
+      incrementStudyItem("VIDEO")
+        .then(() => {
+          emitStudyEvent(STUDY_EVENTS.ITEM_INCREMENTED);
+        })
+        .catch((err) =>
+          console.error("Increment video study item error:", err),
+        );
     }
   }, [id]);
 

@@ -2,16 +2,14 @@ import { useEffect, useRef } from "react";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 import { pingStudyTime } from "@/api/clients/studyLogApi";
 import { logError } from "@/utils/LogError";
+import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 
-export function useStudyTracker() {
+export function useStudyTracker(isStudying = false) {
   const { isLoggedIn } = useClientAuthContext();
   const isActivityDetected = useRef(false);
 
   useEffect(() => {
-    if (!isLoggedIn) return;
-
-    // Ping once immediately on mount
-    pingStudyTime().catch(logError);
+    if (!isLoggedIn || !isStudying) return;
 
     // Track user activity events
     const handleActivity = () => {
@@ -28,6 +26,7 @@ export function useStudyTracker() {
           pingStudyTime()
             .then(() => {
               isActivityDetected.current = false; // Reset activity detection for next interval
+              emitStudyEvent(STUDY_EVENTS.PING_SUCCESS);
             })
             .catch(logError);
         }
@@ -41,5 +40,6 @@ export function useStudyTracker() {
       );
       clearInterval(intervalId);
     };
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isStudying]);
 }
+
