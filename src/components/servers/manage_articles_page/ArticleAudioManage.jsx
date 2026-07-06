@@ -79,13 +79,19 @@ const ArticleAudioManage = ({ article, onRefresh }) => {
   const handleGenerate = async () => {
     setIsUploading(true);
     const toastId = toast.loading("Generating audio voice...");
+
     try {
-      await deleteTtsFile(article.id, article.audio_url);
+      if (article.audio_url) {
+        await deleteTtsFile(article.id, article.audio_url);
+        await uploadTtsFile(article.id);
+      }
+
       await uploadTtsFile(article.id);
 
       toast.success("Audio generated successfully!", { id: toastId });
     } catch (err) {
       logError(err);
+      toast.error("Failed to generate audio.", { id: toastId });
     } finally {
       setIsUploading(false);
     }
@@ -101,6 +107,7 @@ const ArticleAudioManage = ({ article, onRefresh }) => {
 
     setIsDeleting(true);
     const toastId = toast.loading("Deleting audio...");
+
     try {
       if (article.audio_url) {
         await deleteTtsFile(article.id, article.audio_url);
@@ -109,6 +116,7 @@ const ArticleAudioManage = ({ article, onRefresh }) => {
       toast.success("Audio deleted successfully", { id: toastId });
     } catch (err) {
       logError(err);
+      toast.error("Failed to delete audio.", { id: toastId });
     } finally {
       setIsDeleting(false);
     }
