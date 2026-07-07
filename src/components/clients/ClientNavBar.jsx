@@ -190,8 +190,8 @@ const ClientNavBar = () => {
             <span className="ml-1 text-brand-500">English</span>
           </a>
 
-          {/* Desktop Navigation - Centered */}
-          <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center justify-center flex-1 px-6 xl:px-8">
             <div className="flex items-center gap-0.5 p-1 rounded-2xl bg-neutral-100/60 dark:bg-neutral-800/60 backdrop-blur-sm">
               {navItems.map((item) => (
                 <NavLink
@@ -199,7 +199,7 @@ const ClientNavBar = () => {
                   to={item.path}
                   end={item.end}
                   className={({ isActive }) =>
-                    `relative px-5 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 rounded-xl ${
+                    `relative px-3 xl:px-4 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 rounded-xl ${
                       isActive
                         ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
                         : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
