@@ -15,6 +15,7 @@ import {
   Loader2,
   Volume2,
   Pause,
+  HelpCircle,
 } from "lucide-react";
 import {
   toggleArticle,
@@ -102,6 +103,11 @@ const ArticlesTable = ({
   const handleVocabClick = (index) => {
     const articleId = articles[index].id;
     navigate(`/server/article/${articleId}/vocab`);
+  };
+
+  const handleQuestionClick = (index) => {
+    const articleId = articles[index].id;
+    navigate(`/server/article/${articleId}/question`);
   };
 
   const handleGenerateAudioFile = async (index) => {
@@ -286,6 +292,17 @@ const ArticlesTable = ({
                         aria-label="Vocabulary"
                       >
                         <BookA className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                      <button
+                        onClick={() => handleQuestionClick(i)}
+                        className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors"
+                        aria-label="Questions"
+                      >
+                        <HelpCircle className="w-4 h-4" />
                       </button>
                     </div>
                   </td>

@@ -19,6 +19,8 @@ import VideoPlayer from "@/components/video/VideoPlayer";
 import LyricsPanel from "@/components/video/LyricsPanel";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
 import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
+import { getQuestions } from "@/api/clients/questionApi";
+import PracticeQuestions from "@/components/clients/PracticeQuestions";
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -27,6 +29,20 @@ const VideoDetails = () => {
   const [lyrics, setLyrics] = useState([]);
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [questions, setQuestions] = useState([]);
+  const [activeTab, setActiveTab] = useState("vocab");
+
+  useEffect(() => {
+    if (id) {
+      getQuestions("VIDEO", id)
+        .then((data) => {
+          setQuestions(data || []);
+        })
+        .catch((err) => {
+          console.error("Fetch video questions error:", err);
+        });
+    }
+  }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -126,7 +142,45 @@ const VideoDetails = () => {
 
               <VideoInfo video={videoData} />
 
-              <EntryWordList id={videoData.id} fetchApi={getEntriesByVideoId} />
+              {questions.length > 0 ? (
+                <>
+                  <div className="flex items-center gap-2 mb-4 border-b border-neutral-200 dark:border-neutral-800 pb-px mt-6 select-none">
+                    <button
+                      onClick={() => setActiveTab("vocab")}
+                      className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                        activeTab === "vocab"
+                          ? "border-brand-500 text-brand-500 dark:text-brand-400 font-semibold"
+                          : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                      }`}
+                    >
+                      Từ vựng quan trọng
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("questions")}
+                      className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors duration-200 ${
+                        activeTab === "questions"
+                          ? "border-brand-500 text-brand-500 dark:text-brand-400 font-semibold"
+                          : "border-transparent text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                      }`}
+                    >
+                      Luyện tập câu hỏi ({questions.length})
+                    </button>
+                  </div>
+                  {activeTab === "vocab" ? (
+                    <EntryWordList
+                      id={videoData.id}
+                      fetchApi={getEntriesByVideoId}
+                    />
+                  ) : (
+                    <PracticeQuestions questions={questions} />
+                  )}
+                </>
+              ) : (
+                <EntryWordList
+                  id={videoData.id}
+                  fetchApi={getEntriesByVideoId}
+                />
+              )}
             </div>
 
             {/* --- CỘT PHẢI: SIDEBAR (Chiếm 1/3) --- */}

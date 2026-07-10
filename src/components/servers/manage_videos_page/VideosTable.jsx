@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   BookA,
   FileText,
+  HelpCircle,
 } from "lucide-react";
 import { toggleVideo, deleteVideo } from "@/api/servers/videoApi";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +56,11 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
   const handleLyricClick = (index) => {
     const videoId = videos[index].id;
     navigate(`/server/video/${videoId}/lyric`);
+  };
+
+  const handleQuestionClick = (index) => {
+    const videoId = videos[index].id;
+    navigate(`/server/video/${videoId}/question`);
   };
 
   const handleVocabularyClick = (index) => {
@@ -190,6 +196,16 @@ const VideosTable = ({ columns, videos, reloadVideos, query, updateQuery }) => {
                     className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
                   >
                     <BookA className="w-4 h-4" />
+                  </button>
+                </td>
+
+                {/* Questions */}
+                <td className="px-4 py-3">
+                  <button
+                    onClick={() => handleQuestionClick(i)}
+                    className="p-2 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+                  >
+                    <HelpCircle className="w-4 h-4" />
                   </button>
                 </td>
 

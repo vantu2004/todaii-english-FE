@@ -42,6 +42,7 @@ const GenericVideoList = ({ title, fetchApi }) => {
     { key: "updated_at", label: "Updated At", sortField: "updatedAt" },
     { key: "lyric", label: "Lyrics" },
     { key: "vocabulary", label: "Vocabularies" },
+    { key: "questions", label: "Questions" },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "action", label: "Actions" },
   ];

@@ -32,6 +32,7 @@ import VocabDecksInGroup from "@/modules/servers/pages/manage_vocab_groups_page/
 import ManageVocabsInArticle from "@/modules/servers/pages/manage_articles_page/ManageVocabsInArticle";
 import ManageVocabsInVideo from "@/modules/servers/pages/manage_videos_page/ManageVocabsInVideo";
 import ManageVocabsInVocabDeck from "@/modules/servers/pages/manage_vocab_decks_page/ManageVocabsInVocabDeck";
+import ManageQuestions from "@/modules/servers/pages/ManageQuestions";
 import { HeaderProvider } from "@/context/servers/HeaderContext";
 import Profile from "@/modules/servers/pages/manage_profile_page/Profile";
 import PageNotFound from "@/pages/PageNotFound";
@@ -232,6 +233,17 @@ export default function ServerRoutes() {
               }
             />
 
+            <Route
+              path="/article/:id/question"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageQuestions />
+                </ServerProtectRoutes>
+              }
+            />
+
             {/* Videos */}
             <Route
               path="/video-topic"
@@ -317,6 +329,17 @@ export default function ServerRoutes() {
                   rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
                 >
                   <ManageVocabsInVideo />
+                </ServerProtectRoutes>
+              }
+            />
+
+            <Route
+              path="/video/:id/question"
+              element={
+                <ServerProtectRoutes
+                  rolesAllowed={["SUPER_ADMIN", "CONTENT_MANAGER"]}
+                >
+                  <ManageQuestions />
                 </ServerProtectRoutes>
               }
             />

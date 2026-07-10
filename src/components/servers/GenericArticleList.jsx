@@ -41,6 +41,7 @@ const GenericArticleList = ({ title, fetchApi }) => {
     { key: "paragraph", label: "Paragraphs" },
     { key: "gen_audio", label: "Generate Audio" },
     { key: "vocabulary", label: "Vocabularies" },
+    { key: "questions", label: "Questions" },
     { key: "enable", label: "Enable", sortField: "enabled" },
     { key: "actions", label: "Actions" },
   ];
