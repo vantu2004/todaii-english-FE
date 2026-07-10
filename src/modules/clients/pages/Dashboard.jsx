@@ -333,37 +333,41 @@ const Dashboard = () => {
             <div className="flex items-center gap-1 p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 shrink-0 self-start md:self-center">
               <button
                 onClick={() => setActiveTab("coach")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "coach"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "coach"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 AI Study Coach
               </button>
               <button
                 onClick={() => setActiveTab("calendar")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "calendar"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "calendar"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Lịch học
               </button>
               <button
                 onClick={() => setActiveTab("analytics")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "analytics"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "analytics"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Đánh giá TOEIC
               </button>
               <button
                 onClick={() => setActiveTab("activity")}
-                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${activeTab === "activity"
-                  ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                  }`}
+                className={`px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 rounded-md ${
+                  activeTab === "activity"
+                    ? "text-neutral-900 dark:text-white bg-white dark:bg-neutral-700 shadow-sm"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
+                }`}
               >
                 Tương tác hệ thống
               </button>
@@ -398,10 +402,11 @@ const Dashboard = () => {
                           <button
                             key={plan.id}
                             onClick={() => setSelectedPlan(plan)}
-                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${selectedPlan?.id === plan.id
-                              ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
-                              : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
-                              }`}
+                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${
+                              selectedPlan?.id === plan.id
+                                ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                            }`}
                           >
                             {(() => {
                               const startDate = new Date(plan.created_at);
@@ -732,10 +737,10 @@ const Dashboard = () => {
                                     "STABLE",
                                     "DECLINING",
                                   ].includes(scoreData.trend)) && (
-                                    <span className="text-neutral-400">
-                                      Chưa có
-                                    </span>
-                                  )}
+                                  <span className="text-neutral-400">
+                                    Chưa có
+                                  </span>
+                                )}
                               </span>
                             </div>
                           </div>
