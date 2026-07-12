@@ -28,6 +28,7 @@ import FlashcardGame from "../vocab_deck_details_page/FlashcardGame";
 import QuizGame from "../vocab_deck_details_page/QuizGame";
 import SpeedRoundGame from "../vocab_deck_details_page/SpeedRoundGame";
 import TypingGame from "../vocab_deck_details_page/TypingGame";
+import GameScopeModal from "../vocab_deck_details_page/GameScopeModal";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BE mới trả về DictionaryWord: { id, word, json_data }
@@ -113,6 +114,9 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const { isLoggedIn } = useClientAuthContext();
   const [learnedWordIds, setLearnedWordIds] = useState([]);
   const [togglingWordIds, setTogglingWordIds] = useState({});
+  const [scopeModalOpen, setScopeModalOpen] = useState(false);
+  const [pendingGameMode, setPendingGameMode] = useState("");
+  const [filteredGameWords, setFilteredGameWords] = useState([]);
 
   useEffect(() => {
     const fetchLearned = async () => {
@@ -383,7 +387,8 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
   const handlePlayGame = (gameMode) => {
     setShowGameMenu(false);
-    setMode(gameMode);
+    setPendingGameMode(gameMode);
+    setScopeModalOpen(true);
   };
 
   // Words đủ điều kiện cho games (đã có meaning)
@@ -556,7 +561,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       {/* ── Games ── */}
       {mode === "flashcard" && (
         <FlashcardGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -565,7 +570,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "quiz" && (
         <QuizGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -574,7 +579,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "speed" && (
         <SpeedRoundGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -583,13 +588,26 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "typing" && (
         <TypingGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
           togglingWordIds={togglingWordIds}
         />
       )}
+
+      <GameScopeModal
+        isOpen={scopeModalOpen}
+        onClose={() => setScopeModalOpen(false)}
+        words={wordsWithData}
+        learnedWordIds={learnedWordIds}
+        gameMode={pendingGameMode}
+        onStart={(filteredWords) => {
+          setFilteredGameWords(filteredWords);
+          setMode(pendingGameMode);
+          setScopeModalOpen(false);
+        }}
+      />
     </div>
   );
 };

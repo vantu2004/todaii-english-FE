@@ -35,6 +35,7 @@ import SpeedRoundGame from "@/components/clients/vocab_deck_details_page/SpeedRo
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 import DictionaryModal from "@/components/clients/DictionaryModal";
 import SaveToNotebookModal from "@/components/clients/SaveToNotebookModal";
+import GameScopeModal from "@/components/clients/vocab_deck_details_page/GameScopeModal";
 
 // ─── Helper: parse json_data string → flat word object ───────────────────────
 const parseJsonData = (jsonDataStr) => {
@@ -128,6 +129,9 @@ const VocabDeckDetails = () => {
 
   const [learnedWordIds, setLearnedWordIds] = useState([]);
   const [togglingWordIds, setTogglingWordIds] = useState({});
+  const [scopeModalOpen, setScopeModalOpen] = useState(false);
+  const [pendingGameMode, setPendingGameMode] = useState("");
+  const [filteredGameWords, setFilteredGameWords] = useState([]);
 
   useEffect(() => {
     const fetchLearned = async () => {
@@ -167,6 +171,11 @@ const VocabDeckDetails = () => {
     } finally {
       setTogglingWordIds((prev) => ({ ...prev, [wordId]: false }));
     }
+  };
+
+  const handleStartGameFlow = (gameMode) => {
+    setPendingGameMode(gameMode);
+    setScopeModalOpen(true);
   };
 
   const handleOpenModal = (word) => {
@@ -304,7 +313,7 @@ const VocabDeckDetails = () => {
       {/* Game overlays */}
       {mode === "flashcard" && (
         <FlashcardGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -313,7 +322,7 @@ const VocabDeckDetails = () => {
       )}
       {mode === "quiz" && (
         <QuizGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -322,7 +331,7 @@ const VocabDeckDetails = () => {
       )}
       {mode === "speed" && (
         <SpeedRoundGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -331,7 +340,7 @@ const VocabDeckDetails = () => {
       )}
       {mode === "typing" && (
         <TypingGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -407,7 +416,7 @@ const VocabDeckDetails = () => {
             <div className="w-full xl:w-auto flex flex-wrap gap-2">
               {/* Nút Primary */}
               <button
-                onClick={() => setMode("flashcard")}
+                onClick={() => handleStartGameFlow("flashcard")}
                 disabled={wordsWithData.length === 0}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-bold hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -417,21 +426,21 @@ const VocabDeckDetails = () => {
               {/* Các nút Secondary */}
               <div className="w-full sm:w-auto flex grid grid-cols-2 sm:flex sm:flex-row gap-2">
                 <button
-                  onClick={() => setMode("quiz")}
+                  onClick={() => handleStartGameFlow("quiz")}
                   disabled={wordsWithData.length < 4}
                   className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Gamepad2 size={16} /> Trắc nghiệm
                 </button>
                 <button
-                  onClick={() => setMode("speed")}
+                  onClick={() => handleStartGameFlow("speed")}
                   disabled={wordsWithData.length < 4}
                   className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Zap size={16} /> Tốc độ
                 </button>
                 <button
-                  onClick={() => setMode("typing")}
+                  onClick={() => handleStartGameFlow("typing")}
                   disabled={wordsWithData.length < 4}
                   className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-transparent text-neutral-700 dark:text-neutral-300 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -638,6 +647,19 @@ const VocabDeckDetails = () => {
         word={saveWord}
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
+      />
+
+      <GameScopeModal
+        isOpen={scopeModalOpen}
+        onClose={() => setScopeModalOpen(false)}
+        words={wordsWithData}
+        learnedWordIds={learnedWordIds}
+        gameMode={pendingGameMode}
+        onStart={(filteredWords) => {
+          setFilteredGameWords(filteredWords);
+          setMode(pendingGameMode);
+          setScopeModalOpen(false);
+        }}
       />
     </div>
   );
