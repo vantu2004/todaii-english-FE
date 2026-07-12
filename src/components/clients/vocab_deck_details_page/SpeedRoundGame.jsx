@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { X, Trophy, Heart, Zap } from "lucide-react";
+import { X, Trophy, Heart, Zap, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -44,7 +44,7 @@ const Lives = ({ count }) => (
 );
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-const SpeedRoundGame = ({ words, onClose }) => {
+const SpeedRoundGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
   const validWords = useMemo(() => words.filter((w) => w.meaning), [words]);
   const questionQueue = useMemo(() => shuffle(validWords), [validWords]);
 
@@ -296,12 +296,33 @@ const SpeedRoundGame = ({ words, onClose }) => {
     >
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 shrink-0">
-        <button
-          onClick={onClose}
-          className="p-2 -ml-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-500 dark:text-neutral-400"
-        >
-          <X size={24} />
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onClose}
+            className="p-2 -ml-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-neutral-500 dark:text-neutral-400"
+          >
+            <X size={24} />
+          </button>
+          {onToggleLearn && currentWord && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleLearn(currentWord.id);
+              }}
+              disabled={togglingWordIds[currentWord.id]}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+              } ${
+                learnedWordIds.includes(currentWord.id)
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
+                  : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
+              }`}
+            >
+              <Check size={12} />
+              {learnedWordIds.includes(currentWord.id) ? "Đã học" : "Chưa học"}
+            </button>
+          )}
+        </div>
 
         <div className="flex flex-col items-center gap-1.5">
           <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">

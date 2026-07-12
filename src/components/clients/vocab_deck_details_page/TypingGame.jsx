@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   XCircle,
   Flame,
+  Check,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -64,7 +65,7 @@ const CharDiff = ({ input, target }) => {
 };
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-const TypingGame = ({ words, onClose }) => {
+const TypingGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
   const validWords = useMemo(
     () => shuffle(words.filter((w) => w.meaning)),
     [words],
@@ -310,9 +311,30 @@ const TypingGame = ({ words, onClose }) => {
 
       {/* Main */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 w-full max-w-2xl mx-auto">
-        <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-8">
-          {currentIndex + 1} / {validWords.length}
-        </span>
+        <div className="flex items-center gap-3 mb-8">
+          <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">
+            {currentIndex + 1} / {validWords.length}
+          </span>
+          {onToggleLearn && currentWord && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleLearn(currentWord.id);
+              }}
+              disabled={togglingWordIds[currentWord.id]}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+              } ${
+                learnedWordIds.includes(currentWord.id)
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
+                  : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
+              }`}
+            >
+              <Check size={12} />
+              {learnedWordIds.includes(currentWord.id) ? "Đã học" : "Chưa học"}
+            </button>
+          )}
+        </div>
 
         {/* Card */}
         <motion.div

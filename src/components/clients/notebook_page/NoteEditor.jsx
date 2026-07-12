@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import SearchBar from "@/components/clients/SearchBar";
 import { logError } from "@/utils/LogError";
+import { toggleLearnedWord, fetchLearnedWordIds } from "@/api/clients/userApi";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import toast from "react-hot-toast";
 import SearchResultPanel from "./SearchResultPanel";
 import SavedWordsList from "./SavedWordsList";
 import EmptyNoteState from "./EmptyNoteState";
@@ -106,6 +109,50 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   // Per-word fetch state
   const [fetchingIds, setFetchingIds] = useState({});
   const [errorIds, setErrorIds] = useState({});
+
+  const { isLoggedIn } = useClientAuthContext();
+  const [learnedWordIds, setLearnedWordIds] = useState([]);
+  const [togglingWordIds, setTogglingWordIds] = useState({});
+
+  useEffect(() => {
+    const fetchLearned = async () => {
+      if (!isLoggedIn) return;
+      try {
+        const ids = await fetchLearnedWordIds();
+        setLearnedWordIds(ids || []);
+      } catch (err) {
+        console.error("Failed to load learned words", err);
+      }
+    };
+    fetchLearned();
+  }, [isLoggedIn]);
+
+  const handleToggleLearn = async (wordId) => {
+    if (!isLoggedIn) {
+      toast.error("Bạn cần đăng nhập để đánh dấu từ đã học!");
+      return;
+    }
+    setTogglingWordIds((prev) => ({ ...prev, [wordId]: true }));
+    try {
+      await toggleLearnedWord(wordId);
+      const isCurrentlyLearned = learnedWordIds.includes(wordId);
+      setLearnedWordIds((prev) =>
+        prev.includes(wordId)
+          ? prev.filter((id) => id !== wordId)
+          : [...prev, wordId]
+      );
+      if (isCurrentlyLearned) {
+        toast.success("Đã hủy đánh dấu đã học.");
+      } else {
+        toast.success("Đã đánh dấu từ vựng này là đã học!");
+      }
+    } catch (err) {
+      console.error("Failed to toggle learned word", err);
+      toast.error("Đã xảy ra lỗi khi lưu tiến độ. Vui lòng thử lại!");
+    } finally {
+      setTogglingWordIds((prev) => ({ ...prev, [wordId]: false }));
+    }
+  };
 
   const dropdownRef = useRef(null);
 
@@ -446,7 +493,6 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           </div>
         </div>
 
-        {/* List */}
         <SavedWordsList
           words={savedWords}
           loading={loadingSaved}
@@ -461,6 +507,9 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           onFetchAll={handleFetchAll}
           fetchingIds={fetchingIds}
           errorIds={errorIds}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
         />
       </div>
 
@@ -507,16 +556,40 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
       {/* ── Games ── */}
       {mode === "flashcard" && (
-        <FlashcardGame words={wordsWithData} onClose={() => setMode("list")} />
+        <FlashcardGame
+          words={wordsWithData}
+          onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
+        />
       )}
       {mode === "quiz" && (
-        <QuizGame words={wordsWithData} onClose={() => setMode("list")} />
+        <QuizGame
+          words={wordsWithData}
+          onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
+        />
       )}
       {mode === "speed" && (
-        <SpeedRoundGame words={wordsWithData} onClose={() => setMode("list")} />
+        <SpeedRoundGame
+          words={wordsWithData}
+          onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
+        />
       )}
       {mode === "typing" && (
-        <TypingGame words={wordsWithData} onClose={() => setMode("list")} />
+        <TypingGame
+          words={wordsWithData}
+          onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
+        />
       )}
     </div>
   );

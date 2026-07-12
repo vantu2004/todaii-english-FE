@@ -18,10 +18,14 @@ import {
   BookOpen,
   Calendar,
   BookMarked,
+  Check,
 } from "lucide-react";
 import { getVocabDeckById } from "@/api/clients/vocabDeckApi";
 import { searchByTodaiiDictionary } from "@/api/clients/dictionaryApi";
 import { incrementStudyItem } from "@/api/clients/studyLogApi";
+import { toggleLearnedWord, fetchLearnedWordIds } from "@/api/clients/userApi";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import toast from "react-hot-toast";
 import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 import FlashcardGame from "@/components/clients/vocab_deck_details_page/FlashcardGame";
 import QuizGame from "@/components/clients/vocab_deck_details_page/QuizGame";
@@ -119,6 +123,51 @@ const VocabDeckDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saveWord, setSaveWord] = useState(null);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+  const { isLoggedIn } = useClientAuthContext();
+
+  const [learnedWordIds, setLearnedWordIds] = useState([]);
+  const [togglingWordIds, setTogglingWordIds] = useState({});
+
+  useEffect(() => {
+    const fetchLearned = async () => {
+      if (!isLoggedIn) return;
+      try {
+        const ids = await fetchLearnedWordIds();
+        setLearnedWordIds(ids || []);
+      } catch (err) {
+        console.error("Failed to load learned words", err);
+      }
+    };
+    fetchLearned();
+  }, [isLoggedIn]);
+
+  const handleToggleLearn = async (wordId) => {
+    if (!isLoggedIn) {
+      toast.error("Bạn cần đăng nhập để đánh dấu từ đã học!");
+      return;
+    }
+    setTogglingWordIds((prev) => ({ ...prev, [wordId]: true }));
+    try {
+      await toggleLearnedWord(wordId);
+      const isCurrentlyLearned = learnedWordIds.includes(wordId);
+      setLearnedWordIds((prev) =>
+        prev.includes(wordId)
+          ? prev.filter((id) => id !== wordId)
+          : [...prev, wordId]
+      );
+      if (isCurrentlyLearned) {
+        toast.success("Đã hủy đánh dấu đã học.");
+      } else {
+        toast.success("Đã đánh dấu từ vựng này là đã học!");
+      }
+    } catch (err) {
+      console.error("Failed to toggle learned word", err);
+      toast.error("Đã xảy ra lỗi khi lưu tiến độ. Vui lòng thử lại!");
+    } finally {
+      setTogglingWordIds((prev) => ({ ...prev, [wordId]: false }));
+    }
+  };
 
   const handleOpenModal = (word) => {
     if (word) {
@@ -256,24 +305,36 @@ const VocabDeckDetails = () => {
         <FlashcardGame
           words={words.filter((w) => w.hasData)}
           onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
         />
       )}
       {mode === "quiz" && (
         <QuizGame
           words={words.filter((w) => w.hasData)}
           onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
         />
       )}
       {mode === "speed" && (
         <SpeedRoundGame
           words={words.filter((w) => w.hasData)}
           onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
         />
       )}
       {mode === "typing" && (
         <TypingGame
           words={words.filter((w) => w.hasData)}
           onClose={() => setMode("list")}
+          learnedWordIds={learnedWordIds}
+          onToggleLearn={handleToggleLearn}
+          togglingWordIds={togglingWordIds}
         />
       )}
 
@@ -320,6 +381,13 @@ const VocabDeckDetails = () => {
                 <div className="flex items-center gap-1.5">
                   <Calendar size={16} />
                   <span>Cập nhật: {formatISODate(deck.updated_at)}</span>
+                </div>
+
+                <div className="hidden sm:block w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-600"></div>
+
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-200/50 dark:border-emerald-500/20 shadow-sm font-semibold">
+                  <BookMarked size={14} className="text-emerald-500" />
+                  <span>Đã học: {words.filter(w => learnedWordIds.includes(w.id)).length}/{words.length} từ</span>
                 </div>
 
                 {missingCount > 0 && (
@@ -514,9 +582,24 @@ const VocabDeckDetails = () => {
               {/* RIGHT: Speak Audio & View Details Link */}
               <div className="flex items-center gap-2">
                 <button
+                  onClick={() => handleToggleLearn(item.id)}
+                  disabled={togglingWordIds[item.id]}
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
+                    togglingWordIds[item.id] ? "opacity-50 cursor-not-allowed" : ""
+                  } ${
+                    learnedWordIds.includes(item.id)
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
+                      : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
+                  }`}
+                >
+                  <Check size={12} className={learnedWordIds.includes(item.id) ? "text-emerald-600 dark:text-emerald-400" : ""} />
+                  {learnedWordIds.includes(item.id) ? "Đã học" : "Chưa học"}
+                </button>
+
+                <button
                   onClick={() => handleOpenModal(item.word)}
                   className="px-2 py-1 text-xs font-medium text-neutral-500 dark:text-neutral-400 
-                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors"
+                  hover:text-brand-500 dark:hover:text-brand-400 transition-colors border-l border-neutral-200 dark:border-neutral-700 pl-2"
                 >
                   Chi tiết
                 </button>

@@ -46,6 +46,7 @@ import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
 import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 import { getUserLearningProfile } from "@/api/clients/userLearningProfileApi";
+import { fetchLearnedWordIds } from "@/api/clients/userApi";
 import LearningGoalModal from "@/components/clients/LearningGoalModal";
 import StudyCalendar from "@/components/clients/dashboard/StudyCalendar";
 
@@ -96,6 +97,7 @@ const Dashboard = () => {
   // Calendar states
   const [studyLogs, setStudyLogs] = useState([]);
   const [loadingCalendar, setLoadingCalendar] = useState(false);
+  const [totalLearnedWordsCount, setTotalLearnedWordsCount] = useState(0);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -156,12 +158,13 @@ const Dashboard = () => {
   const fetchLearningData = async () => {
     try {
       setLoadingLearning(true);
-      const [streak, weakness, score, plan, history] = await Promise.all([
+      const [streak, weakness, score, plan, history, learnedIds] = await Promise.all([
         getStreakInfo(),
         getWeaknessAnalysis(),
         getScorePrediction(),
         getCurrentStudyPlan(),
         getStudyPlanHistory(),
+        fetchLearnedWordIds().catch(() => []),
       ]);
       setStreakData(streak);
       setWeaknessData(weakness || []);
@@ -169,6 +172,7 @@ const Dashboard = () => {
       setCurrentPlan(plan);
       setSelectedPlan(plan);
       setPlanHistory(history || []);
+      setTotalLearnedWordsCount(learnedIds ? learnedIds.length : 0);
     } catch (error) {
       console.error("Error fetching advanced learning data:", error);
     } finally {
@@ -582,6 +586,12 @@ const Dashboard = () => {
                           <span>Bộ từ vựng đã học:</span>
                           <span className="font-semibold text-neutral-900 dark:text-white">
                             {dailyLog.vocab_decks_learned_count || 0}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-neutral-800/50 pt-2 mt-1">
+                          <span>Từ vựng đã thuộc:</span>
+                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                            {totalLearnedWordsCount} từ
                           </span>
                         </div>
                       </div>

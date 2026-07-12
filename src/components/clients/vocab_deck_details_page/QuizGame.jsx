@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Check, X, Trophy, ArrowRight, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const QuizGame = ({ words, onClose }) => {
+const QuizGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -143,9 +143,30 @@ const QuizGame = ({ words, onClose }) => {
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500 mb-4 block">
             Chọn nghĩa đúng
           </span>
-          <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-neutral-900 dark:text-white mb-2">
-            {currentQuestion.target.word}
-          </h2>
+          <div className="flex items-center justify-center gap-3 flex-wrap mb-2">
+            <h2 className="text-4xl sm:text-5xl font-semibold tracking-tight text-neutral-900 dark:text-white">
+              {currentQuestion.target.word}
+            </h2>
+            {onToggleLearn && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleLearn(currentQuestion.target.id);
+                }}
+                disabled={togglingWordIds[currentQuestion.target.id]}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                  togglingWordIds[currentQuestion.target.id] ? "opacity-50 cursor-not-allowed" : ""
+                } ${
+                  learnedWordIds.includes(currentQuestion.target.id)
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
+                    : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
+                }`}
+              >
+                <Check size={12} />
+                {learnedWordIds.includes(currentQuestion.target.id) ? "Đã học" : "Chưa học"}
+              </button>
+            )}
+          </div>
           {currentQuestion.target.ipa && (
             <p className="text-lg text-neutral-400 dark:text-neutral-500 font-mono">
               {currentQuestion.target.ipa}

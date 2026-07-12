@@ -44,3 +44,21 @@ export const toggleSavedTest = async (testId) => {
     throw err;
   }
 };
+
+export const toggleLearnedWord = async (wordId) => {
+  try {
+    const response = await clientInstance.put(`/user/learned-word/${wordId}`);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const fetchLearnedWordIds = async () => {
+  try {
+    const response = await clientInstance.get("/user/learned-words");
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
