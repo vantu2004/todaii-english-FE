@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import VideoInfo from "@/components/clients/video_details_page/VideoInfo";
 import RelatedVideos from "@/components/clients/video_details_page/RelatedVideos";
@@ -21,6 +21,9 @@ import { incrementStudyItem } from "@/api/clients/studyLogApi";
 import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 import { getQuestions } from "@/api/clients/questionApi";
 import PracticeQuestions from "@/components/clients/PracticeQuestions";
+import { useLearningProgress } from "@/hooks/clients/useLearningProgress";
+import { PopupHalf } from "@/components/clients/learning/ProgressPopups";
+import { useRef } from "react";
 
 const VideoDetails = () => {
   const { id } = useParams();
@@ -65,7 +68,55 @@ const VideoDetails = () => {
     activeLyricIndex,
     lyricRefs,
     seekToMs,
+    playerRef,
   } = useVideoPlayer(lyrics);
+
+  const {
+    showPopup,
+    handleContinue,
+    isInitialLoad,
+    initialPosition,
+    triggerManualSave,
+  } = useLearningProgress({
+    contentId: id,
+    contentType: "VIDEO",
+    isPlaying: state.playing,
+    playerRef,
+  });
+
+  const hasResumed = useRef(false);
+  useEffect(() => {
+    hasResumed.current = false;
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  const performSeek = useCallback(
+    (pos) => {
+      if (pos > 0 && !hasResumed.current && playerRef.current) {
+        hasResumed.current = true;
+        const player = playerRef.current;
+        if (typeof player.seekTo === "function") {
+          player.seekTo(pos, "seconds");
+        } else if (typeof player.currentTime === "number") {
+          player.currentTime = pos;
+        } else if (typeof player.getInternalPlayer === "function") {
+          const internal = player.getInternalPlayer();
+          if (internal) {
+            if (typeof internal.seekTo === "function") {
+              internal.seekTo(pos, "seconds");
+            } else if (typeof internal.currentTime === "number") {
+              internal.currentTime = pos;
+            }
+          }
+        }
+      }
+    },
+    [playerRef],
+  );
+
+  const handlePlayerReady = () => {
+    performSeek(initialPosition);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,10 +185,17 @@ const VideoDetails = () => {
                 state={state}
                 setPlayerRef={setPlayerRef}
                 onPlay={() => setState((s) => ({ ...s, playing: true }))}
-                onPause={() => setState((s) => ({ ...s, playing: false }))}
-                onEnded={() => setState((s) => ({ ...s, playing: false }))}
+                onPause={() => {
+                  setState((s) => ({ ...s, playing: false }));
+                  triggerManualSave();
+                }}
+                onEnded={() => {
+                  setState((s) => ({ ...s, playing: false }));
+                  triggerManualSave();
+                }}
                 onTimeUpdate={handleTimeUpdate}
                 onDuration={handleDuration}
+                onReady={handlePlayerReady}
               />
 
               <VideoInfo video={videoData} />
@@ -197,6 +255,7 @@ const VideoDetails = () => {
             </div>
           </div>
         </div>
+        {showPopup === "idle" && <PopupHalf onContinue={handleContinue} />}
       </motion.div>
     </AnimatePresence>
   );

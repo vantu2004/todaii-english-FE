@@ -16,12 +16,19 @@ import { useEffect, useState } from "react";
 import { STUDY_EVENTS, emitStudyEvent } from "@/utils/studyEvents";
 import { getQuestions } from "@/api/clients/questionApi";
 import PracticeQuestions from "@/components/clients/PracticeQuestions";
+import { useLearningProgress } from "@/hooks/clients/useLearningProgress";
+import { PopupHalf } from "@/components/clients/learning/ProgressPopups";
 
 const ArticleDetails = () => {
   const { id } = useParams();
   const { article, loading } = useArticleDetails(id);
   const [questions, setQuestions] = useState([]);
   const [activeTab, setActiveTab] = useState("vocab");
+
+  const { showPopup, handleContinue } = useLearningProgress({
+    contentId: id,
+    contentType: "ARTICLE",
+  });
 
   useEffect(() => {
     if (id) {
@@ -146,6 +153,7 @@ const ArticleDetails = () => {
             </aside>
           </div>
         </div>
+        {showPopup === "idle" && <PopupHalf onContinue={handleContinue} />}
       </motion.div>
     </AnimatePresence>
   );

@@ -10,6 +10,7 @@ export default function VideoPlayer({
   onTimeUpdate,
   onDuration,
   setPlayerRef,
+  onReady,
 }) {
   return (
     <div className="w-full max-w-5xl mx-auto mb-6">
@@ -36,6 +37,7 @@ export default function VideoPlayer({
           onEnded={onEnded}
           onTimeUpdate={onTimeUpdate}
           onDuration={onDuration}
+          onReady={onReady}
           config={{
             youtube: { playerVars: { showinfo: 1 } },
           }}
