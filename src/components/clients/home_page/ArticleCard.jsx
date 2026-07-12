@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Eye, Clock } from "lucide-react";
 import { formatISODate } from "@/utils/FormatDate";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const ArticleCard = ({
   id,
@@ -12,6 +14,28 @@ const ArticleCard = ({
   updated_at,
   views,
 }) => {
+  const { isLoggedIn } = useClientAuthContext();
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn && id) {
+      getProgress(id, "ARTICLE")
+        .then((data) => setProgress(data))
+        .catch((err) => console.error("Error loading card progress:", err));
+    }
+  }, [id, isLoggedIn]);
+
+  const percent = progress
+    ? progress.completed
+      ? 100
+      : progress.estimate_time > 0
+        ? Math.min(
+            100,
+            Math.round((progress.study_time / progress.estimate_time) * 100),
+          )
+        : 0
+    : 0;
+
   return (
     <Link
       to={`/client/article/${id}`}
@@ -43,6 +67,22 @@ const ArticleCard = ({
             {title}
           </span>
         </h3>
+
+        {/* Progress Badge */}
+        {progress && progress.study_time > 0 && (
+          <div className="mb-2">
+            <span
+              className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold border
+              ${
+                progress.completed
+                  ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50"
+                  : "text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50"
+              }`}
+            >
+              {progress.completed ? "Đã đọc" : `Đọc tiếp (${percent}%)`}
+            </span>
+          </div>
+        )}
 
         {/* Meta Info Footer (Pushed to bottom) */}
         <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 font-medium">

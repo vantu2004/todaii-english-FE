@@ -4,8 +4,34 @@ import { Link } from "react-router-dom";
 import { isSavedVideo } from "@/api/clients/videoApi";
 import { toggleSavedVideo } from "@/api/clients/userApi";
 import ToggleBookmarkButton from "@/components/clients/ToggleBookmarkButton";
+import { useState, useEffect } from "react";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const VideoCard = ({ video, onToggle }) => {
+  const { isLoggedIn } = useClientAuthContext();
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn && video?.id) {
+      getProgress(video.id, "VIDEO")
+        .then((data) => setProgress(data))
+        .catch((err) =>
+          console.error("Error loading video card progress:", err),
+        );
+    }
+  }, [video?.id, isLoggedIn]);
+
+  const percent = progress
+    ? progress.completed
+      ? 100
+      : progress.estimate_time > 0
+        ? Math.min(
+            100,
+            Math.round((progress.study_time / progress.estimate_time) * 100),
+          )
+        : 0
+    : 0;
   return (
     <Link
       to={`/client/video/${video.id}`}
@@ -78,6 +104,18 @@ const VideoCard = ({ video, onToggle }) => {
             <span className="text-[12px] text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded-sm border border-neutral-200 dark:border-neutral-700">
               {formatISODate(video.created_at)}
             </span>
+            {progress && progress.study_time > 0 && (
+              <span
+                className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-sm 
+                ${
+                  progress.completed
+                    ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50"
+                    : "text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50"
+                }`}
+              >
+                {progress.completed ? "Đã xem" : `Xem tiếp (${percent}%)`}
+              </span>
+            )}
           </div>
         </div>
       </div>

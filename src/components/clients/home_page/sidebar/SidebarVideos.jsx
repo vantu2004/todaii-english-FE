@@ -2,10 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Play } from "lucide-react";
 import { getLatestVideos } from "@/api/clients/videoApi";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const SidebarVideos = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isLoggedIn } = useClientAuthContext();
+  const [progressMap, setProgressMap] = useState({});
+
+  useEffect(() => {
+    if (isLoggedIn && videos.length > 0) {
+      videos.forEach((video) => {
+        getProgress(video.id, "VIDEO")
+          .then((data) => {
+            if (data && data.study_time > 0) {
+              setProgressMap((prev) => ({ ...prev, [video.id]: data }));
+            }
+          })
+          .catch((err) =>
+            console.error("Error fetching sidebar video progress:", err),
+          );
+      });
+    }
+  }, [videos, isLoggedIn]);
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -58,6 +78,29 @@ const SidebarVideos = () => {
           <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-brand-500 text-white text-[10px] font-bold rounded shadow-sm">
             {firstVideo.cefr_level}
           </div>
+          {progressMap[firstVideo.id] && (
+            <div className="absolute top-2 right-2">
+              <span
+                className={`text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm border backdrop-blur-sm
+                ${
+                  progressMap[firstVideo.id].completed
+                    ? "bg-emerald-500/80 text-white border-emerald-400"
+                    : "bg-brand-500/80 text-white border-brand-400"
+                }`}
+              >
+                {progressMap[firstVideo.id].completed
+                  ? "Đã xem"
+                  : `Xem tiếp (${Math.min(
+                      100,
+                      Math.round(
+                        (progressMap[firstVideo.id].study_time /
+                          progressMap[firstVideo.id].estimate_time) *
+                          100,
+                      ),
+                    )}%)`}
+              </span>
+            </div>
+          )}
           <div className="absolute bottom-2 right-2 px-1.5 py-0.5 bg-black/70 backdrop-blur-md text-white text-[10px] font-medium rounded">
             {new Intl.NumberFormat("en", { notation: "compact" }).format(
               firstVideo.views || 0,
@@ -109,7 +152,7 @@ const SidebarVideos = () => {
                 >
                   {video.title}
                 </p>
-                <div className="flex items-center gap-1.5 text-[10px] text-neutral-500 dark:text-neutral-400">
+                <div className="flex items-center gap-1.5 text-[10px] text-neutral-500 dark:text-neutral-400 mt-1">
                   <span className="truncate max-w-[80px]">
                     {video.author_name}
                   </span>
@@ -120,6 +163,30 @@ const SidebarVideos = () => {
                     }).format(video.views || 0)}{" "}
                     views
                   </span>
+                  {progressMap[video.id] && (
+                    <>
+                      <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+                      <span
+                        className={`font-semibold text-[9px] px-1 rounded-sm border
+                        ${
+                          progressMap[video.id].completed
+                            ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200/50 dark:border-emerald-900/50"
+                            : "text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/30 border-brand-200/50 dark:border-brand-900/50"
+                        }`}
+                      >
+                        {progressMap[video.id].completed
+                          ? "Đã xem"
+                          : `Xem tiếp (${Math.min(
+                              100,
+                              Math.round(
+                                (progressMap[video.id].study_time /
+                                  progressMap[video.id].estimate_time) *
+                                  100,
+                              ),
+                            )}%)`}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </Link>

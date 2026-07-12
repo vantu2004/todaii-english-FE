@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Eye, Clock, ArrowUpRight } from "lucide-react";
 import { formatISODate } from "@/utils/FormatDate";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const BigArticleCard = ({
   id,
@@ -12,6 +14,28 @@ const BigArticleCard = ({
   updated_at, // Có thể dùng published_at nếu muốn hiển thị ngày đăng
   views,
 }) => {
+  const { isLoggedIn } = useClientAuthContext();
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn && id) {
+      getProgress(id, "ARTICLE")
+        .then((data) => setProgress(data))
+        .catch((err) => console.error("Error loading card progress:", err));
+    }
+  }, [id, isLoggedIn]);
+
+  const percent = progress
+    ? progress.completed
+      ? 100
+      : progress.estimate_time > 0
+        ? Math.min(
+            100,
+            Math.round((progress.study_time / progress.estimate_time) * 100),
+          )
+        : 0
+    : 0;
+
   return (
     <Link
       to={`/client/article/${id}`}
@@ -55,6 +79,21 @@ const BigArticleCard = ({
               <Eye size={14} />
               <span>{views} lượt xem</span>
             </div>
+            {progress && progress.study_time > 0 && (
+              <>
+                <div className="w-1 h-1 rounded-full bg-neutral-500" />
+                <span
+                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border
+                  ${
+                    progress.completed
+                      ? "text-emerald-400 bg-emerald-950/40 border-emerald-900/50"
+                      : "text-brand-400 bg-brand-950/40 border-brand-900/50"
+                  }`}
+                >
+                  {progress.completed ? "Đã đọc" : `Đọc tiếp (${percent}%)`}
+                </span>
+              </>
+            )}
           </div>
 
           {/* Title with Underline Animation */}

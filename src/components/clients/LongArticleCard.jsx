@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
-import { Eye, Clock, ArrowUpRight } from "lucide-react";
+import { Eye, Clock, ArrowUpRight, Check } from "lucide-react";
 import { formatISODate } from "@/utils/FormatDate";
 import ToggleBookmarkButton from "./ToggleBookmarkButton";
 import { isSavedArticle } from "@/api/clients/articleApi";
 import { toggleSavedArticle } from "@/api/clients/userApi";
+import { useState, useEffect } from "react";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const LongArticleCard = ({
   id,
@@ -17,6 +20,28 @@ const LongArticleCard = ({
   updated_at,
   onToggle,
 }) => {
+  const { isLoggedIn } = useClientAuthContext();
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn && id) {
+      getProgress(id, "ARTICLE")
+        .then((data) => setProgress(data))
+        .catch((err) => console.error("Error loading card progress:", err));
+    }
+  }, [id, isLoggedIn]);
+
+  const percent = progress
+    ? progress.completed
+      ? 100
+      : progress.estimate_time > 0
+        ? Math.min(
+            100,
+            Math.round((progress.study_time / progress.estimate_time) * 100),
+          )
+        : 0
+    : 0;
+
   const getLevelStyle = (level) => {
     const styles = {
       A1: "bg-emerald-50 text-emerald-700 ring-emerald-600/10 dark:bg-emerald-900/30 dark:text-emerald-400 dark:ring-emerald-500/20",
@@ -101,13 +126,28 @@ const LongArticleCard = ({
             </div>
 
             {/* Read more indicator */}
-            <span className="flex items-center gap-1 text-xs font-medium text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
-              Đọc tiếp
-              <ArrowUpRight
-                size={14}
-                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              />
-            </span>
+            {progress && progress.completed ? (
+              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-colors">
+                Đã đọc
+                <Check size={14} />
+              </span>
+            ) : progress && progress.study_time > 0 ? (
+              <span className="flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400 transition-colors">
+                Đọc tiếp ({percent}%)
+                <ArrowUpRight
+                  size={14}
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </span>
+            ) : (
+              <span className="flex items-center gap-1 text-xs font-medium text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+                Đọc tiếp
+                <ArrowUpRight
+                  size={14}
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </span>
+            )}
           </div>
         </div>
       </div>

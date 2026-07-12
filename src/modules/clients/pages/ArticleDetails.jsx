@@ -92,7 +92,7 @@ const ArticleDetails = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-20 pb-10 px-4 transition-colors duration-300"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 pt-24 pb-10 px-4 transition-colors duration-300"
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           {/* Main Content */}

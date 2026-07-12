@@ -174,7 +174,7 @@ const VideoDetails = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-surface-primary dark:bg-neutral-950 text-neutral-900 dark:text-white font-sans px-4 pt-20 pb-10"
+        className="min-h-screen bg-surface-primary dark:bg-neutral-950 text-neutral-900 dark:text-white font-sans px-4 pt-24 pb-10"
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

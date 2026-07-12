@@ -1,8 +1,30 @@
 import { Link } from "react-router-dom";
 import { formatISODate } from "@/utils/FormatDate";
 import { PlayCircle, Clapperboard, Eye, Calendar } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const RelatedVideos = ({ videos }) => {
+  const { isLoggedIn } = useClientAuthContext();
+  const [progressMap, setProgressMap] = useState({});
+
+  useEffect(() => {
+    if (isLoggedIn && videos && videos.length > 0) {
+      videos.forEach((video) => {
+        getProgress(video.id, "VIDEO")
+          .then((data) => {
+            if (data && data.study_time > 0) {
+              setProgressMap((prev) => ({ ...prev, [video.id]: data }));
+            }
+          })
+          .catch((err) =>
+            console.error("Error fetching related video progress:", err),
+          );
+      });
+    }
+  }, [videos, isLoggedIn]);
+
   if (!videos || videos.length === 0) return null;
 
   // Helper format số view (1000 -> 1K)
@@ -74,7 +96,7 @@ const RelatedVideos = ({ videos }) => {
                 {video.author_name}
               </p>
 
-              <div className="flex items-center gap-2 text-[10px] text-neutral-400 dark:text-neutral-500 mt-auto">
+              <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 dark:text-neutral-500 mt-auto flex-wrap">
                 <div className="flex items-center gap-0.5">
                   <Eye size={10} />
                   <span>{formatViews(video.views)}</span>
@@ -84,6 +106,30 @@ const RelatedVideos = ({ videos }) => {
                   {/* <Calendar size={10} /> */}
                   <span>{formatISODate(video.created_at)}</span>
                 </div>
+                {progressMap[video.id] && (
+                  <>
+                    <span className="w-0.5 h-0.5 rounded-full bg-neutral-300 dark:bg-neutral-600" />
+                    <span
+                      className={`font-semibold text-[9px] px-1 rounded-sm border
+                      ${
+                        progressMap[video.id].completed
+                          ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200/50 dark:border-emerald-900/50"
+                          : "text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/30 border-brand-200/50 dark:border-brand-900/50"
+                      }`}
+                    >
+                      {progressMap[video.id].completed
+                        ? "Đã xem"
+                        : `Xem tiếp (${Math.min(
+                            100,
+                            Math.round(
+                              (progressMap[video.id].study_time /
+                                progressMap[video.id].estimate_time) *
+                                100,
+                            ),
+                          )}%)`}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </Link>

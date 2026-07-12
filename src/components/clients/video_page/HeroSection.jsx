@@ -14,6 +14,8 @@ import SearchBar from "@/components/clients/SearchBar";
 import { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const HeroSection = ({ videos = [], video, onNavigate }) => {
   const [keyword, setKeyword] = useState("");
@@ -22,6 +24,34 @@ const HeroSection = ({ videos = [], video, onNavigate }) => {
 
   const displayVideos =
     videos && videos.length > 0 ? videos : video ? [video] : [];
+
+  const { isLoggedIn } = useClientAuthContext();
+  const [progress, setProgress] = useState(null);
+
+  const currentVideo = displayVideos[activeIndex];
+
+  useEffect(() => {
+    if (isLoggedIn && currentVideo?.id) {
+      getProgress(currentVideo.id, "VIDEO")
+        .then((data) => setProgress(data))
+        .catch((err) =>
+          console.error("Error loading hero video progress:", err),
+        );
+    } else {
+      setProgress(null);
+    }
+  }, [currentVideo?.id, isLoggedIn]);
+
+  const percent = progress
+    ? progress.completed
+      ? 100
+      : progress.estimate_time > 0
+        ? Math.min(
+            100,
+            Math.round((progress.study_time / progress.estimate_time) * 100),
+          )
+        : 0
+    : 0;
 
   useEffect(() => {
     if (displayVideos.length <= 1 || isHovered) return;
@@ -32,8 +62,6 @@ const HeroSection = ({ videos = [], video, onNavigate }) => {
   }, [displayVideos.length, isHovered]);
 
   if (displayVideos.length === 0) return null;
-
-  const currentVideo = displayVideos[activeIndex];
 
   const prevSlide = (e) => {
     e.stopPropagation();
@@ -110,6 +138,18 @@ const HeroSection = ({ videos = [], video, onNavigate }) => {
             <span className="text-gray-300 text-[11px] font-medium flex items-center gap-1 bg-black/40 px-2.5 py-1 rounded-sm border border-white/10">
               <Clock size={12} /> {formatISODate(currentVideo.created_at)}
             </span>
+            {progress && progress.study_time > 0 && (
+              <span
+                className={`text-[11px] font-bold px-2.5 py-1 rounded-sm border backdrop-blur-md shadow-sm
+                ${
+                  progress.completed
+                    ? "bg-emerald-500/80 text-white border-emerald-400"
+                    : "bg-brand-500/80 text-white border-brand-400"
+                }`}
+              >
+                {progress.completed ? "Đã xem" : `Xem tiếp (${percent}%)`}
+              </span>
+            )}
           </div>
 
           {/* Title */}

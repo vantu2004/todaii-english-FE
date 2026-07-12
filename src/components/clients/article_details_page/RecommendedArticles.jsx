@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRecommendedArticles } from "@/api/clients/articleApi";
 import { formatISODate } from "@/utils/FormatDate";
+import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
+import { getProgress } from "@/api/clients/progressApi";
 
 const RecommendedArticles = () => {
   const navigate = useNavigate();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isLoggedIn } = useClientAuthContext();
+  const [progressMap, setProgressMap] = useState({});
 
   useEffect(() => {
     const fetchRecommended = async () => {
@@ -24,6 +28,22 @@ const RecommendedArticles = () => {
 
     fetchRecommended();
   }, []);
+
+  useEffect(() => {
+    if (isLoggedIn && articles && articles.length > 0) {
+      articles.forEach((article) => {
+        getProgress(article.id, "ARTICLE")
+          .then((data) => {
+            if (data && data.study_time > 0) {
+              setProgressMap((prev) => ({ ...prev, [article.id]: data }));
+            }
+          })
+          .catch((err) =>
+            console.error("Error fetching recommended article progress:", err),
+          );
+      });
+    }
+  }, [articles, isLoggedIn]);
 
   if (loading || !articles || !articles.length) return null;
 
@@ -76,7 +96,7 @@ const RecommendedArticles = () => {
               </h4>
 
               {/* Meta Data */}
-              <div className="flex flex-wrap items-center gap-y-1 gap-x-3 text-xs font-medium text-neutral-400">
+              <div className="flex flex-wrap items-center gap-y-1 gap-x-3 text-[10px] font-medium text-neutral-400">
                 <span className="text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded-sm text-[10px] uppercase tracking-wide">
                   {article.source_name}
                 </span>
@@ -90,6 +110,28 @@ const RecommendedArticles = () => {
                   <Eye size={12} />
                   <span>{article.views}</span>
                 </div>
+
+                {progressMap[article.id] && (
+                  <span
+                    className={`font-semibold text-[9px] px-1 rounded-sm border
+                    ${
+                      progressMap[article.id].completed
+                        ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200/50 dark:border-emerald-900/50"
+                        : "text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/30 border-brand-200/50 dark:border-brand-900/50"
+                    }`}
+                  >
+                    {progressMap[article.id].completed
+                      ? "Đã đọc"
+                      : `Đọc tiếp (${Math.min(
+                          100,
+                          Math.round(
+                            (progressMap[article.id].study_time /
+                              progressMap[article.id].estimate_time) *
+                              100,
+                          ),
+                        )}%)`}
+                  </span>
+                )}
               </div>
             </div>
           </div>
