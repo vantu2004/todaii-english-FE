@@ -412,10 +412,13 @@ const Dashboard = () => {
                                 : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
                             }`}
                           >
-                            Tuần ngày{" "}
-                            {new Date(plan.created_at).toLocaleDateString(
-                              "vi-VN",
-                            )}
+                            {(() => {
+                              const startDate = new Date(plan.created_at);
+                              const endDate = new Date(startDate);
+                              endDate.setDate(endDate.getDate() + 1);
+
+                              return `Kế hoạch ${startDate.toLocaleDateString("vi-VN")} - ${endDate.toLocaleDateString("vi-VN")}`;
+                            })()}
                           </button>
                         ))
                       )}
