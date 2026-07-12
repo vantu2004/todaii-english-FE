@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import {
   getWords,
   addWordToNotebook,
@@ -28,6 +28,7 @@ import FlashcardGame from "../vocab_deck_details_page/FlashcardGame";
 import QuizGame from "../vocab_deck_details_page/QuizGame";
 import SpeedRoundGame from "../vocab_deck_details_page/SpeedRoundGame";
 import TypingGame from "../vocab_deck_details_page/TypingGame";
+import GameScopeModal from "../vocab_deck_details_page/GameScopeModal";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BE mới trả về DictionaryWord: { id, word, json_data }
@@ -113,6 +114,9 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   const { isLoggedIn } = useClientAuthContext();
   const [learnedWordIds, setLearnedWordIds] = useState([]);
   const [togglingWordIds, setTogglingWordIds] = useState({});
+  const [scopeModalOpen, setScopeModalOpen] = useState(false);
+  const [pendingGameMode, setPendingGameMode] = useState("");
+  const [filteredGameWords, setFilteredGameWords] = useState([]);
 
   useEffect(() => {
     const fetchLearned = async () => {
@@ -222,13 +226,13 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           prev.map((w) =>
             w.id === wordItem.id
               ? {
-                  ...w,
-                  ipa: parsed.ipa ?? w.ipa,
-                  pos: parsed.pos ?? w.pos,
-                  meaning: parsed.meaning,
-                  example: parsed.example ?? w.example,
-                  hasData: true,
-                }
+                ...w,
+                ipa: parsed.ipa ?? w.ipa,
+                pos: parsed.pos ?? w.pos,
+                meaning: parsed.meaning,
+                example: parsed.example ?? w.example,
+                hasData: true,
+              }
               : w,
           ),
         );
@@ -334,12 +338,12 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     const parsed =
       searchState.type === "todaii"
         ? parseJsonData(
-            JSON.stringify({
-              found: true,
-              total: 1,
-              result: [entry],
-            }),
-          )
+          JSON.stringify({
+            found: true,
+            total: 1,
+            result: [entry],
+          }),
+        )
         : null;
 
     const optimisticWord = {
@@ -383,12 +387,13 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
 
   const handlePlayGame = (gameMode) => {
     setShowGameMenu(false);
-    setMode(gameMode);
+    setPendingGameMode(gameMode);
+    setScopeModalOpen(true);
   };
 
   // Words đủ điều kiện cho games (đã có meaning)
-  const wordsWithData = savedWords.filter((w) => w.hasData);
-  const missingCount = savedWords.filter((w) => !w.hasData).length;
+  const wordsWithData = useMemo(() => savedWords.filter((w) => w.hasData), [savedWords]);
+  const missingCount = useMemo(() => savedWords.filter((w) => !w.hasData).length, [savedWords]);
 
   if (!note) return <EmptyNoteState />;
 
@@ -532,11 +537,10 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 <button
                   key={key}
                   onClick={() => setApiSource(key)}
-                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${
-                    apiSource === key
-                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
-                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                  }`}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${apiSource === key
+                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                    }`}
                 >
                   {label}
                 </button>
@@ -557,7 +561,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       {/* ── Games ── */}
       {mode === "flashcard" && (
         <FlashcardGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -566,7 +570,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "quiz" && (
         <QuizGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -575,7 +579,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "speed" && (
         <SpeedRoundGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
@@ -584,13 +588,26 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       )}
       {mode === "typing" && (
         <TypingGame
-          words={wordsWithData}
+          words={filteredGameWords}
           onClose={() => setMode("list")}
           learnedWordIds={learnedWordIds}
           onToggleLearn={handleToggleLearn}
           togglingWordIds={togglingWordIds}
         />
       )}
+
+      <GameScopeModal
+        isOpen={scopeModalOpen}
+        onClose={() => setScopeModalOpen(false)}
+        words={wordsWithData}
+        learnedWordIds={learnedWordIds}
+        gameMode={pendingGameMode}
+        onStart={(filteredWords) => {
+          setFilteredGameWords(filteredWords);
+          setMode(pendingGameMode);
+          setScopeModalOpen(false);
+        }}
+      />
     </div>
   );
 };
