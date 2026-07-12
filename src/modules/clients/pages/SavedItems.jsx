@@ -147,10 +147,10 @@ export default function SavedItems() {
 
   return (
     <div className="min-h-screen bg-surface-primary dark:bg-neutral-950 transition-colors duration-200 pt-[68px]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-3xl">
+          <h1 className="text-3xl font-light text-neutral-900 dark:text-white tracking-tight flex items-center gap-2">
             Nội dung đã lưu
           </h1>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">

@@ -13,7 +13,9 @@ const GameScopeModal = ({
   const [selectedScope, setSelectedScope] = useState("all");
 
   const totalCount = words.length;
-  const learnedCount = words.filter((w) => learnedWordIds.includes(w.id)).length;
+  const learnedCount = words.filter((w) =>
+    learnedWordIds.includes(w.id),
+  ).length;
   const unlearnedCount = totalCount - learnedCount;
 
   const minRequired = gameMode === "quiz" || gameMode === "speed" ? 4 : 1;
@@ -120,7 +122,10 @@ const GameScopeModal = ({
                   Chọn phạm vi ôn tập
                 </h3>
                 <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-0.5">
-                  Chế độ chơi: <span className="font-semibold text-neutral-700 dark:text-neutral-300">{getGameModeName()}</span>
+                  Chế độ chơi:{" "}
+                  <span className="font-semibold text-neutral-700 dark:text-neutral-300">
+                    {getGameModeName()}
+                  </span>
                 </p>
               </div>
 
@@ -149,8 +154,8 @@ const GameScopeModal = ({
                       isDisabled
                         ? "opacity-50 cursor-not-allowed border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-950/20"
                         : isSelected
-                        ? "border-neutral-900 dark:border-white bg-neutral-50/40 dark:bg-neutral-800/20 shadow-sm"
-                        : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 bg-white dark:bg-neutral-900"
+                          ? "border-neutral-900 dark:border-white bg-neutral-50/40 dark:bg-neutral-800/20 shadow-sm"
+                          : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 bg-white dark:bg-neutral-900"
                     }`}
                   >
                     <div className={`p-2.5 rounded-xl shrink-0 ${opt.color}`}>
@@ -176,7 +181,6 @@ const GameScopeModal = ({
                         </p>
                       )}
                     </div>
-
                   </button>
                 );
               })}

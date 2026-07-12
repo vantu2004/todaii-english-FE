@@ -226,13 +226,13 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           prev.map((w) =>
             w.id === wordItem.id
               ? {
-                ...w,
-                ipa: parsed.ipa ?? w.ipa,
-                pos: parsed.pos ?? w.pos,
-                meaning: parsed.meaning,
-                example: parsed.example ?? w.example,
-                hasData: true,
-              }
+                  ...w,
+                  ipa: parsed.ipa ?? w.ipa,
+                  pos: parsed.pos ?? w.pos,
+                  meaning: parsed.meaning,
+                  example: parsed.example ?? w.example,
+                  hasData: true,
+                }
               : w,
           ),
         );
@@ -338,12 +338,12 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     const parsed =
       searchState.type === "todaii"
         ? parseJsonData(
-          JSON.stringify({
-            found: true,
-            total: 1,
-            result: [entry],
-          }),
-        )
+            JSON.stringify({
+              found: true,
+              total: 1,
+              result: [entry],
+            }),
+          )
         : null;
 
     const optimisticWord = {
@@ -392,8 +392,14 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   };
 
   // Words đủ điều kiện cho games (đã có meaning)
-  const wordsWithData = useMemo(() => savedWords.filter((w) => w.hasData), [savedWords]);
-  const missingCount = useMemo(() => savedWords.filter((w) => !w.hasData).length, [savedWords]);
+  const wordsWithData = useMemo(
+    () => savedWords.filter((w) => w.hasData),
+    [savedWords],
+  );
+  const missingCount = useMemo(
+    () => savedWords.filter((w) => !w.hasData).length,
+    [savedWords],
+  );
 
   if (!note) return <EmptyNoteState />;
 
@@ -537,10 +543,11 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 <button
                   key={key}
                   onClick={() => setApiSource(key)}
-                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${apiSource === key
-                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
-                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                    }`}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${
+                    apiSource === key
+                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                  }`}
                 >
                   {label}
                 </button>

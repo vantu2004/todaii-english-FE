@@ -358,7 +358,6 @@ const Dashboard = () => {
           <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-light text-neutral-900 dark:text-white tracking-tight flex items-center gap-2">
-                <Sparkles className="text-brand-500 w-8 h-8" />
                 Lộ trình & Thống kê
               </h1>
               <p className="mt-2 text-neutral-500 dark:text-neutral-400 text-sm">

@@ -291,7 +291,10 @@ const VocabDeckDetails = () => {
 
   // ─── Derived ─────────────────────────────────────────────────────────────────
   const wordsWithData = useMemo(() => words.filter((w) => w.hasData), [words]);
-  const missingCount = useMemo(() => words.filter((w) => !w.hasData).length, [words]);
+  const missingCount = useMemo(
+    () => words.filter((w) => !w.hasData).length,
+    [words],
+  );
   const isFetchingAny = Object.values(fetchingIds).some(Boolean);
 
   // ─── Loading / Empty ─────────────────────────────────────────────────────────
