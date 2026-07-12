@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, ArrowRight, RotateCw, Volume2, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, RotateCw, Volume2, X, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 
-const FlashcardGame = ({ words, onClose }) => {
+const FlashcardGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -64,8 +64,29 @@ const FlashcardGame = ({ words, onClose }) => {
         <h2 className="text-lg font-bold text-neutral-900 dark:text-white">
           Flashcard
         </h2>
-        <div className="px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-600 dark:text-neutral-400">
-          {currentIndex + 1} / {words.length}
+        <div className="flex items-center gap-3">
+          <div className="px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-neutral-600 dark:text-neutral-400">
+            {currentIndex + 1} / {words.length}
+          </div>
+          {onToggleLearn && currentWord && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleLearn(currentWord.id);
+              }}
+              disabled={togglingWordIds[currentWord.id]}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+              } ${
+                learnedWordIds.includes(currentWord.id)
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
+                  : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
+              }`}
+            >
+              <Check size={12} />
+              {learnedWordIds.includes(currentWord.id) ? "Đã học" : "Chưa học"}
+            </button>
+          )}
         </div>
         <button
           onClick={onClose}

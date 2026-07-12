@@ -2,7 +2,7 @@ import { BookOpen, Layers, Clock } from "lucide-react";
 import { formatISODate } from "@/utils/FormatDate";
 import { Link } from "react-router-dom";
 
-const DeckCard = ({ deck }) => {
+const DeckCard = ({ deck, learnedWordIds = [] }) => {
   const getLevelStyle = (level) => {
     switch (level) {
       case "A1":
@@ -77,6 +77,27 @@ const DeckCard = ({ deck }) => {
         <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3 line-clamp-3 flex-1">
           {deck.description}
         </p>
+
+        {/* Progress Bar */}
+        {(deck.words || []).length > 0 && (() => {
+          const totalCount = deck.words.length;
+          const learnedCount = deck.words.filter(w => learnedWordIds.includes(w.id)).length;
+          const percent = Math.round((learnedCount / totalCount) * 100);
+          return (
+            <div className="mt-2 mb-3">
+              <div className="flex justify-between text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 mb-1">
+                <span>Tiến độ học</span>
+                <span>{learnedCount}/{totalCount} từ ({percent}%)</span>
+              </div>
+              <div className="w-full h-1.5 bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-emerald-500 rounded-full transition-all duration-300"
+                  style={{ width: `${percent}%` }}
+                ></div>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Meta Info */}
         <div className="flex items-center justify-between text-xs font-medium text-neutral-400 dark:text-neutral-500 pt-3 border-t border-neutral-50 dark:border-neutral-800">

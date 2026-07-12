@@ -8,6 +8,7 @@ import {
   X as CloseX,
 } from "lucide-react";
 import { filterVocabDecks } from "@/api/clients/vocabDeckApi";
+import { fetchLearnedWordIds } from "@/api/clients/userApi";
 import { logError } from "@/utils/LogError";
 import SearchBar from "@/components/clients/SearchBar";
 import Pagination from "@/components/clients/Pagination";
@@ -27,6 +28,19 @@ const VocabularyFilter = () => {
   const [loading, setLoading] = useState(true);
   const [meta, setMeta] = useState({ totalPages: 0, totalElements: 0 });
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [learnedWordIds, setLearnedWordIds] = useState([]);
+
+  useEffect(() => {
+    const fetchLearned = async () => {
+      try {
+        const ids = await fetchLearnedWordIds();
+        setLearnedWordIds(ids || []);
+      } catch (err) {
+        console.error("Failed to load learned words", err);
+      }
+    };
+    fetchLearned();
+  }, []);
 
   const [query, setQuery] = useState({
     keyword: "",
@@ -195,7 +209,7 @@ const VocabularyFilter = () => {
                 {decks.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {decks.map((deck) => (
-                      <DeckCard key={deck.id} deck={deck} />
+                      <DeckCard key={deck.id} deck={deck} learnedWordIds={learnedWordIds} />
                     ))}
                   </div>
                 ) : (
