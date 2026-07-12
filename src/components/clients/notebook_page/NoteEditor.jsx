@@ -207,7 +207,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     setErrorIds((prev) => ({ ...prev, [wordItem.id]: false }));
     try {
       // size=5 để tăng khả năng có exact match
-      const res = await searchByTodaiiDictionary(wordItem.word, 0, 5);
+      const res = await searchByTodaiiDictionary(wordItem.word, 1, 5);
       const exactResult = findExactResult(res?.result, wordItem.word);
       const parsed = parseJsonData(
         JSON.stringify({
@@ -222,13 +222,13 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
           prev.map((w) =>
             w.id === wordItem.id
               ? {
-                  ...w,
-                  ipa: parsed.ipa ?? w.ipa,
-                  pos: parsed.pos ?? w.pos,
-                  meaning: parsed.meaning,
-                  example: parsed.example ?? w.example,
-                  hasData: true,
-                }
+                ...w,
+                ipa: parsed.ipa ?? w.ipa,
+                pos: parsed.pos ?? w.pos,
+                meaning: parsed.meaning,
+                example: parsed.example ?? w.example,
+                hasData: true,
+              }
               : w,
           ),
         );
@@ -334,12 +334,12 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     const parsed =
       searchState.type === "todaii"
         ? parseJsonData(
-            JSON.stringify({
-              found: true,
-              total: 1,
-              result: [entry],
-            }),
-          )
+          JSON.stringify({
+            found: true,
+            total: 1,
+            result: [entry],
+          }),
+        )
         : null;
 
     const optimisticWord = {
@@ -532,11 +532,10 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
                 <button
                   key={key}
                   onClick={() => setApiSource(key)}
-                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${
-                    apiSource === key
-                      ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
-                      : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
-                  }`}
+                  className={`px-5 py-2 text-xs font-semibold rounded-lg transition-all ${apiSource === key
+                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+                    }`}
                 >
                   {label}
                 </button>
