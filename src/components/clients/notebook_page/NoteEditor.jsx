@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import {
   getWords,
   addWordToNotebook,
@@ -387,8 +387,8 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
   };
 
   // Words đủ điều kiện cho games (đã có meaning)
-  const wordsWithData = savedWords.filter((w) => w.hasData);
-  const missingCount = savedWords.filter((w) => !w.hasData).length;
+  const wordsWithData = useMemo(() => savedWords.filter((w) => w.hasData), [savedWords]);
+  const missingCount = useMemo(() => savedWords.filter((w) => !w.hasData).length, [savedWords]);
 
   if (!note) return <EmptyNoteState />;
 
