@@ -154,7 +154,7 @@ const VocabDeckDetails = () => {
       setLearnedWordIds((prev) =>
         prev.includes(wordId)
           ? prev.filter((id) => id !== wordId)
-          : [...prev, wordId]
+          : [...prev, wordId],
       );
       if (isCurrentlyLearned) {
         toast.success("Đã hủy đánh dấu đã học.");
@@ -387,7 +387,11 @@ const VocabDeckDetails = () => {
 
                 <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-200/50 dark:border-emerald-500/20 shadow-sm font-semibold">
                   <BookMarked size={14} className="text-emerald-500" />
-                  <span>Đã học: {words.filter(w => learnedWordIds.includes(w.id)).length}/{words.length} từ</span>
+                  <span>
+                    Đã học:{" "}
+                    {words.filter((w) => learnedWordIds.includes(w.id)).length}/
+                    {words.length} từ
+                  </span>
                 </div>
 
                 {missingCount > 0 && (
@@ -585,14 +589,23 @@ const VocabDeckDetails = () => {
                   onClick={() => handleToggleLearn(item.id)}
                   disabled={togglingWordIds[item.id]}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all ${
-                    togglingWordIds[item.id] ? "opacity-50 cursor-not-allowed" : ""
+                    togglingWordIds[item.id]
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   } ${
                     learnedWordIds.includes(item.id)
                       ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
                       : "bg-transparent border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-400 hover:border-emerald-500 hover:text-emerald-500"
                   }`}
                 >
-                  <Check size={12} className={learnedWordIds.includes(item.id) ? "text-emerald-600 dark:text-emerald-400" : ""} />
+                  <Check
+                    size={12}
+                    className={
+                      learnedWordIds.includes(item.id)
+                        ? "text-emerald-600 dark:text-emerald-400"
+                        : ""
+                    }
+                  />
                   {learnedWordIds.includes(item.id) ? "Đã học" : "Chưa học"}
                 </button>
 

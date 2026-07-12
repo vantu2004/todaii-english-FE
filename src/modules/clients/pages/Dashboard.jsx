@@ -1,33 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Cpu,
-  BookOpen,
-  LogIn,
-  Languages,
-  BarChart3,
-  Flame,
-  Award,
-  Sparkles,
-  TrendingUp,
-  Calendar,
-  AlertCircle,
-  TrendingDown,
-  MinusCircle,
-  Loader,
-} from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import { Radar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Sparkles, Loader } from "lucide-react";
 
 import { getMyChart } from "@/api/clients/dashboardApi";
 import { getStreakInfo, getAllDailyStudyLogs } from "@/api/clients/studyLogApi";
@@ -38,27 +12,19 @@ import {
 import {
   getCurrentStudyPlan,
   getStudyPlanHistory,
+  toggleStudyPlanTask,
 } from "@/api/clients/studyPlanApi";
-import UserLearningProfileWidget from "@/components/clients/UserLearningProfileWidget";
 import { formatDate } from "@/utils/FormatDate";
 import { logError } from "@/utils/LogError";
-import DateRangePicker from "@/components/servers/dashboard/DateRangePicker";
-import DashboardCharts from "@/components/servers/dashboard/DashboardCharts";
 import { useClientAuthContext } from "@/hooks/clients/useClientAuthContext";
 import { getUserLearningProfile } from "@/api/clients/userLearningProfileApi";
 import { fetchLearnedWordIds } from "@/api/clients/userApi";
+
 import LearningGoalModal from "@/components/clients/LearningGoalModal";
 import StudyCalendar from "@/components/clients/dashboard/StudyCalendar";
-
-// Register Radial scale for Radar chart
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-);
+import AiStudyCoachTab from "@/components/clients/dashboard/AiStudyCoachTab";
+import ToeicAnalyticsTab from "@/components/clients/dashboard/ToeicAnalyticsTab";
+import SystemActivityTab from "@/components/clients/dashboard/SystemActivityTab";
 
 const getRangeForDays = (days) => {
   const end = new Date();
@@ -71,7 +37,7 @@ const getRangeForDays = (days) => {
 };
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("coach"); // "coach" | "analytics" | "activity"
+  const [activeTab, setActiveTab] = useState("coach"); // "coach" | "analytics" | "activity" | "calendar"
 
   // Date picker states (for activity stats)
   const [preset, setPreset] = useState("7");
@@ -89,6 +55,7 @@ const Dashboard = () => {
   const [currentPlan, setCurrentPlan] = useState(null);
   const [planHistory, setPlanHistory] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlanTab, setSelectedPlanTab] = useState(null);
 
   // Learning Profile popup states
   const { isLoggedIn } = useClientAuthContext();
@@ -154,18 +121,18 @@ const Dashboard = () => {
   };
 
   // Fetch advanced learning data
-  // Fetch advanced learning data
   const fetchLearningData = async () => {
     try {
       setLoadingLearning(true);
-      const [streak, weakness, score, plan, history, learnedIds] = await Promise.all([
-        getStreakInfo(),
-        getWeaknessAnalysis(),
-        getScorePrediction(),
-        getCurrentStudyPlan(),
-        getStudyPlanHistory(),
-        fetchLearnedWordIds().catch(() => []),
-      ]);
+      const [streak, weakness, score, plan, history, learnedIds] =
+        await Promise.all([
+          getStreakInfo(),
+          getWeaknessAnalysis(),
+          getScorePrediction(),
+          getCurrentStudyPlan(),
+          getStudyPlanHistory(),
+          fetchLearnedWordIds().catch(() => []),
+        ]);
       setStreakData(streak);
       setWeaknessData(weakness || []);
       setScoreData(score);
@@ -183,6 +150,72 @@ const Dashboard = () => {
   useEffect(() => {
     fetchLearningData();
   }, []);
+
+  // Tự động set tab ngày đầu tiên khi selectedPlan thay đổi
+  useEffect(() => {
+    if (selectedPlan?.tasks && selectedPlan.tasks.length > 0) {
+      const dates = [
+        ...new Set(selectedPlan.tasks.map((t) => t.plan_date)),
+      ].sort();
+      setSelectedPlanTab(dates[0]);
+    } else {
+      setSelectedPlanTab(null);
+    }
+  }, [selectedPlan]);
+
+  const handleToggleTask = async (taskId) => {
+    try {
+      const updatedTask = await toggleStudyPlanTask(taskId);
+
+      // Cập nhật tasks trong selectedPlan
+      const updatedTasks = selectedPlan.tasks.map((task) =>
+        task.id === taskId
+          ? {
+              ...task,
+              completed: updatedTask.completed,
+              completed_at: updatedTask.completed_at,
+            }
+          : task,
+      );
+
+      const newSelectedPlan = { ...selectedPlan, tasks: updatedTasks };
+      setSelectedPlan(newSelectedPlan);
+
+      // Cập nhật trong planHistory
+      setPlanHistory((prev) =>
+        prev.map((p) => (p.id === selectedPlan.id ? newSelectedPlan : p)),
+      );
+
+      // Cập nhật trong currentPlan
+      if (currentPlan && currentPlan.id === selectedPlan.id) {
+        setCurrentPlan(newSelectedPlan);
+      }
+
+      toast.success(
+        updatedTask.completed
+          ? "Đã hoàn thành nhiệm vụ! 🎉"
+          : "Đã đánh dấu chưa hoàn thành.",
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Không thể cập nhật trạng thái nhiệm vụ");
+    }
+  };
+
+  const getContentUrl = (taskType, contentId) => {
+    switch (taskType) {
+      case "ARTICLE":
+        return `/client/article/${contentId}`;
+      case "VIDEO":
+        return `/client/video/${contentId}`;
+      case "VOCAB_DECK":
+        return `/client/vocabulary/${contentId}`;
+      case "TOEIC_TEST":
+        return `/client/toeic/${contentId}`;
+      default:
+        return "/client";
+    }
+  };
 
   useEffect(() => {
     if (activeTab === "activity") {
@@ -389,123 +422,16 @@ const Dashboard = () => {
             <>
               {/* TAB 1: AI STUDY COACH */}
               {activeTab === "coach" && (
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                  {/* Left panel: Plan History */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-4 h-fit">
-                    <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                      <Calendar size={14} />
-                      Lộ trình trước đây
-                    </h3>
-                    <div className="space-y-2">
-                      {planHistory.length === 0 ? (
-                        <p className="text-xs text-neutral-400 dark:text-neutral-500 italic py-2">
-                          Chưa có lịch sử lộ trình
-                        </p>
-                      ) : (
-                        planHistory.map((plan) => (
-                          <button
-                            key={plan.id}
-                            onClick={() => setSelectedPlan(plan)}
-                            className={`w-full text-left px-3 py-2.5 rounded-md text-xs font-medium transition-all ${
-                              selectedPlan?.id === plan.id
-                                ? "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
-                                : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
-                            }`}
-                          >
-                            {(() => {
-                              const startDate = new Date(plan.created_at);
-                              const endDate = new Date(startDate);
-                              endDate.setDate(endDate.getDate() + 1);
-
-                              return `Kế hoạch ${startDate.toLocaleDateString("vi-VN")} - ${endDate.toLocaleDateString("vi-VN")}`;
-                            })()}
-                          </button>
-                        ))
-                      )}
-                    </div>
-
-                    {/* Target Goal Section */}
-                    <div className="mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-800">
-                      <UserLearningProfileWidget
-                        onProfileUpdated={fetchLearningData}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Right panel: Plan Content */}
-                  <div className="lg:col-span-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6">
-                    {selectedPlan ? (
-                      <article className="prose dark:prose-invert max-w-none text-neutral-800 dark:text-neutral-200">
-                        <div className="flex items-center justify-between pb-4 border-b border-neutral-200 dark:border-neutral-800 mb-6">
-                          <h2 className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2 m-0">
-                            <Sparkles size={18} className="text-brand-500" />
-                            Lộ trình học AI Coach
-                          </h2>
-                          <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                            Khởi tạo:{" "}
-                            {new Date(
-                              selectedPlan.created_at,
-                            ).toLocaleDateString("vi-VN")}
-                          </span>
-                        </div>
-                        <ReactMarkdown
-                          components={{
-                            h1: ({ children }) => (
-                              <h1 className="text-3xl font-bold mb-5">
-                                {children}
-                              </h1>
-                            ),
-
-                            h2: ({ children }) => (
-                              <h2 className="text-2xl font-semibold mt-6 mb-3">
-                                {children}
-                              </h2>
-                            ),
-
-                            p: ({ children }) => (
-                              <p className="mb-3 leading-7">{children}</p>
-                            ),
-
-                            ul: ({ children }) => (
-                              <ul className="list-disc ml-6 space-y-2">
-                                {children}
-                              </ul>
-                            ),
-
-                            ol: ({ children }) => (
-                              <ol className="list-decimal ml-6 space-y-2">
-                                {children}
-                              </ol>
-                            ),
-
-                            li: ({ children }) => <li>{children}</li>,
-
-                            strong: ({ children }) => (
-                              <strong className="font-bold">{children}</strong>
-                            ),
-                          }}
-                        >
-                          {selectedPlan.content}
-                        </ReactMarkdown>
-                      </article>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center py-20 text-center">
-                        <Sparkles
-                          size={48}
-                          className="text-neutral-300 dark:text-neutral-700 mb-4"
-                        />
-                        <h3 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                          Chưa có lộ trình AI
-                        </h3>
-                        <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mt-2">
-                          Hệ thống AI Coach sẽ phân tích kết quả học của bạn và
-                          gửi lộ trình đầu tiên vào thứ Hai hàng tuần. Hãy duy
-                          trì học tập đều đặn nhé!
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <AiStudyCoachTab
+                  planHistory={planHistory}
+                  selectedPlan={selectedPlan}
+                  setSelectedPlan={setSelectedPlan}
+                  selectedPlanTab={selectedPlanTab}
+                  setSelectedPlanTab={setSelectedPlanTab}
+                  handleToggleTask={handleToggleTask}
+                  getContentUrl={getContentUrl}
+                  fetchLearningData={fetchLearningData}
+                />
               )}
 
               {/* TAB CALENDAR: SCHEDULE TIME-TABLE GRID */}
@@ -515,398 +441,44 @@ const Dashboard = () => {
 
               {/* TAB 2: ANALYTICS & SCORE PREDICTION */}
               {activeTab === "analytics" && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Left Column: Streak & Progress */}
-                  <div className="lg:col-span-1 space-y-6">
-                    {/* Circle Study Progress Widget */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col items-center text-center shadow-sm">
-                      <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 self-start flex items-center gap-1.5">
-                        <Flame size={14} className="text-orange-500" />
-                        Đã học hôm nay
-                      </h3>
-                      <div className="relative w-36 h-36 flex items-center justify-center mb-4">
-                        <svg
-                          className="w-full h-full transform -rotate-90"
-                          viewBox="0 0 144 144"
-                        >
-                          <circle
-                            className="text-neutral-100 dark:text-neutral-800"
-                            strokeWidth={strokeWidth}
-                            stroke="currentColor"
-                            fill="transparent"
-                            r={circleRadius}
-                            cx={72}
-                            cy={72}
-                          />
-                          <circle
-                            className="text-brand-500 transition-all duration-500"
-                            strokeWidth={strokeWidth}
-                            strokeDasharray={circumference}
-                            style={{ strokeDashoffset }}
-                            strokeLinecap="round"
-                            stroke="currentColor"
-                            fill="transparent"
-                            r={circleRadius}
-                            cx={72}
-                            cy={72}
-                          />
-                        </svg>
-                        <div className="absolute flex flex-col items-center justify-center leading-none">
-                          <span className="text-3xl font-light text-neutral-900 dark:text-white">
-                            {todayStudyMins}
-                          </span>
-                          <span className="text-[10px] text-neutral-400 uppercase font-medium mt-1">
-                            phút
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-2 font-medium">
-                        {computedPercent >= 100
-                          ? "Đã hoàn thành mục tiêu ngày!"
-                          : `Còn thiếu ${Math.max(0, goalMins - todayStudyMins)} phút để đạt mục tiêu.`}
-                      </p>
-
-                      <div className="w-full mt-5 pt-4 border-t border-neutral-100 dark:border-neutral-800 space-y-2 text-left text-xs">
-                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400">
-                          <span>Đề thi đã luyện:</span>
-                          <span className="font-semibold text-neutral-900 dark:text-white">
-                            {dailyLog.tests_taken_count || 0}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400">
-                          <span>Bài báo đã đọc:</span>
-                          <span className="font-semibold text-neutral-900 dark:text-white">
-                            {dailyLog.articles_read_count || 0}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400">
-                          <span>Video đã xem:</span>
-                          <span className="font-semibold text-neutral-900 dark:text-white">
-                            {dailyLog.videos_watched_count || 0}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400">
-                          <span>Bộ từ vựng đã học:</span>
-                          <span className="font-semibold text-neutral-900 dark:text-white">
-                            {dailyLog.vocab_decks_learned_count || 0}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-neutral-800/50 pt-2 mt-1">
-                          <span>Từ vựng đã thuộc:</span>
-                          <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                            {totalLearnedWordsCount} từ
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Streak Info Widget */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg shadow-sm">
-                      <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-4 flex items-center gap-1.5">
-                        <Award size={14} />
-                        Thành tích Streak
-                      </h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-md text-center border border-neutral-200 dark:border-neutral-800">
-                          <Flame
-                            className="mx-auto text-orange-500 mb-1"
-                            size={24}
-                          />
-                          <span className="text-2xl font-light text-neutral-900 dark:text-white">
-                            {streakData?.current_streak || 0}
-                          </span>
-                          <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium mt-1">
-                            STREAK HIỆN TẠI
-                          </p>
-                        </div>
-                        <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-md text-center border border-neutral-200 dark:border-neutral-800">
-                          <Award
-                            className="mx-auto text-yellow-500 mb-1"
-                            size={24}
-                          />
-                          <span className="text-2xl font-light text-neutral-900 dark:text-white">
-                            {streakData?.longest_streak || 0}
-                          </span>
-                          <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium mt-1">
-                            STREAK KỶ LỤC
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Center Column: Radar Weakness Chart */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col h-[380px] shadow-sm">
-                    <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 flex items-center gap-1.5">
-                      <AlertCircle size={14} />
-                      Phân tích điểm yếu (Accuracy)
-                    </h3>
-                    <div className="flex-1 relative h-64">
-                      {weaknessData.length > 0 ? (
-                        <Radar
-                          data={radarChartData}
-                          options={radarChartOptions}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full text-xs text-neutral-400 dark:text-neutral-500 italic">
-                          Chưa có dữ liệu kiểm tra
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right Column: Score Prediction */}
-                  <div className="lg:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-6 rounded-lg flex flex-col justify-between shadow-sm">
-                    <div>
-                      <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-6 flex items-center gap-1.5">
-                        <TrendingUp size={14} />
-                        Dự đoán điểm thi thật
-                      </h3>
-                      {!scoreData || scoreData.total_tests_taken === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-10 text-center animate-fade-in">
-                          <Award
-                            size={40}
-                            className="text-neutral-300 dark:text-neutral-700 mb-3"
-                          />
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-[220px]">
-                            Luyện tập ít nhất 1 đề thi full test để kích hoạt
-                            tính năng dự đoán điểm và phân tích xu hướng học
-                            tập.
-                          </p>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="flex items-baseline gap-2 mb-4 justify-center py-4 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg">
-                            <span className="text-5xl font-light text-neutral-900 dark:text-white">
-                              {scoreData.predicted_score || "N/A"}
-                            </span>
-                            <span className="text-sm font-semibold text-neutral-400 uppercase">
-                              TOEIC
-                            </span>
-                          </div>
-                          <div className="space-y-3 text-xs text-neutral-600 dark:text-neutral-300">
-                            <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
-                              <span>Điểm trung bình (3 đề gần nhất)</span>
-                              <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                                {scoreData.avg_score || 0}
-                              </span>
-                            </div>
-                            <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
-                              <span>Điểm thưởng xu hướng (Trend bonus)</span>
-                              <span
-                                className={`font-semibold ${scoreData.trend_bonus > 0 ? "text-green-500" : scoreData.trend_bonus < 0 ? "text-red-500" : "text-neutral-400"}`}
-                              >
-                                {scoreData.trend_bonus || 0}
-                              </span>
-                            </div>
-                            <div className="flex justify-between py-1 border-b border-neutral-200 dark:border-neutral-800/50">
-                              <span>Tổng số đề đã luyện</span>
-                              <span className="font-semibold text-neutral-800 dark:text-neutral-200">
-                                {scoreData.total_tests_taken || 0} đề
-                              </span>
-                            </div>
-                            <div className="flex justify-between py-1">
-                              <span>Xu hướng hiện tại</span>
-                              <span className="flex items-center gap-1 font-semibold uppercase">
-                                {scoreData.trend === "IMPROVING" && (
-                                  <>
-                                    <TrendingUp
-                                      size={12}
-                                      className="text-green-500"
-                                    />
-                                    <span className="text-green-500">
-                                      Đang cải thiện
-                                    </span>
-                                  </>
-                                )}
-                                {scoreData.trend === "STABLE" && (
-                                  <>
-                                    <MinusCircle
-                                      size={12}
-                                      className="text-blue-500"
-                                    />
-                                    <span className="text-blue-500">
-                                      Ổn định
-                                    </span>
-                                  </>
-                                )}
-                                {scoreData.trend === "DECLINING" && (
-                                  <>
-                                    <TrendingDown
-                                      size={12}
-                                      className="text-red-500"
-                                    />
-                                    <span className="text-red-500">
-                                      Suy giảm
-                                    </span>
-                                  </>
-                                )}
-                                {(!scoreData.trend ||
-                                  ![
-                                    "IMPROVING",
-                                    "STABLE",
-                                    "DECLINING",
-                                  ].includes(scoreData.trend)) && (
-                                  <span className="text-neutral-400">
-                                    Chưa có
-                                  </span>
-                                )}
-                              </span>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <ToeicAnalyticsTab
+                  streakData={streakData}
+                  weaknessData={weaknessData}
+                  scoreData={scoreData}
+                  totalLearnedWordsCount={totalLearnedWordsCount}
+                  radarChartData={radarChartData}
+                  radarChartOptions={radarChartOptions}
+                  todayStudyMins={todayStudyMins}
+                  computedPercent={computedPercent}
+                  strokeWidth={strokeWidth}
+                  strokeDashoffset={strokeDashoffset}
+                  circleRadius={circleRadius}
+                  circumference={circumference}
+                  goalMins={goalMins}
+                />
               )}
 
               {/* TAB 3: SYSTEM ACTIVITY STATS */}
               {activeTab === "activity" && (
-                <>
-                  {/* Date Filter & Controls */}
-                  <DateRangePicker
-                    startDate={dates.startDate}
-                    endDate={dates.endDate}
-                    onRangeChange={handleRangeChange}
-                    preset={preset}
-                    setPreset={setPreset}
-                    onRefresh={fetchMyChartData}
-                    loading={loadingActivity}
-                  />
-
-                  {/* Summary Cards Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    {/* Card 1: AI Assistant */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
-                          <Cpu size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
-                            Trí tuệ nhân tạo (AI)
-                          </p>
-                          <h3 className="text-xl font-light text-neutral-900 dark:text-white mt-1">
-                            {loadingActivity
-                              ? "..."
-                              : totalAiRequests.toLocaleString()}{" "}
-                            <span className="text-xs font-normal text-neutral-400">
-                              lượt
-                            </span>
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                        <span>Tổng số token:</span>
-                        <span className="font-semibold text-neutral-700 dark:text-neutral-300">
-                          {loadingActivity
-                            ? "..."
-                            : totalTokens.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card 2: Dictionary */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
-                          <BookOpen size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
-                            Tra cứu từ điển
-                          </p>
-                          <h3 className="text-xl font-light text-neutral-900 dark:text-white mt-1">
-                            {loadingActivity
-                              ? "..."
-                              : totalDictQueries.toLocaleString()}{" "}
-                            <span className="text-xs font-normal text-neutral-400">
-                              lần
-                            </span>
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                        <span>Todaii Dict / Free API:</span>
-                        <span className="font-semibold text-neutral-700 dark:text-neutral-300">
-                          {loadingActivity
-                            ? "..."
-                            : `${totalDictLocal} / ${totalDictApi}`}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card 3: Google Translation */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
-                          <Languages size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
-                            Google Dịch
-                          </p>
-                          <h3 className="text-xl font-light text-neutral-900 dark:text-white mt-1">
-                            {loadingActivity
-                              ? "..."
-                              : totalGgTranslations.toLocaleString()}{" "}
-                            <span className="text-xs font-normal text-neutral-400">
-                              lượt
-                            </span>
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                        <span>Ký tự đã dịch:</span>
-                        <span className="font-semibold text-neutral-700 dark:text-neutral-300">
-                          {loadingActivity
-                            ? "..."
-                            : totalCharsTranslated.toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card 4: Account Activity */}
-                    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-5 rounded-lg flex flex-col justify-between transition-all">
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-brand-50 dark:bg-brand-950/30 text-brand-500 rounded-md">
-                          <LogIn size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
-                            Tương tác hệ thống
-                          </p>
-                          <h3 className="text-xl font-light text-neutral-900 dark:text-white mt-1">
-                            {loadingActivity
-                              ? "..."
-                              : totalLogins.toLocaleString()}{" "}
-                            <span className="text-xs font-normal text-neutral-400">
-                              lần
-                            </span>
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-neutral-200 dark:border-neutral-800 flex justify-between text-xs text-neutral-500 dark:text-neutral-400 gap-2">
-                        <span className="truncate">Thư nhận / Tải ảnh:</span>
-                        <span className="font-semibold text-neutral-700 dark:text-neutral-300 shrink-0">
-                          {loadingActivity
-                            ? "..."
-                            : `${totalEmails} / ${totalUploads}`}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Render Charts */}
-                  <div className="mt-8">
-                    <DashboardCharts
-                      chartData={chartData}
-                      loading={loadingActivity}
-                      activeTab="user-chart"
-                    />
-                  </div>
-                </>
+                <SystemActivityTab
+                  dates={dates}
+                  handleRangeChange={handleRangeChange}
+                  preset={preset}
+                  setPreset={setPreset}
+                  fetchMyChartData={fetchMyChartData}
+                  loadingActivity={loadingActivity}
+                  totalAiRequests={totalAiRequests}
+                  totalTokens={totalTokens}
+                  totalDictQueries={totalDictQueries}
+                  totalDictLocal={totalDictLocal}
+                  totalDictApi={totalDictApi}
+                  totalGgTranslations={totalGgTranslations}
+                  totalCharsTranslated={totalCharsTranslated}
+                  totalLogins={totalLogins}
+                  totalEmails={totalEmails}
+                  totalUploads={totalUploads}
+                  chartData={chartData}
+                />
               )}
             </>
           )}

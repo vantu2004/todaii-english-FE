@@ -24,3 +24,15 @@ export const getStudyPlanHistory = async () => {
     throw err;
   }
 };
+
+export const toggleStudyPlanTask = async (taskId) => {
+  try {
+    const response = await clientInstance.patch(
+      `/study-plan/tasks/${taskId}/toggle`,
+    );
+    return response.data; // Updated task DTO
+  } catch (err) {
+    console.error("Toggle study plan task error:", err);
+    throw err;
+  }
+};

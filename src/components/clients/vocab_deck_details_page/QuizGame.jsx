@@ -2,7 +2,13 @@ import React, { useState, useMemo } from "react";
 import { Check, X, Trophy, ArrowRight, X as CloseIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const QuizGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
+const QuizGame = ({
+  words,
+  onClose,
+  learnedWordIds = [],
+  onToggleLearn,
+  togglingWordIds = {},
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -155,7 +161,9 @@ const QuizGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, toggling
                 }}
                 disabled={togglingWordIds[currentQuestion.target.id]}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-                  togglingWordIds[currentQuestion.target.id] ? "opacity-50 cursor-not-allowed" : ""
+                  togglingWordIds[currentQuestion.target.id]
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 } ${
                   learnedWordIds.includes(currentQuestion.target.id)
                     ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
@@ -163,7 +171,9 @@ const QuizGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, toggling
                 }`}
               >
                 <Check size={12} />
-                {learnedWordIds.includes(currentQuestion.target.id) ? "Đã học" : "Chưa học"}
+                {learnedWordIds.includes(currentQuestion.target.id)
+                  ? "Đã học"
+                  : "Chưa học"}
               </button>
             )}
           </div>

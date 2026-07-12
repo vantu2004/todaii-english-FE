@@ -1,4 +1,11 @@
-import { Trash2, Loader2, BookDashed, Download, RefreshCw, Check } from "lucide-react";
+import {
+  Trash2,
+  Loader2,
+  BookDashed,
+  Download,
+  RefreshCw,
+  Check,
+} from "lucide-react";
 
 // words shape (sau khi map qua mapDictionaryWord):
 // { id, word, ipa, pos, meaning, example, audio_url, hasData }
@@ -131,19 +138,26 @@ const SavedWordsList = ({
                   )}
                 </div>
 
-                <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+                <div
+                  className="flex items-center gap-1 shrink-0"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   {onToggleLearn && (
                     <button
                       onClick={() => onToggleLearn(word.id)}
                       disabled={togglingWordIds[word.id]}
                       className={`p-1.5 rounded-md border transition-all ${
-                        togglingWordIds[word.id] ? "opacity-50 cursor-not-allowed" : ""
+                        togglingWordIds[word.id]
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
                       } ${
                         learnedWordIds.includes(word.id)
                           ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
                           : "bg-transparent border-neutral-200 dark:border-neutral-700 text-neutral-300 dark:text-neutral-500 hover:border-emerald-500 hover:text-emerald-500"
                       }`}
-                      title={learnedWordIds.includes(word.id) ? "Đã học" : "Chưa học"}
+                      title={
+                        learnedWordIds.includes(word.id) ? "Đã học" : "Chưa học"
+                      }
                     >
                       <Check size={12} />
                     </button>

@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { ArrowLeft, ArrowRight, RotateCw, Volume2, X, Check } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  RotateCw,
+  Volume2,
+  X,
+  Check,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { loadVoices, handleSpeak } from "@/utils/ReactSpeechKit";
 
-const FlashcardGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
+const FlashcardGame = ({
+  words,
+  onClose,
+  learnedWordIds = [],
+  onToggleLearn,
+  togglingWordIds = {},
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -76,7 +89,9 @@ const FlashcardGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, tog
               }}
               disabled={togglingWordIds[currentWord.id]}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+                togglingWordIds[currentWord.id]
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               } ${
                 learnedWordIds.includes(currentWord.id)
                   ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"

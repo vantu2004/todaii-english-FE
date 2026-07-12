@@ -65,7 +65,13 @@ const CharDiff = ({ input, target }) => {
 };
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-const TypingGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
+const TypingGame = ({
+  words,
+  onClose,
+  learnedWordIds = [],
+  onToggleLearn,
+  togglingWordIds = {},
+}) => {
   const validWords = useMemo(
     () => shuffle(words.filter((w) => w.meaning)),
     [words],
@@ -323,7 +329,9 @@ const TypingGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, toggli
               }}
               disabled={togglingWordIds[currentWord.id]}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+                togglingWordIds[currentWord.id]
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               } ${
                 learnedWordIds.includes(currentWord.id)
                   ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"

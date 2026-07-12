@@ -209,7 +209,11 @@ const VocabularyFilter = () => {
                 {decks.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {decks.map((deck) => (
-                      <DeckCard key={deck.id} deck={deck} learnedWordIds={learnedWordIds} />
+                      <DeckCard
+                        key={deck.id}
+                        deck={deck}
+                        learnedWordIds={learnedWordIds}
+                      />
                     ))}
                   </div>
                 ) : (

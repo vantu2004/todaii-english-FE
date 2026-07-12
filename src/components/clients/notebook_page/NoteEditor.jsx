@@ -139,7 +139,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
       setLearnedWordIds((prev) =>
         prev.includes(wordId)
           ? prev.filter((id) => id !== wordId)
-          : [...prev, wordId]
+          : [...prev, wordId],
       );
       if (isCurrentlyLearned) {
         toast.success("Đã hủy đánh dấu đã học.");
@@ -207,7 +207,7 @@ const NoteEditor = ({ note, onToggleSidebar, isSidebarOpen }) => {
     setErrorIds((prev) => ({ ...prev, [wordItem.id]: false }));
     try {
       // size=5 để tăng khả năng có exact match
-      const res = await searchByTodaiiDictionary(wordItem.word, 0, 5);
+      const res = await searchByTodaiiDictionary(wordItem.word, 1, 5);
       const exactResult = findExactResult(res?.result, wordItem.word);
       const parsed = parseJsonData(
         JSON.stringify({

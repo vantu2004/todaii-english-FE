@@ -44,7 +44,13 @@ const Lives = ({ count }) => (
 );
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-const SpeedRoundGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, togglingWordIds = {} }) => {
+const SpeedRoundGame = ({
+  words,
+  onClose,
+  learnedWordIds = [],
+  onToggleLearn,
+  togglingWordIds = {},
+}) => {
   const validWords = useMemo(() => words.filter((w) => w.meaning), [words]);
   const questionQueue = useMemo(() => shuffle(validWords), [validWords]);
 
@@ -311,7 +317,9 @@ const SpeedRoundGame = ({ words, onClose, learnedWordIds = [], onToggleLearn, to
               }}
               disabled={togglingWordIds[currentWord.id]}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
-                togglingWordIds[currentWord.id] ? "opacity-50 cursor-not-allowed" : ""
+                togglingWordIds[currentWord.id]
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
               } ${
                 learnedWordIds.includes(currentWord.id)
                   ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400 hover:bg-emerald-100"
